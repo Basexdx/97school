@@ -13,15 +13,15 @@ for t in tasks:
 db=sqlite3.connect(':memory:')
 db.executescript((root/'cloudflare/schema.sql').read_text())
 db.executescript((root/'cloudflare/task-bank.sql').read_text())
-# Fresh schema script remains harmless when tables/triggers already exist.
+# Re-running refreshes triggers without changing the old v13 table shape.
 db.executescript((root/'cloudflare/task-bank.sql').read_text())
 for student,class_id,grade in [('alice','class_8B',8),('bob','class_8B',8),('charlie','class_7A',7)]:
  db.execute("INSERT INTO students(id,class_id,current_grade) VALUES(?,?,?)",(student,class_id,grade))
 
-def attempt(student,aid,eid,tid,grade=8,correct=1,max_xp=10):
+def attempt(student,aid,eid,tid,correct=1,max_xp=10):
  db.execute("""INSERT OR IGNORE INTO task_attempts
- (student_id,attempt_id,event_id,task_id,grade,content_version,payload_hash,answer_json,correct,status,max_xp)
- VALUES(?,?,?,?,?,'v','hash','1',?,'CONFIRMED',?)""",(student,aid,eid,tid,grade,correct,max_xp))
+ (student_id,attempt_id,event_id,task_id,content_version,payload_hash,answer_json,correct,status,max_xp)
+ VALUES(?,?,?,?,'v','hash','1',?,'CONFIRMED',?)""",(student,aid,eid,tid,correct,max_xp))
 
 # First-attempt correct answer = full XP and replay is idempotent.
 attempt('alice','a1','e1','task1');attempt('alice','a1','e1','task1');attempt('alice','a2','e2','task1')
@@ -31,11 +31,11 @@ assert db.execute("SELECT total_xp FROM class_progress WHERE student_id='alice' 
 attempt('alice','a3','e3','task2',correct=0);attempt('alice','a4','e4','task2')
 assert db.execute("SELECT total_xp FROM class_progress WHERE student_id='alice' AND grade=8").fetchone()[0]==17
 
-# Grade 7: correct on third attempt = 40%, after third = minimum 20%.
-attempt('charlie','c1','ce1','task3',grade=7,correct=0);attempt('charlie','c2','ce2','task3',grade=7,correct=0);attempt('charlie','c3','ce3','task3',grade=7)
+# Grade 7 is derived from its task ID prefix; 3rd attempt = 40%, 4th+ = 20%.
+attempt('charlie','c1','ce1','genius-peryshkin7-20',correct=0);attempt('charlie','c2','ce2','genius-peryshkin7-20',correct=0);attempt('charlie','c3','ce3','genius-peryshkin7-20')
 assert db.execute("SELECT total_xp FROM class_progress WHERE student_id='charlie' AND grade=7").fetchone()[0]==4
-for n in range(1,4):attempt('charlie',f'd{n}',f'de{n}','task4',grade=7,correct=0)
-attempt('charlie','d4','de4','task4',grade=7)
+for n in range(1,4):attempt('charlie',f'd{n}',f'de{n}','genius-peryshkin7-22',correct=0)
+attempt('charlie','d4','de4','genius-peryshkin7-22')
 assert db.execute("SELECT total_xp FROM class_progress WHERE student_id='charlie' AND grade=7").fetchone()[0]==6
 
 attempt('bob','b1','be1','task1')
@@ -49,4 +49,4 @@ except sqlite3.IntegrityError:pass
 else:raise AssertionError('expected rollback')
 assert db.execute("SELECT COUNT(*) FROM task_attempts WHERE attempt_id='bad'").fetchone()[0]==0
 assert db.execute("SELECT COUNT(*) FROM task_awards WHERE task_id='fail'").fetchone()[0]==0
-print('Exact arithmetic, replay, multigrade XP decay and atomic rollback: PASS')
+print('Exact arithmetic, replay, v13-compatible multigrade XP decay and atomic rollback: PASS')
