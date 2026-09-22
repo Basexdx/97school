@@ -17,32 +17,41 @@ jobs:
         with:
           ref: dev
 
-      - name: Verify and repair repository layout
+      - name: Repair repository layout
         shell: bash
         run: |
           set -euo pipefail
           shopt -s nullglob
 
+          mkdir -p public/task-bank public/icons
+
+          root_tasks=(genius-*.json)
+          if ((${#root_tasks[@]})); then
+            mv -f "${root_tasks[@]}" public/task-bank/
+          fi
+
+          if [ -f index.json ]; then
+            mv -f index.json public/task-bank/index.json
+          fi
+
+          if [ -d icons ]; then
+            cp -af icons/. public/icons/
+            rm -rf icons
+          fi
+
+          rm -f sw.js
+          rm -f public/task-bank/.gitkeep public/icons/.gitkeep
+
           count=$(find public/task-bank -maxdepth 1 -type f -name 'genius-*.json' | wc -l | tr -d ' ')
+          echo "Task files in public/task-bank: $count"
           test "$count" -eq 319
           test -f public/task-bank/index.json
           test -f public/task-bank/genius-peryshkin-839.json
           test -f public/task-bank/genius-peryshkin-852.json
           test -f public/task-bank/genius-peryshkin-862.json
           test -f public/task-bank/genius-peryshkin-947.json
-
-          mkdir -p public/icons
-          if [ -d icons ]; then
-            cp -a icons/. public/icons/
-            rm -rf icons
-          fi
-
-          rm -f public/task-bank/.gitkeep public/icons/.gitkeep
-          rm -f index.json sw.js
-          root_tasks=(genius-*.json)
-          if ((${#root_tasks[@]})); then
-            rm -f "${root_tasks[@]}"
-          fi
+          test -f public/icons/icon-192.png
+          test -f public/icons/icon-512.png
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
