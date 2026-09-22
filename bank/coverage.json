@@ -1,0 +1,322 @@
+[
+  {
+    "paragraph": 1,
+    "title": "Основные положения молекулярно-кинетической теории строения вещества",
+    "section": "thermal",
+    "count": 6,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 2,
+    "title": "Агрегатные состояния вещества",
+    "section": "thermal",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 3,
+    "title": "Смачивание и несмачивание. Капиллярные явления",
+    "section": "thermal",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 4,
+    "title": "Температура",
+    "section": "thermal",
+    "count": 9,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 5,
+    "title": "Внутренняя энергия",
+    "section": "thermal",
+    "count": 1,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 6,
+    "title": "Способы изменения внутренней энергии тела",
+    "section": "thermal",
+    "count": 2,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 7,
+    "title": "Теплопроводность",
+    "section": "thermal",
+    "count": 1,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 8,
+    "title": "Конвекция",
+    "section": "thermal",
+    "count": 2,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 9,
+    "title": "Излучение",
+    "section": "thermal",
+    "count": 2,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 10,
+    "title": "Количество теплоты. Единицы количества теплоты",
+    "section": "thermal",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 11,
+    "title": "Удельная теплоёмкость",
+    "section": "thermal",
+    "count": 19,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 12,
+    "title": "Расчёт количества теплоты. Уравнение теплового баланса",
+    "section": "thermal",
+    "count": 52,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 13,
+    "title": "Энергия топлива. Удельная теплота сгорания",
+    "section": "thermal",
+    "count": 22,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 14,
+    "title": "Закон сохранения и превращения энергии в механических и тепловых процессах",
+    "section": "thermal",
+    "count": 27,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 15,
+    "title": "Плавление и отвердевание кристаллических тел",
+    "section": "thermal",
+    "count": 5,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 16,
+    "title": "График плавления и отвердевания кристаллических тел",
+    "section": "thermal",
+    "count": 4,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 17,
+    "title": "Удельная теплота плавления",
+    "section": "thermal",
+    "count": 36,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 18,
+    "title": "Испарение. Конденсация. Насыщенный и ненасыщенный пар",
+    "section": "thermal",
+    "count": 4,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 19,
+    "title": "Поглощение энергии при испарении жидкости. Выделение энергии при конденсации пара",
+    "section": "thermal",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 20,
+    "title": "Влажность воздуха. Способы определения влажности воздуха",
+    "section": "thermal",
+    "count": 7,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 21,
+    "title": "Кипение",
+    "section": "thermal",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 22,
+    "title": "Удельная теплота парообразования",
+    "section": "thermal",
+    "count": 27,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 23,
+    "title": "Работа газа и пара при расширении",
+    "section": "thermal",
+    "count": 3,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 24,
+    "title": "Двигатель внутреннего сгорания",
+    "section": "thermal",
+    "count": 1,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 25,
+    "title": "Паровая турбина",
+    "section": "thermal",
+    "count": 1,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 26,
+    "title": "КПД теплового двигателя",
+    "section": "thermal",
+    "count": 30,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 27,
+    "title": "Электризация тел при соприкосновении. Взаимодействие заряженных тел",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 28,
+    "title": "Электроскоп. Проводники и непроводники электричества",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 29,
+    "title": "Закон Кулона. Электрическое поле",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 30,
+    "title": "Делимость электрического заряда. Электрон",
+    "section": "electric",
+    "count": 2,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 31,
+    "title": "Строение атома",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 32,
+    "title": "Объяснение электрических явлений. Закон сохранения электрического заряда",
+    "section": "electric",
+    "count": 3,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 33,
+    "title": "Статическое электричество, его учёт и использование в быту и технике",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 34,
+    "title": "Электрический ток. Источники электрического тока",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 35,
+    "title": "Электрическая цепь и её составные части",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 36,
+    "title": "Электрический ток в металлах",
+    "section": "electric",
+    "count": 0,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 37,
+    "title": "Действия электрического тока",
+    "section": "electric",
+    "count": 1,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 38,
+    "title": "Сила тока. Измерение силы тока",
+    "section": "electric",
+    "count": 6,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 39,
+    "title": "Электрическое напряжение. Измерение напряжения",
+    "section": "electric",
+    "count": 2,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  },
+  {
+    "paragraph": 40,
+    "title": "Электрическое сопротивление проводника. Закон Ома для участка цепи",
+    "section": "electric",
+    "count": 9,
+    "searchStatus": "SOURCE_PDF_RELEASE",
+    "reviewRequired": 0
+  }
+]

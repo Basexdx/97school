@@ -1,0 +1,165 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS teachers (
+  id TEXT PRIMARY KEY,
+  email TEXT UNIQUE,
+  status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE','SUSPENDED','REVOKED')),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS classes (
+  id TEXT PRIMARY KEY,
+  teacher_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  grade INTEGER NOT NULL CHECK (grade IN (7,8,9)),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+);
+
+CREATE TABLE IF NOT EXISTS students (
+  id TEXT PRIMARY KEY,
+  class_id TEXT NOT NULL,
+  nickname TEXT,
+  current_grade INTEGER NOT NULL CHECK (current_grade IN (7,8,9)),
+  status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE','SUSPENDED','REVOKED')),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (class_id) REFERENCES classes(id)
+);
+
+CREATE TABLE IF NOT EXISTS access_keys (
+  id TEXT PRIMARY KEY,
+  class_id TEXT NOT NULL,
+  student_id TEXT,
+  key_hash TEXT NOT NULL UNIQUE,
+  key_label TEXT NOT NULL,
+  purpose TEXT NOT NULL DEFAULT 'INITIAL_ACCESS' CHECK (purpose IN ('INITIAL_ACCESS','NEW_DEVICE','RECOVERY')),
+  status TEXT NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE','PENDING','USED','REVOKED','EXPIRED')),
+  expires_at TEXT NOT NULL,
+  used_at TEXT,
+  revoked_at TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (class_id) REFERENCES classes(id),
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE IF NOT EXISTS connection_requests (
+  id TEXT PRIMARY KEY,
+  access_key_id TEXT NOT NULL,
+  student_id TEXT,
+  pending_token_hash TEXT NOT NULL UNIQUE,
+  status TEXT NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','APPROVED','REJECTED','EXPIRED')),
+  expires_at TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  decided_at TEXT,
+  decided_by TEXT,
+  FOREIGN KEY (access_key_id) REFERENCES access_keys(id),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (decided_by) REFERENCES teachers(id)
+);
+
+CREATE TABLE IF NOT EXISTS student_sessions (
+  id TEXT PRIMARY KEY,
+  request_id TEXT UNIQUE,
+  student_id TEXT NOT NULL,
+  token_hash TEXT NOT NULL UNIQUE,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expires_at TEXT NOT NULL,
+  last_active_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  revoked_at TEXT,
+  FOREIGN KEY (request_id) REFERENCES connection_requests(id),
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE IF NOT EXISTS teacher_sessions (
+  id TEXT PRIMARY KEY,
+  teacher_id TEXT NOT NULL,
+  token_hash TEXT NOT NULL UNIQUE,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expires_at TEXT NOT NULL,
+  last_active_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  revoked_at TEXT,
+  FOREIGN KEY (teacher_id) REFERENCES teachers(id)
+);
+
+CREATE TABLE IF NOT EXISTS class_progress (
+  id TEXT PRIMARY KEY,
+  student_id TEXT NOT NULL,
+  grade INTEGER NOT NULL CHECK (grade IN (7,8,9)),
+  total_xp INTEGER NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(student_id, grade),
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE IF NOT EXISTS xp_events (
+  id TEXT PRIMARY KEY,
+  student_id TEXT NOT NULL,
+  grade INTEGER NOT NULL CHECK (grade IN (7,8,9)),
+  amount INTEGER NOT NULL,
+  reason TEXT NOT NULL,
+  source_id TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE IF NOT EXISTS rate_limits (
+  key_hash TEXT NOT NULL,
+  bucket TEXT NOT NULL,
+  window_start INTEGER NOT NULL,
+  count INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (key_hash, bucket, window_start)
+);
+
+CREATE TABLE IF NOT EXISTS audit_log (
+  id TEXT PRIMARY KEY,
+  actor_role TEXT NOT NULL CHECK (actor_role IN ('STUDENT','TEACHER','ADMIN','SYSTEM')),
+  actor_id TEXT,
+  action TEXT NOT NULL,
+  target_type TEXT,
+  target_id TEXT,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_connection_requests_status ON connection_requests(status, created_at);
+CREATE INDEX IF NOT EXISTS idx_access_keys_hash ON access_keys(key_hash);
+CREATE INDEX IF NOT EXISTS idx_access_keys_class ON access_keys(class_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_student_sessions_student ON student_sessions(student_id, revoked_at);
+CREATE INDEX IF NOT EXISTS idx_teacher_sessions_teacher ON teacher_sessions(teacher_id, revoked_at);
+CREATE INDEX IF NOT EXISTS idx_xp_events_weekly ON xp_events(grade, created_at);
+
+INSERT OR IGNORE INTO teachers (id, email) VALUES ('teacher_01', 'teacher@genius.local');
+INSERT OR IGNORE INTO classes (id, teacher_id, title, grade) VALUES
+  ('class_7A', 'teacher_01', '7А', 7),
+  ('class_8B', 'teacher_01', '8Б', 8),
+  ('class_9A', 'teacher_01', '9А', 9),
+  ('class_9B', 'teacher_01', '9Б', 9);
+
+-- v5 offline-first sync
+CREATE TABLE IF NOT EXISTS learning_tests (
+  id TEXT PRIMARY KEY,
+  grade INTEGER NOT NULL CHECK (grade IN (7,8,9)),
+  title TEXT NOT NULL,
+  max_xp INTEGER NOT NULL DEFAULT 60 CHECK (max_xp >= 0 AND max_xp <= 60),
+  active INTEGER NOT NULL DEFAULT 1 CHECK (active IN (0,1)),
+  content_version INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS sync_events (
+  id TEXT PRIMARY KEY,
+  student_id TEXT NOT NULL,
+  event_type TEXT NOT NULL,
+  payload_hash TEXT NOT NULL,
+  client_created_at TEXT,
+  status TEXT NOT NULL DEFAULT 'ACCEPTED' CHECK (status IN ('ACCEPTED','REJECTED')),
+  result_json TEXT,
+  received_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_sync_events_student ON sync_events(student_id, received_at);
+
+INSERT OR IGNORE INTO learning_tests (id, grade, title, max_xp, active, content_version) VALUES
+  ('demo-grade-7', 7, 'Демонстрационный тест 7 класса', 60, 1, 1),
+  ('demo-grade-8', 8, 'Демонстрационный тест 8 класса', 60, 1, 1),
+  ('demo-grade-9', 9, 'Демонстрационный тест 9 класса', 60, 1, 1);
