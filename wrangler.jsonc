@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "genius-api",
+  "main": "worker/src/index.js",
+  "compatibility_date": "2026-09-20",
+  "vars": {
+    "TEACHER_ID": "teacher_01",
+    "PENDING_TTL_MINUTES": "15",
+    "STUDENT_SESSION_DAYS": "30",
+    "TEACHER_SESSION_HOURS": "12"
+  },
+  "secrets": {
+    "required": ["TEACHER_ACCESS_SECRET", "RATE_LIMIT_SECRET"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "genius-db",
+      "database_id": "00000000-0000-0000-0000-000000000001"
+    }
+  ]
+}
