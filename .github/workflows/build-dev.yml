@@ -1,0 +1,30 @@
+name: Build Genius dev
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test task banks
+        run: npm run test:bank
+      - name: Build Genius
+        run: npm run build
+      - name: Verify generated grade 7 bank
+        run: |
+          test -f public/task-bank/grade7.json
+          test -f public/task-bank/index-grade7.json
+          node -e "const fs=require('fs'); const b=JSON.parse(fs.readFileSync('public/task-bank/grade7.json')); if(b.tasks.length!==71) process.exit(1); const t=b.tasks.find(x=>x.BOOK_TASK_NUMBER===161); if(!t||t.DIAGRAM?.type!=='multi-line-chart'||/рис/i.test(t.TASK)) process.exit(1); console.log('Grade 7 bank:',b.tasks.length,'tasks; task 161 graph OK')"
