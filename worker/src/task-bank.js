@@ -1,19 +1,26 @@
-import tasks from '../../bank/tasks.json'
+import tasks8 from '../../bank/tasks.json'
+import tasks7 from '../../bank/tasks-grade7.json'
 import {checkAnswer,publishable} from '../../shared/task-checker.mjs'
-import {TASK_BANK_VERSION} from '../../shared/task-bank-meta.mjs'
-const VERSION=TASK_BANK_VERSION
-const byId=new Map(tasks.filter(publishable).map(t=>[t.ID,t]))
+import {TASK_BANK_VERSION,TASK_BANK_VERSION_7} from '../../shared/task-bank-meta.mjs'
+
+const allTasks=[...tasks8,...tasks7]
+const byId=new Map(allTasks.filter(publishable).map(t=>[t.ID,t]))
+const versionForGrade=grade=>Number(grade)===7?TASK_BANK_VERSION_7:TASK_BANK_VERSION
 const json=(v,status=200)=>new Response(JSON.stringify(v),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}})
 const digest=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))),b=>b.toString(16).padStart(2,'0')).join('')
+
 export async function taskProgress(env,student) {
-  const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,
+  const grade=Number(student.grade)
+  const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,a.grade,
     COALESCE((SELECT amount FROM task_awards w WHERE w.student_id=a.student_id AND w.task_id=a.task_id AND w.attempt_id=a.attempt_id),0) AS xp_awarded
-    FROM task_attempts a WHERE a.student_id=? ORDER BY a.received_at,a.rowid`).bind(student.id).all()
-  const xp=await env.DB.prepare('SELECT total_xp FROM class_progress WHERE student_id=? AND grade=8').bind(student.id).first()
-  return json({studentId:student.id,attempts:rows.results||[],totalXp:xp?.total_xp||0})
+    FROM task_attempts a WHERE a.student_id=? AND a.grade=? ORDER BY a.received_at,a.rowid`).bind(student.id,grade).all()
+  const xp=await env.DB.prepare('SELECT total_xp FROM class_progress WHERE student_id=? AND grade=?').bind(student.id,grade).first()
+  return json({studentId:student.id,grade,attempts:rows.results||[],totalXp:xp?.total_xp||0})
 }
+
 export async function submitTaskAttempts(request,env,student) {
-  if(Number(student.grade)!==8) return json({error:'grade_mismatch'},403)
+  const grade=Number(student.grade)
+  if(![7,8,9].includes(grade)) return json({error:'grade_mismatch'},403)
   const text=await request.text()
   if(text.length>100000) return json({error:'payload_too_large'},413)
   let body
@@ -30,13 +37,14 @@ export async function submitTaskAttempts(request,env,student) {
     let existing=await env.DB.prepare('SELECT * FROM task_attempts WHERE student_id=? AND (attempt_id=? OR event_id=?)').bind(student.id,attemptId,eventId).first()
     if(!existing) {
       const task=byId.get(taskId)
-      if(!task||version!==VERSION) {results.push({attemptId,status:'REJECTED',error:task?'content_version_mismatch':'task_unavailable'});continue}
+      if(!task||Number(task.CLASS)!==grade||version!==versionForGrade(grade)) {
+        results.push({attemptId,status:'REJECTED',error:!task?'task_unavailable':Number(task.CLASS)!==grade?'grade_mismatch':'content_version_mismatch'});continue
+      }
       const checked=checkAnswer(task,answer)
-      // Free-text explanations require teacher review; they never auto-award XP.
       const status=checked.reviewRequired?'PENDING_REVIEW':'CONFIRMED'
       await env.DB.prepare(`INSERT OR IGNORE INTO task_attempts
-        (student_id,attempt_id,event_id,task_id,content_version,payload_hash,answer_json,correct,status,max_xp)
-        VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(student.id,attemptId,eventId,taskId,version,hash,JSON.stringify(answer??null),checked.correct===null?null:Number(checked.correct),status,task.XP).run()
+        (student_id,attempt_id,event_id,task_id,grade,content_version,payload_hash,answer_json,correct,status,max_xp)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?)`).bind(student.id,attemptId,eventId,taskId,grade,version,hash,JSON.stringify(answer??null),checked.correct===null?null:Number(checked.correct),status,task.XP).run()
       existing=await env.DB.prepare('SELECT * FROM task_attempts WHERE student_id=? AND (attempt_id=? OR event_id=?)').bind(student.id,attemptId,eventId).first()
     }
     if(!existing || existing.payload_hash!==hash || existing.attempt_id!==attemptId || existing.event_id!==eventId) {
@@ -45,6 +53,6 @@ export async function submitTaskAttempts(request,env,student) {
     const award=await env.DB.prepare('SELECT amount FROM task_awards WHERE student_id=? AND task_id=? AND attempt_id=?').bind(student.id,taskId,attemptId).first()
     results.push({attemptId,taskId,status:existing.status,correct:existing.correct===null?null:Boolean(existing.correct),xpAwarded:award?.amount||0})
   }
-  const xp=await env.DB.prepare('SELECT total_xp FROM class_progress WHERE student_id=? AND grade=8').bind(student.id).first()
-  return json({studentId:student.id,results,totalXp:xp?.total_xp||0})
+  const xp=await env.DB.prepare('SELECT total_xp FROM class_progress WHERE student_id=? AND grade=?').bind(student.id,grade).first()
+  return json({studentId:student.id,grade,results,totalXp:xp?.total_xp||0})
 }
