@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-101-25327",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Плавление снега",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "В снежный сугроб, имеющий температуру 0 °C, бросили раскаленный до температуры 600 °C стальной шар массой 2,2 кг. Какова масса расплавленного снега? Потерями энергии в окружающую среду и испарением воды пренебречь.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 2,
+    "unit": "Введите массу расплавленного снега, кг",
+    "tolerance": 0.05
+  },
+  "ANSWER_PROMPT": "Введите массу расплавленного снега, кг",
+  "UNITS": [],
+  "SKILLS": [
+    "Плавление снега"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

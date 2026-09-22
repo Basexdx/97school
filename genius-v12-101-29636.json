@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-101-29636",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 14,
+  "TOPIC": "Механическая энергия и нагревание",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Стальной молот падает с высоты 10 м и забивает сваю. При ударе 50% энергии идет на его нагревание. На сколько градусов нагревается молот? Удар считать абсолютно неупругим.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 0.1,
+    "unit": "Введите изменение температуры, °C",
+    "tolerance": 0.01
+  },
+  "ANSWER_PROMPT": "Введите изменение температуры, °C",
+  "UNITS": [],
+  "SKILLS": [
+    "Механическая энергия и нагревание"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

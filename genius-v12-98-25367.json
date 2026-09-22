@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-98-25367",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 26,
+  "TOPIC": "КПД двигателя",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "КПД двигателя трактора равен 25%. Какую максимальную полезную работу он может совершить, израсходовав 10 кг бензина?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 115,
+    "unit": "Введите работу, МДж",
+    "tolerance": 0.2
+  },
+  "ANSWER_PROMPT": "Введите работу, МДж",
+  "UNITS": [],
+  "SKILLS": [
+    "КПД двигателя"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

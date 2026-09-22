@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-98-31530",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Тепловой баланс со льдом",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "В калориметр поместили 200 г мокрого снега и долили 200 г воды при температуре 100 °C. После этого снег растаял, и в калориметре установилась температура 20 °C. Сколько замерзшей воды содержал мокрый снег первоначально?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 152.7,
+    "unit": "Введите массу замёрзшей воды, г",
+    "tolerance": 0.5
+  },
+  "ANSWER_PROMPT": "Введите массу замёрзшей воды, г",
+  "UNITS": [],
+  "SKILLS": [
+    "Тепловой баланс со льдом"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,3520 @@
+{
+  "version": "4.0.0-source-319",
+  "complete": true,
+  "origin": "CURATED_SOURCE_BANK_319",
+  "title": "Банк задач 8 класса · 319 задач",
+  "paragraphs": [
+    {
+      "paragraph": 1,
+      "title": "Основные положения молекулярно-кинетической теории строения вещества",
+      "section": "thermal",
+      "count": 6,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 2,
+      "title": "Агрегатные состояния вещества",
+      "section": "thermal",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 3,
+      "title": "Смачивание и несмачивание. Капиллярные явления",
+      "section": "thermal",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 4,
+      "title": "Температура",
+      "section": "thermal",
+      "count": 9,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 5,
+      "title": "Внутренняя энергия",
+      "section": "thermal",
+      "count": 1,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 6,
+      "title": "Способы изменения внутренней энергии тела",
+      "section": "thermal",
+      "count": 2,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 7,
+      "title": "Теплопроводность",
+      "section": "thermal",
+      "count": 1,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 8,
+      "title": "Конвекция",
+      "section": "thermal",
+      "count": 2,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 9,
+      "title": "Излучение",
+      "section": "thermal",
+      "count": 2,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 10,
+      "title": "Количество теплоты. Единицы количества теплоты",
+      "section": "thermal",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 11,
+      "title": "Удельная теплоёмкость",
+      "section": "thermal",
+      "count": 19,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 12,
+      "title": "Расчёт количества теплоты. Уравнение теплового баланса",
+      "section": "thermal",
+      "count": 52,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 13,
+      "title": "Энергия топлива. Удельная теплота сгорания",
+      "section": "thermal",
+      "count": 22,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 14,
+      "title": "Закон сохранения и превращения энергии в механических и тепловых процессах",
+      "section": "thermal",
+      "count": 27,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 15,
+      "title": "Плавление и отвердевание кристаллических тел",
+      "section": "thermal",
+      "count": 5,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 16,
+      "title": "График плавления и отвердевания кристаллических тел",
+      "section": "thermal",
+      "count": 4,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 17,
+      "title": "Удельная теплота плавления",
+      "section": "thermal",
+      "count": 36,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 18,
+      "title": "Испарение. Конденсация. Насыщенный и ненасыщенный пар",
+      "section": "thermal",
+      "count": 4,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 19,
+      "title": "Поглощение энергии при испарении жидкости. Выделение энергии при конденсации пара",
+      "section": "thermal",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 20,
+      "title": "Влажность воздуха. Способы определения влажности воздуха",
+      "section": "thermal",
+      "count": 7,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 21,
+      "title": "Кипение",
+      "section": "thermal",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 22,
+      "title": "Удельная теплота парообразования",
+      "section": "thermal",
+      "count": 27,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 23,
+      "title": "Работа газа и пара при расширении",
+      "section": "thermal",
+      "count": 3,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 24,
+      "title": "Двигатель внутреннего сгорания",
+      "section": "thermal",
+      "count": 1,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 25,
+      "title": "Паровая турбина",
+      "section": "thermal",
+      "count": 1,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 26,
+      "title": "КПД теплового двигателя",
+      "section": "thermal",
+      "count": 30,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 27,
+      "title": "Электризация тел при соприкосновении. Взаимодействие заряженных тел",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 28,
+      "title": "Электроскоп. Проводники и непроводники электричества",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 29,
+      "title": "Закон Кулона. Электрическое поле",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 30,
+      "title": "Делимость электрического заряда. Электрон",
+      "section": "electric",
+      "count": 2,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 31,
+      "title": "Строение атома",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 32,
+      "title": "Объяснение электрических явлений. Закон сохранения электрического заряда",
+      "section": "electric",
+      "count": 3,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 33,
+      "title": "Статическое электричество, его учёт и использование в быту и технике",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 34,
+      "title": "Электрический ток. Источники электрического тока",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 35,
+      "title": "Электрическая цепь и её составные части",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 36,
+      "title": "Электрический ток в металлах",
+      "section": "electric",
+      "count": 0,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 37,
+      "title": "Действия электрического тока",
+      "section": "electric",
+      "count": 1,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 38,
+      "title": "Сила тока. Измерение силы тока",
+      "section": "electric",
+      "count": 6,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 39,
+      "title": "Электрическое напряжение. Измерение напряжения",
+      "section": "electric",
+      "count": 2,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    },
+    {
+      "paragraph": 40,
+      "title": "Электрическое сопротивление проводника. Закон Ома для участка цепи",
+      "section": "electric",
+      "count": 9,
+      "searchStatus": "SOURCE_PDF_RELEASE",
+      "reviewRequired": 0
+    }
+  ],
+  "tasks": [
+    {
+      "id": "genius-src8-7-19601",
+      "paragraph": 1,
+      "section": "thermal",
+      "topic": "Броуновское движение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1306
+    },
+    {
+      "id": "genius-src8-7-23867",
+      "paragraph": 9,
+      "section": "thermal",
+      "topic": "Тепловое излучение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1666
+    },
+    {
+      "id": "genius-src8-7-24044",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1362
+    },
+    {
+      "id": "genius-src8-7-25066",
+      "paragraph": 8,
+      "section": "thermal",
+      "topic": "Конвекция",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1673
+    },
+    {
+      "id": "genius-src8-7-25878",
+      "paragraph": 9,
+      "section": "thermal",
+      "topic": "Тепловое излучение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1231
+    },
+    {
+      "id": "genius-src8-7-26141",
+      "paragraph": 1,
+      "section": "thermal",
+      "topic": "Диффузия",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1172
+    },
+    {
+      "id": "genius-src8-7-26142",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1319
+    },
+    {
+      "id": "genius-src8-7-26143",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1538
+    },
+    {
+      "id": "genius-src8-7-26144",
+      "paragraph": 1,
+      "section": "thermal",
+      "topic": "Диффузия",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1256
+    },
+    {
+      "id": "genius-src8-7-26145",
+      "paragraph": 1,
+      "section": "thermal",
+      "topic": "Диффузия",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1385
+    },
+    {
+      "id": "genius-src8-7-26146",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1430
+    },
+    {
+      "id": "genius-src8-7-26147",
+      "paragraph": 18,
+      "section": "thermal",
+      "topic": "Испарение и охлаждение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1706
+    },
+    {
+      "id": "genius-src8-7-26148",
+      "paragraph": 18,
+      "section": "thermal",
+      "topic": "Испарение и охлаждение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1244
+    },
+    {
+      "id": "genius-src8-7-26149",
+      "paragraph": 1,
+      "section": "thermal",
+      "topic": "Броуновское движение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1306
+    },
+    {
+      "id": "genius-src8-7-26150",
+      "paragraph": 6,
+      "section": "thermal",
+      "topic": "Изменение внутренней энергии работой",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1247
+    },
+    {
+      "id": "genius-src8-7-26151",
+      "paragraph": 18,
+      "section": "thermal",
+      "topic": "Конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1140
+    },
+    {
+      "id": "genius-src8-7-26152",
+      "paragraph": 8,
+      "section": "thermal",
+      "topic": "Конвекция",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1279
+    },
+    {
+      "id": "genius-src8-7-26153",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1326
+    },
+    {
+      "id": "genius-src8-7-26155",
+      "paragraph": 1,
+      "section": "thermal",
+      "topic": "Броуновское движение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1213
+    },
+    {
+      "id": "genius-src8-7-29595",
+      "paragraph": 6,
+      "section": "thermal",
+      "topic": "Изменение внутренней энергии работой",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1249
+    },
+    {
+      "id": "genius-src8-7-29693",
+      "paragraph": 7,
+      "section": "thermal",
+      "topic": "Теплопроводность",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1211
+    },
+    {
+      "id": "genius-src8-7-31527",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1266
+    },
+    {
+      "id": "genius-src8-19-46",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Температура, диффузия и тепловые закономерности",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1730
+    },
+    {
+      "id": "genius-src8-19-154",
+      "paragraph": 38,
+      "section": "electric",
+      "topic": "Сила тока и единицы",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1462
+    },
+    {
+      "id": "genius-src8-19-181",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Количество теплоты и удельные величины",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1464
+    },
+    {
+      "id": "genius-src8-19-235",
+      "paragraph": 30,
+      "section": "electric",
+      "topic": "Электрический заряд и энергия",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1442
+    },
+    {
+      "id": "genius-src8-19-316",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрические и магнитные устройства",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1916
+    },
+    {
+      "id": "genius-src8-19-343",
+      "paragraph": 30,
+      "section": "electric",
+      "topic": "Делимость электрического заряда",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1512
+    },
+    {
+      "id": "genius-src8-19-1662",
+      "paragraph": 38,
+      "section": "electric",
+      "topic": "Электрические измерительные приборы",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1500
+    },
+    {
+      "id": "genius-src8-19-478",
+      "paragraph": 5,
+      "section": "thermal",
+      "topic": "Энергия и физические понятия",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1325
+    },
+    {
+      "id": "genius-src8-19-505",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Влажность воздуха",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1369
+    },
+    {
+      "id": "genius-src8-19-424",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Частота и оптические приборы",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1339
+    },
+    {
+      "id": "genius-src8-19-559",
+      "paragraph": 38,
+      "section": "electric",
+      "topic": "Электрические измерительные приборы",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1660
+    },
+    {
+      "id": "genius-src8-19-694",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Напряжение, сопротивление и заряд",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1630
+    },
+    {
+      "id": "genius-src8-19-748",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Связь электрических единиц",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1493
+    },
+    {
+      "id": "genius-src8-19-802",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Удельное сопротивление",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1557
+    },
+    {
+      "id": "genius-src8-19-829",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1588
+    },
+    {
+      "id": "genius-src8-19-14243",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Напряжение, сопротивление и заряд",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1784
+    },
+    {
+      "id": "genius-src8-19-14268",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Работа, мощность и сила тока",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1696
+    },
+    {
+      "id": "genius-src8-19-14293",
+      "paragraph": 39,
+      "section": "electric",
+      "topic": "Электрические измерения и влажность",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1783
+    },
+    {
+      "id": "genius-src8-19-14318",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Влажность воздуха",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1694
+    },
+    {
+      "id": "genius-src8-19-14576",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрический ток и электромагнитное поле",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 2420
+    },
+    {
+      "id": "genius-src8-19-1326",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Влажность воздуха",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1581
+    },
+    {
+      "id": "genius-src8-19-1519",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Работа, мощность и сила тока",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1563
+    },
+    {
+      "id": "genius-src8-19-1546",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Работа, мощность и сила тока",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1550
+    },
+    {
+      "id": "genius-src8-19-1579",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Напряжение, сопротивление и заряд",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1711
+    },
+    {
+      "id": "genius-src8-19-1606",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Влажность воздуха",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1449
+    },
+    {
+      "id": "genius-src8-19-1635",
+      "paragraph": 38,
+      "section": "electric",
+      "topic": "Электрические измерительные приборы",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1478
+    },
+    {
+      "id": "genius-src8-19-13129",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1802
+    },
+    {
+      "id": "genius-src8-19-14550",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Единицы тепловых и электрических величин",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1797
+    },
+    {
+      "id": "genius-src8-19-24042",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1801
+    },
+    {
+      "id": "genius-src8-19-25851",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1563
+    },
+    {
+      "id": "genius-src8-19-29593",
+      "paragraph": 39,
+      "section": "electric",
+      "topic": "Определения электрических величин",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 2611
+    },
+    {
+      "id": "genius-src8-19-29713",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Влажность воздуха",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1896
+    },
+    {
+      "id": "genius-src8-19-29736",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Сила тока и сопротивление",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 2301
+    },
+    {
+      "id": "genius-src8-19-29829",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Тепловые величины и их единицы",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1825
+    },
+    {
+      "id": "genius-src8-19-32454",
+      "paragraph": 18,
+      "section": "thermal",
+      "topic": "Конденсация и внутренняя энергия",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "matching",
+      "xp": 20,
+      "bytes": 1587
+    },
+    {
+      "id": "genius-src8-99-26077",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитная индукция",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1677
+    },
+    {
+      "id": "genius-src8-99-26158",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Магнитное действие электрического тока",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1365
+    },
+    {
+      "id": "genius-src8-99-26159",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитный спектр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1367
+    },
+    {
+      "id": "genius-src8-99-26160",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Преломление света",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1312
+    },
+    {
+      "id": "genius-src8-99-26161",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитный спектр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1550
+    },
+    {
+      "id": "genius-src8-99-26162",
+      "paragraph": 32,
+      "section": "electric",
+      "topic": "Электризация через влияние",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1523
+    },
+    {
+      "id": "genius-src8-99-26163",
+      "paragraph": 32,
+      "section": "electric",
+      "topic": "Электризация через влияние",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1606
+    },
+    {
+      "id": "genius-src8-99-26164",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Дисперсия света",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1196
+    },
+    {
+      "id": "genius-src8-99-26165",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитный спектр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1085
+    },
+    {
+      "id": "genius-src8-99-26166",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитный спектр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1336
+    },
+    {
+      "id": "genius-src8-99-26167",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Рассеяние света",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1104
+    },
+    {
+      "id": "genius-src8-99-26168",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитная индукция",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1538
+    },
+    {
+      "id": "genius-src8-99-26169",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Рассеяние света",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1234
+    },
+    {
+      "id": "genius-src8-99-26170",
+      "paragraph": 32,
+      "section": "electric",
+      "topic": "Электризация через влияние",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1571
+    },
+    {
+      "id": "genius-src8-99-26171",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Отражение света",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1206
+    },
+    {
+      "id": "genius-src8-99-26172",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электромагнитная индукция",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1613
+    },
+    {
+      "id": "genius-src8-99-26173",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Преломление света",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "single_choice",
+      "xp": 10,
+      "bytes": 1150
+    },
+    {
+      "id": "genius-src8-114-26240",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрические и магнитные приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1910
+    },
+    {
+      "id": "genius-src8-114-26285",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Оптические приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1721
+    },
+    {
+      "id": "genius-src8-114-26286",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрические и магнитные приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1947
+    },
+    {
+      "id": "genius-src8-114-26287",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Оптические приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1752
+    },
+    {
+      "id": "genius-src8-114-26288",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Оптические и электрические устройства",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1890
+    },
+    {
+      "id": "genius-src8-114-26290",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Оптические приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1752
+    },
+    {
+      "id": "genius-src8-114-26291",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрические и магнитные приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2137
+    },
+    {
+      "id": "genius-src8-114-26292",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрические и магнитные приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1937
+    },
+    {
+      "id": "genius-src8-114-26293",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Измерительные приборы и тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2102
+    },
+    {
+      "id": "genius-src8-114-26294",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Реостат и электрические приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2150
+    },
+    {
+      "id": "genius-src8-114-26295",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Оптические приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1721
+    },
+    {
+      "id": "genius-src8-114-26297",
+      "paragraph": 25,
+      "section": "thermal",
+      "topic": "Паровая турбина и источник тока",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2059
+    },
+    {
+      "id": "genius-src8-114-26298",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Генератор и электродвигатель",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1984
+    },
+    {
+      "id": "genius-src8-114-26301",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Оптические и электрические устройства",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1892
+    },
+    {
+      "id": "genius-src8-114-26303",
+      "paragraph": 24,
+      "section": "thermal",
+      "topic": "Двигатели",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1913
+    },
+    {
+      "id": "genius-src8-114-26306",
+      "paragraph": 38,
+      "section": "electric",
+      "topic": "Манометр и гальванометр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2076
+    },
+    {
+      "id": "genius-src8-114-26307",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Термометр и психрометр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2020
+    },
+    {
+      "id": "genius-src8-114-26308",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Генератор и электродвигатель",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1997
+    },
+    {
+      "id": "genius-src8-114-26309",
+      "paragraph": 40,
+      "section": "electric",
+      "topic": "Реостат и электрические приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2154
+    },
+    {
+      "id": "genius-src8-114-26310",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Электрические и магнитные приборы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1909
+    },
+    {
+      "id": "genius-src8-114-26311",
+      "paragraph": 37,
+      "section": "electric",
+      "topic": "Действия электрического тока",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1768
+    },
+    {
+      "id": "genius-src8-114-26312",
+      "paragraph": 4,
+      "section": "thermal",
+      "topic": "Измерительные приборы и тепловое расширение",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2104
+    },
+    {
+      "id": "genius-src8-114-29550",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Генератор и электродвигатель",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1992
+    },
+    {
+      "id": "genius-src8-114-29572",
+      "paragraph": 20,
+      "section": "thermal",
+      "topic": "Термометр и психрометр",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 2047
+    },
+    {
+      "id": "genius-src8-114-29830",
+      "paragraph": 38,
+      "section": "electric",
+      "topic": "Измерение заряда и силы тока",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1542
+    },
+    {
+      "id": "genius-src8-114-32586",
+      "paragraph": null,
+      "section": "extra8",
+      "topic": "Генератор и электродвигатель",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "matching",
+      "xp": 10,
+      "bytes": 1879
+    },
+    {
+      "id": "genius-v12-37-1689",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Уравнение теплового баланса",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1228
+    },
+    {
+      "id": "genius-v12-37-8799",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Уравнение теплового баланса",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1113
+    },
+    {
+      "id": "genius-v12-37-8806",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1271
+    },
+    {
+      "id": "genius-v12-37-8808",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Расчёт количества теплоты",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1355
+    },
+    {
+      "id": "genius-v12-37-8809",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Удельная теплота сгорания",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1326
+    },
+    {
+      "id": "genius-v12-37-9112",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1253
+    },
+    {
+      "id": "genius-v12-37-9118",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Превращение механической энергии во внутреннюю",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1597
+    },
+    {
+      "id": "genius-v12-37-13135",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1130
+    },
+    {
+      "id": "genius-v12-37-14274",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Уравнение теплового баланса",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1245
+    },
+    {
+      "id": "genius-v12-37-14324",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Расчёт количества теплоты",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1059
+    },
+    {
+      "id": "genius-v12-56-3312",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1833
+    },
+    {
+      "id": "genius-v12-56-8783",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1718
+    },
+    {
+      "id": "genius-v12-56-8784",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1672
+    },
+    {
+      "id": "genius-v12-56-8786",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Количество теплоты по графику нагревания",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1885
+    },
+    {
+      "id": "genius-v12-56-12421",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1882
+    },
+    {
+      "id": "genius-v12-56-14582",
+      "paragraph": 16,
+      "section": "thermal",
+      "topic": "Плавление по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1974
+    },
+    {
+      "id": "genius-v12-56-25282",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления по диаграмме",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1734
+    },
+    {
+      "id": "genius-v12-56-25310",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Сравнение удельной теплоёмкости",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 2204
+    },
+    {
+      "id": "genius-v12-56-26081",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Сравнение удельной теплоёмкости",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1818
+    },
+    {
+      "id": "genius-v12-56-29743",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость по таблице",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "table",
+      "xp": 20,
+      "bytes": 2090
+    },
+    {
+      "id": "genius-v12-40-8836",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Мощность нагревателя",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1411
+    },
+    {
+      "id": "genius-v12-40-8841",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Плавление льда и нагрев воды",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1444
+    },
+    {
+      "id": "genius-v12-40-8842",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Тепловой баланс с паром",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1356
+    },
+    {
+      "id": "genius-v12-40-8854",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1067
+    },
+    {
+      "id": "genius-v12-40-9048",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Нагревание воды по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1807
+    },
+    {
+      "id": "genius-v12-40-9049",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Мощность нагревателя по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1752
+    },
+    {
+      "id": "genius-v12-40-9050",
+      "paragraph": 16,
+      "section": "thermal",
+      "topic": "Нагревание льда и воды по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1849
+    },
+    {
+      "id": "genius-v12-40-9051",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость по графику",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "graph",
+      "xp": 20,
+      "bytes": 1901
+    },
+    {
+      "id": "genius-v12-40-14340",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Плавление льда",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1225
+    },
+    {
+      "id": "genius-v12-40-23877",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Превращение механической энергии во внутреннюю",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1466
+    },
+    {
+      "id": "genius-v12-98-53",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Механическая энергия и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1561
+    },
+    {
+      "id": "genius-v12-98-161",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Механическая энергия и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1364
+    },
+    {
+      "id": "genius-v12-98-188",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Механическая энергия и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1406
+    },
+    {
+      "id": "genius-v12-98-350",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Работа сил сопротивления и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1265
+    },
+    {
+      "id": "genius-v12-98-940",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Механическая энергия и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1264
+    },
+    {
+      "id": "genius-v12-98-944",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Механическая энергия и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1249
+    },
+    {
+      "id": "genius-v12-98-23882",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Превращение механической энергии во внутреннюю",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1259
+    },
+    {
+      "id": "genius-v12-98-25106",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД двигателя",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1065
+    },
+    {
+      "id": "genius-v12-98-25367",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД двигателя",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1001
+    },
+    {
+      "id": "genius-v12-98-31530",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Тепловой баланс со льдом",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1266
+    },
+    {
+      "id": "genius-v12-101-1163",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Плавление и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1483
+    },
+    {
+      "id": "genius-v12-101-1190",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Плавление и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1253
+    },
+    {
+      "id": "genius-v12-101-1271",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Тепловой баланс смесей",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1599
+    },
+    {
+      "id": "genius-v12-101-1298",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Тепловой баланс смесей",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1603
+    },
+    {
+      "id": "genius-v12-101-3328",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Плавление свинца при постоянной мощности",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1298
+    },
+    {
+      "id": "genius-v12-101-25298",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Нагревание воды с учётом КПД",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1183
+    },
+    {
+      "id": "genius-v12-101-25327",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Плавление снега",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1256
+    },
+    {
+      "id": "genius-v12-101-25385",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Нагревание и плавление олова",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1385
+    },
+    {
+      "id": "genius-v12-101-29636",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Механическая энергия и нагревание",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1229
+    },
+    {
+      "id": "genius-v12-101-32475",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "КПД электрического чайника",
+      "difficulty": "ВЫСОКИЙ",
+      "type": "calculation",
+      "xp": 30,
+      "bytes": 1160
+    },
+    {
+      "id": "genius-peryshkin-736",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 880
+    },
+    {
+      "id": "genius-peryshkin-737",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1072
+    },
+    {
+      "id": "genius-peryshkin-738",
+      "paragraph": 11,
+      "section": "thermal",
+      "topic": "Удельная теплоёмкость",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 920
+    },
+    {
+      "id": "genius-peryshkin-739",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 943
+    },
+    {
+      "id": "genius-peryshkin-740",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 941
+    },
+    {
+      "id": "genius-peryshkin-741",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 937
+    },
+    {
+      "id": "genius-peryshkin-742",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 978
+    },
+    {
+      "id": "genius-peryshkin-743",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 943
+    },
+    {
+      "id": "genius-peryshkin-744",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 955
+    },
+    {
+      "id": "genius-peryshkin-745",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 939
+    },
+    {
+      "id": "genius-peryshkin-746",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 954
+    },
+    {
+      "id": "genius-peryshkin-747",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 984
+    },
+    {
+      "id": "genius-peryshkin-748",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 923
+    },
+    {
+      "id": "genius-peryshkin-749",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 943
+    },
+    {
+      "id": "genius-peryshkin-750",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 951
+    },
+    {
+      "id": "genius-peryshkin-751",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 964
+    },
+    {
+      "id": "genius-peryshkin-752",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 981
+    },
+    {
+      "id": "genius-peryshkin-753",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1008
+    },
+    {
+      "id": "genius-peryshkin-754",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 944
+    },
+    {
+      "id": "genius-peryshkin-755",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1075
+    },
+    {
+      "id": "genius-peryshkin-756",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 948
+    },
+    {
+      "id": "genius-peryshkin-757",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1027
+    },
+    {
+      "id": "genius-peryshkin-758",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1052
+    },
+    {
+      "id": "genius-peryshkin-759",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1059
+    },
+    {
+      "id": "genius-peryshkin-760",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1071
+    },
+    {
+      "id": "genius-peryshkin-761",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 990
+    },
+    {
+      "id": "genius-peryshkin-762",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 953
+    },
+    {
+      "id": "genius-peryshkin-763",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 955
+    },
+    {
+      "id": "genius-peryshkin-764",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 993
+    },
+    {
+      "id": "genius-peryshkin-765",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1121
+    },
+    {
+      "id": "genius-peryshkin-766",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 953
+    },
+    {
+      "id": "genius-peryshkin-767",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 928
+    },
+    {
+      "id": "genius-peryshkin-768",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 975
+    },
+    {
+      "id": "genius-peryshkin-769",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1176
+    },
+    {
+      "id": "genius-peryshkin-770",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1051
+    },
+    {
+      "id": "genius-peryshkin-771",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1163
+    },
+    {
+      "id": "genius-peryshkin-772",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1206
+    },
+    {
+      "id": "genius-peryshkin-773",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1194
+    },
+    {
+      "id": "genius-peryshkin-774",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1011
+    },
+    {
+      "id": "genius-peryshkin-775",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1009
+    },
+    {
+      "id": "genius-peryshkin-776",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1019
+    },
+    {
+      "id": "genius-peryshkin-777",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 964
+    },
+    {
+      "id": "genius-peryshkin-778",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1012
+    },
+    {
+      "id": "genius-peryshkin-779",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1412
+    },
+    {
+      "id": "genius-peryshkin-780",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1005
+    },
+    {
+      "id": "genius-peryshkin-781",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1197
+    },
+    {
+      "id": "genius-peryshkin-782",
+      "paragraph": 12,
+      "section": "thermal",
+      "topic": "Количество теплоты и тепловой баланс",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1226
+    },
+    {
+      "id": "genius-peryshkin-783",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 866
+    },
+    {
+      "id": "genius-peryshkin-784",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 828
+    },
+    {
+      "id": "genius-peryshkin-785",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 860
+    },
+    {
+      "id": "genius-peryshkin-786",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 822
+    },
+    {
+      "id": "genius-peryshkin-787",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 858
+    },
+    {
+      "id": "genius-peryshkin-788",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 966
+    },
+    {
+      "id": "genius-peryshkin-789",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 839
+    },
+    {
+      "id": "genius-peryshkin-790",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 848
+    },
+    {
+      "id": "genius-peryshkin-791",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 840
+    },
+    {
+      "id": "genius-peryshkin-792",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 871
+    },
+    {
+      "id": "genius-peryshkin-793",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 828
+    },
+    {
+      "id": "genius-peryshkin-794",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 955
+    },
+    {
+      "id": "genius-peryshkin-795",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 917
+    },
+    {
+      "id": "genius-peryshkin-796",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1082
+    },
+    {
+      "id": "genius-peryshkin-797",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 923
+    },
+    {
+      "id": "genius-peryshkin-798",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 875
+    },
+    {
+      "id": "genius-peryshkin-799",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 953
+    },
+    {
+      "id": "genius-peryshkin-800",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 922
+    },
+    {
+      "id": "genius-peryshkin-801",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 918
+    },
+    {
+      "id": "genius-peryshkin-802",
+      "paragraph": 13,
+      "section": "thermal",
+      "topic": "Энергия топлива",
+      "difficulty": "ПОВЫШЕННЫЙ",
+      "type": "calculation",
+      "xp": 20,
+      "bytes": 1278
+    },
+    {
+      "id": "genius-peryshkin-803",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1213
+    },
+    {
+      "id": "genius-peryshkin-804",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1080
+    },
+    {
+      "id": "genius-peryshkin-805",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1033
+    },
+    {
+      "id": "genius-peryshkin-806",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 998
+    },
+    {
+      "id": "genius-peryshkin-807",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 941
+    },
+    {
+      "id": "genius-peryshkin-808",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1185
+    },
+    {
+      "id": "genius-peryshkin-809",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1004
+    },
+    {
+      "id": "genius-peryshkin-810",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1025
+    },
+    {
+      "id": "genius-peryshkin-811",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1251
+    },
+    {
+      "id": "genius-peryshkin-812",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1150
+    },
+    {
+      "id": "genius-peryshkin-813",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1044
+    },
+    {
+      "id": "genius-peryshkin-814",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 997
+    },
+    {
+      "id": "genius-peryshkin-815",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1045
+    },
+    {
+      "id": "genius-peryshkin-816",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1147
+    },
+    {
+      "id": "genius-peryshkin-817",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 900
+    },
+    {
+      "id": "genius-peryshkin-818",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 934
+    },
+    {
+      "id": "genius-peryshkin-819",
+      "paragraph": 14,
+      "section": "thermal",
+      "topic": "Закон сохранения энергии",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 930
+    },
+    {
+      "id": "genius-peryshkin-836",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 946
+    },
+    {
+      "id": "genius-peryshkin-837",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 926
+    },
+    {
+      "id": "genius-peryshkin-838",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1029
+    },
+    {
+      "id": "genius-peryshkin-839",
+      "paragraph": 16,
+      "section": "thermal",
+      "topic": "График плавления и отвердевания",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "graph",
+      "xp": 10,
+      "bytes": 2841
+    },
+    {
+      "id": "genius-peryshkin-840",
+      "paragraph": 15,
+      "section": "thermal",
+      "topic": "Плавление и отвердевание",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 981
+    },
+    {
+      "id": "genius-peryshkin-841",
+      "paragraph": 15,
+      "section": "thermal",
+      "topic": "Плавление и отвердевание",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 886
+    },
+    {
+      "id": "genius-peryshkin-842",
+      "paragraph": 15,
+      "section": "thermal",
+      "topic": "Плавление и отвердевание",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1139
+    },
+    {
+      "id": "genius-peryshkin-843",
+      "paragraph": 15,
+      "section": "thermal",
+      "topic": "Плавление и отвердевание",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 869
+    },
+    {
+      "id": "genius-peryshkin-844",
+      "paragraph": 15,
+      "section": "thermal",
+      "topic": "Плавление и отвердевание",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 869
+    },
+    {
+      "id": "genius-peryshkin-845",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 923
+    },
+    {
+      "id": "genius-peryshkin-846",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 957
+    },
+    {
+      "id": "genius-peryshkin-847",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 971
+    },
+    {
+      "id": "genius-peryshkin-848",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 940
+    },
+    {
+      "id": "genius-peryshkin-849",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1016
+    },
+    {
+      "id": "genius-peryshkin-850",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1022
+    },
+    {
+      "id": "genius-peryshkin-851",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 1089
+    },
+    {
+      "id": "genius-peryshkin-852",
+      "paragraph": 16,
+      "section": "thermal",
+      "topic": "График плавления и отвердевания",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "graph",
+      "xp": 10,
+      "bytes": 2571
+    },
+    {
+      "id": "genius-peryshkin-853",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1276
+    },
+    {
+      "id": "genius-peryshkin-854",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 915
+    },
+    {
+      "id": "genius-peryshkin-855",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 976
+    },
+    {
+      "id": "genius-peryshkin-856",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 946
+    },
+    {
+      "id": "genius-peryshkin-857",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1123
+    },
+    {
+      "id": "genius-peryshkin-858",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1249
+    },
+    {
+      "id": "genius-peryshkin-859",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 946
+    },
+    {
+      "id": "genius-peryshkin-860",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 900
+    },
+    {
+      "id": "genius-peryshkin-861",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 980
+    },
+    {
+      "id": "genius-peryshkin-862",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1631
+    },
+    {
+      "id": "genius-peryshkin-863",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 938
+    },
+    {
+      "id": "genius-peryshkin-864",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 994
+    },
+    {
+      "id": "genius-peryshkin-865",
+      "paragraph": 17,
+      "section": "thermal",
+      "topic": "Удельная теплота плавления",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1178
+    },
+    {
+      "id": "genius-peryshkin-876",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 957
+    },
+    {
+      "id": "genius-peryshkin-877",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 921
+    },
+    {
+      "id": "genius-peryshkin-878",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "qualitative",
+      "xp": 10,
+      "bytes": 1017
+    },
+    {
+      "id": "genius-peryshkin-879",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 956
+    },
+    {
+      "id": "genius-peryshkin-880",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 932
+    },
+    {
+      "id": "genius-peryshkin-881",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 970
+    },
+    {
+      "id": "genius-peryshkin-882",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 996
+    },
+    {
+      "id": "genius-peryshkin-883",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1044
+    },
+    {
+      "id": "genius-peryshkin-884",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 990
+    },
+    {
+      "id": "genius-peryshkin-885",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 961
+    },
+    {
+      "id": "genius-peryshkin-886",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1020
+    },
+    {
+      "id": "genius-peryshkin-887",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1048
+    },
+    {
+      "id": "genius-peryshkin-888",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1146
+    },
+    {
+      "id": "genius-peryshkin-889",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 940
+    },
+    {
+      "id": "genius-peryshkin-890",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1201
+    },
+    {
+      "id": "genius-peryshkin-891",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1128
+    },
+    {
+      "id": "genius-peryshkin-892",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1528
+    },
+    {
+      "id": "genius-peryshkin-893",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1018
+    },
+    {
+      "id": "genius-peryshkin-894",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 987
+    },
+    {
+      "id": "genius-peryshkin-895",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1284
+    },
+    {
+      "id": "genius-peryshkin-896",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1149
+    },
+    {
+      "id": "genius-peryshkin-897",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1306
+    },
+    {
+      "id": "genius-peryshkin-898",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1110
+    },
+    {
+      "id": "genius-peryshkin-899",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1029
+    },
+    {
+      "id": "genius-peryshkin-900",
+      "paragraph": 22,
+      "section": "thermal",
+      "topic": "Парообразование и конденсация",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1131
+    },
+    {
+      "id": "genius-peryshkin-918",
+      "paragraph": 23,
+      "section": "thermal",
+      "topic": "Работа газа и тепловые процессы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1032
+    },
+    {
+      "id": "genius-peryshkin-919",
+      "paragraph": 23,
+      "section": "thermal",
+      "topic": "Работа газа и тепловые процессы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 993
+    },
+    {
+      "id": "genius-peryshkin-920",
+      "paragraph": 23,
+      "section": "thermal",
+      "topic": "Работа газа и тепловые процессы",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1077
+    },
+    {
+      "id": "genius-peryshkin-921",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1009
+    },
+    {
+      "id": "genius-peryshkin-922",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1050
+    },
+    {
+      "id": "genius-peryshkin-923",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1201
+    },
+    {
+      "id": "genius-peryshkin-924",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1110
+    },
+    {
+      "id": "genius-peryshkin-925",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1037
+    },
+    {
+      "id": "genius-peryshkin-926",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1100
+    },
+    {
+      "id": "genius-peryshkin-927",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1032
+    },
+    {
+      "id": "genius-peryshkin-928",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1165
+    },
+    {
+      "id": "genius-peryshkin-929",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 966
+    },
+    {
+      "id": "genius-peryshkin-930",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 938
+    },
+    {
+      "id": "genius-peryshkin-931",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1002
+    },
+    {
+      "id": "genius-peryshkin-932",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 969
+    },
+    {
+      "id": "genius-peryshkin-933",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 892
+    },
+    {
+      "id": "genius-peryshkin-934",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 955
+    },
+    {
+      "id": "genius-peryshkin-935",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 876
+    },
+    {
+      "id": "genius-peryshkin-936",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 959
+    },
+    {
+      "id": "genius-peryshkin-937",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 929
+    },
+    {
+      "id": "genius-peryshkin-938",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 993
+    },
+    {
+      "id": "genius-peryshkin-939",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 933
+    },
+    {
+      "id": "genius-peryshkin-940",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1129
+    },
+    {
+      "id": "genius-peryshkin-941",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 978
+    },
+    {
+      "id": "genius-peryshkin-942",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 945
+    },
+    {
+      "id": "genius-peryshkin-943",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 927
+    },
+    {
+      "id": "genius-peryshkin-944",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 935
+    },
+    {
+      "id": "genius-peryshkin-945",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 976
+    },
+    {
+      "id": "genius-peryshkin-946",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 1004
+    },
+    {
+      "id": "genius-peryshkin-947",
+      "paragraph": 26,
+      "section": "thermal",
+      "topic": "КПД теплового двигателя",
+      "difficulty": "БАЗОВЫЙ",
+      "type": "calculation",
+      "xp": 10,
+      "bytes": 984
+    }
+  ]
+}

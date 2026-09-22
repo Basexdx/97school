@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-101-32475",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "КПД электрического чайника",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Воду массой 2 кг, имеющую начальную температуру 25 °С, нагрели в электрическом чайнике до температуры кипения за 6 мин. Мощность электрического чайника равна 2 кВт. Чему равен КПД чайника?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 87.5,
+    "unit": "Введите КПД, %",
+    "tolerance": 0.2
+  },
+  "ANSWER_PROMPT": "Введите КПД, %",
+  "UNITS": [],
+  "SKILLS": [
+    "КПД электрического чайника"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

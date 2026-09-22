@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-101-1190",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Плавление и нагревание",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Имеются две порции воды одинаковой массы, находящиеся при температуре 0 °C. Первую порцию нагревают на 17 °C, затрачивая при этом количество теплоты Q₁. Во сколько раз n большее количество теплоты выделяется при полном превращении в лед второй порции воды?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 4.62,
+    "unit": "Введите n",
+    "tolerance": 0.03
+  },
+  "ANSWER_PROMPT": "Введите n",
+  "UNITS": [],
+  "SKILLS": [
+    "Плавление и нагревание"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

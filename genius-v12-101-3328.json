@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-101-3328",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Плавление свинца при постоянной мощности",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Кусок свинца, имеющего температуру 27 °C, начинают нагревать на плитке постоянной мощности. Через 10 минут от начала нагревания свинец нагрелся до температуры плавления. Сколько еще времени потребуется для плавления свинца?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 6.41,
+    "unit": "Введите время, мин",
+    "tolerance": 0.1
+  },
+  "ANSWER_PROMPT": "Введите время, мин",
+  "UNITS": [],
+  "SKILLS": [
+    "Плавление свинца при постоянной мощности"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
