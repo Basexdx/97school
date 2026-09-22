@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-858",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Удельная теплота плавления",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 858,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "В медный калориметр весом 200 г налито 100 г воды при 16 °C. В воду бросили кусочек льда при 0 °C весом 9,3 г, который целиком расплавился. Окончательная температура воды после этого установилась 9 °C. Определите на основании этих данных удельную теплоту плавления льда.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Удельная теплота плавления"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

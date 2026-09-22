@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-863",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Удельная теплота плавления",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 863,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "КПД спиртовки 10%. Сколько нужно сжечь спирта в спиртовке, чтобы расплавить 1 кг льда при 0 °C?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Удельная теплота плавления"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-924",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 26,
+  "TOPIC": "КПД теплового двигателя",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 924,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Нагреватель за некоторое время отдает тепловому двигателю количество теплоты, равное 120 кДж. Тепловой двигатель совершает при этом полезную работу 30 кДж. Определите КПД теплового двигателя.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "КПД теплового двигателя"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

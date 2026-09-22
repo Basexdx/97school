@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-7-31527",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 4,
+  "TOPIC": "Тепловое расширение",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Системы труб водяного отопления всегда снабжаются расширительным баком, присоединенным к системе отопления. Какое явление при этом учитывается?\n1) тепловое расширение бака\n2) тепловое расширение воды\n3) передача давления водой\n4) передача давления твердыми телами",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "2"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Тепловое расширение"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-928",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 26,
+  "TOPIC": "КПД теплового двигателя",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 928,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Нагреватель отдает тепловому двигателю количество теплоты, равное 20 кДж. За то же время тепловой двигатель отдает холодильнику количество теплоты, равное 15 кДж. Найдите работу, совершенную тепловым двигателем, и его КПД.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "КПД теплового двигателя"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

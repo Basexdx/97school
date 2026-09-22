@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-920",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 23,
+  "TOPIC": "Работа газа и тепловые процессы",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 920,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "На токарном станке обтачивается деталь со скоростью 1,5 м/с. Сила сопротивления равна 8370 Н. Какое количество теплоты выделится в данном процессе за пять минут?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Работа газа и тепловые процессы"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

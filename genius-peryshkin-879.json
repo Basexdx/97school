@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-879",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 22,
+  "TOPIC": "Парообразование и конденсация",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 879,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Какое количество теплоты требуется для обращения в пар воды массой 0,2 кг при температуре 100 °C?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Парообразование и конденсация"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

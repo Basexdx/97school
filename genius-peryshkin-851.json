@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-851",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Удельная теплота плавления",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 851,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "qualitative",
+  "TASK": "В каком случае требуется большее количество энергии и на сколько: на плавление 1000 кг железа или 1000 кг алюминия, если и железо, и алюминий взяты при начальной температуре 10 °C?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Удельная теплота плавления"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

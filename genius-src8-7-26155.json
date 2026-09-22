@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-7-26155",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 1,
+  "TOPIC": "Броуновское движение",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Под микроскопом рассматривают каплю молока. Видно, что частицы жира находятся в непрерывном хаотическом движении. Какое явление наблюдается в этом опыте?\n1) броуновское движение\n2) атмосферное давление\n3) теплопроводность\n4) диффузия",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "1"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Броуновское движение"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

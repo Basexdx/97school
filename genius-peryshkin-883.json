@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-883",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 22,
+  "TOPIC": "Парообразование и конденсация",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 883,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Какое количество теплоты нужно затратить, чтобы воду массой 7 кг, взятую при температуре 0 °C, довести до кипения и затем полностью ее испарить?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Парообразование и конденсация"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-896",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 22,
+  "TOPIC": "Парообразование и конденсация",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 896,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Змеевик полностью вмерз в лед. Через змеевик проходит, охлаждаясь и конденсируясь, 2 кг пара, причем вода из змеевика выходит при температуре 0 °C. Какое количество льда можно расплавить таким образом?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Парообразование и конденсация"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

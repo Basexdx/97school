@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-7-24044",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 4,
+  "TOPIC": "Тепловое расширение",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Балалайку настроили в теплом помещении, а затем вынесли на улицу в морозный день. Звучание балалайки изменилось. Благодаря какому явлению наблюдалось изменение звучания?\n1) малая сжимаемость твердых тел\n2) тепловое расширение/сжатие твердых тел\n3) тепловое равновесие твердых тел\n4) передача давления твердыми телами",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "2"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Тепловое расширение"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

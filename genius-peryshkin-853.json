@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-853",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Удельная теплота плавления",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 853,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Нагревают два сосуда: в одном находится 0,2 кг воды при температуре 0 °C, в другом — 200 г снега. Одинаково ли будет повышаться температура в сосудах при одинаковой мощности нагревателя? Постройте график зависимости температуры каждого сосуда от получаемого количества теплоты.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Удельная теплота плавления"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

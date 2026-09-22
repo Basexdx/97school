@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-897",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 22,
+  "TOPIC": "Парообразование и конденсация",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 897,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "В калориметр налито 57,4 г воды при 12 °C. В воду пущен пар при 100 °C. Через некоторое время количество воды в калориметре увеличилось на 1,3 г, а температура воды поднялась до 24,8 °C. Для нагрева пустого калориметра на 1 °C требуется 18,27 Дж теплоты. Найдите удельную теплоту парообразования воды.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Парообразование и конденсация"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-7-29693",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 7,
+  "TOPIC": "Теплопроводность",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Стальная ложка, опущенная в горячий чай, быстро нагревается. Какой способ теплопередачи преимущественно объясняет изменение внутренней энергии ложки в этом случае?\n1) теплопроводность\n2) тепловое излучение\n3) конвекция\n4) совершение работы",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "1"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Теплопроводность"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

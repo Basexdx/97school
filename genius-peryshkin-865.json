@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-865",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Удельная теплота плавления",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 865,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "В водопаде высотой 32 м ежесекундно падает 3,5 м³ воды. Какое количество энергии можно получить в час от этого водопада? Какое количество каменного угля надо сжигать каждый час, чтобы получить то же самое количество энергии?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Удельная теплота плавления"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

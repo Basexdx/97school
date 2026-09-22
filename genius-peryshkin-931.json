@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-931",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 26,
+  "TOPIC": "КПД теплового двигателя",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 931,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Мопед, едущий со скоростью 20 км/ч, за 100 км пути расходует 1 кг бензина. КПД его двигателя равен 22%. Какова полезная мощность двигателя?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "КПД теплового двигателя"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
