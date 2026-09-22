@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-779",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "Количество теплоты и тепловой баланс",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 779,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Стальной резец массой 2 кг был нагрет до температуры 800 °C и затем опущен в сосуд, содержащий 15 л воды при температуре 10 °C. До какой температуры нагреется вода в сосуде? (Указание. Для решения данной задачи необходимо составить уравнение, в котором за неизвестное принять искомую температуру воды в сосуде после опускания резца.)",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Количество теплоты и тепловой баланс"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

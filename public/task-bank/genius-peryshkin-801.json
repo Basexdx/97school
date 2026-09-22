@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-801",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 13,
+  "TOPIC": "Энергия топлива",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 801,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "КПД вагранки (шахтной печи) 60%. Сколько надо древесного угля, чтобы нагреть 10 000 кг чугуна от 20 °C до 1100 °C?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Энергия топлива"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

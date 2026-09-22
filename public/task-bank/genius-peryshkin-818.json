@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-818",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 14,
+  "TOPIC": "Закон сохранения энергии",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 818,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "qualitative",
+  "TASK": "Какой энергией обладает летящая пуля? Какие превращения энергии происходят при ее движении?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Закон сохранения энергии"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
