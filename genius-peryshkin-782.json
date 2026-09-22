@@ -1,0 +1,30 @@
+{
+  "ID": "genius-peryshkin-782",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "Количество теплоты и тепловой баланс",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для этой задачи не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "PERYSHKIN_COLLECTION_V13",
+  "BOOK_TASK_NUMBER": 782,
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Свинец массой 0,1 кг при температуре 100 °C погрузили в алюминиевый калориметр массой 0,04 кг, содержащий 0,24 кг воды при температуре 15 °C. После чего в калориметре установилась температура 16 °C. Какова удельная теплоемкость свинца?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "manual"
+  },
+  "ANSWER_PROMPT": "Введите ответ",
+  "UNITS": [],
+  "SKILLS": [
+    "Количество теплоты и тепловой баланс"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
