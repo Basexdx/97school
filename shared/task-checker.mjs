@@ -9,19 +9,31 @@ export function numericValue(value) {
   const n = Number(text)
   return Number.isFinite(n) ? n : null
 }
+const numericCorrect=(actual,expected,tolerance=0)=>{
+  const value=numericValue(actual)
+  return value!==null&&Math.abs(value-expected)<=tolerance
+}
+const normalizeOrdered=v=>String(v??'').trim().replace(/[\s,;]+/g,'')
+
 export function checkAnswer(task, answer) {
   if (!publishable(task)) throw new Error('task_unavailable')
   const spec = task.ANSWER
   if (spec.mode === 'manual') return { correct: null, reviewRequired: true }
-  if (spec.mode === 'numeric') {
-    const value = numericValue(answer)
-    return { correct: value !== null && Math.abs(value - spec.value) <= (spec.tolerance || 0), reviewRequired: false }
+  if (spec.mode === 'numeric') return { correct:numericCorrect(answer,spec.value,spec.tolerance||0), reviewRequired:false }
+  if (spec.mode === 'numeric_list') {
+    const actual=Array.isArray(answer)?answer:[]
+    const tolerance=spec.tolerance||0
+    return {correct:actual.length===spec.values.length&&spec.values.every((v,i)=>numericCorrect(actual[i],v,tolerance)),reviewRequired:false}
   }
-  const normalizeOrdered=v=>String(v??'').trim().replace(/[\s,;]+/g,'')
+  if (spec.mode === 'parts') {
+    const actual=Array.isArray(answer)?answer:[]
+    const correct=actual.length===spec.parts.length&&spec.parts.every((part,i)=>part.type==='numeric'
+      ?numericCorrect(actual[i],part.value,part.tolerance||0)
+      :part.values.map(normalizeOrdered).includes(normalizeOrdered(actual[i])))
+    return {correct,reviewRequired:false}
+  }
   const actual = Array.isArray(answer) ? answer.map(normalizeOrdered) : [normalizeOrdered(answer)]
   const expected = spec.values.map(normalizeOrdered)
-  if (spec.mode === 'set') {
-    return { correct: new Set(actual).size === actual.length && actual.length === expected.length && expected.every(x => actual.includes(x)), reviewRequired: false }
-  }
-  return { correct: actual.length === expected.length && actual.every((x,i) => x === expected[i]), reviewRequired: false }
+  if (spec.mode === 'set') return { correct:new Set(actual).size===actual.length&&actual.length===expected.length&&expected.every(x=>actual.includes(x)), reviewRequired:false }
+  return { correct:actual.length===expected.length&&actual.every((x,i)=>x===expected[i]), reviewRequired:false }
 }
