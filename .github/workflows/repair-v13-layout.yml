@@ -1,0 +1,55 @@
+name: Repair Genius v13 layout
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Verify and repair repository layout
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          count=$(find public/task-bank -maxdepth 1 -type f -name 'genius-*.json' | wc -l | tr -d ' ')
+          test "$count" -eq 319
+          test -f public/task-bank/index.json
+          test -f public/task-bank/genius-peryshkin-839.json
+          test -f public/task-bank/genius-peryshkin-852.json
+          test -f public/task-bank/genius-peryshkin-862.json
+          test -f public/task-bank/genius-peryshkin-947.json
+
+          mkdir -p public/icons
+          if [ -d icons ]; then
+            cp -a icons/. public/icons/
+            rm -rf icons
+          fi
+
+          rm -f public/task-bank/.gitkeep public/icons/.gitkeep
+          rm -f index.json sw.js
+          root_tasks=(genius-*.json)
+          if ((${#root_tasks[@]})); then
+            rm -f "${root_tasks[@]}"
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Repository layout is already correct"
+            exit 0
+          fi
+          git commit -m "fix: restore Genius v13 public asset layout"
+          git push origin HEAD:dev
