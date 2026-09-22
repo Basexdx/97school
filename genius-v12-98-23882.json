@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-98-23882",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 14,
+  "TOPIC": "Превращение механической энергии во внутреннюю",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Чему paвна температура воды у основания водопада, если у его вершины она равнялась 20 °C? Высота водопада составляет 100 м. Считать, что 84% энергии падающей воды идет на ее нагревание.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 20.2,
+    "unit": "Введите температуру, °C",
+    "tolerance": 0.05
+  },
+  "ANSWER_PROMPT": "Введите температуру, °C",
+  "UNITS": [],
+  "SKILLS": [
+    "Превращение механической энергии во внутреннюю"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

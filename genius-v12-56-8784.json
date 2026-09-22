@@ -1,0 +1,58 @@
+{
+  "ID": "genius-v12-56-8784",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 11,
+  "TOPIC": "Удельная теплоёмкость по графику",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": true,
+  "IMAGE_DESCRIPTION": "График нагревания жидкости массой 4 кг",
+  "DIAGRAM": {
+    "type": "line-chart",
+    "label": "График нагревания жидкости массой 4 кг",
+    "xLabel": "Q, кДж",
+    "yLabel": "t, °C",
+    "xTicks": [
+      0,
+      32,
+      64
+    ],
+    "yTicks": [
+      20,
+      40
+    ],
+    "points": [
+      [
+        0,
+        20
+      ],
+      [
+        64,
+        40
+      ]
+    ],
+    "xMax": 64,
+    "yMax": 40
+  },
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "graph",
+  "TASK": "На рисунке изображен график зависимости температуры t четырех килограммов некоторой жидкости от сообщаемого ей количества теплоты Q. Чему равна удельная теплоемкость этой жидкости? В ответ запишите число без указания единиц измерения.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 800,
+    "unit": "Введите число",
+    "tolerance": 0
+  },
+  "ANSWER_PROMPT": "Введите число",
+  "UNITS": [],
+  "SKILLS": [
+    "Удельная теплоёмкость по графику"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

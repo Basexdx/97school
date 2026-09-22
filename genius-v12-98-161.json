@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-98-161",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 14,
+  "TOPIC": "Механическая энергия и нагревание",
+  "DIFFICULTY": "ВЫСОКИЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 30,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Металлический шар массой m₁ = 2 кг упал на свинцовую пластину массой m₂ = 1 кг и остановился. При этом пластина нагрелась на 3,2 °C. С какой высоты упал шар, если на нагревание пластины пошло 80% выделившегося при ударе количества теплоты? (Удельная теплоемкость свинца — 130 Дж/(кг · °С).)",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 26,
+    "unit": "Введите высоту, м",
+    "tolerance": 0
+  },
+  "ANSWER_PROMPT": "Введите высоту, м",
+  "UNITS": [],
+  "SKILLS": [
+    "Механическая энергия и нагревание"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
