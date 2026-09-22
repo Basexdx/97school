@@ -11,9 +11,11 @@ const digest=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-
 
 export async function taskProgress(env,student) {
   const grade=Number(student.grade)
-  const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,a.grade,
+  const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,
     COALESCE((SELECT amount FROM task_awards w WHERE w.student_id=a.student_id AND w.task_id=a.task_id AND w.attempt_id=a.attempt_id),0) AS xp_awarded
-    FROM task_attempts a WHERE a.student_id=? AND a.grade=? ORDER BY a.received_at,a.rowid`).bind(student.id,grade).all()
+    FROM task_attempts a
+    WHERE a.student_id=? AND (CASE WHEN a.task_id LIKE 'genius-peryshkin7-%' THEN 7 ELSE 8 END)=?
+    ORDER BY a.received_at,a.rowid`).bind(student.id,grade).all()
   const xp=await env.DB.prepare('SELECT total_xp FROM class_progress WHERE student_id=? AND grade=?').bind(student.id,grade).first()
   return json({studentId:student.id,grade,attempts:rows.results||[],totalXp:xp?.total_xp||0})
 }
@@ -43,8 +45,8 @@ export async function submitTaskAttempts(request,env,student) {
       const checked=checkAnswer(task,answer)
       const status=checked.reviewRequired?'PENDING_REVIEW':'CONFIRMED'
       await env.DB.prepare(`INSERT OR IGNORE INTO task_attempts
-        (student_id,attempt_id,event_id,task_id,grade,content_version,payload_hash,answer_json,correct,status,max_xp)
-        VALUES(?,?,?,?,?,?,?,?,?,?,?)`).bind(student.id,attemptId,eventId,taskId,grade,version,hash,JSON.stringify(answer??null),checked.correct===null?null:Number(checked.correct),status,task.XP).run()
+        (student_id,attempt_id,event_id,task_id,content_version,payload_hash,answer_json,correct,status,max_xp)
+        VALUES(?,?,?,?,?,?,?,?,?,?)`).bind(student.id,attemptId,eventId,taskId,version,hash,JSON.stringify(answer??null),checked.correct===null?null:Number(checked.correct),status,task.XP).run()
       existing=await env.DB.prepare('SELECT * FROM task_attempts WHERE student_id=? AND (attempt_id=? OR event_id=?)').bind(student.id,attemptId,eventId).first()
     }
     if(!existing || existing.payload_hash!==hash || existing.attempt_id!==attemptId || existing.event_id!==eventId) {
