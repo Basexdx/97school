@@ -16,7 +16,6 @@
     "audit:clean": "npm audit --audit-level=high",
     "bank:build": "node scripts/prepare-grade7-bank.mjs && node scripts/build-task-bank.mjs",
     "db:tasks": "wrangler d1 execute DB --config wrangler.jsonc --local --file=cloudflare/task-bank.sql --yes",
-    "db:tasks:v14": "wrangler d1 execute DB --config wrangler.jsonc --local --file=cloudflare/task-bank-v14-multigrade.sql --yes",
     "test:bank": "npm run prepare:grade7 && node --test tests/task-checker.test.mjs tests/integration.test.mjs && python3 tests/task-bank-sql.py",
     "start:web": "next start --hostname 127.0.0.1 --port 3000"
   },
