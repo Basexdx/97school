@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-19-424",
+  "CLASS": 8,
+  "SECTION": "extra8",
+  "PARAGRAPH": null,
+  "TOPIC": "Частота и оптические приборы",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "matching",
+  "TASK": "Для каждого физического понятия из первого столбца подберите соответствующий пример из второго столбца.\nФИЗИЧЕСКИЕ ПОНЯТИЯ\nПРИМЕРЫ\nА) физическая величина\nБ) единица физической величины\nB) физический прибор\n1) интерференция\n2) спектроскоп\n3) частота\n4) герц\n5) дисперсия",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "342"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите последовательность цифр без пробелов",
+  "UNITS": [],
+  "SKILLS": [
+    "Частота и оптические приборы"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

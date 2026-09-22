@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-99-26171",
+  "CLASS": 8,
+  "SECTION": "extra8",
+  "PARAGRAPH": null,
+  "TOPIC": "Отражение света",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Какое физическое явление проявляется в природе, когда на берегу мы наблюдаем в спокойной глади воды в точности отраженные береговые пейзажи?\n1) зеркальное отражение света\n2) рассеянное отражение света\n3) дисперсия света\n4) поглощение света",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "1"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Отражение света"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

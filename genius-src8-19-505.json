@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-19-505",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 20,
+  "TOPIC": "Влажность воздуха",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "matching",
+  "TASK": "Для каждого физического понятия из первого столбца подберите соответствующий пример из второго столбца.\nФИЗИЧЕСКИЕ ПОНЯТИЯ\nПРИМЕРЫ\nА) физическая величина\nБ) единица физической величины\nB) прибор для измерения физической величины\n1) испарение воды\n2) влажность воздуха\n3) атмосфера\n4) психрометр\n5) миллиметр",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "254"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите последовательность цифр без пробелов",
+  "UNITS": [],
+  "SKILLS": [
+    "Влажность воздуха"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

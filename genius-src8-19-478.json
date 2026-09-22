@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-19-478",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 5,
+  "TOPIC": "Энергия и физические понятия",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "matching",
+  "TASK": "Для каждого физического понятия из первого столбца подберите соответствующий пример из второго столбца.\nФИЗИЧЕСКИЕ ПОНЯТИЯ\nПРИМЕРЫ\nА) физическая величина\nБ) единица физической величины\nB) физический прибор\n1) микроскоп\n2) диффузия\n3) энергия\n4) джоуль\n5) молекула",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "341"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите последовательность цифр без пробелов",
+  "UNITS": [],
+  "SKILLS": [
+    "Энергия и физические понятия"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

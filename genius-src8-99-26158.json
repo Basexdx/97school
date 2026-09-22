@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-99-26158",
+  "CLASS": 8,
+  "SECTION": "extra8",
+  "PARAGRAPH": null,
+  "TOPIC": "Магнитное действие электрического тока",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Каким физическим явлением объясняется тот факт, что магнитная стрелка компаса ориентируется вблизи электромагнита?\n1) электризация тел\n2) взаимодействие проводников с током\n3) намагничивание вещества в магнитном поле\n4) взаимодействие постоянного магнита и проводника с током",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "4"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Магнитное действие электрического тока"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,32 @@
+{
+  "ID": "genius-src8-99-26164",
+  "CLASS": 8,
+  "SECTION": "extra8",
+  "PARAGRAPH": null,
+  "TOPIC": "Дисперсия света",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Если рассматривать предмет сквозь стеклянную призму, то вокруг предмета можно наблюдать радужный ободок. Какое явление объясняет появление радужного ободка?\n1) отражение света\n2) рассеяние света\n3) дисперсия света\n4) поглощение света",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "3"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Дисперсия света"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

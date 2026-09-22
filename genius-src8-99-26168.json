@@ -1,0 +1,36 @@
+{
+  "ID": "genius-src8-99-26168",
+  "CLASS": 8,
+  "SECTION": "extra8",
+  "PARAGRAPH": null,
+  "TOPIC": "Электромагнитная индукция",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": true,
+  "IMAGE_DESCRIPTION": "Постоянный магнит движется внутрь катушки, соединённой с амперметром",
+  "DIAGRAM": {
+    "type": "coil-magnet",
+    "direction": "in",
+    "label": "Постоянный магнит движется внутрь катушки, соединённой с амперметром"
+  },
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_BANK_100",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "single_choice",
+  "TASK": "Катушку присоединили к амперметру. При движении постоянного магнита внутрь катушки в ней возник электрический ток (см. рисунок). Какое явление демонстрирует данный опыт?\n1) резонанс\n2) электризация тел\n3) взаимодействие зарядов\n4) электромагнитная индукция",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "ordered",
+    "values": [
+      "4"
+    ]
+  },
+  "ANSWER_PROMPT": "Введите номер выбранного ответа",
+  "UNITS": [],
+  "SKILLS": [
+    "Электромагнитная индукция"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
