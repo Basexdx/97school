@@ -43,3 +43,13 @@ self.addEventListener('fetch', event => {
     })
   )
 })
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close()
+  const target = event.notification.data?.url || '/?screen=performance'
+  event.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(openClients => {
+    const existing=openClients[0]
+    if(existing){existing.navigate(target);return existing.focus()}
+    return clients.openWindow(target)
+  }))
+})

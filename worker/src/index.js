@@ -1,4 +1,5 @@
 import { submitTaskAttempts, taskProgress } from './task-bank.js'
+import { saveGrade, saveHomework, saveHomeworkOverride, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic.js'
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
 
 export default {
@@ -29,6 +30,16 @@ async function handleRequest(request, env) {
   if (path === '/api/student/me' && request.method === 'GET') return studentMe(request, env)
   if (path === '/api/student/sync' && request.method === 'POST') return studentSync(request, env)
   if (path === '/api/student/logout' && request.method === 'POST') return studentLogout(request, env)
+  if (path === '/api/student/performance' && request.method === 'GET') {
+    const auth=await requireStudent(request,env);return auth.ok?studentPerformance(env,auth.student):auth.response
+  }
+  if (path === '/api/student/rankings' && request.method === 'GET') {
+    const auth=await requireStudent(request,env);return auth.ok?studentRanking(request,env,auth.student):auth.response
+  }
+  const progressMatch=path.match(/^\/api\/student\/homework\/([^/]+)\/status$/)
+  if(progressMatch&&request.method==='POST'){
+    const auth=await requireStudent(request,env);return auth.ok?updateHomeworkProgress(request,env,auth.student,progressMatch[1]):auth.response
+  }
 
   if (path === '/api/teacher/login' && request.method === 'POST') return teacherLogin(request, env)
   if (path === '/api/teacher/logout' && request.method === 'POST') return teacherLogout(request, env)
@@ -37,6 +48,19 @@ async function handleRequest(request, env) {
   if (path === '/api/teacher/connection-requests' && request.method === 'GET') return teacherRequests(request, env)
   if (path === '/api/teacher/access-keys' && request.method === 'GET') return teacherAccessKeys(request, env)
   if (path === '/api/teacher/access-keys' && request.method === 'POST') return teacherCreateAccessKey(request, env)
+  if (path === '/api/teacher/academic' && request.method === 'GET') {
+    const auth=await requireTeacher(request,env);return auth.ok?teacherAcademic(request,env,auth.teacher):auth.response
+  }
+  if (path === '/api/teacher/grades' && request.method === 'POST') {
+    const auth=await requireTeacher(request,env);return auth.ok?saveGrade(request,env,auth.teacher):auth.response
+  }
+  if (path === '/api/teacher/homework' && request.method === 'POST') {
+    const auth=await requireTeacher(request,env);return auth.ok?saveHomework(request,env,auth.teacher):auth.response
+  }
+  const overrideMatch=path.match(/^\/api\/teacher\/homework\/([^/]+)\/override$/)
+  if(overrideMatch&&request.method==='POST'){
+    const auth=await requireTeacher(request,env);return auth.ok?saveHomeworkOverride(request,env,auth.teacher,overrideMatch[1]):auth.response
+  }
 
   const approveMatch = path.match(/^\/api\/teacher\/connection-requests\/([^/]+)\/approve$/)
   if (approveMatch && request.method === 'POST') return teacherDecideRequest(request, env, approveMatch[1], 'APPROVED')
@@ -468,7 +492,7 @@ async function requireStudent(request, env) {
   const hash = await sha256(token)
   const now = new Date().toISOString()
   const row = await env.DB.prepare(`
-    SELECT ss.id AS session_id, ss.expires_at, s.id, s.nickname, s.current_grade, s.status, c.title AS class_title
+    SELECT ss.id AS session_id, ss.expires_at, s.id, s.class_id, s.nickname, s.current_grade, s.status, c.title AS class_title
     FROM student_sessions ss
     JOIN students s ON s.id=ss.student_id
     JOIN classes c ON c.id=s.class_id
@@ -476,7 +500,7 @@ async function requireStudent(request, env) {
   `).bind(hash, now).first()
   if (!row || row.status !== 'ACTIVE') return { ok: false, response: json({ error: 'student_auth_required' }, 401) }
   await env.DB.prepare(`UPDATE student_sessions SET last_active_at=CURRENT_TIMESTAMP WHERE id=?`).bind(row.session_id).run()
-  return { ok: true, student: { id: row.id, nickname: row.nickname, grade: row.current_grade, className: row.class_title } }
+  return { ok: true, student: { id: row.id, classId: row.class_id, nickname: row.nickname, grade: row.current_grade, className: row.class_title } }
 }
 
 async function requireTeacher(request, env) {

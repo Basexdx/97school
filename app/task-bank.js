@@ -9,6 +9,7 @@ const sections={thermal:'Тепловые явления',electric:'Электр
 const sectionRanges={thermal:'§1–§26',electric:'§27–§40',extra8:'Доп. темы 8 класса'}
 const typeLabels={single_choice:'Один ответ',numeric:'Числовой ответ',multiple_choice:'Несколько ответов',matching:'Соответствие',sequence:'Последовательность',qualitative:'Качественная',calculation:'Расчётная',graph:'График',table:'Таблица',experiment:'Эксперимент',circuit:'Электрическая цепь'}
 const difficultyLabels={БАЗОВЫЙ:'Базовый',ПОВЫШЕННЫЙ:'Повышенный',ВЫСОКИЙ:'Высокий'}
+const BANK_POSITION_KEY='genius:task-bank-position:v1'
 
 function answerState(attempt){
   const correct=attempt.status==='CONFIRMED'?attempt.result?.correct:attempt.localResult?.correct
@@ -20,6 +21,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
   const [index,setIndex]=useState(null),[student,setStudent]=useState(null),[attempts,setAttempts]=useState([])
   const [section,setSection]=useState(''),[paragraph,setParagraph]=useState(''),[topic,setTopic]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[progress,setProgress]=useState(''),[query,setQuery]=useState('')
   const [task,setTask]=useState(null),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[online,setOnline]=useState(true)
+  const [restoreTaskId,setRestoreTaskId]=useState('')
 
   async function reload(sync=false) {
     try {
@@ -35,6 +37,10 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
   }
 
   useEffect(()=>{
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(BANK_POSITION_KEY)||'null')
+      if(saved){setSection(saved.section||'');setParagraph(saved.paragraph||'');setTopic(saved.topic||'');setDifficulty(saved.difficulty||'');setType(saved.type||'');setProgress(saved.progress||'');setQuery(saved.query||'');setRestoreTaskId(saved.taskId||'')}
+    }catch{}
     setOnline(navigator.onLine);reload(true)
     const up=()=>{setOnline(true);reload(true)},down=()=>setOnline(false)
     window.addEventListener('online',up);window.addEventListener('offline',down)
@@ -64,12 +70,25 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
     return (index?.tasks||[]).filter(t=>(!section||t.section===section)&&(!paragraph||t.paragraph===Number(paragraph))&&(!topic||t.topic===topic)&&(!difficulty||t.difficulty===difficulty)&&(!type||t.type===type)&&(!progress||(progress==='solved'?states[t.id]?.solved:progress==='repeat'?states[t.id]?.repeat:progress==='pending'?states[t.id]?.pending:!states[t.id]?.solved))&&(!needle||`${t.topic} ${locationLabel(t)} ${typeLabels[t.type]||t.type}`.toLocaleLowerCase('ru-RU').includes(needle)))
   },[index,section,paragraph,topic,difficulty,type,progress,query,states])
 
+  useEffect(()=>{
+    if(task||!index||!restoreTaskId)return
+    const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      document.getElementById(`task-${restoreTaskId}`)?.scrollIntoView({block:'center',behavior:'instant'})
+    }))
+    return()=>cancelAnimationFrame(frame)
+  },[index,rows.length,restoreTaskId,task])
+
   const currentParagraphs=(index?.paragraphs||[]).filter(p=>!section||p.section===section)
   function resetFilters(){setSection('');setParagraph('');setTopic('');setDifficulty('');setType('');setProgress('');setQuery('')}
   function selectSection(id){setSection(section===id?'':id);setParagraph('');setTopic('')}
   function selectParagraph(value){setParagraph(value?String(value):'');setTopic('')}
 
-  async function open(id){setBusy(true);setMessage('');try{setTask(await loadBankTask(id,index.version))}catch(e){setMessage(e.message)}finally{setBusy(false)}}
+  function rememberPosition(id){
+    setRestoreTaskId(id)
+    try{sessionStorage.setItem(BANK_POSITION_KEY,JSON.stringify({taskId:id,section,paragraph,topic,difficulty,type,progress,query,scrollY:window.scrollY}))}catch{}
+  }
+  async function open(id){rememberPosition(id);setBusy(true);setMessage('');try{setTask(await loadBankTask(id,index.version))}catch(e){setMessage(e.message)}finally{setBusy(false)}}
+  function backToBank(){const id=task?.ID||restoreTaskId;rememberPosition(id);setTask(null)}
   async function download(kind,value){setBusy(true);setMessage('');try{const result=await downloadBankPackage(index,kind,value);await refreshOffline();setMessage(`Готово: скачано ${result.count} задач · ${formatBytes(result.sizeBytes)}.`)}catch(e){setMessage(e.message)}finally{setBusy(false)}}
   async function submit(t,answer){
     const checked=checkAnswer(t,answer);await saveBankAttempt(student?.id,t,answer,checked);setAttempts(await bankAttempts(student?.id))
@@ -80,7 +99,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
   if(task){
     const navRows=rows.length?rows:(index?.tasks||[])
     const pos=navRows.findIndex(x=>x.id===task.ID)
-    return <TaskCard key={task.ID} task={task} submit={submit} back={()=>setTask(null)} goLearn={()=>setScreen('topics')} student={student} attempts={attempts.filter(a=>a.taskId===task.ID)} message={message} navigate={open} previousId={pos>0?navRows[pos-1].id:null} nextId={pos>=0&&pos<navRows.length-1?navRows[pos+1].id:null} position={pos>=0?pos+1:1} total={navRows.length}/>
+    return <TaskCard key={task.ID} task={task} submit={submit} back={backToBank} goLearn={()=>setScreen('topics')} student={student} attempts={attempts.filter(a=>a.taskId===task.ID)} message={message} navigate={open} previousId={pos>0?navRows[pos-1].id:null} nextId={pos>=0&&pos<navRows.length-1?navRows[pos+1].id:null} position={pos>=0?pos+1:1} total={navRows.length}/>
   }
 
   return <div className="bank-page bank-v11 bank-v12">
@@ -122,7 +141,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 
     <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!paragraph||busy||!online} onClick={()=>download('paragraph',paragraph)}>⇩ Скачать тему {paragraph&&`· ${formatBytes(index.tasks.filter(t=>t.paragraph===Number(paragraph)).reduce((a,t)=>a+t.bytes,0))}`}</button><button disabled={!section||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
 
-    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''}`} key={t.id} onClick={()=>open(t.id)}><div className="bank-tile-top"><span>{locationLabel(t)}</span><span>{t.xp} XP</span></div><h2>{t.topic}</h2><p>{typeLabels[t.type]||t.type} · {difficultyLabels[t.difficulty]||t.difficulty.toLowerCase()}</p><div className="bank-tile-meta"><span>{state?.count?`${state.count} попыт.`:'Новая'}</span>{state?.pending&&<span className="pending">SYNC</span>}</div><footer>{state?.repeat?'↻ Повторить':state?.solved?'✓ Решено':'Начать решение →'}</footer></button>})}</div>
+    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><div className="bank-tile-top"><span>{locationLabel(t)}</span><span>{t.xp} XP</span></div><h2>{t.topic}</h2><p>{typeLabels[t.type]||t.type} · {difficultyLabels[t.difficulty]||t.difficulty.toLowerCase()}</p><div className="bank-tile-meta"><span>{state?.count?`${state.count} попыт.`:'Новая'}</span>{state?.pending&&<span className="pending">SYNC</span>}</div><footer>{state?.repeat?'↻ Повторить':state?.solved?'✓ Решено':'Начать решение →'}</footer></button>})}</div>
     {index&&!rows.length&&<div className="bank-empty"><span>⌕</span><h2>Ничего не найдено</h2><p>Измени фильтры или вернись ко всему банку задач.</p><button onClick={resetFilters}>Показать все задачи</button></div>}
   </div>
 }

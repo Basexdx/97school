@@ -163,3 +163,123 @@ INSERT OR IGNORE INTO learning_tests (id, grade, title, max_xp, active, content_
   ('demo-grade-7', 7, 'Демонстрационный тест 7 класса', 60, 1, 1),
   ('demo-grade-8', 8, 'Демонстрационный тест 8 класса', 60, 1, 1),
   ('demo-grade-9', 9, 'Демонстрационный тест 9 класса', 60, 1, 1);
+
+-- v14 academic progress: Tuesday/Friday diary, homework and rankings.
+CREATE TABLE IF NOT EXISTS school_breaks (
+  id TEXT PRIMARY KEY,
+  academic_year TEXT NOT NULL,
+  title TEXT NOT NULL,
+  starts_on TEXT NOT NULL,
+  ends_on TEXT NOT NULL,
+  CHECK (starts_on <= ends_on)
+);
+
+CREATE TABLE IF NOT EXISTS lessons (
+  id TEXT PRIMARY KEY,
+  class_id TEXT NOT NULL,
+  academic_year TEXT NOT NULL,
+  lesson_date TEXT NOT NULL,
+  topic TEXT,
+  status TEXT NOT NULL DEFAULT 'PLANNED' CHECK (status IN ('PLANNED','COMPLETED','CANCELLED')),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(class_id, lesson_date),
+  FOREIGN KEY (class_id) REFERENCES classes(id)
+);
+
+CREATE TABLE IF NOT EXISTS homework (
+  id TEXT PRIMARY KEY,
+  class_id TEXT NOT NULL,
+  lesson_id TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL DEFAULT '',
+  created_by TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(class_id, lesson_id),
+  FOREIGN KEY (class_id) REFERENCES classes(id),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  FOREIGN KEY (created_by) REFERENCES teachers(id)
+);
+
+CREATE TABLE IF NOT EXISTS homework_overrides (
+  id TEXT PRIMARY KEY,
+  homework_id TEXT NOT NULL,
+  student_id TEXT NOT NULL,
+  title TEXT,
+  description TEXT,
+  lesson_id TEXT,
+  is_exempt INTEGER NOT NULL DEFAULT 0 CHECK (is_exempt IN (0,1)),
+  updated_by TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(homework_id, student_id),
+  FOREIGN KEY (homework_id) REFERENCES homework(id) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  FOREIGN KEY (updated_by) REFERENCES teachers(id)
+);
+
+CREATE TABLE IF NOT EXISTS homework_progress (
+  homework_id TEXT NOT NULL,
+  student_id TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'NOT_STARTED' CHECK (status IN ('NOT_STARTED','IN_PROGRESS','DONE')),
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (homework_id, student_id),
+  FOREIGN KEY (homework_id) REFERENCES homework(id) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE TABLE IF NOT EXISTS gradebook_entries (
+  id TEXT PRIMARY KEY,
+  lesson_id TEXT NOT NULL,
+  student_id TEXT NOT NULL,
+  value INTEGER NOT NULL CHECK (value BETWEEN 2 AND 5),
+  kind TEXT NOT NULL DEFAULT 'LESSON' CHECK (kind IN ('LESSON','HOMEWORK','TEST','LAB')),
+  comment TEXT,
+  created_by TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(lesson_id, student_id, kind),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (created_by) REFERENCES teachers(id)
+);
+
+CREATE TABLE IF NOT EXISTS reminder_deliveries (
+  id TEXT PRIMARY KEY,
+  homework_id TEXT NOT NULL,
+  student_id TEXT NOT NULL,
+  channel TEXT NOT NULL CHECK (channel IN ('IN_APP','WEB_NOTIFICATION')),
+  lesson_date TEXT NOT NULL,
+  delivered_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(homework_id, student_id, channel, lesson_date),
+  FOREIGN KEY (homework_id) REFERENCES homework(id),
+  FOREIGN KEY (student_id) REFERENCES students(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_lessons_class_date ON lessons(class_id, lesson_date);
+CREATE INDEX IF NOT EXISTS idx_homework_class_lesson ON homework(class_id, lesson_id);
+CREATE INDEX IF NOT EXISTS idx_homework_progress_student ON homework_progress(student_id, status);
+CREATE INDEX IF NOT EXISTS idx_gradebook_student ON gradebook_entries(student_id, lesson_id);
+CREATE INDEX IF NOT EXISTS idx_class_progress_rank ON class_progress(grade, total_xp DESC);
+
+INSERT OR IGNORE INTO school_breaks (id, academic_year, title, starts_on, ends_on) VALUES
+  ('break_2026_10', '2026-2027', 'Осенние каникулы', '2026-10-05', '2026-10-11'),
+  ('break_2026_11', '2026-2027', 'Осенние каникулы', '2026-11-16', '2026-11-22'),
+  ('break_2026_12', '2026-2027', 'Зимние каникулы', '2026-12-31', '2027-01-10'),
+  ('break_2027_02', '2026-2027', 'Февральские каникулы', '2027-02-22', '2027-02-28'),
+  ('break_2027_04', '2026-2027', 'Весенние каникулы', '2027-04-05', '2027-04-11');
+
+WITH RECURSIVE calendar(day) AS (
+  SELECT date('2026-09-01')
+  UNION ALL
+  SELECT date(day, '+1 day') FROM calendar WHERE day < date('2027-05-28')
+)
+INSERT OR IGNORE INTO lessons (id, class_id, academic_year, lesson_date)
+SELECT 'lesson_' || c.id || '_' || replace(calendar.day, '-', ''), c.id, '2026-2027', calendar.day
+FROM calendar CROSS JOIN classes c
+WHERE strftime('%w', calendar.day) IN ('2','5')
+  AND NOT EXISTS (
+    SELECT 1 FROM school_breaks b
+    WHERE b.academic_year='2026-2027' AND calendar.day BETWEEN b.starts_on AND b.ends_on
+  );

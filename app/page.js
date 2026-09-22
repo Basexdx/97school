@@ -6,6 +6,7 @@ import {bankPendingLocal,syncBankAttempts} from './task-store'
 import {TASK_BANK_VERSION} from '../shared/task-bank-meta.mjs'
 import { clearOfflinePackages, downloadGradeLessonsPackage, downloadGradePackage, downloadLessonPackage, downloadTopicPackage, formatBytes, getOfflineState, queueSyncEvent, removeOfflinePackage, syncPendingEvents } from './offline-db'
 import { grade8Chapters, grade8Lessons, getGrade8Lesson, getGrade8ChapterLessons } from './grade8-lessons'
+import {LabsPlaceholder,StudentPerformance,TeacherAcademic} from './performance'
 
 const topicsByGrade = {
   7: [
@@ -56,12 +57,11 @@ const quiz = [
 
 const navItems = [
   ['home', '⌂', 'Главная'],
-  ['topics', '▦', 'Обучение'],
-  ['practice', '◇', 'Задачи'],
-  ['tests', '▣', 'Тесты'],
-  ['oge', '◈', 'ОГЭ (9 класс)'],
-  ['rating', '⌁', 'Рейтинг'],
-  ['achievements', '♕', 'Достижения'],
+  ['practice', '◇', 'Задачник'],
+  ['topics', '▦', 'Учебник'],
+  ['oge', '◈', 'Подготовка к ОГЭ'],
+  ['labs', '⚗', 'Лабораторные работы'],
+  ['performance', '⌁', 'Успеваемость'],
   ['offline', '⇩', 'Офлайн-материалы'],
   ['profile', '○', 'Профиль'],
 ]
@@ -212,13 +212,13 @@ function TeacherLogin({ setScreen }) {
   )
 }
 
-function Sidebar({ screen, setScreen, grade }) {
+function Sidebar({ screen, setScreen, grade, setGrade }) {
   return (
     <aside className="sidebar-light">
       <Brand dark onClick={() => setScreen('home')} />
       <nav>
-        {navItems.filter(([key]) => key !== 'oge' || grade === 9).map(([key, icon, label]) => (
-          <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => setScreen(key)}><span>{icon}</span>{label}</button>
+        {navItems.map(([key, icon, label]) => (
+          <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => {if(key==='oge'&&grade!==9)setGrade(9);setScreen(key)}}><span>{icon}</span>{label}</button>
         ))}
       </nav>
       <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
@@ -290,12 +290,12 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
     })
     await refreshOfflineState()
     if (navigator.onLine) await trySync(false)
-    setScreen('rating')
+    setScreen('performance')
   }
 
   return (
     <div className="student-app">
-      <Sidebar screen={screen} setScreen={setScreen} grade={grade} />
+      <Sidebar screen={screen} setScreen={setScreen} grade={grade} setGrade={setGrade} />
       <main className="student-content">
         <div className={`connection-banner ${isOnline ? 'online' : 'offline'}`}>
           <span>{isOnline ? '● Онлайн' : '○ Офлайн'}</span>
@@ -310,7 +310,8 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
         {screen === 'topic' && <TopicScreen grade={grade} topic={currentTopics[selectedTopic]} topicIndex={selectedTopic} startQuiz={startQuiz} setScreen={setScreen} offlineState={offlineState} downloadCurrentTopic={downloadCurrentTopic} />}
         {screen === 'quiz' && <QuizScreen quizIndex={quizIndex} answer={answer} />}
         {screen === 'result' && <ResultScreen percent={percent} score={score} earned={earned} setScreen={setScreen} startQuiz={startQuiz} claim={claimXp} />}
-        {screen === 'rating' && <Rating grade={grade} xp={xp} />}
+        {(screen === 'performance' || screen === 'rating') && <StudentPerformance grade={grade} xp={xp} />}
+        {screen === 'labs' && <LabsPlaceholder />}
         {screen === 'achievements' && <Achievements />}
         {screen === 'offline' && <OfflineMaterials grade={grade} topics={currentTopics} state={offlineState} refresh={refreshOfflineState} syncNow={() => trySync(true)} isOnline={isOnline} />}
         {screen === 'profile' && <Profile grade={grade} setGrade={setGrade} xp={xp} />}
@@ -758,6 +759,7 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
       <Brand dark onClick={() => setTab('classes')} />
       <nav>
         <button className={`side-nav ${tab === 'classes' ? 'active' : ''}`} onClick={() => setTab('classes')}><span>▦</span>Мои классы</button>
+        <button className={`side-nav ${tab === 'academic' ? 'active' : ''}`} onClick={() => setTab('academic')}><span>▤</span>Дневник и ДЗ</button>
         <button className={`side-nav ${tab === 'requests' ? 'active' : ''}`} onClick={() => setTab('requests')}><span>◎</span>Запросы {pendingCount > 0 && <b className="nav-badge">{pendingCount}</b>}</button>
         <button className={`side-nav ${tab === 'keys' ? 'active' : ''}`} onClick={() => setTab('keys')}><span>⌁</span>Ключи доступа</button>
         <button className={`side-nav ${tab === 'results' ? 'active' : ''}`} onClick={() => setTab('results')}><span>▣</span>Результаты</button>
@@ -768,10 +770,12 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
     <main className="student-content">
       {tab === 'classes' && <>
         <div className="teacher-head"><div><h1>Мои классы</h1><p className="subtle">Управление учебными группами без лишних персональных данных.</p></div><button className="blue-btn small">+ Создать класс</button></div>
-        <div className="teacher-classes">{[['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button>Открыть →</button></div>)}</div>
+        <div className="teacher-classes">{[['7А','24 ученика','88%'],['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button onClick={() => setTab('academic')}>Открыть →</button></div>)}</div>
         <h2 className="quick-title">Быстрые действия</h2>
-        <div className="quick-grid"><button onClick={() => setTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => setTab('requests')}>◎<span>Запросы на подключение</span></button><button>▥<span>Посмотреть статистику</span></button></div>
+        <div className="quick-grid"><button onClick={() => setTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => setTab('requests')}>◎<span>Запросы на подключение</span></button><button onClick={() => setTab('academic')}>▤<span>Открыть дневник</span></button></div>
       </>}
+
+      {tab === 'academic' && <TeacherAcademic />}
 
       {tab === 'requests' && <>
         <div className="teacher-head"><div><h1>Запросы на подключение</h1><p className="subtle">Код не открывает доступ автоматически — каждый запрос подтверждается учителем.</p></div><span className="pending-count-pill">{pendingCount} ожидает</span></div>
@@ -817,7 +821,10 @@ export default function Page() {
   const [grade, setGrade] = useState(8)
   const [xp, setXp] = useState(0)
   const [request, setRequest] = useState(null)
-  useEffect(() => { if (new URLSearchParams(window.location.search).get('screen') === 'offline') setScreen('offline') }, [])
+  useEffect(() => {
+    const requested=new URLSearchParams(window.location.search).get('screen')
+    if(['offline','performance','practice','topics','labs','oge'].includes(requested))setScreen(requested)
+  }, [])
 
   if (screen === 'landing') return <Landing onStudentAccess={() => setScreen('studentAccess')} onTeacherLogin={() => setScreen('teacherLogin')} />
   if (screen === 'studentAccess') return <StudentAccess setScreen={setScreen} request={request} setRequest={setRequest} setGrade={setGrade} />

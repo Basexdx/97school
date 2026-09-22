@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.wrangler/
+.env
+.env.*
+!.env.example
+npm-debug.log*
+bank/grade7-source-analysis.json
+bank/paragraphs-grade7.json
+public/task-bank/grade7.json
+public/task-bank/index-grade7.json
