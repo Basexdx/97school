@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-40-8854",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 26,
+  "TOPIC": "КПД теплового двигателя",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Автомобиль УАЗ израсходовал 30 кг бензина за 2 ч. езды. Чему равна мощность двигателя автомобиля, если его КПД составляет 30%?",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 57.5,
+    "unit": "Введите мощность, кВт",
+    "tolerance": 0.2
+  },
+  "ANSWER_PROMPT": "Введите мощность, кВт",
+  "UNITS": [],
+  "SKILLS": [
+    "КПД теплового двигателя"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

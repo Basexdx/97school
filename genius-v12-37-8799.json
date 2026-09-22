@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-37-8799",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "Уравнение теплового баланса",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Сколько литров воды при 83 °C нужно добавить к 4 л воды при 20 °C, чтобы получить воду температурой 65 °С? Теплообменом с окружающей средой пренебречь.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 10,
+    "unit": "Введите объём воды, л",
+    "tolerance": 0
+  },
+  "ANSWER_PROMPT": "Введите объём воды, л",
+  "UNITS": [],
+  "SKILLS": [
+    "Уравнение теплового баланса"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

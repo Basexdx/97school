@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-37-1689",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "Уравнение теплового баланса",
+  "DIFFICULTY": "БАЗОВЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 10,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "3 л воды, взятой при температуре 20 °C, смешали с водой при температуре 100 °C. Температура смеси оказалась равной 40 °C. Чему равна масса горячей воды? Теплообменом с окружающей средой пренебречь.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 1,
+    "unit": "Введите массу горячей воды, кг",
+    "tolerance": 0
+  },
+  "ANSWER_PROMPT": "Введите массу горячей воды, кг",
+  "UNITS": [],
+  "SKILLS": [
+    "Уравнение теплового баланса"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

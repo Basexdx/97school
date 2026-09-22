@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-37-14274",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "Уравнение теплового баланса",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Нагретый камень массой 5 кг, охлаждаясь в воде массой 2 кг на 4 °C, нагревает ее на 1 °C. Чему равна удельная теплоемкость камня (в Дж/кг · °С)? Тепловыми потерями можно пренебречь.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 420,
+    "unit": "Введите удельную теплоёмкость, Дж/(кг·°C)",
+    "tolerance": 0
+  },
+  "ANSWER_PROMPT": "Введите удельную теплоёмкость, Дж/(кг·°C)",
+  "UNITS": [],
+  "SKILLS": [
+    "Уравнение теплового баланса"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

@@ -1,0 +1,62 @@
+{
+  "ID": "genius-v12-40-9049",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 11,
+  "TOPIC": "Мощность нагревателя по графику",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": true,
+  "IMAGE_DESCRIPTION": "График нагревания 1 кг воды",
+  "DIAGRAM": {
+    "type": "line-chart",
+    "label": "График нагревания 1 кг воды",
+    "xLabel": "τ, мин",
+    "yLabel": "t, °C",
+    "xTicks": [
+      0,
+      5,
+      10
+    ],
+    "yTicks": [
+      50,
+      100
+    ],
+    "points": [
+      [
+        0,
+        0
+      ],
+      [
+        5,
+        50
+      ],
+      [
+        10,
+        100
+      ]
+    ],
+    "xMax": 10,
+    "yMax": 100
+  },
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "graph",
+  "TASK": "В тонкостенный сосуд налили воду массой 1 кг, поставили его на электрическую плитку и начали нагревать. На рисунке представлен график зависимости температуры воды t от времени τ. Найдите мощность плитки. Потерями теплоты и теплоемкостью сосуда пренебречь.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 700,
+    "unit": "Введите мощность плитки, Вт",
+    "tolerance": 0
+  },
+  "ANSWER_PROMPT": "Введите мощность плитки, Вт",
+  "UNITS": [],
+  "SKILLS": [
+    "Мощность нагревателя по графику"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

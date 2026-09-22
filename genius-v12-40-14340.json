@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-40-14340",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 17,
+  "TOPIC": "Плавление льда",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "В лед, имеющий температуру 0 °C, помещают прогретый в кипящей воде медный шарик массой 99 г. Сколько льда растает? Считать, что вся энергия, выделяющаяся при охлаждении шарика, расходуется на плавление льда.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 12,
+    "unit": "Введите массу растаявшего льда, г",
+    "tolerance": 0.1
+  },
+  "ANSWER_PROMPT": "Введите массу растаявшего льда, г",
+  "UNITS": [],
+  "SKILLS": [
+    "Плавление льда"
+  ],
+  "VERSION": "4.0.0-source-319"
+}

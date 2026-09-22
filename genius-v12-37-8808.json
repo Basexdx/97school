@@ -1,0 +1,32 @@
+{
+  "ID": "genius-v12-37-8808",
+  "CLASS": 8,
+  "SECTION": "thermal",
+  "PARAGRAPH": 12,
+  "TOPIC": "Расчёт количества теплоты",
+  "DIFFICULTY": "ПОВЫШЕННЫЙ",
+  "STATUS": "VERIFIED",
+  "IMAGE_REQUIRED": false,
+  "IMAGE_DESCRIPTION": "Рисунок для решения не требуется.",
+  "DIAGRAM": null,
+  "ASSETS": [],
+  "XP": 20,
+  "OFFLINE_READY": true,
+  "ORIGIN": "CURATED_SOURCE_PACK_V12_50",
+  "REFERENCE_DATA": [],
+  "TASK_TYPE": "calculation",
+  "TASK": "Какое количество теплоты необходимо, чтобы нагреть 1 л воды от 20 °C до 100 °C? Вода нагревается в алюминиевой кастрюле массой 200 г. Тепловыми потерями пренебречь. (Удельная теплоемкость алюминия — 920 Дж/(кг·°С), воды — 4200 Дж/(кг·°С).) Ответ дайте в килоджоулях.",
+  "OPTIONS": [],
+  "ANSWER": {
+    "mode": "numeric",
+    "value": 350.72,
+    "unit": "Введите количество теплоты, кДж",
+    "tolerance": 0.02
+  },
+  "ANSWER_PROMPT": "Введите количество теплоты, кДж",
+  "UNITS": [],
+  "SKILLS": [
+    "Расчёт количества теплоты"
+  ],
+  "VERSION": "4.0.0-source-319"
+}
