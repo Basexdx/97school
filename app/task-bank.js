@@ -4,6 +4,7 @@ import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
 import {formatBytes} from './offline-db'
 import {bankIdentity,bankIndex,bankAttempts,loadBankTask,downloadBankPackage,saveBankAttempt,syncBankAttempts} from './task-store'
+import MatchingTaskFields,{emptyMatchingAnswer,matchingAnswerReady} from './matching-task'
 
 const sections={thermal:'Тепловые явления',electric:'Электрические явления',extra8:'Электромагнитные и световые явления'}
 const sectionRanges={thermal:'§1–§26',electric:'§27–§40',extra8:'Доп. темы 8 класса'}
@@ -149,10 +150,10 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 }
 
 function TaskCard({task:t,submit,back,goLearn,student,attempts,message,navigate,previousId,nextId,position,total}) {
-  const [answer,setAnswer]=useState(''),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
+  const [answer,setAnswer]=useState(()=>t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):''),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
   const latest=attempts.at(-1),wrongCount=attempts.filter(a=>answerState(a)===false).length,solved=attempts.some(a=>answerState(a)===true)
   async function check(e){e.preventDefault();setBusy(true);setError('');try{const checked=await submit(t,answer);setResult(checked)}catch(e){setError(e.message)}finally{setBusy(false)}}
-  function tryAgain(){setAnswer('');setResult(null);setError('')}
+  function tryAgain(){setAnswer(t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):'');setResult(null);setError('')}
   const location=Number.isInteger(t.PARAGRAPH)?`§${t.PARAGRAPH}`:'Дополнительная тема 8 класса'
   const isAdvanced=t.DIFFICULTY==='ПОВЫШЕННЫЙ'||t.DIFFICULTY==='ВЫСОКИЙ'
   const manual=t.ANSWER?.mode==='manual'
@@ -171,9 +172,9 @@ function TaskCard({task:t,submit,back,goLearn,student,attempts,message,navigate,
 
     <section className="bank-question">
       <div className="bank-card-title"><span>01</span><h2>Условие</h2></div>
-      <div className="bank-task-text">{t.TASK}</div>
+      {t.TASK_TYPE!=='matching'&&<div className="bank-task-text">{t.TASK}</div>}
       {t.DIAGRAM&&<TaskDiagram spec={t.DIAGRAM}/>} 
-      <form onSubmit={check}><label className="bank-answer"><span>{t.ANSWER_PROMPT||'Введите ответ'}</span><input inputMode={manual?'text':'decimal'} autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder={manual?'Введите ответ':'Введите число'} required/><small>{manual?'Ответ сохранится в попытке. Автоматическая проверка для задач из сборника будет добавлена позже.':'Можно использовать точку или запятую для десятичной дроби.'}</small></label><div className="bank-submit-row"><button className="bank-primary" disabled={busy||!String(answer).trim()}>{busy?'Сохраняю…':manual?'Сохранить ответ':'Проверить ответ'}</button>{attempts.length>0&&<span>Попыток: {attempts.length}</span>}</div></form>
+      <form onSubmit={check}>{t.TASK_TYPE==='matching'?<MatchingTaskFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:<label className="bank-answer"><span>{t.ANSWER_PROMPT||'Введите ответ'}</span><input inputMode={manual?'text':'decimal'} autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder={manual?'Введите ответ':'Введите число'} required/><small>{manual?'Ответ сохранится в попытке. Автоматическая проверка для задач из сборника будет добавлена позже.':'Можно использовать точку или запятую для десятичной дроби.'}</small></label>}<div className="bank-submit-row"><button className="bank-primary" disabled={busy||(t.TASK_TYPE==='matching'?!matchingAnswerReady(answer):!String(answer).trim())}>{busy?'Сохраняю…':manual?'Сохранить ответ':'Проверить ответ'}</button>{attempts.length>0&&<span>Попыток: {attempts.length}</span>}</div></form>
       {(error||message)&&<p role="alert" className="bank-inline-message">{error||message}</p>}
       {result&&result.correct===null&&<div role="status" className="bank-feedback manual"><div className="bank-feedback-icon">◇</div><div><strong>Ответ сохранён</strong><p>Для этой задачи пока не включена автоматическая проверка и не опубликовано решение. Можно перейти к следующей задаче стрелкой.</p></div></div>}
       {result&&result.correct!==null&&<div role="status" className={`bank-feedback ${result.correct?'right':'wrong'}`}><div className="bank-feedback-icon">{result.correct?'✓':'×'}</div><div><strong>{result.correct?'Верно!':'Ответ пока неверный'}</strong><p>{result.correct?(!student?'Результат сохранён локально. В режиме ученика сервер подтвердит XP.':latest?.status==='CONFIRMED'?`Сервер подтвердил ответ. XP за эту задачу: ${latest.result?.xpAwarded||0}.`:'Попытка сохранена и ожидает серверной синхронизации.'):'Проверь вычисления и попробуй ещё раз. Решение для этой сборки пока не опубликовано.'}</p>{!result.correct&&<button type="button" onClick={tryAgain}>Попробовать ещё</button>}</div></div>}
@@ -191,7 +192,7 @@ function TaskDiagram({spec}){
   if(spec.type==='data-table')return <figure className="bank-chart-figure"><div className="bank-data-table-wrap"><table className="bank-data-table"><thead><tr>{spec.headers.map((h,i)=><th key={i}>{h}</th>)}</tr></thead><tbody>{spec.rows.map((row,i)=><tr key={i}>{row.map((v,j)=><td key={j}>{v}</td>)}</tr>)}</tbody></table></div><figcaption>{spec.label}</figcaption></figure>
 
   if(['line-chart','multi-line-chart'].includes(spec.type)){
-    const W=640,H=360,left=72,right=28,top=26,bottom=62
+    const W=700,H=420,left=92,right=72,top=44,bottom=86
     const series=spec.type==='multi-line-chart'?spec.series:[{label:'',points:spec.points}]
     const allPoints=series.flatMap(s=>s.points)
     const xVals=[...(spec.xTicks||[]),...allPoints.map(p=>p[0])],yVals=[...(spec.yTicks||[]),...allPoints.map(p=>p[1])]
@@ -201,7 +202,7 @@ function TaskDiagram({spec}){
       {(spec.yTicks||[]).map((v,i)=><g key={`y${i}`}><line className="grid" x1={left} x2={W-right} y1={Y(v)} y2={Y(v)}/><text className="tick" x={left-12} y={Y(v)+5} textAnchor="end">{String(v).replace('.',',')}</text></g>)}
       {(spec.xTicks||[]).map((v,i)=><g key={`x${i}`}><line className="grid" y1={top} y2={H-bottom} x1={X(v)} x2={X(v)}/><text className="tick" x={X(v)} y={H-bottom+25} textAnchor="middle">{String(v).replace('.',',')}</text></g>)}
       <line className="axis" x1={left} x2={W-right} y1={Y(yMin)} y2={Y(yMin)}/><line className="axis" x1={X(xMin)} x2={X(xMin)} y1={top} y2={H-bottom}/>
-      {series.map((sr,i)=><g key={i}><polyline className={`series s${i+1}`} points={sr.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{sr.label&&<text className="series-label" x={X(sr.points.at(-1)[0])+8} y={Y(sr.points.at(-1)[1])-8}>{sr.label}</text>}</g>)}
+      {series.map((sr,i)=>{const last=sr.points.at(-1),lx=Math.min(W-right-8,Math.max(left+8,X(last[0])+(i%2?-10:12))),ly=Math.min(H-bottom-12,Math.max(top+18,Y(last[1])+(i%2?18:-14)));return <g key={i}><polyline className={`series s${i+1}`} points={sr.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{sr.label&&<text className="series-label" x={lx} y={ly} textAnchor={i%2?'end':'start'}>{sr.label}</text>}</g>})}
       <text className="axis-label" x={W-right} y={H-14} textAnchor="end">{spec.xLabel}</text><text className="axis-label" x={18} y={top+8}>{spec.yLabel}</text>
     </svg><figcaption>{spec.label}</figcaption></figure>
   }

@@ -81,11 +81,9 @@ export async function saveGrade(request,env,teacher){
   const row=await env.DB.prepare(`SELECT l.id FROM lessons l JOIN classes c ON c.id=l.class_id JOIN students s ON s.class_id=c.id WHERE l.id=? AND s.id=? AND c.teacher_id=?`).bind(lessonId,studentId,teacher.id).first()
   if(!row)return json({error:'lesson_or_student_not_found'},404)
   const comment=clean(body?.comment,240),id=crypto.randomUUID()
-  await env.DB.batch([
-    env.DB.prepare(`DELETE FROM attendance_entries WHERE lesson_id=? AND student_id=?`).bind(lessonId,studentId),
-    env.DB.prepare(`INSERT INTO gradebook_entries(id,lesson_id,student_id,value,kind,comment,created_by) VALUES(?,?,?,?,?,?,?)
-      ON CONFLICT(lesson_id,student_id,kind) DO UPDATE SET value=excluded.value,comment=excluded.comment,updated_at=CURRENT_TIMESTAMP`).bind(id,lessonId,studentId,value,kind,comment,teacher.id),
-  ])
+  await env.DB.prepare(`DELETE FROM attendance_entries WHERE lesson_id=? AND student_id=?`).bind(lessonId,studentId).run()
+  await env.DB.prepare(`INSERT INTO gradebook_entries(id,lesson_id,student_id,value,kind,comment,created_by) VALUES(?,?,?,?,?,?,?)
+    ON CONFLICT(lesson_id,student_id,kind) DO UPDATE SET value=excluded.value,comment=excluded.comment,updated_at=CURRENT_TIMESTAMP`).bind(id,lessonId,studentId,value,kind,comment,teacher.id).run()
   return json({lessonId,studentId,value,kind,comment},201)
 }
 
@@ -98,10 +96,8 @@ export async function saveAttendance(request,env,teacher){
     await env.DB.prepare(`DELETE FROM attendance_entries WHERE lesson_id=? AND student_id=?`).bind(lessonId,studentId).run()
     return json({lessonId,studentId,status},200)
   }
-  await env.DB.batch([
-    env.DB.prepare(`DELETE FROM gradebook_entries WHERE lesson_id=? AND student_id=? AND kind='LESSON'`).bind(lessonId,studentId),
-    env.DB.prepare(`INSERT INTO attendance_entries(lesson_id,student_id,status,updated_by) VALUES(?,?,?,?) ON CONFLICT(lesson_id,student_id) DO UPDATE SET status=excluded.status,updated_by=excluded.updated_by,updated_at=CURRENT_TIMESTAMP`).bind(lessonId,studentId,'ABSENT',teacher.id),
-  ])
+  await env.DB.prepare(`DELETE FROM gradebook_entries WHERE lesson_id=? AND student_id=? AND kind='LESSON'`).bind(lessonId,studentId).run()
+  await env.DB.prepare(`INSERT INTO attendance_entries(lesson_id,student_id,status,updated_by) VALUES(?,?,?,?) ON CONFLICT(lesson_id,student_id) DO UPDATE SET status=excluded.status,updated_by=excluded.updated_by,updated_at=CURRENT_TIMESTAMP`).bind(lessonId,studentId,'ABSENT',teacher.id).run()
   return json({lessonId,studentId,status:'ABSENT'},201)
 }
 

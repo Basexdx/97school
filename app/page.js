@@ -6,7 +6,7 @@ import {bankPendingLocal,syncBankAttempts} from './task-store'
 import {TASK_BANK_VERSION} from '../shared/task-bank-meta.mjs'
 import { clearOfflinePackages, downloadGradeLessonsPackage, downloadGradePackage, downloadLessonPackage, downloadTopicPackage, formatBytes, getOfflineState, queueSyncEvent, removeOfflinePackage, syncPendingEvents } from './offline-db'
 import { grade8Chapters, grade8Lessons, getGrade8Lesson, getGrade8ChapterLessons } from './grade8-lessons'
-import {LabsPlaceholder,StudentPerformance,TeacherAcademic} from './performance'
+import {LabsPlaceholder,StudentPerformance,TeacherAcademic} from './performance-v2'
 
 const topicsByGrade = {
   7: [

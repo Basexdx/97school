@@ -283,3 +283,27 @@ WHERE strftime('%w', calendar.day) IN ('2','5')
     SELECT 1 FROM school_breaks b
     WHERE b.academic_year='2026-2027' AND calendar.day BETWEEN b.starts_on AND b.ends_on
   );
+
+
+-- v15 class journal: attendance and visual assessment types.
+CREATE TABLE IF NOT EXISTS attendance_entries (
+  lesson_id TEXT NOT NULL,
+  student_id TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'ABSENT' CHECK (status IN ('ABSENT')),
+  updated_by TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (lesson_id, student_id),
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  FOREIGN KEY (student_id) REFERENCES students(id),
+  FOREIGN KEY (updated_by) REFERENCES teachers(id)
+);
+CREATE TABLE IF NOT EXISTS lesson_assessments (
+  lesson_id TEXT PRIMARY KEY,
+  assessment_type TEXT NOT NULL DEFAULT 'LESSON' CHECK (assessment_type IN ('LESSON','INDEPENDENT','TEST','HOMEWORK')),
+  updated_by TEXT NOT NULL,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (lesson_id) REFERENCES lessons(id),
+  FOREIGN KEY (updated_by) REFERENCES teachers(id)
+);
+CREATE INDEX IF NOT EXISTS idx_attendance_student_lesson ON attendance_entries(student_id,lesson_id);
+CREATE INDEX IF NOT EXISTS idx_lesson_assessments_type ON lesson_assessments(assessment_type,lesson_id);

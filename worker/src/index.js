@@ -1,5 +1,5 @@
 import { submitTaskAttempts, taskProgress } from './task-bank.js'
-import { saveGrade, saveHomework, saveHomeworkOverride, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic.js'
+import { saveAttendance, saveGrade, saveHomework, saveHomeworkOverride, saveLessonAssessment, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic-v2.js'
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
 
 export default {
@@ -53,6 +53,12 @@ async function handleRequest(request, env) {
   }
   if (path === '/api/teacher/grades' && request.method === 'POST') {
     const auth=await requireTeacher(request,env);return auth.ok?saveGrade(request,env,auth.teacher):auth.response
+  }
+  if (path === '/api/teacher/attendance' && request.method === 'POST') {
+    const auth=await requireTeacher(request,env);return auth.ok?saveAttendance(request,env,auth.teacher):auth.response
+  }
+  if (path === '/api/teacher/lesson-assessment' && request.method === 'POST') {
+    const auth=await requireTeacher(request,env);return auth.ok?saveLessonAssessment(request,env,auth.teacher):auth.response
   }
   if (path === '/api/teacher/homework' && request.method === 'POST') {
     const auth=await requireTeacher(request,env);return auth.ok?saveHomework(request,env,auth.teacher):auth.response
