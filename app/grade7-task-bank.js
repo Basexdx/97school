@@ -40,7 +40,7 @@ export default function Grade7TaskBank({onXp=()=>{}}){
     return checked
   }
 
-  if(current)return <Grade7TaskCard task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={()=>setTaskId(null)} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={setTaskId} position={navPos+1} total={nav.length} student={student}/>
+  if(current)return <Grade7TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={()=>setTaskId(null)} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={setTaskId} position={navPos+1} total={nav.length} student={student}/>
 
   const solved=Object.values(taskStates).filter(s=>s.solved).length
   return <div className={styles.page}>
@@ -76,14 +76,14 @@ function Grade7TaskCard({task,submit,attempts,back,previousId,nextId,navigate,po
   </article>
 }
 
-function emptyAnswer(spec){if(spec.mode==='numeric_list')return spec.values.map(()=> '');if(spec.mode==='parts')return spec.parts.map(()=> '');if(spec.mode==='set')return [];return ''}
+function emptyAnswer(spec){if(spec.mode==='numeric_list')return (spec.fields||spec.values||[]).map(()=> '');if(spec.mode==='parts')return (spec.parts||[]).map(()=> '');if(spec.mode==='set')return [];return ''}
 function answerReady(spec,value){if(spec.mode==='numeric_list'||spec.mode==='parts')return value.every(v=>String(v).trim());if(spec.mode==='set')return value.length>0;return String(value).trim().length>0}
 
 function AnswerFields({task,value,onChange}){
   const spec=task.ANSWER
   if(spec.mode==='numeric')return <label className={styles.answerBox}><span>{task.ANSWER_PROMPT||'Введите ответ'}</span><div><input inputMode="decimal" value={value} onChange={e=>onChange(e.target.value)} placeholder="Ответ"/><em>{spec.unit}</em></div></label>
-  if(spec.mode==='numeric_list')return <div className={styles.multiFields}>{spec.fields.map((f,i)=><label key={i}><span>{f.label}</span><div><input inputMode="decimal" value={value[i]} onChange={e=>{const a=[...value];a[i]=e.target.value;onChange(a)}}/><em>{f.unit}</em></div></label>)}</div>
-  if(spec.mode==='parts')return <div className={styles.multiFields}>{spec.parts.map((part,i)=>part.type==='numeric'?<label key={i}><span>{part.label}</span><div><input inputMode="decimal" value={value[i]} onChange={e=>{const a=[...value];a[i]=e.target.value;onChange(a)}}/><em>{part.unit||''}</em></div></label>:<fieldset key={i} className={styles.choices}><legend>{part.label}</legend>{part.options.map(o=><label key={o.id}><input type="radio" name={`p${i}`} checked={value[i]===o.id} onChange={()=>{const a=[...value];a[i]=o.id;onChange(a)}}/><span><b>{o.id}</b>{o.text}</span></label>)}</fieldset>)}</div>
+  if(spec.mode==='numeric_list')return <div className={styles.multiFields}>{spec.fields.map((f,i)=><label key={i}><span>{f.label}</span><div><input inputMode="decimal" value={value?.[i]??''} onChange={e=>{const a=[...value];a[i]=e.target.value;onChange(a)}}/><em>{f.unit}</em></div></label>)}</div>
+  if(spec.mode==='parts')return <div className={styles.multiFields}>{spec.parts.map((part,i)=>part.type==='numeric'?<label key={i}><span>{part.label}</span><div><input inputMode="decimal" value={value?.[i]??''} onChange={e=>{const a=[...value];a[i]=e.target.value;onChange(a)}}/><em>{part.unit||''}</em></div></label>:<fieldset key={i} className={styles.choices}><legend>{part.label}</legend>{part.options.map(o=><label key={o.id}><input type="radio" name={`p${i}`} checked={value[i]===o.id} onChange={()=>{const a=[...value];a[i]=o.id;onChange(a)}}/><span><b>{o.id}</b>{o.text}</span></label>)}</fieldset>)}</div>
   const options=task.OPTIONS||[]
   if(spec.mode==='set')return <fieldset className={styles.choices}><legend>{task.ANSWER_PROMPT||'Выберите ответы'}</legend>{options.map(o=><label key={o.id}><input type="checkbox" checked={value.includes(o.id)} onChange={e=>onChange(e.target.checked?[...value,o.id]:value.filter(x=>x!==o.id))}/><span><b>{o.id}</b>{o.text}</span></label>)}</fieldset>
   return <fieldset className={styles.choices}><legend>{task.ANSWER_PROMPT||'Выберите ответ'}</legend>{options.map(o=><label key={o.id}><input type="radio" name={`answer-${task.ID}`} checked={value===o.id} onChange={()=>onChange(o.id)}/><span><b>{o.id}</b>{o.text}</span></label>)}</fieldset>
