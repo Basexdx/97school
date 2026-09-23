@@ -2,8 +2,8 @@ import './globals.css'
 import PwaRegister from './pwa-register'
 
 export const metadata = {
-  title: 'Genius — физика 7–9',
-  description: 'Образовательное приложение Genius',
+  title: 'Genius — физика, которую понимаешь',
+  description: 'Учебник, задачи, лабораторные работы и подготовка к ОГЭ по физике.',
   manifest: '/manifest.webmanifest',
 }
 

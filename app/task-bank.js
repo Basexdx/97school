@@ -73,7 +73,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
   useEffect(()=>{
     if(task||!index||!restoreTaskId)return
     const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      document.getElementById(`task-${restoreTaskId}`)?.scrollIntoView({block:'center',behavior:'instant'})
+      document.getElementById(`task-${restoreTaskId}`)?.scrollIntoView({block:'center',behavior:'auto'})
     }))
     return()=>cancelAnimationFrame(frame)
   },[index,rows.length,restoreTaskId,task])
@@ -125,19 +125,21 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 
     <div className="bank-sections">{Object.entries(sections).map(([id,label])=><button key={id} className={section===id?'selected':''} onClick={()=>selectSection(id)}><small>{sectionRanges[id]}</small><strong>{label}</strong><span>{index?.tasks.filter(t=>t.section===id).length??0} задач →</span></button>)}</div>
 
-    <section className="bank-navigator">
-      <div className="bank-search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти тему" aria-label="Поиск по банку задач"/></div>
-      {!!currentParagraphs.length&&<div className="bank-paragraph-strip" aria-label="Параграфы"><button className={!paragraph?'active':''} onClick={()=>selectParagraph('')}>Все</button>{currentParagraphs.map(p=><button key={p.paragraph} title={p.title} className={Number(paragraph)===p.paragraph?'active':''} onClick={()=>selectParagraph(p.paragraph)}>§{p.paragraph}</button>)}</div>}
-    </section>
+    <div className="bank-filter-dock">
+      <section className="bank-navigator">
+        <div className="bank-search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти тему" aria-label="Поиск по банку задач"/></div>
+        {!!currentParagraphs.length&&<div className="bank-paragraph-strip" aria-label="Параграфы"><button className={!paragraph?'active':''} onClick={()=>selectParagraph('')}>Все</button>{currentParagraphs.map(p=><button key={p.paragraph} title={p.title} className={Number(paragraph)===p.paragraph?'active':''} onClick={()=>selectParagraph(p.paragraph)}>§{p.paragraph}</button>)}</div>}
+      </section>
 
-    <section className="bank-filters" aria-label="Фильтры задач">
-      <label>Параграф<select value={paragraph} onChange={e=>selectParagraph(e.target.value)} disabled={!currentParagraphs.length}><option value="">Все параграфы</option>{currentParagraphs.map(p=><option key={p.paragraph} value={p.paragraph}>§{p.paragraph}. {p.title}</option>)}</select></label>
-      <label>Тема<select value={topic} onChange={e=>setTopic(e.target.value)}><option value="">Все темы</option>{[...new Set((index?.tasks||[]).filter(t=>(!section||t.section===section)&&(!paragraph||t.paragraph===Number(paragraph))).map(t=>t.topic))].sort().map(x=><option key={x}>{x}</option>)}</select></label>
-      <label>Сложность<select value={difficulty} onChange={e=>setDifficulty(e.target.value)}><option value="">Любая сложность</option>{['БАЗОВЫЙ','ПОВЫШЕННЫЙ','ВЫСОКИЙ'].map(x=><option key={x} value={x}>{difficultyLabels[x]}</option>)}</select></label>
-      <label>Тип<select value={type} onChange={e=>setType(e.target.value)}><option value="">Все типы</option>{[...new Set(index?.tasks.map(t=>t.type)||[])].map(x=><option key={x} value={x}>{typeLabels[x]||x}</option>)}</select></label>
-      <label>Прогресс<select value={progress} onChange={e=>setProgress(e.target.value)}><option value="">Все задачи</option><option value="solved">Решённые</option><option value="unsolved">Нерешённые</option><option value="repeat">Требуют повторения</option><option value="pending">Ждут синхронизации</option></select></label>
-      <button onClick={resetFilters}>Сбросить фильтры</button>
-    </section>
+      <section className="bank-filters" aria-label="Фильтры задач">
+        <label>Параграф<select value={paragraph} onChange={e=>selectParagraph(e.target.value)} disabled={!currentParagraphs.length}><option value="">Все параграфы</option>{currentParagraphs.map(p=><option key={p.paragraph} value={p.paragraph}>§{p.paragraph}. {p.title}</option>)}</select></label>
+        <label>Тема<select value={topic} onChange={e=>setTopic(e.target.value)}><option value="">Все темы</option>{[...new Set((index?.tasks||[]).filter(t=>(!section||t.section===section)&&(!paragraph||t.paragraph===Number(paragraph))).map(t=>t.topic))].sort().map(x=><option key={x}>{x}</option>)}</select></label>
+        <label>Сложность<select value={difficulty} onChange={e=>setDifficulty(e.target.value)}><option value="">Любая сложность</option>{['БАЗОВЫЙ','ПОВЫШЕННЫЙ','ВЫСОКИЙ'].map(x=><option key={x} value={x}>{difficultyLabels[x]}</option>)}</select></label>
+        <label>Тип<select value={type} onChange={e=>setType(e.target.value)}><option value="">Все типы</option>{[...new Set(index?.tasks.map(t=>t.type)||[])].map(x=><option key={x} value={x}>{typeLabels[x]||x}</option>)}</select></label>
+        <label>Прогресс<select value={progress} onChange={e=>setProgress(e.target.value)}><option value="">Все задачи</option><option value="solved">Решённые</option><option value="unsolved">Нерешённые</option><option value="repeat">Требуют повторения</option><option value="pending">Ждут синхронизации</option></select></label>
+        <button onClick={resetFilters}>Сбросить фильтры</button>
+      </section>
+    </div>
 
     <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!paragraph||busy||!online} onClick={()=>download('paragraph',paragraph)}>⇩ Скачать тему {paragraph&&`· ${formatBytes(index.tasks.filter(t=>t.paragraph===Number(paragraph)).reduce((a,t)=>a+t.bytes,0))}`}</button><button disabled={!section||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
 

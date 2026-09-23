@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import TaskBank from './task-bank'
+import UnifiedTaskBank from './unified-task-bank'
 import {bankPendingLocal,syncBankAttempts} from './task-store'
 import {TASK_BANK_VERSION} from '../shared/task-bank-meta.mjs'
 import { clearOfflinePackages, downloadGradeLessonsPackage, downloadGradePackage, downloadLessonPackage, downloadTopicPackage, formatBytes, getOfflineState, queueSyncEvent, removeOfflinePackage, syncPendingEvents } from './offline-db'
@@ -86,30 +86,32 @@ function Landing({ onStudentAccess, onTeacherLogin }) {
       <section className="landing-card">
         <nav className="landing-nav">
           <Brand dark onClick={() => {}} />
-          <div className="landing-links"><span>О проекте</span><span>Возможности</span><span>Безопасность</span></div>
           <div className="landing-actions"><button className="ghost-dark" onClick={onTeacherLogin}>Учителю</button><button className="blue-btn small" onClick={onStudentAccess}>Войти по коду</button></div>
         </nav>
-        <div className="landing-grid">
+        <div className="landing-grid landing-grid-v14">
           <div className="landing-copy">
-            <h1>Физика<br/>становится <span>игрой</span></h1>
-            <p>Изучай. Решай. Развивайся.<br/>Соревнуйся. Достигай большего!</p>
-            <div className="landing-cta"><button className="blue-btn" onClick={onStudentAccess}>Войти в Genius</button><button className="ghost-dark" onClick={onTeacherLogin}>Кабинет учителя</button></div>
+            <span className="landing-eyebrow">ФИЗИКА · 7–9 КЛАСС</span>
+            <h1>Понимай физику.<br/><span>Решай уверенно.</span></h1>
+            <p>Учебник, задачи, лабораторные работы и подготовка к ОГЭ — в одной системе.</p>
+            <div className="landing-cta"><button className="blue-btn" onClick={onStudentAccess}>Начать заниматься</button><button className="ghost-dark" onClick={onTeacherLogin}>Войти как учитель</button></div>
+            <div className="landing-assurance"><span>✓ Прогресс сохраняется</span><span>✓ Работает офлайн</span></div>
           </div>
-          <div className="atom-stage" aria-hidden="true">
-            <div className="atom-core" />
-            <div className="orbit orbit-a"><i /></div>
-            <div className="orbit orbit-b"><i /></div>
-            <div className="orbit orbit-c"><i /></div>
-            <span className="formula formula-top">E = mc²</span>
-            <span className="formula formula-bottom">F = ma</span>
-            <div className="planet-glow" />
+          <div className="landing-showcase" aria-hidden="true">
+            <div className="landing-showcase-atom"><div className="atom-core"/><div className="orbit orbit-a"><i/></div><div className="orbit orbit-b"><i/></div><div className="orbit orbit-c"><i/></div></div>
+            <div className="landing-progress-card">
+              <header><span>ТВОЙ ПРОГРЕСС</span><b>8 класс</b></header>
+              <h2>Электрические явления</h2>
+              <p>Следующая тема: закон Ома</p>
+              <div className="landing-progress"><i/></div>
+              <div className="landing-progress-meta"><strong>68%</strong><span>12 тем изучено</span></div>
+              <div className="landing-next-task"><span>Продолжить обучение</span><b>→</b></div>
+            </div>
           </div>
         </div>
-        <div className="landing-proof">
-          <div><strong>Без почты</strong><span>у учеников</span></div>
-          <div><strong>Только по коду</strong><span>от учителя</span></div>
-          <div><strong>Рейтинг</strong><span>и достижения</span></div>
-          <div><strong>7–9 класс</strong><span>+ подготовка к ОГЭ</span></div>
+        <div className="landing-proof landing-proof-v14">
+          <div><strong>Учебник и задачник</strong><span>теория сразу закрепляется практикой</span></div>
+          <div><strong>Личный прогресс</strong><span>видно, что уже освоено</span></div>
+          <div><strong>Подготовка к ОГЭ</strong><span>по темам и типам заданий</span></div>
         </div>
       </section>
     </main>
@@ -305,7 +307,7 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && <HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
         {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
-        {screen === 'practice' && <TaskBank onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen} />}
+        {screen === 'practice' && <UnifiedTaskBank initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen} />}
         {screen === 'lesson8' && <Grade8LessonScreen lessonId={selectedLessonId} setScreen={setScreen} offlineState={offlineState} refreshOfflineState={refreshOfflineState} />}
         {screen === 'topic' && <TopicScreen grade={grade} topic={currentTopics[selectedTopic]} topicIndex={selectedTopic} startQuiz={startQuiz} setScreen={setScreen} offlineState={offlineState} downloadCurrentTopic={downloadCurrentTopic} />}
         {screen === 'quiz' && <QuizScreen quizIndex={quizIndex} answer={answer} />}

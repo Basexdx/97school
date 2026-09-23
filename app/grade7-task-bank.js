@@ -8,16 +8,17 @@ import styles from './grade7-task-bank.module.css'
 const difficultyLabels={БАЗОВЫЙ:'Базовый',ПОВЫШЕННЫЙ:'Повышенный',ВЫСОКИЙ:'Высокий'}
 const typeLabels={single_choice:'Выбор ответа',multiple_choice:'Несколько ответов',calculation:'Расчётная',graph:'График',table:'Работа с прибором'}
 const sectionLabels={intro7:'Введение и измерения',motion7:'Движение'}
+const POSITION_KEY='genius:task-bank-position:grade7:v1'
 const xpForAttempt=(max,count)=>count===0?max:count===1?Math.floor(max*.7):count===2?Math.floor(max*.4):Math.floor(max*.2)
 const answerState=a=>a?.status==='CONFIRMED'?a.result?.correct:a?.localResult?.correct
 const numericText=v=>String(v).replace('.',',')
 
 export default function Grade7TaskBank({onXp=()=>{}}){
   const [bank,setBank]=useState(null),[index,setIndex]=useState(null),[student,setStudent]=useState(null),[attempts,setAttempts]=useState([])
-  const [taskId,setTaskId]=useState(null),[paragraph,setParagraph]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState('')
+  const [taskId,setTaskId]=useState(null),[paragraph,setParagraph]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState(''),[restoreTaskId,setRestoreTaskId]=useState('')
 
   async function reloadAttempts(owner){setAttempts(await bankAttempts(owner))}
-  useEffect(()=>{let live=true;(async()=>{try{
+  useEffect(()=>{let live=true;try{const saved=JSON.parse(sessionStorage.getItem(POSITION_KEY)||'null');if(saved){setParagraph(saved.paragraph||'');setDifficulty(saved.difficulty||'');setType(saved.type||'');setQuery(saved.query||'');setRestoreTaskId(saved.taskId||'')}}catch{};(async()=>{try{
     const [b,i]=await Promise.all([fetch('/task-bank/grade7.json',{cache:'no-store'}),fetch('/task-bank/index-grade7.json',{cache:'no-store'})])
     if(!b.ok||!i.ok)throw Error('Банк 7 класса ещё не подготовлен. Перезапустите Genius после обновления.')
     const [bankData,indexData]=await Promise.all([b.json(),i.json()]);if(!live)return;setBank(bankData);setIndex(indexData)
@@ -28,9 +29,21 @@ export default function Grade7TaskBank({onXp=()=>{}}){
   const taskStates=useMemo(()=>{const m={};for(const a of gradeAttempts){const s=m[a.taskId]||{count:0,wrong:0,solved:false};s.count++;const c=answerState(a);if(c===false)s.wrong++;if(c===true)s.solved=true;m[a.taskId]=s}return m},[gradeAttempts])
   const filtered=useMemo(()=>{const q=query.trim().toLocaleLowerCase('ru-RU');return (index?.tasks||[]).filter(t=>(!paragraph||t.paragraph===Number(paragraph))&&(!difficulty||t.difficulty===difficulty)&&(!type||t.type===type)&&(!q||`${t.bookNumber} ${t.topic}`.toLocaleLowerCase('ru-RU').includes(q)))},[index,paragraph,difficulty,type,query])
   const current=taskId&&bank?.tasks.find(t=>t.ID===taskId)
-  const currentPos=current?filtered.findIndex(t=>t.id===current.ID):-1
   const nav=filtered.length?filtered:index?.tasks||[]
   const navPos=current?nav.findIndex(t=>t.id===current.ID):-1
+
+  useEffect(()=>{
+    if(current||!index||!restoreTaskId)return
+    const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById(`grade7-task-${restoreTaskId}`)?.scrollIntoView({block:'center',behavior:'auto'})))
+    return()=>cancelAnimationFrame(frame)
+  },[current,index,filtered.length,restoreTaskId])
+
+  function rememberPosition(id){
+    setRestoreTaskId(id)
+    try{sessionStorage.setItem(POSITION_KEY,JSON.stringify({taskId:id,paragraph,difficulty,type,query}))}catch{}
+  }
+  function openTask(id){rememberPosition(id);setTaskId(id)}
+  function backToBank(){rememberPosition(current?.ID||restoreTaskId);setTaskId(null)}
 
   async function submit(task,answer){
     const checked=checkAnswer(task,answer)
@@ -40,7 +53,7 @@ export default function Grade7TaskBank({onXp=()=>{}}){
     return checked
   }
 
-  if(current)return <Grade7TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={()=>setTaskId(null)} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={setTaskId} position={navPos+1} total={nav.length} student={student}/>
+  if(current)return <Grade7TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={backToBank} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={openTask} position={navPos+1} total={nav.length} student={student}/>
 
   const solved=Object.values(taskStates).filter(s=>s.solved).length
   return <div className={styles.page}>
@@ -50,16 +63,16 @@ export default function Grade7TaskBank({onXp=()=>{}}){
     {message&&<div className={styles.notice}>{message}</div>}
     <section className={styles.stats}><article><small>Отобрано</small><strong>{index?.tasks.length||'…'}</strong><span>из 168</span></article><article><small>Решено</small><strong>{solved}</strong><span>задач</span></article><article><small>Попытки</small><strong>{gradeAttempts.length}</strong><span>в этом классе</span></article><article><small>Источник</small><strong>7</strong><span>класс</span></article></section>
 
-    <section className={styles.filters}>
-      <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти номер или тему" aria-label="Поиск"/>
-      <select value={paragraph} onChange={e=>setParagraph(e.target.value)}><option value="">Все разделы</option>{(index?.paragraphs||[]).filter(p=>p.count>0).map(p=><option key={p.paragraph} value={p.paragraph}>§{p.paragraph}. {p.title}</option>)}</select>
-      <select value={difficulty} onChange={e=>setDifficulty(e.target.value)}><option value="">Любая сложность</option>{Object.entries(difficultyLabels).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select>
-      <select value={type} onChange={e=>setType(e.target.value)}><option value="">Все типы</option>{[...new Set((index?.tasks||[]).map(t=>t.type))].map(k=><option key={k} value={k}>{typeLabels[k]||k}</option>)}</select>
-      <button onClick={()=>{setParagraph('');setDifficulty('');setType('');setQuery('')}}>Сбросить</button>
-    </section>
+    <div className={styles.filterDock}><section className={styles.filters}>
+        <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти номер или тему" aria-label="Поиск"/>
+        <select value={paragraph} onChange={e=>setParagraph(e.target.value)}><option value="">Все разделы</option>{(index?.paragraphs||[]).filter(p=>p.count>0).map(p=><option key={p.paragraph} value={p.paragraph}>§{p.paragraph}. {p.title}</option>)}</select>
+        <select value={difficulty} onChange={e=>setDifficulty(e.target.value)}><option value="">Любая сложность</option>{Object.entries(difficultyLabels).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select>
+        <select value={type} onChange={e=>setType(e.target.value)}><option value="">Все типы</option>{[...new Set((index?.tasks||[]).map(t=>t.type))].map(k=><option key={k} value={k}>{typeLabels[k]||k}</option>)}</select>
+        <button onClick={()=>{setParagraph('');setDifficulty('');setType('');setQuery('')}}>Сбросить</button>
+      </section></div>
 
     <div className={styles.summary}><span><b>{filtered.length}</b> задач</span><span>1-я попытка — полный XP · 2-я — 70% · 3-я — 40% · далее — 20%</span></div>
-    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,wrong:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''}`} onClick={()=>setTaskId(item.id)}><div className={styles.tileTop}><span>Задача {item.bookNumber}</span><span>{state.solved?'✓':`${next} XP`}</span></div><h2>{item.topic}</h2><p>{typeLabels[item.type]||item.type} · {difficultyLabels[item.difficulty]}</p><footer><span>{state.count?`${state.count} попыт.`:'Новая'}</span><b>{state.solved?'Решено':'Открыть →'}</b></footer></button>})}</section>
+    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,wrong:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade7-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><div className={styles.tileTop}><span>Задача {item.bookNumber}</span><span>{state.solved?'✓':`${next} XP`}</span></div><h2>{item.topic}</h2><p>{typeLabels[item.type]||item.type} · {difficultyLabels[item.difficulty]}</p><footer><span>{state.count?`${state.count} попыт.`:'Новая'}</span><b>{state.solved?'Решено':'Открыть →'}</b></footer></button>})}</section>
   </div>
 }
 
