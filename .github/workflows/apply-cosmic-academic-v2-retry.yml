@@ -1,0 +1,110 @@
+name: Apply cosmic academic v2 retry
+
+on:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+      - name: Patch app and API
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def must_replace(path,old,new,count=None):
+              p=Path(path);s=p.read_text(encoding='utf-8')
+              if old not in s: raise SystemExit(f'Missing patch anchor in {path}: {old[:90]}')
+              s=s.replace(old,new) if count is None else s.replace(old,new,count)
+              p.write_text(s,encoding='utf-8')
+
+          # API helper must work with both Cloudflare D1 and the lightweight test adapter.
+          p=Path('worker/src/academic-v2.js');s=p.read_text(encoding='utf-8')
+          s=s.replace("""  await env.DB.batch([\n    env.DB.prepare(`DELETE FROM attendance_entries WHERE lesson_id=? AND student_id=?`).bind(lessonId,studentId),\n    env.DB.prepare(`INSERT INTO gradebook_entries(id,lesson_id,student_id,value,kind,comment,created_by) VALUES(?,?,?,?,?,?,?)\n      ON CONFLICT(lesson_id,student_id,kind) DO UPDATE SET value=excluded.value,comment=excluded.comment,updated_at=CURRENT_TIMESTAMP`).bind(id,lessonId,studentId,value,kind,comment,teacher.id),\n  ])""",
+          """  await env.DB.prepare(`DELETE FROM attendance_entries WHERE lesson_id=? AND student_id=?`).bind(lessonId,studentId).run()\n  await env.DB.prepare(`INSERT INTO gradebook_entries(id,lesson_id,student_id,value,kind,comment,created_by) VALUES(?,?,?,?,?,?,?)\n    ON CONFLICT(lesson_id,student_id,kind) DO UPDATE SET value=excluded.value,comment=excluded.comment,updated_at=CURRENT_TIMESTAMP`).bind(id,lessonId,studentId,value,kind,comment,teacher.id).run()""")
+          s=s.replace("""  await env.DB.batch([\n    env.DB.prepare(`DELETE FROM gradebook_entries WHERE lesson_id=? AND student_id=? AND kind='LESSON'`).bind(lessonId,studentId),\n    env.DB.prepare(`INSERT INTO attendance_entries(lesson_id,student_id,status,updated_by) VALUES(?,?,?,?) ON CONFLICT(lesson_id,student_id) DO UPDATE SET status=excluded.status,updated_by=excluded.updated_by,updated_at=CURRENT_TIMESTAMP`).bind(lessonId,studentId,'ABSENT',teacher.id),\n  ])""",
+          """  await env.DB.prepare(`DELETE FROM gradebook_entries WHERE lesson_id=? AND student_id=? AND kind='LESSON'`).bind(lessonId,studentId).run()\n  await env.DB.prepare(`INSERT INTO attendance_entries(lesson_id,student_id,status,updated_by) VALUES(?,?,?,?) ON CONFLICT(lesson_id,student_id) DO UPDATE SET status=excluded.status,updated_by=excluded.updated_by,updated_at=CURRENT_TIMESTAMP`).bind(lessonId,studentId,'ABSENT',teacher.id).run()""")
+          p.write_text(s,encoding='utf-8')
+
+          # Activate redesigned diary/gradebook.
+          must_replace('app/page.js',"import {LabsPlaceholder,StudentPerformance,TeacherAcademic} from './performance'","import {LabsPlaceholder,StudentPerformance,TeacherAcademic} from './performance-v2'")
+
+          # Worker routes.
+          must_replace('worker/src/index.js',
+            "import { saveGrade, saveHomework, saveHomeworkOverride, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic.js'",
+            "import { saveAttendance, saveGrade, saveHomework, saveHomeworkOverride, saveLessonAssessment, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic-v2.js'")
+          p=Path('worker/src/index.js');s=p.read_text(encoding='utf-8')
+          marker="""  if (path === '/api/teacher/grades' && request.method === 'POST') {\n    const auth=await requireTeacher(request,env);return auth.ok?saveGrade(request,env,auth.teacher):auth.response\n  }\n"""
+          if "'/api/teacher/attendance'" not in s:
+              if marker not in s: raise SystemExit('teacher route marker missing')
+              s=s.replace(marker,marker+"""  if (path === '/api/teacher/attendance' && request.method === 'POST') {\n    const auth=await requireTeacher(request,env);return auth.ok?saveAttendance(request,env,auth.teacher):auth.response\n  }\n  if (path === '/api/teacher/lesson-assessment' && request.method === 'POST') {\n    const auth=await requireTeacher(request,env);return auth.ok?saveLessonAssessment(request,env,auth.teacher):auth.response\n  }\n""")
+          p.write_text(s,encoding='utf-8')
+
+          # Persistent attendance / work type metadata.
+          p=Path('cloudflare/schema.sql');s=p.read_text(encoding='utf-8')
+          if 'CREATE TABLE IF NOT EXISTS attendance_entries' not in s:
+              s += """\n\n-- v15 class journal: attendance and visual assessment types.\nCREATE TABLE IF NOT EXISTS attendance_entries (\n  lesson_id TEXT NOT NULL,\n  student_id TEXT NOT NULL,\n  status TEXT NOT NULL DEFAULT 'ABSENT' CHECK (status IN ('ABSENT')),\n  updated_by TEXT NOT NULL,\n  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  PRIMARY KEY (lesson_id, student_id),\n  FOREIGN KEY (lesson_id) REFERENCES lessons(id),\n  FOREIGN KEY (student_id) REFERENCES students(id),\n  FOREIGN KEY (updated_by) REFERENCES teachers(id)\n);\nCREATE TABLE IF NOT EXISTS lesson_assessments (\n  lesson_id TEXT PRIMARY KEY,\n  assessment_type TEXT NOT NULL DEFAULT 'LESSON' CHECK (assessment_type IN ('LESSON','INDEPENDENT','TEST','HOMEWORK')),\n  updated_by TEXT NOT NULL,\n  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (lesson_id) REFERENCES lessons(id),\n  FOREIGN KEY (updated_by) REFERENCES teachers(id)\n);\nCREATE INDEX IF NOT EXISTS idx_attendance_student_lesson ON attendance_entries(student_id,lesson_id);\nCREATE INDEX IF NOT EXISTS idx_lesson_assessments_type ON lesson_assessments(assessment_type,lesson_id);\n"""
+          p.write_text(s,encoding='utf-8')
+
+          # Matching tasks in the approved two-column + answer-table format.
+          p=Path('app/task-bank.js');s=p.read_text(encoding='utf-8')
+          imp="import MatchingTaskFields,{emptyMatchingAnswer,matchingAnswerReady} from './matching-task'\n"
+          if imp not in s:
+              anchor="import {bankIdentity,bankIndex,bankAttempts,loadBankTask,downloadBankPackage,saveBankAttempt,syncBankAttempts} from './task-store'\n"
+              if anchor not in s: raise SystemExit('task-bank import anchor missing')
+              s=s.replace(anchor,anchor+imp)
+          s=s.replace("const [answer,setAnswer]=useState(''),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('')","const [answer,setAnswer]=useState(()=>t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):''),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('')")
+          s=s.replace("function tryAgain(){setAnswer('');setResult(null);setError('')}","function tryAgain(){setAnswer(t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):'');setResult(null);setError('')}")
+          s=s.replace('<div className="bank-task-text">{t.TASK}</div>',"{t.TASK_TYPE!=='matching'&&<div className=\"bank-task-text\">{t.TASK}</div>}")
+          old='<form onSubmit={check}><label className="bank-answer"><span>{t.ANSWER_PROMPT||\'Введите ответ\'}</span>'
+          new='<form onSubmit={check}>{t.TASK_TYPE===\'matching\'?<MatchingTaskFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:<label className="bank-answer"><span>{t.ANSWER_PROMPT||\'Введите ответ\'}</span>'
+          if old not in s: raise SystemExit('matching form start missing')
+          s=s.replace(old,new,1)
+          old='</small></label><div className="bank-submit-row"><button className="bank-primary" disabled={busy||!String(answer).trim()}'
+          new='</small></label>}<div className="bank-submit-row"><button className="bank-primary" disabled={busy||(t.TASK_TYPE===\'matching\'?!matchingAnswerReady(answer):!String(answer).trim())}'
+          if old not in s: raise SystemExit('matching form end missing')
+          s=s.replace(old,new,1)
+
+          # Graph layout: larger margins and labels clamped inside plot area.
+          s=s.replace("const W=640,H=360,left=72,right=28,top=26,bottom=62","const W=700,H=420,left=92,right=72,top=44,bottom=86")
+          old="{series.map((sr,i)=><g key={i}><polyline className={`series s${i+1}`} points={sr.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{sr.label&&<text className=\"series-label\" x={X(sr.points.at(-1)[0])+8} y={Y(sr.points.at(-1)[1])-8}>{sr.label}</text>}</g>)}"
+          new="{series.map((sr,i)=>{const last=sr.points.at(-1),lx=Math.min(W-right-8,Math.max(left+8,X(last[0])+(i%2?-10:12))),ly=Math.min(H-bottom-12,Math.max(top+18,Y(last[1])+(i%2?18:-14)));return <g key={i}><polyline className={`series s${i+1}`} points={sr.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{sr.label&&<text className=\"series-label\" x={lx} y={ly} textAnchor={i%2?'end':'start'}>{sr.label}</text>}</g>})}"
+          if old in s:s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+
+          p=Path('app/grade7-task-bank.js');s=p.read_text(encoding='utf-8')
+          s=s.replace("const W=700,H=430,L=85,R=45,T=35,B=75","const W=760,H=470,L=100,R=78,T=52,B=92")
+          old="{series.map((s,i)=><g key={i}><polyline className={`${styles.series} ${i===1?styles.series2:''}`} points={s.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{s.label&&<text className={styles.seriesLabel} x={X(s.points.at(-1)[0])-18} y={Y(s.points.at(-1)[1])-16}>{s.label}</text>}</g>)}"
+          new="{series.map((s,i)=>{const last=s.points.at(-1),lx=Math.min(W-R-10,Math.max(L+10,X(last[0])+(i%2?-12:12))),ly=Math.min(H-B-14,Math.max(T+20,Y(last[1])+(i%2?18:-16)));return <g key={i}><polyline className={`${styles.series} ${i===1?styles.series2:''}`} points={s.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{s.label&&<text className={styles.seriesLabel} x={lx} y={ly} textAnchor={i%2?'end':'start'}>{s.label}</text>}</g>})}"
+          if old in s:s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Validate worker
+        run: node --check worker/src/academic-v2.js && node --check worker/src/index.js
+      - name: Tests
+        run: npm run test:bank
+      - name: Production build
+        run: npm run build
+      - name: Commit implementation and remove temporary workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add app/page.js app/task-bank.js app/grade7-task-bank.js worker/src/index.js worker/src/academic-v2.js cloudflare/schema.sql
+          git rm -f .github/workflows/apply-cosmic-academic-v2.yml .github/workflows/apply-cosmic-academic-v2-retry.yml
+          git commit -m "feat: redesign diary gradebook matching tasks and graphs"
+          git push origin HEAD:dev
