@@ -1,0 +1,12 @@
+{
+  "appId": "school.genius.physics",
+  "appName": "Genius",
+  "webDir": "out",
+  "backgroundColor": "#071525",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
