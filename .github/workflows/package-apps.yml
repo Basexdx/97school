@@ -8,6 +8,7 @@ on:
       - 'desktop/**'
       - 'capacitor.config.json'
       - 'public/manifest.webmanifest'
+      - 'app/manifest.js'
       - 'app/api-origin-bridge.js'
       - 'app/layout.js'
       - 'next.config.mjs'
