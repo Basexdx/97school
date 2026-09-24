@@ -5,12 +5,17 @@ on:
   push:
     branches: [dev]
     paths:
+      - 'app/**'
+      - 'bank/**'
+      - 'scripts/**'
+      - 'shared/**'
+      - 'worker/**'
+      - 'cloudflare/**'
       - 'desktop/**'
       - 'capacitor.config.json'
-      - 'public/manifest.webmanifest'
-      - 'app/manifest.js'
-      - 'app/api-origin-bridge.js'
-      - 'app/layout.js'
+      - 'public/**'
+      - 'package.json'
+      - 'package-lock.json'
       - 'next.config.mjs'
       - '.github/workflows/package-apps.yml'
 
