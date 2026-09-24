@@ -1,0 +1,85 @@
+name: Package Genius apps
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+    paths:
+      - 'desktop/**'
+      - 'capacitor.config.json'
+      - 'public/manifest.webmanifest'
+      - 'app/api-origin-bridge.js'
+      - 'app/layout.js'
+      - 'next.config.mjs'
+      - '.github/workflows/package-apps.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows installer
+    runs-on: windows-latest
+    env:
+      GENIUS_STATIC_BUILD: '1'
+      NEXT_PUBLIC_GENIUS_API_ORIGIN: ${{ secrets.GENIUS_API_ORIGIN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install web dependencies
+        run: npm ci
+      - name: Build static Genius web app
+        run: npm run build
+      - name: Install desktop packager
+        run: npm install --no-save electron@latest electron-builder@latest
+      - name: Build Windows installer and portable app
+        run: npx electron-builder --config desktop/electron-builder.yml --win --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Genius-Windows
+          path: |
+            release/windows/*.exe
+          if-no-files-found: error
+          retention-days: 14
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-latest
+    env:
+      GENIUS_STATIC_BUILD: '1'
+      NEXT_PUBLIC_GENIUS_API_ORIGIN: ${{ secrets.GENIUS_API_ORIGIN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install web dependencies
+        run: npm ci
+      - name: Build static Genius web app
+        run: npm run build
+      - name: Install Capacitor
+        run: npm install --no-save @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+      - name: Create Android project
+        run: |
+          rm -rf android
+          npx cap add android
+          npx cap sync android
+      - name: Build installable debug APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Genius-Android
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
