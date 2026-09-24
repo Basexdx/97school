@@ -1,4 +1,4 @@
-export const TASK_BANK_VERSION = '4.1.0-source-321'
+export const TASK_BANK_VERSION = '4.2.0-source-321-matching'
 export const TASK_BANK_ORIGIN = 'CURATED_SOURCE_BANK_321'
 export const TASK_BANK_TITLE = 'Банк задач 8 класса · 321 задача'
 
