@@ -3,15 +3,25 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {checkAnswer,numericValue,publishable} from '../shared/task-checker.mjs'
 const tasks=JSON.parse(fs.readFileSync(new URL('../bank/tasks.json',import.meta.url)))
+const grade8extra=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade8-additions.json',import.meta.url)))
 const grade7=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade7.json',import.meta.url)))
+const grade9=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade9.json',import.meta.url)))
 
-test('319 published grade 8 tasks imported from user-supplied sources',()=>{
+test('319 published grade 8 base tasks imported from user-supplied sources',()=>{
   assert.equal(tasks.length,319)
   assert.equal(tasks.filter(t=>t.ORIGIN==='CURATED_SOURCE_PACK_V12_50').length,50)
   assert.equal(tasks.filter(t=>t.ORIGIN==='PERYSHKIN_COLLECTION_V13').length,169)
   assert.ok(new Set(tasks.map(t=>t.PARAGRAPH).filter(Number.isInteger)).size>=20)
   assert.ok(tasks.filter(t=>t.IMAGE_REQUIRED).length>=18)
   for(const t of tasks){assert.ok(publishable(t));assert.ok(t.CHECK.independent);assert.equal('HINT_1' in t,false);assert.equal('HINT_2' in t,false);assert.ok(Array.isArray(t.SOLUTION))}
+})
+
+test('grade 8 completes Perishkin tasks 916-947',()=>{
+  assert.equal(grade8extra.length,2)
+  assert.deepEqual(grade8extra.map(t=>Number(t.SOURCE.task_id)),[916,917])
+  assert.equal(grade8extra.every(t=>t.CLASS===8&&t.SECTION==='extra8'&&t.PARAGRAPH===null&&publishable(t)),true)
+  const all=[...tasks,...grade8extra]
+  for(let n=916;n<=947;n++)assert.ok(all.some(t=>Number(t.SOURCE?.task_id)===n),`missing ${n}`)
 })
 
 test('grade 7 pack keeps only selected objective/calculation tasks from 1-168',()=>{
@@ -23,6 +33,19 @@ test('grade 7 pack keeps only selected objective/calculation tasks from 1-168',(
   assert.equal(t161.TASK.includes('рис'),false)
   assert.equal(t161.DIAGRAM.type,'multi-line-chart')
   assert.deepEqual(t161.DIAGRAM.series[0].points.at(-1),[2,120])
+})
+
+test('grade 9 curated numerical range and complete free-fall block are source-faithful',()=>{
+  assert.equal(grade9.length,59)
+  assert.equal(grade9.every(t=>t.CLASS===9&&t.SECTION==='kinematics9'&&publishable(t)&&t.CHECK.independent&&t.SOLUTION.length===0),true)
+  const first=grade9.filter(t=>t.BOOK_TASK_NUMBER>=1404&&t.BOOK_TASK_NUMBER<=1513)
+  assert.equal(first.length,35)
+  assert.equal(first.every(t=>['numeric','numeric_list'].includes(t.ANSWER.mode)&&!t.GRAPH_REQUIRED),true)
+  const second=grade9.filter(t=>t.BOOK_TASK_NUMBER>=1588&&t.BOOK_TASK_NUMBER<=1611)
+  assert.deepEqual(second.map(t=>t.BOOK_TASK_NUMBER).sort((a,b)=>a-b),Array.from({length:24},(_,i)=>1588+i))
+  assert.equal(checkAnswer(grade9.find(t=>t.BOOK_TASK_NUMBER===1439),4).correct,true)
+  assert.equal(checkAnswer(grade9.find(t=>t.BOOK_TASK_NUMBER===1611),[9.8,39.2]).correct,true)
+  assert.equal(grade9.find(t=>t.BOOK_TASK_NUMBER===1606).GRAPH_REQUIRED,true)
 })
 
 test('v12 pack contains 10 tasks from each new PDF and no published solutions',()=>{
