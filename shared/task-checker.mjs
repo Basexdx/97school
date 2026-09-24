@@ -1,3 +1,5 @@
+import {matchingAnswerValues,matchingResponseValues} from './matching-utils.mjs'
+
 export const TASK_TYPES = ['single_choice','multiple_choice','numeric','matching','sequence','qualitative','calculation','graph','table','experiment','circuit']
 export function publishable(task) {
   return task.STATUS === 'VERIFIED' || (task.STATUS === 'ANSWER_MISMATCH' && task.CHECK?.resolved === true)
@@ -32,8 +34,10 @@ export function checkAnswer(task, answer) {
       :part.values.map(normalizeOrdered).includes(normalizeOrdered(actual[i])))
     return {correct,reviewRequired:false}
   }
-  const actual = Array.isArray(answer) ? answer.map(normalizeOrdered) : [normalizeOrdered(answer)]
-  const expected = spec.values.map(normalizeOrdered)
+  const expectedRaw=task.TASK_TYPE==='matching'?matchingAnswerValues(task):spec.values
+  const actualRaw=task.TASK_TYPE==='matching'?matchingResponseValues(answer,expectedRaw.length):(Array.isArray(answer)?answer:[answer])
+  const actual=actualRaw.map(normalizeOrdered)
+  const expected=expectedRaw.map(normalizeOrdered)
   if (spec.mode === 'set') return { correct:new Set(actual).size===actual.length&&actual.length===expected.length&&expected.every(x=>actual.includes(x)), reviewRequired:false }
   return { correct:actual.length===expected.length&&actual.every((x,i)=>x===expected[i]), reviewRequired:false }
 }
