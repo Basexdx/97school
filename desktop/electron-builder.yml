@@ -1,0 +1,35 @@
+appId: school.genius.physics
+productName: Genius
+copyright: Copyright © 2026 Genius
+
+directories:
+  output: release/windows
+
+files:
+  - desktop/main.cjs
+  - out/**/*
+
+extraMetadata:
+  main: desktop/main.cjs
+  version: 1.0.0
+
+asar: true
+compression: maximum
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  artifactName: Genius-${version}-${arch}-${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Genius
