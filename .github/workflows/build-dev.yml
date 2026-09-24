@@ -23,8 +23,25 @@ jobs:
         run: npm run test:bank
       - name: Build Genius
         run: npm run build
-      - name: Verify generated grade 7 bank
+      - name: Verify generated task banks
         run: |
           test -f public/task-bank/grade7.json
           test -f public/task-bank/index-grade7.json
-          node -e "const fs=require('fs'); const b=JSON.parse(fs.readFileSync('public/task-bank/grade7.json')); if(b.tasks.length!==71) process.exit(1); const t=b.tasks.find(x=>x.BOOK_TASK_NUMBER===161); if(!t||t.DIAGRAM?.type!=='multi-line-chart'||/рис/i.test(t.TASK)) process.exit(1); console.log('Grade 7 bank:',b.tasks.length,'tasks; task 161 graph OK')"
+          test -f public/task-bank/grade9.json
+          test -f public/task-bank/index-grade9.json
+          node - <<'NODE'
+          const fs=require('fs')
+          const b7=JSON.parse(fs.readFileSync('public/task-bank/grade7.json'))
+          if(b7.tasks.length!==71) process.exit(1)
+          const t161=b7.tasks.find(x=>x.BOOK_TASK_NUMBER===161)
+          if(!t161||t161.DIAGRAM?.type!=='multi-line-chart'||/рис/i.test(t161.TASK)) process.exit(1)
+          const b9=JSON.parse(fs.readFileSync('public/task-bank/grade9.json'))
+          if(b9.tasks.length!==59) process.exit(1)
+          const first=b9.tasks.filter(x=>x.BOOK_TASK_NUMBER>=1404&&x.BOOK_TASK_NUMBER<=1513)
+          if(first.length!==35||first.some(x=>x.GRAPH_REQUIRED||!['numeric','numeric_list'].includes(x.ANSWER.mode))) process.exit(1)
+          const second=b9.tasks.filter(x=>x.BOOK_TASK_NUMBER>=1588&&x.BOOK_TASK_NUMBER<=1611)
+          if(second.length!==24) process.exit(1)
+          const i8=JSON.parse(fs.readFileSync('public/task-bank/index.json'))
+          if(i8.tasks.length!==321) process.exit(1)
+          console.log('Banks OK: grade7=71, grade8=321, grade9=59')
+          NODE
