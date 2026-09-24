@@ -1,11 +1,14 @@
 import tasks8 from '../../bank/tasks.json'
+import tasks8extra from '../../bank/tasks-grade8-additions.json'
 import tasks7 from '../../bank/tasks-grade7.json'
+import tasks9 from '../../bank/tasks-grade9.json'
 import {checkAnswer,publishable} from '../../shared/task-checker.mjs'
-import {TASK_BANK_VERSION,TASK_BANK_VERSION_7} from '../../shared/task-bank-meta.mjs'
+import {TASK_BANK_VERSION,TASK_BANK_VERSION_7,TASK_BANK_VERSION_9} from '../../shared/task-bank-meta.mjs'
 
-const allTasks=[...tasks8,...tasks7]
+const allTasks=[...tasks8,...tasks8extra,...tasks7,...tasks9]
 const byId=new Map(allTasks.filter(publishable).map(t=>[t.ID,t]))
-const versionForGrade=grade=>Number(grade)===7?TASK_BANK_VERSION_7:TASK_BANK_VERSION
+const versionForGrade=grade=>Number(grade)===7?TASK_BANK_VERSION_7:Number(grade)===9?TASK_BANK_VERSION_9:TASK_BANK_VERSION
+const gradeSql="CASE WHEN task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END"
 const json=(v,status=200)=>new Response(JSON.stringify(v),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}})
 const digest=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))),b=>b.toString(16).padStart(2,'0')).join('')
 
@@ -14,7 +17,7 @@ export async function taskProgress(env,student) {
   const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,
     COALESCE((SELECT amount FROM task_awards w WHERE w.student_id=a.student_id AND w.task_id=a.task_id AND w.attempt_id=a.attempt_id),0) AS xp_awarded
     FROM task_attempts a
-    WHERE a.student_id=? AND (CASE WHEN a.task_id LIKE 'genius-peryshkin7-%' THEN 7 ELSE 8 END)=?
+    WHERE a.student_id=? AND (${gradeSql})=?
     ORDER BY a.received_at,a.rowid`).bind(student.id,grade).all()
   const xp=await env.DB.prepare('SELECT total_xp FROM class_progress WHERE student_id=? AND grade=?').bind(student.id,grade).first()
   return json({studentId:student.id,grade,attempts:rows.results||[],totalXp:xp?.total_xp||0})
