@@ -1,3 +1,5 @@
+export const dynamic = 'force-static'
+
 export default function manifest() {
   return {
     name: 'Genius — физика 7–9',
