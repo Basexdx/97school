@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {publishable,TASK_TYPES} from '../shared/task-checker.mjs'
-import {TASK_BANK_ORIGIN,TASK_BANK_TITLE,TASK_BANK_VERSION,TASK_BANK_ORIGIN_7,TASK_BANK_TITLE_7,TASK_BANK_VERSION_7} from '../shared/task-bank-meta.mjs'
+import {TASK_BANK_ORIGIN,TASK_BANK_TITLE,TASK_BANK_VERSION,TASK_BANK_ORIGIN_7,TASK_BANK_TITLE_7,TASK_BANK_VERSION_7,TASK_BANK_ORIGIN_9,TASK_BANK_TITLE_9,TASK_BANK_VERSION_9} from '../shared/task-bank-meta.mjs'
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'))
 const write=(p,v)=>fs.writeFileSync(path.join(root,p),JSON.stringify(v,null,2)+'\n')
@@ -23,7 +23,7 @@ function validateCommon(t,ids){
 }
 
 function buildGrade8(){
-  const tasks=read('bank/tasks.json'),paragraphs=read('bank/paragraphs.json'),ids=new Set()
+  const tasks=[...read('bank/tasks.json'),...read('bank/tasks-grade8-additions.json')],paragraphs=read('bank/paragraphs.json'),ids=new Set()
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==8) throw Error(`${t.ID}: wrong class`)
@@ -35,7 +35,7 @@ function buildGrade8(){
   }
   const live=tasks.filter(publishable),publicDir=path.join(root,'public/task-bank')
   fs.mkdirSync(publicDir,{recursive:true})
-  for(const f of fs.readdirSync(publicDir)) if(f.endsWith('.json')&&!f.startsWith('grade7')&&!f.startsWith('index-grade7')) fs.unlinkSync(path.join(publicDir,f))
+  for(const f of fs.readdirSync(publicDir)) if(f.endsWith('.json')&&!f.startsWith('grade7')&&!f.startsWith('index-grade7')&&!f.startsWith('grade9')&&!f.startsWith('index-grade9')) fs.unlinkSync(path.join(publicDir,f))
   for(const t of live){const {SOURCE,CHECK,SOLUTION,FORMULAS,...publicTask}=t;write(`public/task-bank/${t.ID}.json`,{...publicTask,VERSION:TASK_BANK_VERSION})}
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:tasks.filter(t=>t.PARAGRAPH===p.paragraph&&t.STATUS==='REVIEW_REQUIRED').length,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('bank/coverage.json',coverage);write('bank/answer-mismatch.json',tasks.filter(t=>t.STATUS==='ANSWER_MISMATCH'));write('bank/review-required.json',tasks.filter(t=>t.STATUS==='REVIEW_REQUIRED'))
@@ -56,16 +56,34 @@ function buildGrade7(){
   const live=tasks.filter(publishable),publicDir=path.join(root,'public/task-bank')
   fs.mkdirSync(publicDir,{recursive:true})
   const publicTasks=[]
-  for(const t of live){
-    const {SOURCE,CHECK,SOLUTION,FORMULAS,...publicTask}=t
-    const item={...publicTask,VERSION:TASK_BANK_VERSION_7}
-    publicTasks.push(item)
-  }
+  for(const t of live){const {SOURCE,CHECK,SOLUTION,FORMULAS,...publicTask}=t;publicTasks.push({...publicTask,VERSION:TASK_BANK_VERSION_7})}
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade7.json',{version:TASK_BANK_VERSION_7,grade:7,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,tasks:publicTasks})
   write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168',excludedQualitative:168-live.length,paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 
-const count8=buildGrade8(),count7=buildGrade7()
-console.log(`Built ${count8} grade 8 tasks and ${count7} grade 7 tasks from user-supplied sources.`)
+function buildGrade9(){
+  const tasks=read('bank/tasks-grade9.json'),ids=new Set(),allowedParagraphs=new Set([51,52,53,54,57])
+  for(const t of tasks){
+    validateCommon(t,ids)
+    if(t.CLASS!==9) throw Error(`${t.ID}: wrong class`)
+    if(t.SECTION!=='kinematics9') throw Error(`${t.ID}: unknown grade 9 section`)
+    if(!allowedParagraphs.has(t.PARAGRAPH)) throw Error(`${t.ID}: paragraph mismatch`)
+    if(!Number.isInteger(t.BOOK_TASK_NUMBER)) throw Error(`${t.ID}: missing book number`)
+    if(t.SOURCE.organization!=='А. В. Перышкин — Сборник задач по физике 7–9 классы'||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
+  }
+  const first=tasks.filter(t=>t.BOOK_TASK_NUMBER>=1404&&t.BOOK_TASK_NUMBER<=1513)
+  if(first.some(t=>!['numeric','numeric_list'].includes(t.ANSWER.mode)||t.GRAPH_REQUIRED)) throw Error('Grade 9 range 1404–1513 must contain only direct numeric tasks without graph construction')
+  const second=tasks.filter(t=>t.BOOK_TASK_NUMBER>=1588&&t.BOOK_TASK_NUMBER<=1611)
+  if(second.length!==24||new Set(second.map(t=>t.BOOK_TASK_NUMBER)).size!==24) throw Error('Grade 9 range 1588–1611 must be complete')
+  const live=tasks.filter(publishable),publicTasks=[]
+  for(const t of live){const {SOURCE,CHECK,SOLUTION,FORMULAS,...publicTask}=t;publicTasks.push({...publicTask,VERSION:TASK_BANK_VERSION_9})}
+  const paragraphs=[...new Map(live.map(t=>[t.PARAGRAPH,{paragraph:t.PARAGRAPH,title:t.TOPIC,section:t.SECTION}])).values()].sort((a,b)=>a.paragraph-b.paragraph).map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
+  write('public/task-bank/grade9.json',{version:TASK_BANK_VERSION_9,grade:9,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,tasks:publicTasks})
+  write('public/task-bank/index-grade9.json',{version:TASK_BANK_VERSION_9,grade:9,complete:true,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,sourceRanges:['1404–1513: числовой отбор без построения графиков','1588–1611: полный блок'],paragraphs,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  return live.length
+}
+
+const count8=buildGrade8(),count7=buildGrade7(),count9=buildGrade9()
+console.log(`Built ${count8} grade 8 tasks, ${count7} grade 7 tasks and ${count9} grade 9 tasks from user-supplied sources.`)
