@@ -23,11 +23,9 @@ CREATE TABLE IF NOT EXISTS task_awards (
  FOREIGN KEY(student_id,attempt_id) REFERENCES task_attempts(student_id,attempt_id)
 );
 
--- Refresh triggers on every schema update so existing v13 databases migrate without data loss.
 DROP TRIGGER IF EXISTS task_attempt_award;
 DROP TRIGGER IF EXISTS task_award_progress;
 
--- A task can be attempted many times, but XP is awarded once, on the first correct answer.
 -- Attempt 1: 100%, attempt 2: 70%, attempt 3: 40%, attempt 4+: 20%.
 CREATE TRIGGER task_attempt_award AFTER INSERT ON task_attempts
 WHEN NEW.correct=1 AND NEW.status='CONFIRMED'
@@ -50,14 +48,14 @@ BEGIN
  VALUES(
    'task:'||NEW.student_id||':'||NEW.task_id,
    NEW.student_id,
-   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 ELSE 8 END,
+   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END,
    NEW.amount,'TASK_SOLVED',NEW.task_id
  );
  INSERT INTO class_progress(id,student_id,grade,total_xp)
  VALUES(
-   'task-progress:'||NEW.student_id||':'||(CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 ELSE 8 END),
+   'task-progress:'||NEW.student_id||':'||(CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END),
    NEW.student_id,
-   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 ELSE 8 END,
+   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END,
    NEW.amount
  )
  ON CONFLICT(student_id,grade) DO UPDATE SET total_xp=total_xp+NEW.amount,updated_at=CURRENT_TIMESTAMP;
