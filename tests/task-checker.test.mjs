@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {checkAnswer,numericValue,publishable} from '../shared/task-checker.mjs'
+import {enrichMatchingTask,matchingAnswerValues,matchingParts} from '../shared/matching-utils.mjs'
 const tasks=JSON.parse(fs.readFileSync(new URL('../bank/tasks.json',import.meta.url)))
 const grade8extra=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade8-additions.json',import.meta.url)))
 const grade7=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade7.json',import.meta.url)))
@@ -55,6 +56,25 @@ test('v12 pack contains 10 tasks from each new PDF and no published solutions',(
   assert.equal(fresh.filter(t=>t.DIFFICULTY==='ПОВЫШЕННЫЙ').length>0,true)
   assert.equal(fresh.filter(t=>t.DIFFICULTY==='ВЫСОКИЙ').length>0,true)
   assert.equal(fresh.every(t=>t.SOLUTION.length===0),true)
+})
+
+test('every matching task renders all lettered rows and clean numbered options',()=>{
+  const matching=tasks.filter(t=>t.TASK_TYPE==='matching')
+  assert.ok(matching.length>0)
+  for(const t of matching){
+    const answers=matchingAnswerValues(t),parts=matchingParts(t),fixed=enrichMatchingTask(t)
+    assert.ok(answers.length>=2,t.ID)
+    assert.equal(parts.left.length,answers.length,t.ID)
+    assert.deepEqual(parts.left.map(x=>x.id),['А','Б','В','Г','Д','Е'].slice(0,answers.length),t.ID)
+    assert.ok(parts.right.length>=answers.length,t.ID)
+    assert.equal(parts.right.some(x=>/запишите\s+(?:в\s+ответ|в\s+таблицу)/iu.test(x.text)),false,t.ID)
+    assert.deepEqual(fixed.ANSWER.values,answers,t.ID)
+    assert.equal(checkAnswer(t,answers).correct,true,t.ID)
+  }
+  const sample=tasks.find(t=>t.ID==='genius-src8-19-1606')
+  assert.ok(sample)
+  assert.deepEqual(matchingAnswerValues(sample),['2','4','3'])
+  assert.deepEqual(matchingParts(sample).left.map(x=>x.text),['давление','жесткость','абсолютная влажность'])
 })
 
 test('legacy graded tasks accept correct answers and manual tasks stay ungraded',()=>{
