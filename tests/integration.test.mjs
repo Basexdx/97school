@@ -52,7 +52,7 @@ test('Offline: explicit download, offline load, guest isolation, pending sync an
    const headers={...options.headers,...(auth?{cookie:'genius_student='+token}:{})}
    return worker.fetch(new Request('https://genius.test'+url,{...options,headers}),env)
  }
- const index=await store.bankIndex();assert.equal(index.tasks.length,319)
+ const index=await store.bankIndex();assert.equal(index.tasks.length,321)
  assert.equal(networkCalls.filter(x=>x!=='/task-bank/index.json').length,0,'index must not auto-download tasks')
  await store.downloadBankPackage(index,'paragraph',1)
  navigator.onLine=false
@@ -67,7 +67,6 @@ test('Offline: explicit download, offline load, guest isolation, pending sync an
  assert.equal((await store.bankAttempts('test_student')).find(a=>a.attemptId===saved.attemptId).status,'CONFIRMED')
  assert.equal((await store.bankAttempts()).length,1,'guest answer must not become another student’s server attempt')
  assert.equal((await store.bankPendingLocal()).length,0)
- // Content removal does not erase attempts or server XP.
  const db=await new Promise((resolve,reject)=>{const r=indexedDB.open('genius-offline',1);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})
  await new Promise((resolve,reject)=>{const tx=db.transaction(['content','packages'],'readwrite');tx.objectStore('content').clear();tx.objectStore('packages').clear();tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error)})
  navigator.onLine=false
