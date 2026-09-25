@@ -1,13 +1,19 @@
 import { submitTaskAttempts, taskProgress } from './task-bank.js'
 import { saveAttendance, saveGrade, saveHomework, saveHomeworkOverride, saveLessonAssessment, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic-v2.js'
-const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
+const JSON_HEADERS = {
+  'content-type': 'application/json; charset=utf-8',
+  'cache-control': 'no-store',
+  'x-content-type-options': 'nosniff',
+  'referrer-policy': 'no-referrer',
+}
 
 export default {
   async fetch(request, env) {
     try {
       return await handleRequest(request, env)
     } catch (error) {
-      console.error(error)
+      // Never log request bodies, credentials, cookies, or database error details.
+      console.error('Genius Worker request failed:', error?.name || 'Error')
       return json({ error: 'internal_error' }, 500)
     }
   },
@@ -17,7 +23,11 @@ async function handleRequest(request, env) {
   const url = new URL(request.url)
   const path = url.pathname
 
-  if (request.method === 'OPTIONS') return new Response(null, { status: 204 })
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: JSON_HEADERS })
+  // Restrict teacher login and mutations to the configured front-end origin to block CSRF.
+  if (path.startsWith('/api/teacher/') && request.method !== 'GET' && !isAllowedAppOrigin(request, env)) {
+    return json({ error: 'invalid_origin' }, 403)
+  }
   if (path === '/api/student/task-attempts' && ['GET','POST'].includes(request.method)) {
     const auth=await requireStudent(request,env)
     if(!auth.ok) return auth.response
@@ -79,7 +89,7 @@ async function handleRequest(request, env) {
 
 async function studentRequestAccess(request, env) {
   const limited = await consumeRateLimit(request, env, 'student-code', 10, 5 * 60 * 1000)
-  if (!limited.ok) return json({ error: 'too_many_attempts', retryAfterSeconds: limited.retryAfterSeconds }, 429)
+  if (!limited.ok) return rateLimitResponse(limited)
 
   const body = await safeJson(request)
   const code = normalizeAccessCode(body?.code)
@@ -315,28 +325,45 @@ function xpTargetForScore(scorePercent, maxXp = 60) {
 }
 
 async function teacherLogin(request, env) {
-  const limited = await consumeRateLimit(request, env, 'teacher-login', 8, 10 * 60 * 1000)
-  if (!limited.ok) return json({ error: 'too_many_attempts', retryAfterSeconds: limited.retryAfterSeconds }, 429)
-
+  // Local HTTP is allowed for loopback development only; real credentials require HTTPS.
+  if (!isHttpsRequest(request) && !isLocalRequest(request)) return json({ error: 'https_required' }, 400)
   const body = await safeJson(request)
-  const provided = String(body?.secret || '')
-  if (!provided || !env.TEACHER_ACCESS_SECRET) return json({ error: 'invalid_credentials' }, 401)
-  const [a, b] = await Promise.all([sha256(provided), sha256(env.TEACHER_ACCESS_SECRET)])
-  if (!constantTimeEqual(a, b)) return json({ error: 'invalid_credentials' }, 401)
+  const email = normalizeTeacherEmail(body?.email)
+  const password = typeof body?.password === 'string' ? body.password : ''
+  const limited = await consumeRateLimit(request, env, 'teacher-login', 8, 10 * 60 * 1000, email)
+  if (!limited.ok) return rateLimitResponse(limited)
 
-  const teacher = await env.DB.prepare(`SELECT id, email, status FROM teachers WHERE id=? LIMIT 1`).bind(env.TEACHER_ID || 'teacher_01').first()
+  // Email is an allow-listed account name; the password is a server-only secret.
+  const configuredEmail = normalizeTeacherEmail(env.TEACHER_EMAIL)
+  if (!configuredEmail || !env.TEACHER_ACCESS_SECRET || !env.RATE_LIMIT_SECRET) {
+    return json({ error: 'teacher_login_not_configured' }, 503)
+  }
+  if (!email || password.length < 16 || password.length > 256) return json({ error: 'invalid_credentials' }, 401)
+  const [providedHash, configuredHash, emailHash, allowedEmailHash] = await Promise.all([
+    sha256(password),
+    sha256(env.TEACHER_ACCESS_SECRET),
+    sha256(email),
+    sha256(configuredEmail),
+  ])
+  const emailMatches = constantTimeEqual(emailHash, allowedEmailHash)
+  const passwordMatches = constantTimeEqual(providedHash, configuredHash)
+  if (!emailMatches || !passwordMatches) return json({ error: 'invalid_credentials' }, 401)
+
+  const teacher = await env.DB.prepare(`SELECT id, status FROM teachers WHERE id=? LIMIT 1`).bind(env.TEACHER_ID || 'teacher_01').first()
   if (!teacher || teacher.status !== 'ACTIVE') return json({ error: 'teacher_unavailable' }, 403)
 
   const token = randomToken(32)
   const tokenHash = await sha256(token)
-  const hours = Math.max(1, Number(env.TEACHER_SESSION_HOURS || 12))
+  // Keep teacher sessions short and cap configuration mistakes to 12 hours.
+  const configuredHours = Number(env.TEACHER_SESSION_HOURS || 12)
+  const hours = Number.isFinite(configuredHours) ? Math.max(1, Math.min(12, configuredHours)) : 12
   const expiresAt = new Date(Date.now() + hours * 3_600_000).toISOString()
   await env.DB.prepare(`
     INSERT INTO teacher_sessions (id, teacher_id, token_hash, expires_at)
     VALUES (?, ?, ?, ?)
   `).bind(crypto.randomUUID(), teacher.id, tokenHash, expiresAt).run()
 
-  const response = json({ teacher: { id: teacher.id, email: teacher.email } })
+  const response = json({ teacher: { id: teacher.id, email: configuredEmail } })
   response.headers.append('set-cookie', makeCookie('genius_teacher', token, hours * 3600, request))
   return response
 }
@@ -515,13 +542,13 @@ async function requireTeacher(request, env) {
   const hash = await sha256(token)
   const now = new Date().toISOString()
   const row = await env.DB.prepare(`
-    SELECT ts.id AS session_id, t.id, t.email, t.status
+    SELECT ts.id AS session_id, t.id, t.status
     FROM teacher_sessions ts JOIN teachers t ON t.id=ts.teacher_id
     WHERE ts.token_hash=? AND ts.revoked_at IS NULL AND ts.expires_at>? LIMIT 1
   `).bind(hash, now).first()
   if (!row || row.status !== 'ACTIVE') return { ok: false, response: json({ error: 'teacher_auth_required' }, 401) }
   await env.DB.prepare(`UPDATE teacher_sessions SET last_active_at=CURRENT_TIMESTAMP WHERE id=?`).bind(row.session_id).run()
-  return { ok: true, teacher: { id: row.id, email: row.email } }
+  return { ok: true, teacher: { id: row.id, email: normalizeTeacherEmail(env.TEACHER_EMAIL) } }
 }
 
 async function expireOldPending(env) {
@@ -536,21 +563,36 @@ async function expireOldPending(env) {
   await env.DB.batch(statements)
 }
 
-async function consumeRateLimit(request, env, bucket, max, windowMs) {
-  const source = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || 'local'
-  const keyHash = await sha256(`${env.RATE_LIMIT_SECRET || 'local-rate-limit'}|${source}`)
+// Atomically counts failed or successful credential attempts by trusted client IP and account.
+async function consumeRateLimit(request, env, bucket, max, windowMs, subject = '') {
+  if (typeof env.RATE_LIMIT_SECRET !== 'string' || env.RATE_LIMIT_SECRET.length < 32) {
+    return { ok: false, configurationError: true }
+  }
+  // CF-Connecting-IP is set by Cloudflare; never trust a client-supplied X-Forwarded-For value.
+  const source = request.headers.get('CF-Connecting-IP') || 'local'
   const now = Date.now()
   const windowStart = Math.floor(now / windowMs) * windowMs
-  const existing = await env.DB.prepare(`SELECT count FROM rate_limits WHERE key_hash=? AND bucket=? AND window_start=? LIMIT 1`).bind(keyHash, bucket, windowStart).first()
-  const count = Number(existing?.count || 0)
-  if (count >= max) {
-    return { ok: false, retryAfterSeconds: Math.max(1, Math.ceil((windowStart + windowMs - now) / 1000)) }
+  const retryAfterSeconds = Math.max(1, Math.ceil((windowStart + windowMs - now) / 1000))
+  const scopes = [{ bucket: `${bucket}:ip`, identity: source }]
+  if (subject) scopes.push({ bucket: `${bucket}:account`, identity: subject.toLowerCase() })
+
+  for (const scope of scopes) {
+    const keyHash = await hmacSha256(env.RATE_LIMIT_SECRET, `${scope.bucket}|${scope.identity}`)
+    // One conditional upsert is race-safe: parallel requests cannot pass a read-then-write check.
+    const accepted = await env.DB.prepare(`
+      INSERT INTO rate_limits (key_hash, bucket, window_start, count) VALUES (?, ?, ?, 1)
+      ON CONFLICT(key_hash, bucket, window_start) DO UPDATE SET count=count+1
+      WHERE count < ?
+      RETURNING count
+    `).bind(keyHash, scope.bucket, windowStart, max).first()
+    if (!accepted) return { ok: false, retryAfterSeconds }
   }
-  await env.DB.prepare(`
-    INSERT INTO rate_limits (key_hash, bucket, window_start, count) VALUES (?, ?, ?, 1)
-    ON CONFLICT(key_hash, bucket, window_start) DO UPDATE SET count=count+1
-  `).bind(keyHash, bucket, windowStart).run()
   return { ok: true }
+}
+
+function rateLimitResponse(result) {
+  if (result.configurationError) return json({ error: 'security_configuration_error' }, 503)
+  return json({ error: 'too_many_attempts', retryAfterSeconds: result.retryAfterSeconds }, 429)
 }
 
 function normalizeAccessCode(value) {
@@ -584,6 +626,12 @@ async function sha256(value) {
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('')
 }
 
+async function hmacSha256(secret, value) {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  const digest = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(value))
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
 function constantTimeEqual(a, b) {
   if (a.length !== b.length) return false
   let out = 0
@@ -595,7 +643,9 @@ function getCookie(request, name) {
   const cookie = request.headers.get('cookie') || ''
   for (const part of cookie.split(';')) {
     const [key, ...rest] = part.trim().split('=')
-    if (key === name) return decodeURIComponent(rest.join('='))
+    if (key === name) {
+      try { return decodeURIComponent(rest.join('=')) } catch { return '' }
+    }
   }
   return ''
 }
@@ -616,13 +666,61 @@ function clearPending(response, request) {
 }
 
 function isHttpsRequest(request) {
-  const forwarded = request.headers.get('x-forwarded-proto')
-  if (forwarded) return forwarded === 'https'
+  // The URL scheme comes from the Worker request; forwarded headers can be forged.
   return new URL(request.url).protocol === 'https:'
 }
 
+function isLocalRequest(request) {
+  const url = new URL(request.url)
+  return url.protocol === 'http:' && ['localhost', '127.0.0.1', '::1'].includes(url.hostname)
+}
+
+function normalizeTeacherEmail(value) {
+  if (typeof value !== 'string') return ''
+  const email = value.trim().toLowerCase()
+  return email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : ''
+}
+
+function isAllowedAppOrigin(request, env) {
+  const origin = request.headers.get('origin')
+  if (!origin || typeof env.APP_ORIGIN !== 'string') return false
+  try {
+    const configured = new URL(env.APP_ORIGIN)
+    const isLoopback = ['127.0.0.1', 'localhost', '[::1]'].includes(configured.hostname)
+    if (configured.origin !== env.APP_ORIGIN || !(configured.protocol === 'https:' || (configured.protocol === 'http:' && isLoopback))) return false
+    return new URL(origin).origin === configured.origin && origin === new URL(origin).origin
+  } catch {
+    return false
+  }
+}
+
 async function safeJson(request) {
-  try { return await request.json() } catch { return null }
+  // Read JSON with a strict cap so oversized request bodies cannot exhaust Worker memory.
+  if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type') || '')) return null
+  const declaredLength = Number(request.headers.get('content-length'))
+  if (Number.isFinite(declaredLength) && declaredLength > 64 * 1024) return null
+  if (!request.body) return null
+  const reader = request.body.getReader()
+  const chunks = []
+  let totalBytes = 0
+  try {
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      totalBytes += value.byteLength
+      if (totalBytes > 64 * 1024) {
+        await reader.cancel()
+        return null
+      }
+      chunks.push(value)
+    }
+    const body = new Uint8Array(totalBytes)
+    let offset = 0
+    for (const chunk of chunks) { body.set(chunk, offset); offset += chunk.byteLength }
+    return JSON.parse(new TextDecoder().decode(body))
+  } catch {
+    return null
+  }
 }
 
 function json(data, status = 200) {

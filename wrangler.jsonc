@@ -10,7 +10,7 @@
     "TEACHER_SESSION_HOURS": "12"
   },
   "secrets": {
-    "required": ["TEACHER_ACCESS_SECRET", "RATE_LIMIT_SECRET"]
+    "required": ["APP_ORIGIN", "TEACHER_EMAIL", "TEACHER_ACCESS_SECRET", "RATE_LIMIT_SECRET"]
   },
   "d1_databases": [
     {

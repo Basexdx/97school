@@ -66,8 +66,6 @@ const navItems = [
   ['profile', '○', 'Профиль'],
 ]
 
-const DEMO_CODE = 'GNS-8K4P-X7M2'
-
 function AtomMark() {
   return <span className="atom-mark" aria-hidden="true"><i className="atom-nucleus"/><i className="atom-orbit atom-o1"/><i className="atom-orbit atom-o2"/><i className="atom-orbit atom-o3"/></span>
 }
@@ -118,28 +116,37 @@ function Landing({ onStudentAccess, onTeacherLogin }) {
   )
 }
 
-function StudentAccess({ setScreen, request, setRequest, setGrade }) {
+function StudentAccess({ setScreen, setRequest }) {
   const [code, setCode] = useState('')
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
 
-  function submitCode() {
-    const normalized = code.trim().toUpperCase()
-    if (normalized !== DEMO_CODE) {
-      setError('Код не найден или уже недействителен.')
-      return
-    }
+  // Student access codes are validated by the Worker and never accepted by UI-only state.
+  async function submitCode() {
+    if (busy) return
+    setBusy(true)
     setError('')
-    setGrade(8)
-    setRequest({
-      id: 'REQ-482731',
-      code: DEMO_CODE,
-      codeLabel: 'ключ №17',
-      grade: 8,
-      className: '8Б',
-      requestedAt: new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}),
-      status: 'PENDING',
-    })
-    setScreen('pending')
+    try {
+      const response = await fetch('/api/student/access/request', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ code: code.trim() }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        if (response.status === 429) throw new Error('Слишком много попыток. Подожди и попробуй позже.')
+        if (response.status === 503) throw new Error('Вход временно не настроен. Обратись к учителю.')
+        throw new Error('Код не найден, уже использован или истёк.')
+      }
+      setCode('')
+      setRequest({ ...result, id: result.requestId, requestedAt: new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}) })
+      setScreen('pending')
+    } catch (err) {
+      setError(err.message || 'Не удалось проверить код. Проверь подключение к интернету.')
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -148,7 +155,7 @@ function StudentAccess({ setScreen, request, setRequest, setGrade }) {
         <Brand dark onClick={() => setScreen('landing')} />
         <div className="access-hero-copy">
           <span className="security-kicker">БЕЗОПАСНЫЙ ДОСТУП</span>
-          <h1>Вход без почты,<br/>телефона и пароля</h1>
+          <h1>Персональный<br/>код ученика</h1>
           <p>Персональный код выдаёт учитель. После ввода кода подключение должен подтвердить учитель.</p>
           <div className="security-points">
             <div><span>✓</span><p><strong>Минимум данных</strong><small>Мы не просим email, номер телефона или ФИО.</small></p></div>
@@ -164,10 +171,9 @@ function StudentAccess({ setScreen, request, setRequest, setGrade }) {
           <h2>Вход ученика</h2>
           <p className="subtle">Введи персональный код, который выдал учитель.</p>
           <label className="access-label">Код доступа</label>
-          <input className="access-code-input" value={code} onChange={e => setCode(e.target.value)} onKeyDown={e => e.key === 'Enter' && submitCode()} placeholder="GNS-XXXX-XXXX" autoComplete="off" />
+          <input className="access-code-input" value={code} onChange={e => setCode(e.target.value)} onKeyDown={e => e.key === 'Enter' && submitCode()} placeholder="GNS-XXXX-XXXX" autoComplete="off" maxLength={64} />
           {error && <div className="access-error">{error}</div>}
-          <button className="blue-btn full" onClick={submitCode}>Отправить запрос учителю</button>
-          <div className="demo-code-note"><strong>Для прототипа:</strong> {DEMO_CODE}</div>
+          <button className="blue-btn full" onClick={submitCode} disabled={busy || !code.trim()}>{busy ? 'Проверяем код…' : 'Отправить запрос учителю'}</button>
           <div className="teacher-entry"><span>Ты учитель?</span><button onClick={() => setScreen('teacherLogin')}>Войти в кабинет →</button></div>
         </div>
       </section>
@@ -175,7 +181,33 @@ function StudentAccess({ setScreen, request, setRequest, setGrade }) {
   )
 }
 
-function PendingAccess({ setScreen, request }) {
+function PendingAccess({ setScreen, request, setRequest, setGrade }) {
+  const [pollError, setPollError] = useState('')
+  useEffect(() => {
+    if (!request?.id || request.status !== 'PENDING') return
+    let active = true
+    async function pollStatus() {
+      try {
+        const response = await fetch('/api/student/access/status', { credentials: 'same-origin', cache: 'no-store' })
+        const result = await response.json().catch(() => ({}))
+        if (!active) return
+        if (result.status === 'APPROVED' && result.student) {
+          setRequest(previous => ({ ...previous, status: 'APPROVED', student: result.student }))
+          setGrade(result.student.grade)
+          setScreen('home')
+        } else if (['REJECTED', 'EXPIRED'].includes(result.status)) {
+          setRequest(previous => ({ ...previous, status: result.status }))
+        }
+        setPollError('')
+      } catch {
+        if (active) setPollError('Не удалось проверить статус. Проверь подключение к интернету.')
+      }
+    }
+    pollStatus()
+    const timer = setInterval(pollStatus, 2500)
+    return () => { active = false; clearInterval(timer) }
+  }, [request?.id, request?.status, setGrade, setRequest, setScreen])
+
   if (!request) return null
   const approved = request.status === 'APPROVED'
   const rejected = request.status === 'REJECTED'
@@ -185,14 +217,12 @@ function PendingAccess({ setScreen, request }) {
         <Brand onClick={() => setScreen('landing')} />
         <div className={`pending-status-icon ${approved ? 'approved' : rejected ? 'rejected' : ''}`}>{approved ? '✓' : rejected ? '×' : '…'}</div>
         <h1>{approved ? 'Подключение подтверждено' : rejected ? 'Запрос отклонён' : 'Ждём подтверждения'}</h1>
-        <p className="subtle">{approved ? 'Учитель подтвердил подключение. Можно входить в Genius.' : rejected ? 'Учитель не подтвердил этот запрос. Обратись к учителю за новым кодом.' : 'Код проверен. Запрос отправлен учителю и пока не даёт доступ к учебным данным.'}</p>
+        <p className="subtle">{approved ? 'Учитель подтвердил подключение. Можно входить в Genius.' : rejected ? 'Учитель не подтвердил этот запрос. Обратись к учителю за новым кодом.' : request.status === 'EXPIRED' ? 'Срок запроса истёк. Попроси учителя выдать новый код.' : 'Код проверен сервером. Доступ появится только после подтверждения учителя.'}</p>
         <div className="request-summary"><span>{request.className}</span><strong>{request.codeLabel}</strong><small>Запрос: {request.requestedAt}</small></div>
+        {pollError && <div className="access-error">{pollError}</div>}
         {approved && <button className="blue-btn full" onClick={() => setScreen('home')}>Открыть Genius</button>}
         {rejected && <button className="blue-btn full" onClick={() => setScreen('studentAccess')}>Ввести другой код</button>}
-        {!approved && !rejected && <>
-          <div className="pending-note">В рабочей версии этот экран будет автоматически проверять статус запроса.</div>
-          <button className="soft-btn full-width-soft" onClick={() => setScreen('teacherLogin')}>Открыть кабинет учителя для демо</button>
-        </>}
+        {!approved && !rejected && <div className="pending-note">Статус автоматически проверяется у сервера. Учитель должен подтвердить запрос.</div>}
         <button className="text-link" onClick={() => setScreen('landing')}>Вернуться на главную</button>
       </div>
     </main>
@@ -200,15 +230,51 @@ function PendingAccess({ setScreen, request }) {
 }
 
 function TeacherLogin({ setScreen }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  // The browser submits credentials to the Worker; it never decides teacher access locally.
+  async function submitLogin(event) {
+    event.preventDefault()
+    if (busy) return
+    setBusy(true)
+    setError('')
+    try {
+      const response = await fetch('/api/teacher/login', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), password }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        if (response.status === 429) throw new Error('Слишком много попыток входа. Подожди и попробуй позже.')
+        if (response.status === 503) throw new Error('Вход учителя ещё не настроен администратором.')
+        throw new Error('Почта или пароль не подходят.')
+      }
+      setPassword('')
+      setScreen('teacher')
+    } catch (err) {
+      setError(err.message || 'Не удалось выполнить вход. Проверь подключение к интернету.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <main className="auth-page">
       <div className="auth-panel compact-auth">
         <Brand onClick={() => setScreen('landing')} />
         <button className="back-link" onClick={() => setScreen('landing')}>← Назад</button>
         <h1>Вход для учителя</h1>
-        <p className="subtle">В прототипе используется демонстрационный вход. В production здесь будет усиленная авторизация учителя.</p>
-        <div className="input-stack"><input type="email" placeholder="Email учителя" defaultValue="teacher@example.com" /><input type="password" placeholder="Пароль" defaultValue="password123" /></div>
-        <button className="blue-btn full" onClick={() => setScreen('teacher')}>Войти</button>
+        <p className="subtle">Введи разрешённую почту и пароль учителя. Запрос проверяется сервером.</p>
+        <form onSubmit={submitLogin}>
+          <div className="input-stack"><input type="email" placeholder="Email учителя" value={email} onChange={event => setEmail(event.target.value)} autoComplete="username" maxLength={254} required /><input type="password" placeholder="Пароль учителя" value={password} onChange={event => setPassword(event.target.value)} autoComplete="current-password" maxLength={256} required /></div>
+          {error && <div className="access-error" role="alert">{error}</div>}
+          <button className="blue-btn full" type="submit" disabled={busy || !email.trim() || password.length < 16}>{busy ? 'Проверяем…' : 'Войти'}</button>
+        </form>
       </div>
     </main>
   )
@@ -742,19 +808,76 @@ function Profile({ grade, setGrade, xp }) {
   </>
 }
 
-function TeacherDashboard({ setScreen, request, setRequest }) {
-  const [tab, setTab] = useState(request?.status === 'PENDING' ? 'requests' : 'classes')
-  const pendingCount = request?.status === 'PENDING' ? 1 : 0
+function TeacherDashboard({ setScreen }) {
+  const [tab, setTab] = useState('classes')
+  const [verified, setVerified] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [busyId, setBusyId] = useState('')
+  const [error, setError] = useState('')
+  const [teacher, setTeacher] = useState(null)
+  const [classes, setClasses] = useState([])
+  const [requests, setRequests] = useState([])
+  const [keys, setKeys] = useState([])
+  const pendingCount = requests.filter(item => item.status === 'PENDING').length
 
-  function approveRequest() {
-    if (!request) return
-    setRequest({...request, status:'APPROVED', approvedAt:new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})})
+  // A client-side screen is not proof of identity; verify the HttpOnly session before loading any teacher data.
+  async function loadTeacherData() {
+    setLoading(true)
+    setError('')
+    try {
+      const meResponse = await fetch('/api/teacher/me', { credentials: 'same-origin', cache: 'no-store' })
+      if (!meResponse.ok) {
+        if (meResponse.status === 401) { setScreen('teacherLogin'); return }
+        throw new Error('Не удалось проверить сессию учителя.')
+      }
+      const meData = await meResponse.json()
+      const [classResponse, requestResponse, keyResponse] = await Promise.all([
+        fetch('/api/teacher/classes', { credentials: 'same-origin', cache: 'no-store' }),
+        fetch('/api/teacher/connection-requests', { credentials: 'same-origin', cache: 'no-store' }),
+        fetch('/api/teacher/access-keys', { credentials: 'same-origin', cache: 'no-store' }),
+      ])
+      if ([classResponse, requestResponse, keyResponse].some(response => response.status === 401)) {
+        setScreen('teacherLogin')
+        return
+      }
+      if ([classResponse, requestResponse, keyResponse].some(response => !response.ok)) throw new Error('Не удалось загрузить данные кабинета. Попробуй ещё раз.')
+      const [classData, requestData, keyData] = await Promise.all([classResponse.json(), requestResponse.json(), keyResponse.json()])
+      setTeacher(meData.teacher)
+      setClasses(classData.classes || [])
+      setRequests(requestData.requests || [])
+      setKeys(keyData.keys || [])
+      setVerified(true)
+    } catch (err) {
+      setError(err.message || 'Не удалось загрузить кабинет учителя.')
+    } finally {
+      setLoading(false)
+    }
   }
 
-  function rejectRequest() {
-    if (!request) return
-    setRequest({...request, status:'REJECTED'})
+  useEffect(() => { loadTeacherData() }, [])
+
+  async function decideRequest(requestId, decision) {
+    setBusyId(requestId)
+    setError('')
+    try {
+      const response = await fetch(`/api/teacher/connection-requests/${encodeURIComponent(requestId)}/${decision}`, {
+        method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: '{}',
+      })
+      if (!response.ok) throw new Error(response.status === 401 ? 'Сессия завершилась. Войди снова.' : 'Не удалось обработать запрос.')
+      await loadTeacherData()
+    } catch (err) {
+      setError(err.message || 'Не удалось обработать запрос.')
+    } finally {
+      setBusyId('')
+    }
   }
+
+  async function logout() {
+    try { await fetch('/api/teacher/logout', { method: 'POST', credentials: 'same-origin' }) } finally { setScreen('landing') }
+  }
+
+  if (loading) return <main className="auth-page"><div className="auth-panel"><Brand onClick={() => setScreen('landing')} /><p className="subtle">Проверяем защищённую сессию учителя…</p></div></main>
+  if (!verified) return <main className="auth-page"><div className="auth-panel"><Brand onClick={() => setScreen('landing')} /><h1>Кабинет учителя недоступен</h1><p className="subtle">{error || 'Войди в аккаунт учителя, чтобы продолжить.'}</p><button className="blue-btn full" onClick={loadTeacherData}>Попробовать снова</button><button className="text-link" onClick={() => setScreen('teacherLogin')}>Перейти ко входу</button></div></main>
 
   return <div className="student-app">
     <aside className="sidebar-light">
@@ -767,12 +890,13 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
         <button className={`side-nav ${tab === 'results' ? 'active' : ''}`} onClick={() => setTab('results')}><span>▣</span>Результаты</button>
         <button className={`side-nav ${tab === 'bank' ? 'active' : ''}`} onClick={() => setTab('bank')}><span>◇</span>Банк задач</button>
       </nav>
-      <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
+      <button className="logout" onClick={logout}>↪ Выход</button>
     </aside>
     <main className="student-content">
+      {error && <div className="access-error" role="alert">{error}</div>}
       {tab === 'classes' && <>
-        <div className="teacher-head"><div><h1>Мои классы</h1><p className="subtle">Управление учебными группами без лишних персональных данных.</p></div><button className="blue-btn small">+ Создать класс</button></div>
-        <div className="teacher-classes">{[['7А','24 ученика','88%'],['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button onClick={() => setTab('academic')}>Открыть →</button></div>)}</div>
+        <div className="teacher-head"><div><h1>Мои классы</h1><p className="subtle">Аккаунт: {teacher?.email}</p></div></div>
+        {classes.length === 0 ? <div className="empty-state"><div>▦</div><h3>Классы пока не созданы</h3><p>После настройки учебных групп они появятся здесь.</p></div> : <div className="teacher-classes">{classes.map(item => <div key={item.id}><span>{item.title}</span><div><strong>{item.student_count} учеников</strong><small>{item.grade} класс</small></div><button onClick={() => setTab('academic')}>Дневник →</button></div>)}</div>}
         <h2 className="quick-title">Быстрые действия</h2>
         <div className="quick-grid"><button onClick={() => setTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => setTab('requests')}>◎<span>Запросы на подключение</span></button><button onClick={() => setTab('academic')}>▤<span>Открыть дневник</span></button></div>
       </>}
@@ -781,38 +905,30 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
 
       {tab === 'requests' && <>
         <div className="teacher-head"><div><h1>Запросы на подключение</h1><p className="subtle">Код не открывает доступ автоматически — каждый запрос подтверждается учителем.</p></div><span className="pending-count-pill">{pendingCount} ожидает</span></div>
-        {!request && <div className="empty-state"><div>✓</div><h3>Новых запросов нет</h3><p>Когда ученик введёт выданный код, запрос появится здесь.</p></div>}
-        {request && <article className={`connection-request ${request.status.toLowerCase()}`}>
-          <div className="request-main">
-            <div className="request-avatar">{request.grade}</div>
-            <div><span className={`status-chip ${request.status.toLowerCase()}`}>{request.status === 'PENDING' ? 'ОЖИДАЕТ' : request.status === 'APPROVED' ? 'ОДОБРЕНО' : 'ОТКЛОНЕНО'}</span><h3>{request.className} · {request.codeLabel}</h3><p>Запрос создан в {request.requestedAt}. Genius не передаёт учителю модель устройства или другие данные телефона.</p></div>
-          </div>
-          {request.status === 'PENDING' && <div className="request-actions"><button className="reject-btn" onClick={rejectRequest}>Отклонить</button><button className="blue-btn small" onClick={approveRequest}>Подтвердить подключение</button></div>}
-          {request.status !== 'PENDING' && <div className="request-actions"><button className="soft-btn" onClick={() => setScreen('pending')}>Открыть экран ученика (демо)</button></div>}
-        </article>}
+        {requests.length === 0 && <div className="empty-state"><div>✓</div><h3>Запросов пока нет</h3><p>Запросы, созданные с действительными кодами, появятся здесь.</p></div>}
+        {requests.map(item => <article className={`connection-request ${item.status.toLowerCase()}`} key={item.id}>
+          <div className="request-main"><div className="request-avatar">{item.grade}</div><div><span className={`status-chip ${item.status.toLowerCase()}`}>{item.status === 'PENDING' ? 'ОЖИДАЕТ' : item.status === 'APPROVED' ? 'ОДОБРЕНО' : item.status === 'REJECTED' ? 'ОТКЛОНЕНО' : 'ИСТЁК'}</span><h3>{item.class_title} · {item.key_label}</h3><p>Создан: {new Date(item.created_at).toLocaleString('ru-RU')}. Учителю передаётся только минимум сведений о запросе.</p></div></div>
+          {item.status === 'PENDING' && <div className="request-actions"><button className="reject-btn" disabled={busyId === item.id} onClick={() => decideRequest(item.id, 'reject')}>Отклонить</button><button className="blue-btn small" disabled={busyId === item.id} onClick={() => decideRequest(item.id, 'approve')}>Подтвердить подключение</button></div>}
+        </article>)}
       </>}
 
       {tab === 'keys' && <>
-        <div className="teacher-head"><div><h1>Ключи доступа</h1><p className="subtle">Каждый ученик получает персональный одноразовый ключ.</p></div><button className="blue-btn small">+ Создать ключ</button></div>
+        <div className="teacher-head"><div><h1>Ключи доступа</h1><p className="subtle">Коды не возвращаются этим списком: они доступны только один раз при создании.</p></div></div>
         <div className="security-table">
-          <div className="security-table-head"><span>Класс</span><span>Ключ</span><span>Назначение</span><span>Статус</span></div>
-          <div><b>8Б</b><code>GNS-8K4P-X7M2</code><span>ключ №17</span><em className={request ? 'status-used' : 'status-active'}>{request ? 'Запрос создан' : 'Активен'}</em></div>
-          <div><b>9А</b><code>GNS-2Q9M-R4T8</code><span>ключ №04</span><em className="status-active">Активен</em></div>
+          <div className="security-table-head"><span>Класс</span><span>Метка</span><span>Назначение</span><span>Статус</span></div>
+          {keys.map(item => <div key={item.id}><b>{item.class_title}</b><code>{item.key_label}</code><span>{item.purpose}</span><em className={item.status === 'ACTIVE' ? 'status-active' : 'status-used'}>{item.status}</em></div>)}
         </div>
-        <div className="security-callout"><strong>Production-правило</strong><p>В базе будет храниться только криптографический хэш ключа. После успешной активации исходный код повторно использовать нельзя.</p></div>
+        {keys.length === 0 && <div className="empty-state"><div>⌁</div><h3>Ключей пока нет</h3><p>После выдачи первого персонального кода его статус появится здесь.</p></div>}
+        <div className="security-callout"><strong>Одноразовый секрет</strong><p>Сервер хранит только хэш кода доступа. Список показывает метаданные и никогда не раскрывает активный код повторно.</p></div>
       </>}
 
       {tab === 'results' && <>
-        <div className="teacher-head"><div><h1>Результаты</h1><p className="subtle">Здесь будет только учебная активность внутри Genius.</p></div></div>
-        <div className="metric-grid"><div className="metric-card"><strong>83</strong><span>Учеников</span></div><div className="metric-card"><strong>79%</strong><span>Средняя точность</span></div><div className="metric-card"><strong>1 248</strong><span>Задач за неделю</span></div><div className="metric-card"><strong>68%</strong><span>Активность</span></div></div>
-        <div className="security-callout"><strong>Принцип приватности</strong><p>Учитель видит результаты тестов, XP, прогресс и активность внутри Genius. Геолокация, файлы, сообщения, контакты и активность в других приложениях не собираются.</p></div>
+        <div className="teacher-head"><div><h1>Результаты</h1><p className="subtle">Здесь будут только данные, полученные из кабинета Genius.</p></div></div>
+        <div className="empty-state"><div>▣</div><h3>Нет загруженных результатов</h3><p>Показатели появятся после подключения серверной аналитики. Демонстрационные цифры не показываем.</p></div>
       </>}
 
       {tab === 'bank' && <>
-        <div className="teacher-head"><div><h1>Банк задач</h1><p className="subtle">Текущий учебный банк 8 класса: 319 задач, единое поле ответа, навигация стрелками и офлайн-пакеты. Для нового пакета из сборника решения пока скрыты, ответы сохраняются без автоматической проверки.</p></div><button className="blue-btn small" onClick={() => setScreen('practice')}>Открыть как ученик →</button></div>
-        <div className="metric-grid"><div className="metric-card"><strong>100</strong><span>Задач</span></div><div className="metric-card"><strong>3</strong><span>Тематических раздела</span></div><div className="metric-card"><strong>8</strong><span>Перерисованных схем</span></div><div className="metric-card"><strong>✓</strong><span>Ответы проверены</span></div></div>
-        <div className="teacher-bank-grid"><article><span>♨</span><div><small>§1–§26</small><strong>Тепловые явления</strong><p>Задачи распределены по темам учебника и доступны для локальной практики.</p></div></article><article><span>ϟ</span><div><small>§27–§40</small><strong>Электрические явления</strong><p>В банк входят задания по заряду, току, измерительным приборам и сопротивлению.</p></div></article><article><span>◎</span><div><small>Доп. темы</small><strong>Электромагнитные и световые явления</strong><p>Задачи вынесены отдельно, чтобы не придумывать номера параграфов, которых нет в загруженной части учебника.</p></div></article></div>
-        <div className="security-callout"><strong>Genius v13</strong><p>В банк добавлены 169 задач из предоставленного сборника Перышкина. Задачи со звёздочкой отмечены как повышенный уровень, графики 839 и 852 и рисунок 862 перерисованы в стиле Genius. Запуск на Windows доступен одним кликом.</p></div>
+        <div className="teacher-head"><div><h1>Банк задач</h1><p className="subtle">Банк задач ученика. Доступ к ответам и учебному прогрессу контролируют отдельные защищённые API.</p></div><button className="blue-btn small" onClick={() => setScreen('practice')}>Открыть как ученик →</button></div>
       </>}
     </main>
   </div>
@@ -829,9 +945,9 @@ export default function Page() {
   }, [])
 
   if (screen === 'landing') return <Landing onStudentAccess={() => setScreen('studentAccess')} onTeacherLogin={() => setScreen('teacherLogin')} />
-  if (screen === 'studentAccess') return <StudentAccess setScreen={setScreen} request={request} setRequest={setRequest} setGrade={setGrade} />
-  if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} />
+  if (screen === 'studentAccess') return <StudentAccess setScreen={setScreen} setRequest={setRequest} />
+  if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} setRequest={setRequest} setGrade={setGrade} />
   if (screen === 'teacherLogin') return <TeacherLogin setScreen={setScreen} />
-  if (screen === 'teacher') return <TeacherDashboard setScreen={setScreen} request={request} setRequest={setRequest} />
+  if (screen === 'teacher') return <TeacherDashboard setScreen={setScreen} />
   return <StudentShell screen={screen} setScreen={setScreen} grade={grade} setGrade={setGrade} xp={xp} setXp={setXp} />
 }

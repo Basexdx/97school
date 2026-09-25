@@ -57,7 +57,9 @@ npm run setup:local
 npm run dev
 ```
 
-`setup:local` создаст `.dev.vars`, выведет локальный секрет учителя и применит `cloudflare/schema.sql` к локальной D1.
+`setup:local` попросит email учителя, создаст случайный пароль и ключ rate limit в `.dev.vars`, затем применит схему к локальной D1. Сохраните пароль из терминала; файл `.dev.vars` исключён из Git. Вход проверяет email по настроенному allowlist, но сам по себе не подтверждает владение почтовым ящиком и не отправляет письмо.
+
+Для production настройте в Cloudflare Worker `APP_ORIGIN` (точный HTTPS-origin сайта), `TEACHER_EMAIL`, `TEACHER_ACCESS_SECRET` и `RATE_LIMIT_SECRET` как secrets. Используйте отдельный случайный пароль длиной не менее 24 символов; не добавляйте секреты в репозиторий или сообщения.
 
 Открыть:
 
