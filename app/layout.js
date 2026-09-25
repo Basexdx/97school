@@ -2,6 +2,7 @@ import './globals.css'
 import './landing-enhancements.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
+import OgeReferenceMount from './oge-reference-mount'
 
 export const metadata = {
   title: 'Genius — физика, которую понимаешь',
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
       <body>
         <ApiOriginBridge />
         <PwaRegister />
+        <OgeReferenceMount />
         {children}
       </body>
     </html>
