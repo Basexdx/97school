@@ -82,37 +82,76 @@ function Brand({ dark = false, onClick }) {
 
 function Landing({ onStudentAccess, onTeacherLogin }) {
   return (
-    <main className="landing-page">
-      <section className="landing-card">
-        <nav className="landing-nav">
+    <main className="landing-page landing-v15-page">
+      <section className="landing-card landing-v15-card">
+        <nav className="landing-nav landing-v15-nav" aria-label="Главная навигация">
           <Brand dark onClick={() => {}} />
-          <div className="landing-actions"><button className="ghost-dark" onClick={onTeacherLogin}>Учителю</button><button className="blue-btn small" onClick={onStudentAccess}>Войти по коду</button></div>
-        </nav>
-        <div className="landing-grid landing-grid-v14">
-          <div className="landing-copy">
-            <span className="landing-eyebrow">ФИЗИКА · 7–9 КЛАСС</span>
-            <h1>Понимай физику.<br/><span>Решай уверенно.</span></h1>
-            <p>Учебник, задачи, лабораторные работы и подготовка к ОГЭ — в одной системе.</p>
-            <div className="landing-cta"><button className="blue-btn" onClick={onStudentAccess}>Начать заниматься</button><button className="ghost-dark" onClick={onTeacherLogin}>Войти как учитель</button></div>
-            <div className="landing-assurance"><span>✓ Прогресс сохраняется</span><span>✓ Работает офлайн</span></div>
+          <div className="landing-v15-menu">
+            <a href="#features">Возможности</a>
+            <a href="#program">Программа</a>
+            <a href="#oge">ОГЭ</a>
+            <button onClick={onTeacherLogin}>Для учителей</button>
+            <a href="#features">Тарифы</a>
+            <a href="#about">О нас</a>
           </div>
-          <div className="landing-showcase" aria-hidden="true">
-            <div className="landing-showcase-atom"><div className="atom-core"/><div className="orbit orbit-a"><i/></div><div className="orbit orbit-b"><i/></div><div className="orbit orbit-c"><i/></div></div>
-            <div className="landing-progress-card">
-              <header><span>ТВОЙ ПРОГРЕСС</span><b>8 класс</b></header>
-              <h2>Электрические явления</h2>
-              <p>Следующая тема: закон Ома</p>
-              <div className="landing-progress"><i/></div>
-              <div className="landing-progress-meta"><strong>68%</strong><span>12 тем изучено</span></div>
-              <div className="landing-next-task"><span>Продолжить обучение</span><b>→</b></div>
+          <div className="landing-v15-nav-actions">
+            <button className="landing-v15-nav-student" onClick={onStudentAccess}>Войти как ученик</button>
+            <button className="landing-v15-nav-teacher" onClick={onTeacherLogin}>Войти как учитель</button>
+          </div>
+        </nav>
+        <div className="landing-grid landing-v15-grid">
+          <div className="landing-copy landing-v15-copy">
+            <span className="landing-eyebrow">ФИЗИКА · 7–9 КЛАСС</span>
+            <h1>Понимай<br/>физику. <span>Решай</span><br/><span>уверенно.</span></h1>
+            <p>Учебник, задачи, лабораторные работы и подготовка к ОГЭ — в одной системе.</p>
+            <div className="landing-v15-cta">
+              <button className="blue-btn" onClick={onStudentAccess}>Войти как ученик <span aria-hidden="true">→</span></button>
+              <button className="ghost-dark" onClick={onTeacherLogin}>Войти как учитель <span aria-hidden="true">→</span></button>
+            </div>
+            <div className="landing-v15-assurance" id="benefits">
+              <span><i aria-hidden="true">✓</i> Работает на всех устройствах</span>
+              <span><i aria-hidden="true">✓</i> Прогресс сохраняется</span>
+              <span><i aria-hidden="true">✓</i> Доступно офлайн</span>
+            </div>
+          </div>
+          <div className="landing-v15-visual" aria-hidden="true">
+            <div className="landing-v15-horizon" />
+            <div className="landing-v15-planet landing-v15-planet-left" />
+            <div className="landing-v15-planet landing-v15-planet-right" />
+            <span className="landing-v15-formula landing-v15-formula-one">E = mc²</span>
+            <span className="landing-v15-formula landing-v15-formula-two">F = ma</span>
+            <span className="landing-v15-formula landing-v15-formula-three">v = s/t</span>
+            <div className="landing-v15-atom">
+              <div className="landing-v15-nucleus" />
+              <div className="landing-v15-orbit landing-v15-orbit-one"><i /></div>
+              <div className="landing-v15-orbit landing-v15-orbit-two"><i /></div>
+              <div className="landing-v15-orbit landing-v15-orbit-three"><i /></div>
             </div>
           </div>
         </div>
-        <div className="landing-proof landing-proof-v14">
-          <div><strong>Учебник и задачник</strong><span>теория сразу закрепляется практикой</span></div>
-          <div><strong>Личный прогресс</strong><span>видно, что уже освоено</span></div>
-          <div><strong>Подготовка к ОГЭ</strong><span>по темам и типам заданий</span></div>
-        </div>
+        <section className="landing-v15-features" id="features" aria-label="Разделы Genius">
+          <article className="landing-v15-feature" id="program">
+            <span className="landing-v15-feature-icon" aria-hidden="true">▤</span>
+            <div><strong>Учебник</strong><span>Понятная теория с примерами и схемами.</span></div>
+            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
+          </article>
+          <article className="landing-v15-feature">
+            <span className="landing-v15-feature-icon" aria-hidden="true">☷</span>
+            <div><strong>Задачи</strong><span>Практика по темам с решениями и подсказками.</span></div>
+            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
+          </article>
+          <article className="landing-v15-feature">
+            <span className="landing-v15-feature-icon" aria-hidden="true">⚗</span>
+            <div><strong>Лабораторные работы</strong><span>Интерактивные модели и практические опыты.</span></div>
+            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
+          </article>
+          <article className="landing-v15-feature" id="oge">
+            <span className="landing-v15-feature-icon" aria-hidden="true">◎</span>
+            <div><strong>Подготовка к ОГЭ</strong><span>Тренировка по темам и типам заданий.</span></div>
+            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
+          </article>
+        </section>
+        <div className="landing-v15-about" id="about">Genius <span>·</span> физика для 7–9 классов</div>
       </section>
     </main>
   )
