@@ -1,0 +1,115 @@
+/* Landing hotfix: remove legacy pseudo-element sizing and use stable SVG hero artwork. */
+.landing-showcase,
+.landing-showcase *{box-sizing:border-box}
+
+.landing-progress-card{
+  left:50%!important;
+  bottom:8px!important;
+  width:min(520px,92%)!important;
+  height:520px!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:none!important;
+  max-height:none!important;
+  transform:translateX(-50%)!important;
+  border:0!important;
+  border-radius:0!important;
+  background:url('/landing-student.svg') center bottom/contain no-repeat!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.landing-progress-card>*{display:none!important}
+.landing-progress-card:before,
+.landing-progress-card:after{content:none!important;display:none!important}
+
+.landing-showcase:before,
+.landing-showcase:after,
+.landing-showcase-atom:before,
+.landing-showcase-atom:after{
+  inset:auto!important;
+  width:220px!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:220px!important;
+  max-height:none!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  padding:16px 18px!important;
+  line-height:1.25!important;
+}
+
+.landing-showcase:before{
+  left:0!important;
+  top:25%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:rotate(-5deg)!important;
+}
+.landing-showcase:after{
+  right:0!important;
+  top:31%!important;
+  left:auto!important;
+  bottom:auto!important;
+  transform:rotate(5deg)!important;
+}
+.landing-showcase-atom:before{
+  right:-185px!important;
+  bottom:-245px!important;
+  left:auto!important;
+  top:auto!important;
+  transform:rotate(5deg)!important;
+}
+.landing-showcase-atom:after{
+  left:-210px!important;
+  bottom:-220px!important;
+  right:auto!important;
+  top:auto!important;
+  transform:rotate(-5deg)!important;
+}
+
+.landing-showcase-atom{
+  z-index:8!important;
+}
+.landing-progress-card{
+  z-index:5!important;
+}
+.landing-showcase:before,
+.landing-showcase:after,
+.landing-showcase-atom:before,
+.landing-showcase-atom:after{
+  z-index:10!important;
+}
+
+@media(max-width:1100px){
+  .landing-showcase{min-height:580px!important}
+  .landing-progress-card{width:min(450px,88%)!important;height:470px!important;bottom:6px!important}
+  .landing-showcase:before,.landing-showcase:after,.landing-showcase-atom:before,.landing-showcase-atom:after{width:185px!important;max-width:185px!important;padding:14px 15px!important;font-size:15px!important}
+  .landing-showcase:before{left:0!important;top:28%!important}
+  .landing-showcase:after{right:0!important;top:34%!important}
+  .landing-showcase-atom:before{right:-155px!important;bottom:-225px!important}
+  .landing-showcase-atom:after{left:-170px!important;bottom:-205px!important}
+}
+
+@media(max-width:860px){
+  .landing-showcase{min-height:560px!important;overflow:hidden!important}
+  .landing-progress-card{width:min(430px,82vw)!important;height:455px!important}
+  .landing-showcase:before,.landing-showcase:after{top:33%!important}
+  .landing-showcase:before{left:3%!important}.landing-showcase:after{right:3%!important}
+  .landing-showcase-atom:before{right:-135px!important;bottom:-210px!important}
+  .landing-showcase-atom:after{left:-150px!important;bottom:-195px!important}
+}
+
+@media(max-width:620px){
+  .landing-showcase{min-height:480px!important}
+  .landing-progress-card{width:min(360px,88vw)!important;height:390px!important;bottom:0!important}
+  .landing-showcase:before,.landing-showcase:after{width:145px!important;max-width:145px!important;padding:11px 12px!important;font-size:12px!important;border-radius:14px!important}
+  .landing-showcase:before{left:0!important;top:32%!important;transform:rotate(-3deg)!important}
+  .landing-showcase:after{right:0!important;top:36%!important;transform:rotate(3deg)!important}
+  .landing-showcase-atom:before,.landing-showcase-atom:after{display:none!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .landing-progress-card{animation:none!important}
+}
