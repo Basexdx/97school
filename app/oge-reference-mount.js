@@ -17,24 +17,48 @@ export default function OgeReferenceMount(){
   useEffect(()=>{
     let anchor=null
     const locate=()=>{
+      let insertAfter=null
+
+      // Dedicated OGE task bank screen.
       const heading=[...document.querySelectorAll('h1')].find(node=>node.textContent?.trim()==='Задачи ОГЭ')
-      if(!heading){
+      if(heading){
+        insertAfter=heading.closest('section')
+      }
+
+      // Current student OGE course screen. The OGE bank is rendered through CourseScreen,
+      // so there is no "Задачи ОГЭ" heading here. Mount the reference under the OGE tabs.
+      if(!insertAfter){
+        const courseTabs=[...document.querySelectorAll('.course-tabs')].find(node=>{
+          const active=node.querySelector('button.active')
+          return active?.textContent?.includes('Подготовка к ОГЭ')
+        })
+        if(courseTabs){
+          const gradeRow=courseTabs.parentElement?.querySelector('.grade-mini-row')
+          insertAfter=gradeRow||courseTabs
+        }
+      }
+
+      if(!insertAfter){
         if(anchor?.isConnected)anchor.remove()
         anchor=null
         setTarget(null)
         return
       }
-      const hero=heading.closest('section')
-      if(!hero)return
-      if(anchor?.isConnected)return
+
+      if(anchor?.isConnected){
+        if(anchor.previousElementSibling!==insertAfter)insertAfter.insertAdjacentElement('afterend',anchor)
+        return
+      }
+
       anchor=document.createElement('div')
       anchor.id='genius-oge-reference-anchor'
-      hero.insertAdjacentElement('afterend',anchor)
+      insertAfter.insertAdjacentElement('afterend',anchor)
       setTarget(anchor)
     }
+
     locate()
     const observer=new MutationObserver(locate)
-    observer.observe(document.body,{childList:true,subtree:true})
+    observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})
     return()=>{observer.disconnect();if(anchor?.isConnected)anchor.remove()}
   },[])
 
