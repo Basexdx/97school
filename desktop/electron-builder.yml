@@ -11,7 +11,7 @@ files:
 
 extraMetadata:
   main: desktop/main.cjs
-  version: 1.2.1
+  version: 1.2.2
 
 asar: true
 compression: maximum
