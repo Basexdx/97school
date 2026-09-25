@@ -216,13 +216,13 @@ function PendingAccess({ setScreen, request, setRequest, setGrade }) {
       <div className="auth-panel pending-panel">
         <Brand onClick={() => setScreen('landing')} />
         <div className={`pending-status-icon ${approved ? 'approved' : rejected ? 'rejected' : ''}`}>{approved ? '✓' : rejected ? '×' : '…'}</div>
-        <h1>{approved ? 'Подключение подтверждено' : rejected ? 'Запрос отклонён' : 'Ждём подтверждения'}</h1>
+        <h1>{approved ? 'Подключение подтверждено' : rejected ? 'Запрос отклонён' : request.status === 'EXPIRED' ? 'Срок запроса истёк' : 'Ждём подтверждения'}</h1>
         <p className="subtle">{approved ? 'Учитель подтвердил подключение. Можно входить в Genius.' : rejected ? 'Учитель не подтвердил этот запрос. Обратись к учителю за новым кодом.' : request.status === 'EXPIRED' ? 'Срок запроса истёк. Попроси учителя выдать новый код.' : 'Код проверен сервером. Доступ появится только после подтверждения учителя.'}</p>
         <div className="request-summary"><span>{request.className}</span><strong>{request.codeLabel}</strong><small>Запрос: {request.requestedAt}</small></div>
         {pollError && <div className="access-error">{pollError}</div>}
         {approved && <button className="blue-btn full" onClick={() => setScreen('home')}>Открыть Genius</button>}
-        {rejected && <button className="blue-btn full" onClick={() => setScreen('studentAccess')}>Ввести другой код</button>}
-        {!approved && !rejected && <div className="pending-note">Статус автоматически проверяется у сервера. Учитель должен подтвердить запрос.</div>}
+        {(rejected || request.status === 'EXPIRED') && <button className="blue-btn full" onClick={() => setScreen('studentAccess')}>Ввести новый код</button>}
+        {!approved && !rejected && request.status !== 'EXPIRED' && <div className="pending-note">Статус автоматически проверяется у сервера. Учитель должен подтвердить запрос.</div>}
         <button className="text-link" onClick={() => setScreen('landing')}>Вернуться на главную</button>
       </div>
     </main>
@@ -280,7 +280,7 @@ function TeacherLogin({ setScreen }) {
   )
 }
 
-function Sidebar({ screen, setScreen, grade, setGrade }) {
+function Sidebar({ screen, setScreen, grade, setGrade, onLogout }) {
   return (
     <aside className="sidebar-light">
       <Brand dark onClick={() => setScreen('home')} />
@@ -289,7 +289,7 @@ function Sidebar({ screen, setScreen, grade, setGrade }) {
           <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => {if(key==='oge'&&grade!==9)setGrade(9);setScreen(key)}}><span>{icon}</span>{label}</button>
         ))}
       </nav>
-      <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
+      <button className="logout" onClick={onLogout}>↪ Выход</button>
     </aside>
   )
 }
@@ -322,6 +322,17 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
       if (result.ok) setSyncMessage(result.synced ? `Синхронизировано: ${result.synced}` : 'Всё синхронизировано')
       else if (result.status === 401) setSyncMessage('Очередь готова. Нужна серверная сессия ученика.')
       else setSyncMessage('Не удалось синхронизировать. Данные сохранены локально.')
+      setTimeout(() => setSyncMessage(''), 3500)
+    }
+  }
+
+  async function logoutStudent() {
+    try {
+      const response = await fetch('/api/student/logout', { method: 'POST', credentials: 'same-origin' })
+      if (!response.ok) throw new Error('logout_failed')
+      setScreen('landing')
+    } catch {
+      setSyncMessage('Не удалось завершить сеанс. Проверь подключение и попробуй ещё раз.')
       setTimeout(() => setSyncMessage(''), 3500)
     }
   }
@@ -363,7 +374,7 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
 
   return (
     <div className="student-app">
-      <Sidebar screen={screen} setScreen={setScreen} grade={grade} setGrade={setGrade} />
+      <Sidebar screen={screen} setScreen={setScreen} grade={grade} setGrade={setGrade} onLogout={logoutStudent} />
       <main className="student-content">
         <div className={`connection-banner ${isOnline ? 'online' : 'offline'}`}>
           <span>{isOnline ? '● Онлайн' : '○ Офлайн'}</span>
@@ -936,14 +947,66 @@ function TeacherDashboard({ setScreen }) {
 
 export default function Page() {
   const [screen, setScreen] = useState('landing')
+  const [sessionReady, setSessionReady] = useState(false)
   const [grade, setGrade] = useState(8)
   const [xp, setXp] = useState(0)
   const [request, setRequest] = useState(null)
   useEffect(() => {
     const requested=new URLSearchParams(window.location.search).get('screen')
-    if(['offline','performance','practice','topics','labs','oge'].includes(requested))setScreen(requested)
+    if(['offline','performance','practice','topics','labs','oge'].includes(requested)){
+      setScreen(requested)
+      setSessionReady(true)
+      return
+    }
+    let active=true
+    async function restoreSession(){
+      try {
+        const response=await fetch('/api/student/me',{credentials:'same-origin',cache:'no-store'})
+        if(!active)return
+        if(response.ok){
+          const result=await response.json().catch(()=>({}))
+          const student=result.student
+          const studentGrade=Number(student?.grade)
+          if(student&&topicsByGrade[studentGrade]){
+            setGrade(studentGrade)
+            setScreen('home')
+            setSessionReady(true)
+            return
+          }
+        }
+      } catch {}
+      try {
+        const response=await fetch('/api/student/access/status',{credentials:'same-origin',cache:'no-store'})
+        if(!active)return
+        const result=await response.json().catch(()=>({}))
+        if(result.status==='APPROVED'&&result.student){
+          const studentGrade=Number(result.student.grade)
+          if(topicsByGrade[studentGrade]){
+            setGrade(studentGrade)
+            setScreen('home')
+            setSessionReady(true)
+            return
+          }
+        }
+        if(['PENDING','REJECTED','EXPIRED'].includes(result.status)){
+          setRequest({...result,id:result.requestId,requestedAt:''})
+          setScreen('pending')
+          setSessionReady(true)
+          return
+        }
+      } catch {}
+      try {
+        const response=await fetch('/api/teacher/me',{credentials:'same-origin',cache:'no-store'})
+        if(!active)return
+        if(response.ok)setScreen('teacher')
+      } catch {}
+      if(active)setSessionReady(true)
+    }
+    restoreSession()
+    return()=>{active=false}
   }, [])
 
+  if(!sessionReady)return <main className="auth-page"><div className="auth-panel"><Brand /><p className="subtle">Проверяем сохранённый вход…</p></div></main>
   if (screen === 'landing') return <Landing onStudentAccess={() => setScreen('studentAccess')} onTeacherLogin={() => setScreen('teacherLogin')} />
   if (screen === 'studentAccess') return <StudentAccess setScreen={setScreen} setRequest={setRequest} />
   if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} setRequest={setRequest} setGrade={setGrade} />

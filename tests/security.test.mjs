@@ -5,6 +5,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { build } from 'esbuild'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -24,15 +25,21 @@ function dbCall(sql, params = [], script = false) {
 
 dbCall(fs.readFileSync(path.join(root, 'cloudflare/schema.sql'), 'utf8'), [], true)
 const env = {
-  DB: { prepare(sql) {
-    let params = []
-    return {
-      bind(...values) { params = values; return this },
-      async first() { return dbCall(sql, params)[0] || null },
-      async all() { return { results: dbCall(sql, params) } },
-      async run() { dbCall(sql, params); return { success: true } },
-    }
-  } },
+  DB: {
+    prepare(sql) {
+      let params = []
+      return {
+        bind(...values) { params = values; return this },
+        async first() { return dbCall(sql, params)[0] || null },
+        async all() { return { results: dbCall(sql, params) } },
+        async run() { dbCall(sql, params); return { success: true } },
+      }
+    },
+    async batch(statements) {
+      for (const statement of statements) await statement.run()
+      return []
+    },
+  },
   TEACHER_EMAIL: 'teacher.real@example.org',
   TEACHER_ACCESS_SECRET: 'local-test-password-long-enough',
   RATE_LIMIT_SECRET: 'local-test-rate-limit-secret-32-bytes-long',
@@ -98,6 +105,42 @@ test('student access-code endpoint stops repeated guesses', async () => {
     statuses.push(response.status)
   }
   assert.deepEqual(statuses, [...Array(10).fill(400), 429])
+})
+
+test('student can request access, get teacher approval, and restore a protected session', async () => {
+  const code = 'GNS-ABCD-EFGH-JKLM'
+  const keyHash = createHash('sha256').update(code).digest('hex')
+  dbCall(`INSERT INTO access_keys(id,class_id,key_hash,key_label,purpose,status,expires_at)
+    VALUES('student-flow-key','class_8B',?,'ученик 8Б','INITIAL_ACCESS','ACTIVE','2099-01-01T00:00:00Z')`, [keyHash])
+
+  const requested = await post('/api/student/access/request', { code }, '198.51.100.30')
+  assert.equal(requested.status, 201)
+  const request = await requested.json()
+  assert.equal(request.status, 'PENDING')
+  const pendingCookie = requested.headers.get('set-cookie').split(';')[0]
+
+  const teacherLogin = await post('/api/teacher/login', { email: env.TEACHER_EMAIL, password: env.TEACHER_ACCESS_SECRET }, '198.51.100.31')
+  assert.equal(teacherLogin.status, 200)
+  const teacherCookie = teacherLogin.headers.get('set-cookie').split(';')[0]
+  const approved = await post(`/api/teacher/connection-requests/${request.requestId}/approve`, {}, '198.51.100.31', { Cookie: teacherCookie })
+  assert.equal(approved.status, 200)
+
+  const statusResponse = await worker.fetch(new Request('https://genius.test/api/student/access/status', { headers: { cookie: pendingCookie } }), env)
+  assert.equal(statusResponse.status, 200)
+  assert.equal((await statusResponse.json()).status, 'APPROVED')
+  const studentCookie = (statusResponse.headers.getSetCookie?.() || [statusResponse.headers.get('set-cookie') || ''])
+    .find(value => value.startsWith('genius_student='))
+    .split(';')[0]
+  assert.ok(studentCookie.startsWith('genius_student='))
+
+  const restored = await worker.fetch(new Request('https://genius.test/api/student/me', { headers: { cookie: studentCookie } }), env)
+  assert.equal(restored.status, 200)
+  const student = (await restored.json()).student
+  assert.equal(student.grade, 8)
+  assert.equal(student.nickname, 'ученик 8Б')
+
+  const reused = await post('/api/student/access/request', { code }, '198.51.100.32')
+  assert.equal(reused.status, 400)
 })
 
 test('login fails closed when the rate-limit secret is missing', async () => {
