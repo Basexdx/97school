@@ -2,7 +2,10 @@
 
 import {useEffect,useMemo,useState} from 'react'
 import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
+import OgeReference from './oge-reference.js'
+import {ogeFormulas,ogeQuantities} from './oge-reference-data.mjs'
 import styles from './oge-task-bank.module.css'
+import referenceStyles from './oge-reference.module.css'
 
 const POS_KEY='genius:oge-task-position:v1'
 const parseNumber=v=>{const s=String(v??'').trim().replace(',', '.');if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s))return null;const n=Number(s);return Number.isFinite(n)?n:null}
@@ -10,6 +13,7 @@ const isCorrect=(value,expected)=>{const n=parseNumber(value);return n!==null&&M
 
 export default function OgeTaskBank(){
   const [filter,setFilter]=useState('all')
+  const [view,setView]=useState('tasks')
   const [currentId,setCurrentId]=useState(null)
   const [restoreId,setRestoreId]=useState('')
   const filtered=useMemo(()=>filter==='all'?ogeTasks:ogeTasks.filter(t=>t.type===Number(filter)),[filter])
@@ -26,9 +30,14 @@ export default function OgeTaskBank(){
 
   return <div className={styles.page}>
     <section className={styles.hero}>
-      <div><span className={styles.kicker}>GENIUS · ПОДГОТОВКА К ОГЭ</span><h1>Задачи ОГЭ</h1><p>Отдельный банк заданий формата ОГЭ. Графики и рисунки перерисованы внутри Genius без водяных знаков и лишних элементов страницы.</p><div className={styles.pills}><span>{ogeCounts.total} задач</span><span>Задача 6 ОГЭ · {ogeCounts[6]}</span><span>Задача 7 ОГЭ · {ogeCounts[7]}</span></div></div>
+      <div><span className={styles.kicker}>GENIUS · ПОДГОТОВКА К ОГЭ</span><h1>{view==='tasks'?'Задачи ОГЭ':'Справочник ОГЭ'}</h1><p>{view==='tasks'?'Тренируйся на заданиях ОГЭ по физике: условия, числа и графики собраны в одном месте.':'Основные формулы, физические величины и единицы измерения для подготовки к ОГЭ.'}</p><div className={styles.pills}>{view==='tasks'?<><span>{ogeCounts.total} задач</span><span>Задача 6 ОГЭ · {ogeCounts[6]}</span><span>Задача 7 ОГЭ · {ogeCounts[7]}</span></>:<><span>{ogeFormulas.length} формул</span><span>{ogeQuantities.length} величин и единиц</span><span>Поиск по слову</span></>}</div></div>
       <div className={styles.heroMark} aria-hidden="true"><i/><i/><i/><b>ОГЭ</b></div>
     </section>
+    <div className={referenceStyles.sectionTabs} role="tablist" aria-label="Раздел ОГЭ">
+      <button type="button" role="tab" aria-selected={view==='tasks'} className={view==='tasks'?referenceStyles.sectionTabActive:''} onClick={()=>setView('tasks')}>Банк задач</button>
+      <button type="button" role="tab" aria-selected={view==='reference'} className={view==='reference'?referenceStyles.sectionTabActive:''} onClick={()=>setView('reference')}>Основные формулы и величины</button>
+    </div>
+    {view==='reference' ? <OgeReference/> : <>
     <div className={styles.filterDock}><div className={styles.filters} role="tablist" aria-label="Тип задания ОГЭ">
       <button className={filter==='all'?styles.active:''} onClick={()=>setFilter('all')}>Все <b>{ogeCounts.total}</b></button>
       <button className={filter==='6'?styles.active:''} onClick={()=>setFilter('6')}>Задача 6 ОГЭ <b>{ogeCounts[6]}</b></button>
@@ -36,6 +45,7 @@ export default function OgeTaskBank(){
     </div></div>
     <div className={styles.summary}><strong>{filtered.length}</strong> заданий в выбранном разделе</div>
     <section className={styles.grid}>{filtered.map((t,i)=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${restoreId===t.id?styles.last:''}`} onClick={()=>open(t.id)}><div><span>{t.label}</span><em>№ {t.sourceNo}</em></div><h2>{compact(t.text)}</h2><footer><span>{t.diagram?'График / рисунок':'Числовой ответ'}</span><b>Открыть →</b></footer></button>)}</section>
+    </>}
   </div>
 }
 
