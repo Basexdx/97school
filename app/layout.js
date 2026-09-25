@@ -1,8 +1,10 @@
 import './globals.css'
 import './landing-enhancements.css'
+import './cosmic-lessons.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
 import OgeReferenceMount from './oge-reference-mount'
+import CosmicLessonMount from './cosmic-lesson-mount'
 
 export const metadata = {
   title: 'Genius — физика, которую понимаешь',
@@ -37,6 +39,7 @@ export default function RootLayout({ children }) {
         <ApiOriginBridge />
         <PwaRegister />
         <OgeReferenceMount />
+        <CosmicLessonMount />
         {children}
       </body>
     </html>
