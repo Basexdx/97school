@@ -1,14 +1,16 @@
 import './globals.css'
 import './landing-enhancements.css'
-import './cosmic-lessons.css'
+import './genius-v17-base.css'
+import './genius-v17-reference.css'
+import './genius-v17-lesson.css'
+import './genius-v17-hotfix.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
-import OgeReferenceMount from './oge-reference-mount'
-import CosmicLessonMount from './cosmic-lesson-mount'
+import GeniusV17Enhancer from './genius-v17-enhancer'
 
 export const metadata = {
   title: 'Genius — физика, которую понимаешь',
-  description: 'Учебник, задачи, лабораторные работы и подготовка к ОГЭ по физике.',
+  description: 'Учебник, задачи, лабораторные работы и справочные материалы по физике.',
   manifest: '/manifest.webmanifest',
   applicationName: 'Genius',
   icons: {
@@ -38,8 +40,7 @@ export default function RootLayout({ children }) {
       <body>
         <ApiOriginBridge />
         <PwaRegister />
-        <OgeReferenceMount />
-        <CosmicLessonMount />
+        <GeniusV17Enhancer />
         {children}
       </body>
     </html>

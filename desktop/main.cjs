@@ -47,11 +47,11 @@ async function createWindow(){
   const localOrigin=`http://127.0.0.1:${port}`
   const win=new BrowserWindow({
     width:1440,height:920,minWidth:980,minHeight:680,
-    backgroundColor:'#071525',show:false,
+    backgroundColor:'#071525',show:false,autoHideMenuBar:true,
     webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true}
   })
   win.removeMenu()
-  win.once('ready-to-show',()=>win.show())
+  win.once('ready-to-show',()=>{win.maximize();win.show()})
   win.webContents.setWindowOpenHandler(({url})=>{
     if(!url.startsWith(localOrigin))shell.openExternal(url)
     return {action:'deny'}

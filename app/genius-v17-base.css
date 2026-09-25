@@ -1,0 +1,44 @@
+/* Genius v17 — educational full-screen shell, reference center and one-page lessons */
+:root{--g17-space:#03101d;--g17-space2:#071b2f;--g17-panel:#08223a;--g17-blue:#1597ff;--g17-white:#f4f9ff;--g17-orange:#ffad27;--g17-orange2:#ff7a20;--g17-muted:#8eabc4}
+
+/* 1. Full-width application and non-commercial landing */
+.landing-v15-page{padding:0!important;background:var(--g17-space)!important}
+.landing-v15-card{width:100%!important;max-width:none!important;min-height:100vh!important;margin:0!important;border-radius:0!important;box-shadow:none!important}
+.landing-v15-menu,.landing-v15-about{display:none!important}
+.landing-v15-nav{max-width:none!important}
+.student-content{max-width:none!important;width:100%!important}
+
+/* 2. Minimal centered login */
+.access-page{display:grid!important;place-items:center!important;grid-template-columns:1fr!important;min-height:100vh!important;padding:24px!important;background:radial-gradient(circle at 50% 15%,#0a3762 0,transparent 34%),linear-gradient(180deg,#020c16,#061a2d)!important}
+.access-hero{display:none!important}
+.access-form-wrap{width:min(520px,100%)!important;padding:0!important;display:block!important}
+.access-form-card{width:100%!important;margin:0!important;background:#071d31!important;border:1px solid rgba(74,166,244,.25)!important;color:#fff!important;box-shadow:0 28px 80px rgba(0,0,0,.32)!important}
+.access-form-card .access-icon,.access-form-card .subtle,.access-form-card .access-label,.access-form-card .demo-code-note,.access-form-card .teacher-entry{display:none!important}
+.access-form-card h2{text-align:center!important;margin:20px 0 24px!important;font-size:30px!important}
+.access-form-card .back-link{color:#7fa5c5!important}
+.access-code-input{margin-bottom:14px!important;background:#031523!important;border-color:rgba(91,175,244,.25)!important;color:#fff!important}
+.auth-page:has(.compact-auth){background:radial-gradient(circle at 50% 15%,#0a3762 0,transparent 34%),linear-gradient(180deg,#020c16,#061a2d)!important}
+.compact-auth{background:#071d31!important;border-color:rgba(74,166,244,.25)!important;color:#fff!important;box-shadow:0 28px 80px rgba(0,0,0,.32)!important}
+.compact-auth .brand-lockup,.compact-auth .subtle{display:none!important}
+.compact-auth h1{text-align:center!important;margin:22px 0 24px!important}
+.compact-auth .input-stack input{background:#031523!important;border-color:rgba(91,175,244,.25)!important;color:#fff!important}
+
+/* 3. Extra navigation items */
+.genius-v17-nav-anchor{display:contents}
+.genius-ref-nav span{font-weight:1000;color:var(--g17-orange)!important}
+.genius-ref-nav.active{border-color:rgba(255,173,39,.45)!important;background:linear-gradient(90deg,rgba(255,148,30,.18),rgba(12,47,79,.7))!important;box-shadow:inset 3px 0 0 var(--g17-orange)!important}
+
+/* 4. Search across the whole task bank */
+.genius-global-search-anchor{display:block;margin:0 0 18px}
+.genius-global-search{border:1px solid rgba(68,162,241,.2);border-radius:18px;padding:18px;background:linear-gradient(145deg,#071f35,#061625);box-shadow:0 16px 44px rgba(0,0,0,.12);color:#eaf6ff}
+.genius-global-search-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:13px}.genius-global-search-head>div:first-child>span{font-size:9px;letter-spacing:.14em;color:#61baff;font-weight:900}.genius-global-search-head h2{font-size:20px;margin:3px 0 0}
+.genius-search-scopes{display:flex;gap:6px;flex-wrap:wrap}.genius-search-scopes button{padding:7px 10px;border-radius:999px;background:#082945;color:#86aeca;border:1px solid rgba(74,159,230,.16);font-size:10px;font-weight:800}.genius-search-scopes button.active{background:linear-gradient(180deg,#ffc23e,#ff941d);color:#111c28;border-color:#ffc23e;box-shadow:0 0 18px rgba(255,166,33,.18)}
+.genius-global-search-box{height:48px;display:grid;grid-template-columns:28px 1fr 28px;align-items:center;gap:7px;padding:0 12px;border-radius:13px;background:#031421;border:1px solid rgba(72,166,245,.22)}.genius-global-search-box>span{color:#5cb8ff;font-size:20px}.genius-global-search-box input{width:100%;border:0;outline:0;background:transparent;color:#fff;font-size:13px}.genius-global-search-box input::placeholder{color:#66839d}.genius-global-search-box button{background:transparent;color:#8eabc4;font-size:18px}
+.genius-search-results{margin-top:12px;display:grid;gap:7px;max-height:430px;overflow:auto;padding-right:4px}.genius-search-result-count{font-size:10px;color:#6e94b2;padding:3px 2px}.genius-search-results>button{text-align:left;color:#e8f5ff;background:#061b2e;border:1px solid rgba(72,157,229,.13);border-radius:12px;padding:11px 13px;display:grid;grid-template-columns:200px 1fr;gap:4px 12px}.genius-search-results>button:hover{border-color:rgba(255,173,39,.55);background:#09233b}.genius-search-results>button>div{grid-row:1/3;display:flex;align-items:flex-start;gap:5px;flex-wrap:wrap}.genius-search-results>button span,.genius-search-results>button em,.genius-search-results>button small{font-size:9px;border-radius:999px;padding:4px 7px;font-style:normal}.genius-search-results>button span{background:#0c3b64;color:#69beff}.genius-search-results>button em{background:rgba(255,173,39,.12);color:#ffc04b}.genius-search-results>button small{color:#7f9cb6}.genius-search-results>button strong{font-size:12px}.genius-search-results>button p{grid-column:2;margin:0;color:#8da9c0;font-size:10px;line-height:1.4}
+
+/* 6–7. Compact bank hero, infographic and card statuses */
+.genius-bank-hero p,.genius-bank-hero .bank-pills,.genius-bank-hero [class*="heroPills"]{display:none!important}
+.genius-task-bank-page>section.bank-stats,.genius-task-bank-page>section[class*="_stats__"],.genius-task-bank-page>section[class*="_stats_"]{display:none!important}
+.genius-bank-compact{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.genius-bank-sections{display:flex;flex-direction:column;gap:3px}.genius-bank-sections span{font-size:9px;letter-spacing:.12em;color:#5e9bc9;text-transform:uppercase}.genius-bank-sections b{font-size:12px;color:#d9efff;font-weight:750}.genius-bank-mini-stats{display:flex;gap:7px}.genius-bank-mini-stats>span{min-width:82px;padding:9px 12px;border:1px solid rgba(85,166,235,.15);border-radius:11px;background:rgba(2,15,26,.5);display:flex;align-items:baseline;gap:5px}.genius-bank-mini-stats b{font-size:18px;color:#fff}.genius-bank-mini-stats small{font-size:8px;color:#6f91ad}.genius-bank-mini-stats>span:first-child{border-color:rgba(255,173,39,.33);box-shadow:inset 0 -2px 0 rgba(255,173,39,.6)}
+.genius-enhanced-task{position:relative!important}.genius-task-meta-row{display:flex;align-items:center;justify-content:space-between;gap:7px;margin:7px 0 5px}.genius-physics-area,.genius-task-status{font-size:8px!important;line-height:1!important;border-radius:999px;padding:5px 7px!important;letter-spacing:.02em}.genius-physics-area{background:#082b49;color:#78c5ff;border:1px solid rgba(91,181,250,.17)}.genius-task-status{font-weight:900;text-transform:uppercase}.genius-task-status.new{background:#101f2d;color:#7e96aa;border:1px solid rgba(128,151,170,.14)}.genius-task-status.viewed{background:#082f50;color:#62baff;border:1px solid rgba(69,168,245,.26)}.genius-task-status.solved{background:linear-gradient(180deg,#ffc33f,#ff971f);color:#18202a;border:1px solid #ffc34b;box-shadow:0 0 14px rgba(255,167,35,.15)}
+.genius-enhanced-task .bank-tile-meta{display:none!important}.genius-enhanced-task footer>span:first-child{display:none!important}

@@ -15,7 +15,7 @@
     "db:local": "wrangler d1 execute DB --config wrangler.jsonc --local --file=cloudflare/schema.sql --yes",
     "setup:local": "node scripts/setup-local.mjs",
     "audit:clean": "npm audit --audit-level=high",
-    "bank:build": "node scripts/prepare-grade7-bank.mjs && node scripts/prepare-grade9-bank.mjs && node scripts/build-task-bank.mjs",
+    "bank:build": "node scripts/prepare-grade7-bank.mjs && node scripts/prepare-grade9-bank.mjs && node scripts/build-task-bank.mjs && node scripts/build-search-index.mjs",
     "db:tasks": "wrangler d1 execute DB --config wrangler.jsonc --local --file=cloudflare/task-bank.sql --yes",
     "test:bank": "npm run bank:build && node --test tests/task-checker.test.mjs tests/integration.test.mjs tests/academic.test.mjs tests/oge-bank.test.mjs tests/oge-reference.test.mjs && python3 tests/task-bank-sql.py",
     "start:web": "next start --hostname 127.0.0.1 --port 3000"
