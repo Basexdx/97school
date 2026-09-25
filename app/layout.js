@@ -1,6 +1,5 @@
 import './globals.css'
 import './landing-enhancements.css'
-import './landing-hotfix.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
 

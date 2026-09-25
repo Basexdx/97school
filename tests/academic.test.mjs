@@ -22,7 +22,7 @@ function dbCall(sql,params=[],script=false){
   return JSON.parse(result.stdout)
 }
 dbCall(fs.readFileSync(path.join(root,'cloudflare/schema.sql'),'utf8'),[],true)
-const env={APP_ORIGIN:'https://genius.test',DB:{prepare(sql){let params=[];return {bind(...values){params=values;return this},async first(){return dbCall(sql,params)[0]||null},async all(){return {results:dbCall(sql,params)}},async run(){dbCall(sql,params);return {success:true}}}}}}
+const env={DB:{prepare(sql){let params=[];return {bind(...values){params=values;return this},async first(){return dbCall(sql,params)[0]||null},async all(){return {results:dbCall(sql,params)}},async run(){dbCall(sql,params);return {success:true}}}}}}
 
 async function hash(value){return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))),b=>b.toString(16).padStart(2,'0')).join('')}
 const studentToken='academic_student_token',teacherToken='academic_teacher_token'
@@ -33,7 +33,7 @@ dbCall("INSERT INTO teacher_sessions(id,teacher_id,token_hash,expires_at) VALUES
 
 async function call(pathname,{method='GET',role='student',body}={}){
   const token=role==='teacher'?teacherToken:studentToken
-  const response=await worker.fetch(new Request(`https://genius.test${pathname}`,{method,headers:{cookie:`genius_${role}=${token}`,'content-type':'application/json',origin:'https://genius.test'},body:body?JSON.stringify(body):undefined}),env)
+  const response=await worker.fetch(new Request(`https://genius.test${pathname}`,{method,headers:{cookie:`genius_${role}=${token}`,'content-type':'application/json'},body:body?JSON.stringify(body):undefined}),env)
   return {status:response.status,data:await response.json()}
 }
 
