@@ -77,8 +77,7 @@ function ensureBreakBanner(page,select){
 }
 function enhanceTeacherJournal(page){
   ensureAverage(page);ensureMedals(page)
-  const editor=page.querySelector('[class*="lessonEditor"]'),select=editor?.querySelector('select');if(editor&&select){createCalendar(page,editor,select);ensureBreakBanner(page,select);if(!select.dataset.cgWatch){select.dataset.cgWatch='1';select.addEventListener('change',()=>requestAnimationFrame(()=>enhanceTeacherJournal(page)))}}
-  enhanceBreakColumns(page)
+  const editor=page.querySelector('[class*="lessonEditor"]'),select=editor?.querySelector('select');if(editor&&select){createCalendar(page,editor,select);if(!select.dataset.cgWatch){select.dataset.cgWatch='1';select.addEventListener('change',()=>requestAnimationFrame(()=>enhanceTeacherJournal(page)))}}
 }
 export default function TeacherJournalEnhancer(){
   useEffect(()=>{let frame=0;const run=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>document.querySelectorAll('[class*="teacherPage"]').forEach(enhanceTeacherJournal))};run();const observer=new MutationObserver(run);observer.observe(document.body,{childList:true,subtree:true});return()=>{cancelAnimationFrame(frame);observer.disconnect()}},[])

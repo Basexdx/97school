@@ -1,7 +1,7 @@
 'use client'
 
-import {useEffect,useMemo,useState} from 'react'
-import {formatSchoolDate,generateLessonDates,tomorrowIso} from '../shared/academic-calendar.mjs'
+import {useEffect,useMemo,useRef,useState} from 'react'
+import {formatSchoolDate,generateLessonDates,tomorrowIso,SCHOOL_BREAKS} from '../shared/academic-calendar.mjs'
 import styles from './performance-v2.module.css'
 
 const classOptions=[['class_7A','7А',7],['class_8B','8Б',8],['class_9A','9А',9],['class_9B','9Б',9]]
@@ -126,7 +126,7 @@ function StudentRating({grade,xp}){
 }
 
 function demoAcademic(classId){
-  const option=classOptions.find(x=>x[0]===classId)||classOptions[1],dates=generateLessonDates().slice(0,16)
+  const option=classOptions.find(x=>x[0]===classId)||classOptions[1],dates=generateLessonDates()
   const students=demoNames.map((nickname,i)=>({id:`student-${i}`,nickname,current_grade:option[2]}))
   const lessons=dates.map((date,index)=>({id:`lesson-${date}`,lesson_date:date,topic:index%4===0?'Повторение':index%4===1?'Механическое движение':index%4===2?'Тепловые явления':'Электрический ток',status:'PLANNED',assessment_type:index%7===3?'TEST':index%5===2?'INDEPENDENT':'LESSON'}))
   const grades=students.flatMap((s,si)=>lessons.slice(0,8).filter((_,li)=>(si+li)%2===0).map((l,li)=>({student_id:s.id,lesson_id:l.id,value:3+(si+li)%3,kind:'LESSON'})))
@@ -136,9 +136,39 @@ function demoAcademic(classId){
 
 export function TeacherAcademic(){
   const [classId,setClassId]=useState('class_8B'),[data,setData]=useState(()=>demoAcademic('class_8B')),[selectedLesson,setSelectedLesson]=useState(''),[studentId,setStudentId]=useState(''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[message,setMessage]=useState('')
+  const tableScrollRef=useRef(null)
   useEffect(()=>{setData(demoAcademic(classId));api(`/api/teacher/academic?classId=${classId}`).then(x=>setData({...x,attendance:x.attendance||[]})).catch(()=>{})},[classId])
-  useEffect(()=>{if(data.lessons.length&&!selectedLesson)setSelectedLesson(data.lessons[0].id)},[data,selectedLesson])
-  const recent=data.lessons.slice(0,12),selected=data.lessons.find(l=>l.id===selectedLesson)
+  useEffect(()=>{
+    if(!data.lessons.length||(selectedLesson&&data.lessons.some(l=>l.id===selectedLesson)))return
+    const today=todayIso(),soon=SCHOOL_BREAKS.find(item=>item.start>=today&&Date.parse(item.start)-Date.parse(today)<45*86400000)
+    const target=soon?.start||today
+    setSelectedLesson([...data.lessons].filter(l=>l.lesson_date<=target).at(-1)?.id||data.lessons[0].id)
+  },[data,selectedLesson])
+  useEffect(()=>{
+    if(!selectedLesson)return
+    const frame=requestAnimationFrame(()=>{
+      const wrap=tableScrollRef.current,lesson=data.lessons.find(l=>l.id===selectedLesson)
+      const header=lesson&&wrap?.querySelector(`[data-lesson-date="${lesson.lesson_date}"]`)
+      if(wrap&&header)wrap.scrollLeft=Math.max(0,header.offsetLeft-270)
+    })
+    return()=>cancelAnimationFrame(frame)
+  },[selectedLesson,data.lessons])
+  const lessons=[...data.lessons].sort((a,b)=>a.lesson_date.localeCompare(b.lesson_date))
+  const timeline=[]
+  lessons.forEach((lesson,index)=>{
+    if(index){
+      const previous=lessons[index-1].lesson_date
+      SCHOOL_BREAKS.filter(item=>item.start>previous&&item.end<lesson.lesson_date).forEach(item=>{
+        const cursor=new Date(`${item.start}T12:00:00Z`)
+        while(cursor.toISOString().slice(0,10)<=item.end){
+          timeline.push({kind:'break',date:cursor.toISOString().slice(0,10),break:item})
+          cursor.setUTCDate(cursor.getUTCDate()+1)
+        }
+      })
+    }
+    timeline.push({kind:'lesson',date:lesson.lesson_date,lesson})
+  })
+  const selected=data.lessons.find(l=>l.id===selectedLesson)
   const metrics=useMemo(()=>{
     const values=data.grades.map(g=>Number(g.value)).filter(Boolean),avg=values.length?(values.reduce((a,b)=>a+b,0)/values.length).toFixed(1):'—'
     const byStudent=data.students.map(s=>{const gs=data.grades.filter(g=>g.student_id===s.id).map(g=>Number(g.value)).filter(Boolean);return {...s,avg:gs.length?gs.reduce((a,b)=>a+b,0)/gs.length:0}})
@@ -167,13 +197,12 @@ export function TeacherAcademic(){
   }
 
   return <div className={styles.teacherPage}>
-    <header className={styles.teacherHero}><div><div className={styles.kicker}>GENIUS · ЖУРНАЛ КЛАССА</div><h1>Физика · {data.class.title}</h1><p>Оценки, посещаемость и динамика класса.</p></div><select value={classId} onChange={e=>{setClassId(e.target.value);setSelectedLesson('')}}>{classOptions.map(c=><option value={c[0]} key={c[0]}>{c[1]}</option>)}</select></header>
     <section className={styles.teacherMetrics}><article><span>Средняя оценка</span><strong>{metrics.avg}</strong><small>по классу</small></article><article><span>Учеников</span><strong>{data.students.length}</strong><small>в журнале</small></article><article><span>Пропуски</span><strong>{metrics.absent}</strong><small>отметок «н»</small></article><article><span>Предмет</span><strong>Физика</strong><small>текущий курс</small></article></section>
 
     <div className={styles.teacherGrid}>
       <section className={styles.gradebookCard}>
-        <div className={styles.gradebookHead}><div><h2>Журнал класса</h2><p>«н» — ученик отсутствовал; в средний балл не входит.</p></div><div className={styles.lessonEditor}><select value={selectedLesson} onChange={e=>setSelectedLesson(e.target.value)}>{data.lessons.map(l=><option key={l.id} value={l.id}>{formatSchoolDate(l.lesson_date,{short:true})}</option>)}</select><select value={selected?.assessment_type||'LESSON'} onChange={e=>setAssessmentType(e.target.value)}><option value="LESSON">Работа на уроке</option><option value="INDEPENDENT">Самостоятельная</option><option value="TEST">Контрольная</option><option value="HOMEWORK">Домашняя</option></select></div></div>
-        <div className={styles.gradebookWrap}><table><thead><tr><th>Фамилия и имя</th>{recent.map(l=>{const meta=workType(l.assessment_type);return <th key={l.id} className={styles[`head${l.assessment_type||'LESSON'}`]}><b>{formatSchoolDate(l.lesson_date,{short:true})}</b><small>{meta.short}</small></th>})}<th>Средняя</th></tr></thead><tbody>{data.students.map(s=>{const own=data.grades.filter(g=>g.student_id===s.id).map(g=>Number(g.value)).filter(Boolean),avg=own.length?(own.reduce((a,b)=>a+b,0)/own.length).toFixed(1):'—';return <tr key={s.id}><td><span className={styles.studentAvatar}>{(s.nickname||'?').slice(0,1)}</span><b>{s.nickname||'Ученик'}</b></td>{recent.map(l=>{const absent=(data.attendance||[]).some(a=>a.student_id===s.id&&a.lesson_id===l.id&&a.status==='ABSENT'),value=data.grades.find(g=>g.student_id===s.id&&g.lesson_id===l.id&&g.kind==='LESSON')?.value,cell=absent?'N':value||'';return <td key={l.id}><select className={`${styles.markSelect} ${absent?styles.markAbsent:''} ${value?styles[`mark${l.assessment_type||'LESSON'}`]:''}`} aria-label={`Оценка ${s.nickname} ${l.lesson_date}`} value={cell} onChange={e=>setMark(s.id,l.id,e.target.value)}><option value="">—</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="N">н</option></select></td>})}<td><strong>{avg}</strong></td></tr>})}</tbody></table></div>
+        <div className={styles.gradebookHead}><div><h2>Журнал класса</h2><p>«н» — ученик отсутствовал; в средний балл не входит.</p></div><div className={styles.lessonEditor}><select aria-label="Дата урока" value={selectedLesson} onChange={e=>setSelectedLesson(e.target.value)}>{data.lessons.map(l=><option key={l.id} value={l.id}>{formatSchoolDate(l.lesson_date,{short:true})}</option>)}</select><select aria-label="Тип работы" value={selected?.assessment_type||'LESSON'} onChange={e=>setAssessmentType(e.target.value)}><option value="LESSON">Работа на уроке</option><option value="INDEPENDENT">Самостоятельная</option><option value="TEST">Контрольная</option><option value="HOMEWORK">Домашняя</option></select><select aria-label="Класс" value={classId} onChange={e=>{setClassId(e.target.value);setSelectedLesson('')}}>{classOptions.map(c=><option value={c[0]} key={c[0]}>{c[1]}</option>)}</select></div></div>
+        <div className={styles.gradebookWrap} ref={tableScrollRef}><table><thead><tr className={styles.breakBands}><th aria-hidden="true"/>{timeline.map((entry,index)=>entry.kind==='break'?(index===0||timeline[index-1]?.break?.id!==entry.break.id?<th key={entry.break.id} colSpan={timeline.filter(x=>x.break?.id===entry.break.id).length} className={styles.breakBand}>🍂 {entry.break.title}</th>:null):<th key={entry.lesson.id} aria-hidden="true"/>)}<th aria-hidden="true"/></tr><tr><th>Фамилия и имя</th>{timeline.map(entry=>entry.kind==='break'?<th key={entry.date} className={styles.holidayHead}><b>{formatSchoolDate(entry.date,{short:true})}</b><small>{formatSchoolDate(entry.date,{weekday:true}).split(',')[0]}</small></th>:(()=>{const l=entry.lesson,meta=workType(l.assessment_type);return <th key={l.id} data-lesson-date={l.lesson_date} className={styles[`head${l.assessment_type||'LESSON'}`]}><b>{formatSchoolDate(l.lesson_date,{short:true})}</b><small>{meta.short}</small></th>})())}<th>Средняя</th></tr></thead><tbody>{data.students.map(s=>{const own=data.grades.filter(g=>g.student_id===s.id).map(g=>Number(g.value)).filter(Boolean),avg=own.length?(own.reduce((a,b)=>a+b,0)/own.length).toFixed(1):'—';return <tr key={s.id}><td><span className={styles.studentAvatar}>{(s.nickname||'?').slice(0,1)}</span><b>{s.nickname||'Ученик'}</b></td>{timeline.map(entry=>{if(entry.kind==='break')return <td key={entry.date} className={styles.holidayCell} title={entry.break.title}>🍂</td>;const l=entry.lesson,absent=(data.attendance||[]).some(a=>a.student_id===s.id&&a.lesson_id===l.id&&a.status==='ABSENT'),value=data.grades.find(g=>g.student_id===s.id&&g.lesson_id===l.id&&g.kind==='LESSON')?.value,cell=absent?'N':value||'';return <td key={l.id}><select className={`${styles.markSelect} ${absent?styles.markAbsent:''} ${value?styles[`mark${l.assessment_type||'LESSON'}`]:''}`} aria-label={`Оценка ${s.nickname} ${l.lesson_date}`} value={cell} onChange={e=>setMark(s.id,l.id,e.target.value)}><option value="">—</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="N">н</option></select></td>})}<td><strong>{avg}</strong></td></tr>})}</tbody></table></div>
       </section>
 
       <aside className={styles.classAnalytics}><h2>Аналитика класса</h2><div><h3>🏆 Лучшие результаты</h3>{metrics.top.map((s,i)=><p key={s.id}><span>{i+1}</span><b>{s.nickname}</b><em>{s.avg?s.avg.toFixed(1):'—'}</em></p>)}</div><div><h3>△ Нужна поддержка</h3>{metrics.support.length?metrics.support.map(s=><p key={s.id}><span>!</span><b>{s.nickname}</b><em>{s.avg.toFixed(1)}</em></p>):<small>Сейчас нет учеников в зоне внимания.</small>}</div><div className={styles.workLegend}><h3>Типы работ</h3><span className={styles.kindLesson}>✦ Урок</span><span className={styles.kindIndependent}>◇ Самостоятельная</span><span className={styles.kindTest}>★ Контрольная</span></div></aside>

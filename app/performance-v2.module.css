@@ -70,3 +70,26 @@
   :global(html[data-season]) .classAnalytics,
   :global(html[data-season]) .homeworkEditor { border-radius: 18px; }
 }
+
+/* The class journal is the page heading; keep the class switcher in its toolbar. */
+.teacherPage{position:relative;padding-top:0;gap:0}
+.lessonEditor select:last-child{max-width:74px;padding-right:20px!important}
+.teacherGrid{align-items:stretch}
+.gradebookCard,.classAnalytics{min-height:min(800px,calc(100dvh - 64px))}
+.gradebookWrap{margin-top:0}
+.gradebookWrap table{table-layout:fixed}
+.gradebookWrap th,.gradebookWrap td{min-width:62px;padding:7px 5px;height:53px}
+.gradebookWrap th:first-child,.gradebookWrap td:first-child{min-width:200px;max-width:200px;padding-left:10px;white-space:nowrap}
+.gradebookWrap th:last-child,.gradebookWrap td:last-child{min-width:75px}
+.gradebookWrap th b{white-space:nowrap}
+.gradebookWrap th small{margin-top:4px}
+.gradebookWrap .breakBands th{height:29px;padding:2px 0;border:0;background:transparent!important;box-shadow:none!important}
+.gradebookWrap .breakBands .breakBand{border:1px solid rgba(255,185,40,.4)!important;border-radius:12px;background:linear-gradient(90deg,#6d3b0b,#bd850d,#6d3b0b)!important;color:#ffe199!important;font-size:12px;white-space:nowrap}
+.gradebookWrap .holidayHead{background:rgba(115,75,10,.56)!important;color:#ffd45b!important;box-shadow:inset 0 3px #e7a523}
+.gradebookWrap .holidayCell{background:rgba(96,64,13,.38)!important;color:#e0a321;font-size:15px}
+.gradebookWrap .holidayCell::first-letter{filter:sepia(1)}
+.gradebookWrap .markSelect{min-width:44px;max-width:52px;padding:6px 2px}
+.classAnalytics{display:block}
+
+@media(max-width:1100px){.gradebookCard,.classAnalytics{min-height:0}}
+@media(max-width:720px){.gradebookWrap th:first-child,.gradebookWrap td:first-child{min-width:150px;max-width:150px}.gradebookWrap th,.gradebookWrap td{min-width:56px}}
