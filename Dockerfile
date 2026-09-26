@@ -22,6 +22,16 @@ USER node
 EXPOSE 8787
 CMD ["node","dist/api.mjs"]
 
+FROM node:24-bookworm-slim AS preview
+WORKDIR /app
+ENV NODE_ENV=production \
+    HOST=0.0.0.0 \
+    PORT=8790
+COPY server/preview-gate.mjs ./server/preview-gate.mjs
+USER node
+EXPOSE 8790
+CMD ["node","server/preview-gate.mjs"]
+
 FROM build-base AS web-build
 ENV NODE_OPTIONS=--max-old-space-size=1536
 RUN npm run build
