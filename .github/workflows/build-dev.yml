@@ -21,6 +21,10 @@ jobs:
         run: npm ci
       - name: Test task banks
         run: npm run test:bank
+      - name: Test SQLite server adapter
+        run: npm run test:server
+      - name: Build Genius API server bundle
+        run: npm run build:api
       - name: Build Genius
         run: npm run build
       - name: Verify generated task banks
