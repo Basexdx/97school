@@ -23,6 +23,27 @@ services:
       retries: 5
       start_period: 10s
 
+  preview:
+    build:
+      context: .
+      target: preview
+    restart: unless-stopped
+    environment:
+      PREVIEW_ACCESS_SECRET: ${PREVIEW_ACCESS_SECRET}
+      PREVIEW_COOKIE_SECRET: ${PREVIEW_COOKIE_SECRET}
+      PREVIEW_MAX_ATTEMPTS: ${PREVIEW_MAX_ATTEMPTS:-5}
+      PREVIEW_WINDOW_MINUTES: ${PREVIEW_WINDOW_MINUTES:-15}
+      PREVIEW_BLOCK_MINUTES: ${PREVIEW_BLOCK_MINUTES:-30}
+      PREVIEW_SESSION_HOURS: ${PREVIEW_SESSION_HOURS:-12}
+    expose:
+      - "8790"
+    healthcheck:
+      test: ["CMD","node","-e","fetch('http://127.0.0.1:8790/_preview/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
   web:
     build:
       context: .
@@ -40,8 +61,12 @@ services:
     image: caddy:2-alpine
     restart: unless-stopped
     depends_on:
-      - web
-      - api
+      web:
+        condition: service_started
+      api:
+        condition: service_healthy
+      preview:
+        condition: service_healthy
     ports:
       - "80:80"
       - "443:443"
