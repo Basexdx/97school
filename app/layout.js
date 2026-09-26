@@ -10,12 +10,14 @@ import './teacher-journal-polish.css'
 import './seasonal-sidebar-v2.css'
 import './zz-seasonal-final.css'
 import './mobile-journal-readability.css'
+import './reference-materials.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
 import GeniusV17Enhancer from './genius-v17-enhancer'
 import CosmoUiCleanup from './cosmo-ui-cleanup'
 import SeasonalTheme from './seasonal-theme'
 import TeacherJournalEnhancer from './teacher-journal-enhancer'
+import ReferenceMaterials from './reference-materials'
 
 export const metadata = {
   title: 'Genius — физика, которую понимаешь',
@@ -53,6 +55,7 @@ export default function RootLayout({ children }) {
         <CosmoUiCleanup />
         <SeasonalTheme />
         <TeacherJournalEnhancer />
+        <ReferenceMaterials />
         {children}
       </body>
     </html>
