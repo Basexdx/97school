@@ -1,6 +1,6 @@
-export const TASK_BANK_VERSION = '4.4.0-peryshkin-calculations-expanded'
-export const TASK_BANK_ORIGIN = 'CURATED_SOURCE_BANK_384'
-export const TASK_BANK_TITLE = 'Банк задач 8 класса · 384 задачи'
+export const TASK_BANK_VERSION = '4.3.0-peryshkin-calculations'
+export const TASK_BANK_ORIGIN = 'CURATED_SOURCE_BANK_324'
+export const TASK_BANK_TITLE = 'Банк задач 8 класса · 324 задачи'
 
 export const TASK_BANK_VERSION_7 = '5.3.0-grade7-calculation-expansion'
 export const TASK_BANK_ORIGIN_7 = 'PERYSHKIN_GRADE7_CURATED_205'
