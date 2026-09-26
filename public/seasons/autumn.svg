@@ -1,11 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 560" fill="none">
-  <defs>
-    <linearGradient id="h" x1="220" y1="210" x2="220" y2="560" gradientUnits="userSpaceOnUse"><stop stop-color="#f5a934" stop-opacity=".02"/><stop offset="1" stop-color="#db762c" stop-opacity=".32"/></linearGradient>
-    <radialGradient id="g"><stop stop-color="#ffcb68" stop-opacity=".34"/><stop offset="1" stop-color="#ff9d36" stop-opacity="0"/></radialGradient>
-  </defs>
-  <ellipse cx="330" cy="320" rx="210" ry="180" fill="url(#g)"/>
-  <path d="M0 380 100 310l54 34 74-120 72 94 64-63 76 70v235H0V380Z" fill="url(#h)"/>
-  <path d="M0 435c72-47 124-38 189 5 69 46 125 25 251-44v164H0V435Z" fill="#10273a" fill-opacity=".88"/>
-  <g stroke="#d88736" stroke-opacity=".53" stroke-width="5" stroke-linecap="round"><path d="M342 560V345m0 63-63-70m63 39 54-77m-54 130 79-40"/><path d="M51 560V390m0 45-43-47m43 24 47-57"/></g>
-  <g fill="#ffb34d" fill-opacity=".8"><path d="m277 338 13-25 16 19-15 15-14-9Zm102-45 14-23 15 20-17 11-12-8ZM25 386l15-20 16 18-15 14-16-12Zm382 91 12-19 14 16-14 13-12-10Z"/><circle cx="103" cy="282" r="3"/><circle cx="239" cy="232" r="2"/><circle cx="381" cy="205" r="3"/><circle cx="160" cy="372" r="2"/></g>
+<defs>
+  <radialGradient id="space" cx="0" cy="0" r="1" gradientTransform="translate(118 420) rotate(-48) scale(290)"><stop stop-color="#173c74" stop-opacity=".76"/><stop offset=".55" stop-color="#0a2145" stop-opacity=".28"/><stop offset="1" stop-color="#04101f" stop-opacity="0"/></radialGradient>
+  <radialGradient id="planet" cx="0" cy="0" r="1" gradientTransform="translate(86 438) rotate(-39) scale(155)"><stop stop-color="#45b6ff"/><stop offset=".38" stop-color="#1659a0"/><stop offset=".72" stop-color="#102b59"/><stop offset="1" stop-color="#071329"/></radialGradient>
+  <linearGradient id="rim" x1="9" y1="340" x2="188" y2="514" gradientUnits="userSpaceOnUse"><stop stop-color="#ffd067"/><stop offset=".35" stop-color="#ff9a32"/><stop offset="1" stop-color="#3d8fff" stop-opacity=".1"/></linearGradient>
+  <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="8"/></filter>
+</defs>
+<rect width="440" height="560" fill="url(#space)"/>
+<g fill="#fff"><circle cx="37" cy="72" r="1.4"/><circle cx="197" cy="66" r="1"/><circle cx="323" cy="128" r="1.5"/><circle cx="389" cy="79" r="1"/><circle cx="258" cy="206" r="1.1"/><circle cx="347" cy="260" r="1.4"/><circle cx="119" cy="238" r="1"/></g>
+<g fill="#ffb347"><circle cx="292" cy="176" r="2.4" filter="url(#glow)"/><circle cx="292" cy="176" r="1.3"/><circle cx="391" cy="216" r="2"/><circle cx="176" cy="169" r="1.5"/></g>
+<path d="M-19 470C76 357 206 309 375 327" stroke="#9b6dff" stroke-opacity=".44" stroke-width="1.5"/>
+<path d="M-8 487C95 372 234 331 430 359" stroke="#ff9f35" stroke-opacity=".64" stroke-width="2"/>
+<circle cx="79" cy="466" r="149" fill="url(#planet)"/>
+<circle cx="79" cy="466" r="149" stroke="url(#rim)" stroke-width="5"/>
+<path d="M-3 425c39-18 73-11 101 8 26 18 53 17 88-5M-15 486c42-12 82-6 113 17 28 21 57 22 91 4" stroke="#4ac0ff" stroke-opacity=".35" stroke-width="6"/>
+<path d="M-26 350C57 327 116 346 182 389" stroke="#ffbc55" stroke-opacity=".5" stroke-width="4"/>
+<g fill="#ff9f2f"><path d="m304 274 14-21 7 19 18 4-17 10-3 20-12-16-19 6 10-16-12-14 14 8Z"/><path d="m231 329 12-18 7 15 16 4-14 8-3 17-11-13-16 5 9-13-10-12 10 7Z"/><path d="m350 372 13-19 7 16 17 4-15 9-3 17-11-14-17 5 9-14-10-12 10 8Z"/><path d="m267 420 11-16 6 14 15 3-13 8-3 15-10-12-14 4 8-12-9-10 9 6Z"/><path d="m399 319 10-15 6 13 14 3-13 8-2 14-10-11-13 4 7-11-8-9 9 4Z"/></g>
+<g fill="#ffd060"><circle cx="320" cy="250" r="2"/><circle cx="245" cy="286" r="1.5"/><circle cx="367" cy="342" r="1.8"/><circle cx="220" cy="386" r="1.4"/></g>
 </svg>
