@@ -25,11 +25,16 @@ test('grade 8 completes Perishkin tasks 916-947',()=>{
   for(let n=916;n<=947;n++)assert.ok(all.some(t=>Number(t.SOURCE?.task_id)===n),`missing ${n}`)
 })
 
-test('grade 7 pack keeps only selected objective/calculation tasks from 1-168',()=>{
-  assert.equal(grade7.length,71)
-  assert.equal(grade7.every(t=>t.CLASS===7&&t.BOOK_TASK_NUMBER>=1&&t.BOOK_TASK_NUMBER<=168),true)
+test('grade 7 pack includes the selected 1-168 set and numerical tasks from 183-347',()=>{
+  assert.equal(grade7.length,142)
+  const original=grade7.filter(t=>t.BOOK_TASK_NUMBER<=168)
+  const added=grade7.filter(t=>t.BOOK_TASK_NUMBER>=183&&t.BOOK_TASK_NUMBER<=347)
+  assert.equal(original.length,71)
+  assert.equal(original.every(t=>t.CLASS===7&&publishable(t)&&t.CHECK.independent&&t.SOLUTION.length===0),true)
+  assert.equal(added.length,71)
+  assert.equal(added.every(t=>t.CLASS===7&&t.TASK_TYPE==='calculation'&&publishable(t)&&t.CHECK.independent&&['numeric','numeric_list'].includes(t.ANSWER.mode)),true)
+  assert.equal(added.some(t=>t.TASK_TYPE==='qualitative'),false)
   assert.equal(grade7.some(t=>t.TASK_TYPE==='qualitative'),false)
-  assert.equal(grade7.every(t=>publishable(t)&&t.CHECK.independent&&t.SOLUTION.length===0),true)
   const t161=grade7.find(t=>t.BOOK_TASK_NUMBER===161)
   assert.equal(t161.TASK.includes('рис'),false)
   assert.equal(t161.DIAGRAM.type,'multi-line-chart')
