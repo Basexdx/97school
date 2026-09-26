@@ -8,15 +8,16 @@ const nextConfig = {
     trailingSlash: true,
     images: { unoptimized: true },
   } : {}),
-  async rewrites() {
-    if (STATIC_BUILD) return []
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${API_ORIGIN}/api/:path*`,
-      },
-    ]
-  },
+  ...(!STATIC_BUILD ? {
+    async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${API_ORIGIN}/api/:path*`,
+        },
+      ]
+    },
+  } : {}),
 }
 
 export default nextConfig
