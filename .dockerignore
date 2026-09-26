@@ -1,0 +1,12 @@
+.git
+.github
+.next
+node_modules
+dist
+.env
+.env.*
+!.env.example
+*.db
+*.db-wal
+*.db-shm
+npm-debug.log*
