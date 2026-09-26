@@ -11,6 +11,7 @@
     "dev:api": "wrangler dev --config wrangler.jsonc --port 8787",
     "prebuild": "npm run bank:build",
     "build": "next build",
+    "build:cloudflare": "node scripts/build-cloudflare.mjs",
     "start": "next start",
     "db:local": "wrangler d1 execute DB --config wrangler.jsonc --local --file=cloudflare/schema.sql --yes",
     "setup:local": "node scripts/setup-local.mjs",
