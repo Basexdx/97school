@@ -1,0 +1,122 @@
+/* Mobile journal + shared readability polish for Cosmic Genius. */
+html.cosmo-genius-restored .student-content p,
+html.cosmo-genius-restored .student-content label,
+html.cosmo-genius-restored .student-content small,
+html.cosmo-genius-restored .student-content td,
+html.cosmo-genius-restored .student-content select,
+html.cosmo-genius-restored .student-content input,
+html.cosmo-genius-restored .student-content textarea{
+  font-weight:400;
+}
+html.cosmo-genius-restored .student-content h1{font-weight:650}
+html.cosmo-genius-restored .student-content h2,
+html.cosmo-genius-restored .student-content h3{font-weight:600}
+html.cosmo-genius-restored .side-nav{font-weight:500!important}
+html.cosmo-genius-restored .bank-tile.viewed:not(.solved){opacity:.86}
+html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
+
+@media(max-width:900px){
+  /* The mobile navigation keeps the same left-side mental model as desktop. */
+  html.cosmo-genius-restored .mobile-nav-toggle{
+    min-height:44px!important;
+    padding:8px 13px!important;
+    font-size:20px!important;
+  }
+  html.cosmo-genius-restored .mobile-nav-toggle span{
+    font-size:14px!important;
+    font-weight:550!important;
+  }
+  html.cosmo-genius-restored .sidebar-light{
+    width:min(304px,86vw)!important;
+    background:
+      radial-gradient(ellipse at 55% 80%,rgba(var(--season-glow-rgb),.12),transparent 48%),
+      linear-gradient(180deg,#041422,#061b2d 72%,#03101c)!important;
+  }
+  html.cosmo-genius-restored .sidebar-light nav .side-nav,
+  html.cosmo-genius-restored .sidebar-light nav .side-nav:nth-child(n+6){
+    min-height:48px!important;
+    padding:11px 12px!important;
+    font-size:15px!important;
+    font-weight:500!important;
+    line-height:1.25!important;
+  }
+  html.cosmo-genius-restored .sidebar-light nav .side-nav span{
+    font-size:18px!important;
+  }
+}
+
+@media(max-width:720px){
+  html.cosmo-genius-restored [class*='gradebookCard']{padding:13px!important}
+  html.cosmo-genius-restored [class*='gradebookHead']{gap:10px!important;margin-bottom:12px!important}
+  html.cosmo-genius-restored [class*='gradebookHead'] h2{
+    font-size:22px!important;
+    font-weight:650!important;
+    line-height:1.2!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookHead'] p{
+    font-size:13px!important;
+    line-height:1.45!important;
+    font-weight:400!important;
+  }
+  html.cosmo-genius-restored [class*='lessonEditor'] select{
+    min-height:42px!important;
+    font-size:14px!important;
+    font-weight:450!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] th{
+    min-width:68px!important;
+    padding:9px 7px!important;
+    font-size:13px!important;
+    font-weight:500!important;
+    line-height:1.25!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] th b{
+    font-size:14px!important;
+    font-weight:600!important;
+    line-height:1.2!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] th small{
+    margin-top:2px!important;
+    font-size:11.5px!important;
+    font-weight:400!important;
+    line-height:1.25!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] td{
+    padding:9px 7px!important;
+    font-size:15px!important;
+    font-weight:400!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] [class*='nameHeader'],
+  html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child{
+    width:200px!important;
+    min-width:200px!important;
+    max-width:200px!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child b{
+    max-width:143px!important;
+    font-size:14.5px!important;
+    font-weight:550!important;
+    line-height:1.3!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] [class*='studentAvatar']{
+    width:30px!important;
+    height:30px!important;
+    font-size:12px!important;
+  }
+  html.cosmo-genius-restored [class*='gradebookWrap'] [class*='markSelect']{
+    min-width:56px!important;
+    min-height:38px!important;
+    padding:7px 5px!important;
+    font-size:15px!important;
+    font-weight:600!important;
+  }
+  html.cosmo-genius-restored [class*='classAnalytics'] h2{
+    font-size:21px!important;
+    font-weight:650!important;
+  }
+  html.cosmo-genius-restored [class*='classAnalytics'] h3,
+  html.cosmo-genius-restored [class*='classAnalytics'] p,
+  html.cosmo-genius-restored [class*='workLegend'] span{
+    font-weight:450!important;
+  }
+}
