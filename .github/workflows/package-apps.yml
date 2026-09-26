@@ -3,7 +3,7 @@ name: Package Genius apps
 on:
   workflow_dispatch:
   push:
-    branches: [dev]
+    branches: [dev, ui/cosmo-reference-cleanup-20260926-v3]
     paths:
       - 'app/**'
       - 'bank/**'
