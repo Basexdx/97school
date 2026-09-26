@@ -4,6 +4,7 @@ import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
 import {bankIdentity,bankAttempts,saveBankAttempt,syncBankAttempts} from './task-store'
 import {useTaskViews} from './task-views'
+import PeryshkinSchematic from './peryshkin-schematics'
 import styles from './grade7-task-bank.module.css'
 
 const difficultyLabels={БАЗОВЫЙ:'Базовый',ПОВЫШЕННЫЙ:'Повышенный',ВЫСОКИЙ:'Высокий'}
@@ -60,7 +61,7 @@ export default function Grade7TaskBank({onXp=()=>{}}){
   const solved=Object.values(taskStates).filter(s=>s.solved).length
   return <div className={styles.page}>
     <section className={styles.hero}>
-      <div><div className={styles.kicker}>GENIUS · ФИЗИКА · 7 КЛАСС</div><h1>Задачи Перышкина</h1><p>Отобраны расчётные задачи, задания с выбором ответа и графиками. Новые задачи по атмосферному давлению добавлены из сборника.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>по темам 7 класса</span><span>без подсказок</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div>
+      <div><div className={styles.kicker}>GENIUS · ФИЗИКА · 7 КЛАСС</div><h1>Задачи Перышкина</h1><p>Числовые задачи из сборника Перышкина распределены по темам 7 класса. Для задач с важными схемами рисунки адаптированы под стиль Cosmic Genius.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>по темам 7 класса</span><span>без подсказок</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div>
     </section>
     {message&&<div className={styles.notice}>{message}</div>}
     <section className={styles.stats}><article><small>Отобрано</small><strong>{index?.tasks.length||'…'}</strong><span>задач</span></article><article><small>Решено</small><strong>{solved}</strong><span>задач</span></article><article><small>Попытки</small><strong>{gradeAttempts.length}</strong><span>в этом классе</span></article><article><small>Источник</small><strong>7</strong><span>класс</span></article></section>
@@ -105,6 +106,7 @@ function AnswerFields({task,value,onChange}){
 }
 
 function Diagram({spec}){
+  if(spec.type==='peryshkin-schematic')return <PeryshkinSchematic spec={spec}/>
   if(['line-chart','multi-line-chart','blank-grid'].includes(spec.type))return <Chart spec={spec}/>
   if(spec.type==='ruler-block')return <div className={styles.visual}><svg viewBox="0 0 700 250" role="img" aria-label={spec.ariaLabel}><rect className={styles.object} x="205" y="55" width="330" height="95" rx="16"/><text x="370" y="112" textAnchor="middle">деревянный брусок</text><line className={styles.axis} x1="80" x2="620" y1="185" y2="185"/>{Array.from({length:91},(_,i)=>i).map(i=>{const v=spec.min+i/10,x=80+i*6;return <g key={i}><line className={styles.tickLine} x1={x} x2={x} y1="185" y2={i%10===0?160:173}/>{i%10===0&&<text className={styles.tickText} x={x} y="220" textAnchor="middle">{Math.round(v)}</text>}</g>})}</svg></div>
   if(spec.type==='graduated-cylinder')return <div className={styles.visual}><svg viewBox="0 0 420 330" role="img" aria-label={spec.ariaLabel}><path className={styles.glass} d="M130 35 H290 V280 Q210 315 130 280 Z"/><path className={styles.water} d={`M136 ${270-(spec.level/spec.max)*220} H284 V276 Q210 304 136 276 Z`}/>{[0,50,100,150,200,250,300].map(v=>{const y=270-(v/spec.max)*220;return <g key={v}><line className={styles.tickLine} x1="270" x2={v%100===0?305:292} y1={y} y2={y}/>{v%100===0&&<text className={styles.tickText} x="315" y={y+6}>{v}</text>}</g>})}<text className={styles.axisLabel} x="210" y="25" textAnchor="middle">мл</text></svg></div>
