@@ -18,6 +18,13 @@ if(!Array.isArray(peryshkin2017)||peryshkin2017.length!==packed.taskCount)throw 
 // Only the new grade-7 range is appended here, so book-task numbers stay unique.
 const newGrade7Calculations=peryshkin2017.filter(task=>task.CLASS===7)
 
+const grade7RangePath=fileURLToPath(new URL('./peryshkin-grade7-560-675.b64.json',import.meta.url))
+const grade7RangePack=JSON.parse(fs.readFileSync(grade7RangePath,'utf8'))
+if(grade7RangePack.encoding!=='gzip+base64'||typeof grade7RangePack.data!=='string'||grade7RangePack.taskCount!==83)throw Error('Invalid Peryshkin grade 7 range pack')
+const grade7Range560675=JSON.parse(zlib.gunzipSync(Buffer.from(grade7RangePack.data,'base64')).toString('utf8'))
+if(!Array.isArray(grade7Range560675)||grade7Range560675.length!==grade7RangePack.taskCount)throw Error('Peryshkin grade 7 range count mismatch')
+if(new Set(grade7Range560675.map(task=>task.BOOK_TASK_NUMBER)).size!==grade7Range560675.length)throw Error('Duplicate task numbers in Peryshkin grade 7 range')
+
 function calculation({grade,number,section,paragraph,topic,task,answer,unit,prompt,difficulty='БАЗОВЫЙ',tolerance}){
   const resolvedTolerance=tolerance??Math.max(.01,Math.abs(answer)*.005)
   return {
@@ -37,6 +44,7 @@ export const grade7Additions=[
   calculation({grade:7,number:440,section:'pressure7',paragraph:20,topic:'Атмосферное давление',task:'На какую высоту может подняться столб воды при нормальном атмосферном давлении? Примите атмосферное давление равным 101 300 Па, плотность воды — 1000 кг/м³, g = 10 Н/кг.',answer:10.13,unit:'м',prompt:'Высота столба воды, м',difficulty:'ПОВЫШЕННЫЙ'}),
   calculation({grade:7,number:441,section:'pressure7',paragraph:20,topic:'Атмосферное давление',task:'С какой силой воздух давит на поверхность стола длиной 1 м и шириной 60 см? Примите атмосферное давление равным 100 000 Па.',answer:60000,unit:'Н',prompt:'Сила давления, Н',tolerance:1}),
   ...newGrade7Calculations,
+  ...grade7Range560675,
 ]
 
 export const grade8Additions=[
