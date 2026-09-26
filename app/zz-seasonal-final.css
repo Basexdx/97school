@@ -33,6 +33,31 @@ html[data-season='summer'].cosmo-genius-restored .sidebar-light{background-image
 html.cosmo-genius-restored .sidebar-light::after{display:none!important}
 html.cosmo-genius-restored .sidebar-light::before{opacity:.16!important}
 html.cosmo-genius-restored .sidebar-light .logout{position:relative;z-index:2;text-shadow:0 1px 8px #020b16;color:#fff}
+/* Keep every label readable where the seasonal illustration passes behind the navigation. */
+@media(min-width:901px){
+  html.cosmo-genius-restored .sidebar-light .side-nav{
+    color:#f1f7ff!important;
+    font-weight:600;
+    text-shadow:0 1px 4px rgba(0,7,17,.9);
+    background:rgba(2,15,29,.77)!important;
+    border-color:rgba(110,182,242,.13);
+  }
+  html.cosmo-genius-restored .sidebar-light .side-nav:hover,
+  html.cosmo-genius-restored .sidebar-light .side-nav:focus-visible{
+    color:#fff!important;
+    background:rgba(10,55,91,.92)!important;
+    border-color:rgba(115,194,255,.48);
+  }
+  html.cosmo-genius-restored .sidebar-light .side-nav.active{
+    background:linear-gradient(90deg,rgba(var(--season-accent-rgb),.27),rgba(4,27,47,.92))!important;
+    border-color:rgba(var(--season-accent-rgb),.55)!important;
+  }
+  html.cosmo-genius-restored .sidebar-light .logout{
+    background:rgba(2,15,29,.8);
+    border-radius:8px;
+    font-weight:600;
+  }
+}
 html.cosmo-genius-restored .student-content{padding:28px 26px 40px!important}
 html.cosmo-genius-restored [class*='gradebookCard']{padding:15px!important}
 html.cosmo-genius-restored [class*='teacherGrid']{grid-template-columns:minmax(0,1fr) 335px!important}
