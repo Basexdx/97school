@@ -1,7 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 560" fill="none">
-  <defs><radialGradient id="g"><stop stop-color="#8bdcff" stop-opacity=".28"/><stop offset="1" stop-color="#55b8ff" stop-opacity="0"/></radialGradient><linearGradient id="h" x1="220" y1="250" x2="220" y2="560" gradientUnits="userSpaceOnUse"><stop stop-color="#78cfff" stop-opacity=".04"/><stop offset="1" stop-color="#337ab0" stop-opacity=".3"/></linearGradient></defs>
-  <ellipse cx="320" cy="310" rx="210" ry="190" fill="url(#g)"/>
-  <path d="m0 425 102-95 75 55 88-145 79 108 96-72v284H0V425Z" fill="url(#h)"/><path d="M0 453c97-47 164-31 222 1 76 42 132 29 218-14v120H0V453Z" fill="#0d263b" fill-opacity=".92"/>
-  <g fill="#a6e5ff" fill-opacity=".77"><circle cx="69" cy="235" r="2"/><circle cx="141" cy="307" r="3"/><circle cx="221" cy="190" r="2"/><circle cx="345" cy="256" r="3"/><circle cx="397" cy="170" r="2"/><circle cx="287" cy="367" r="2"/><circle cx="112" cy="414" r="2"/><circle cx="368" cy="437" r="3"/></g>
-  <g stroke="#82bfdc" stroke-opacity=".5" stroke-width="4"><path d="M52 560V370m0 0-37 51m37-31 37 47m-37-14-31 40m31-24 36 38"/><path d="M372 560V335m0 0-47 61m47-38 48 57m-48-20-40 51m40-28 40 43"/></g>
+<defs>
+  <radialGradient id="space" cx="0" cy="0" r="1" gradientTransform="translate(115 420) rotate(-48) scale(292)"><stop stop-color="#245a96" stop-opacity=".72"/><stop offset=".56" stop-color="#0d2b52" stop-opacity=".3"/><stop offset="1" stop-color="#04101f" stop-opacity="0"/></radialGradient>
+  <radialGradient id="planet" cx="0" cy="0" r="1" gradientTransform="translate(82 441) rotate(-38) scale(154)"><stop stop-color="#8fe8ff"/><stop offset=".35" stop-color="#2f8fd0"/><stop offset=".7" stop-color="#17476f"/><stop offset="1" stop-color="#09182d"/></radialGradient>
+  <linearGradient id="rim" x1="0" y1="337" x2="183" y2="515" gradientUnits="userSpaceOnUse"><stop stop-color="#d9fbff"/><stop offset=".45" stop-color="#76d8ff"/><stop offset="1" stop-color="#1d79ca" stop-opacity=".12"/></linearGradient>
+</defs>
+<rect width="440" height="560" fill="url(#space)"/>
+<g fill="#dff8ff"><circle cx="42" cy="75" r="1.3"/><circle cx="188" cy="55" r="1"/><circle cx="322" cy="112" r="1.4"/><circle cx="391" cy="71" r="1"/><circle cx="267" cy="198" r="1.1"/><circle cx="352" cy="255" r="1.3"/><circle cx="120" cy="226" r="1"/></g>
+<path d="M-18 467C80 352 207 309 376 330" stroke="#70c8ff" stroke-opacity=".46" stroke-width="1.5"/>
+<path d="M-6 486C102 375 245 336 431 360" stroke="#d4f6ff" stroke-opacity=".42" stroke-width="2"/>
+<circle cx="78" cy="466" r="149" fill="url(#planet)"/>
+<circle cx="78" cy="466" r="149" stroke="url(#rim)" stroke-width="5"/>
+<path d="M-10 429c35-15 71-9 100 8 29 18 55 17 91-2M-15 487c44-11 84-5 115 18 27 20 56 20 88 5" stroke="#d4f8ff" stroke-opacity=".42" stroke-width="7"/>
+<g stroke="#e8fbff" stroke-width="2" stroke-linecap="round" opacity=".9"><path d="M310 250v28M296 264h28M301 255l18 18M319 255l-18 18"/><path d="M363 315v24M351 327h24M355 319l16 16M371 319l-16 16"/><path d="M241 336v22M230 347h22M233 339l16 16M249 339l-16 16"/><path d="M390 404v25M377 417h26M381 408l18 18M399 408l-18 18"/><path d="M283 410v20M273 420h20M276 413l14 14M290 413l-14 14"/></g>
+<g fill="#bdeeff"><circle cx="333" cy="228" r="3"/><circle cx="260" cy="281" r="2.5"/><circle cx="401" cy="275" r="2.5"/><circle cx="221" cy="388" r="2"/><circle cx="342" cy="382" r="2"/><circle cx="395" cy="351" r="2"/></g>
 </svg>
