@@ -10,11 +10,17 @@
     respond "User-agent: *\nDisallow: /\n" 200
   }
 
-  handle /api/* {
-    reverse_proxy api:8787
+  handle /_preview/* {
+    reverse_proxy preview:8790
   }
 
   handle {
+    forward_auth preview:8790 {
+      uri /_preview/check
+    }
+
+    @api path /api/*
+    reverse_proxy @api api:8787
     reverse_proxy web:3000
   }
 }
