@@ -67,11 +67,11 @@ function buildGrade7(){
     {paragraph:20,title:'Вес воздуха. Атмосферное давление. Гидравлические механизмы',section:'pressure7'},
     {paragraph:21,title:'Архимедова сила. Плавание тел. Воздухоплавание',section:'pressure7'},
     {paragraph:22,title:'Механическая работа',section:'work7'},
-    {paragraph:23,title:'Мощность',section:'work7'},
-    {paragraph:24,title:'Рычаг. Момент силы',section:'work7'},
-    {paragraph:25,title:'Простые механизмы. Золотое правило механики',section:'work7'},
+    {paragraph:23,title:'Мощность. Единицы мощности',section:'work7'},
+    {paragraph:24,title:'Рычаг. Равновесие сил на рычаге. Рычаги в технике, быту и природе',section:'work7'},
+    {paragraph:25,title:'Применение закона равновесия рычага к блоку. «Золотое правило» механики. Центр тяжести тела',section:'work7'},
     {paragraph:26,title:'Коэффициент полезного действия механизма',section:'work7'},
-    {paragraph:27,title:'Потенциальная и кинетическая энергия',section:'energy7'},
+    {paragraph:27,title:'Энергия. Потенциальная и кинетическая энергия',section:'energy7'},
     {paragraph:28,title:'Превращение одного вида механической энергии в другой',section:'energy7'},
   ]
   const paragraphs=[...new Map([...read('bank/paragraphs-grade7.json'),...extraParagraphs].map(p=>[p.paragraph,p])).values()].sort((a,b)=>a.paragraph-b.paragraph),ids=new Set()
@@ -88,7 +88,7 @@ function buildGrade7(){
   const publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_7))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade7.json',{version:TASK_BANK_VERSION_7,grade:7,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,tasks:publicTasks})
-  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; расчётный отбор 381–559',sourceRanges:[[1,168],[183,347],[381,559]],paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; расчётный отбор 381–675',sourceRanges:[[1,168],[183,347],[381,675]],paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 
