@@ -133,6 +133,46 @@ function rowsForQuery(section,query){
   return section.rows.filter(row=>normalize(row.join(' ')).includes(query))
 }
 
+function mobileTableFor(section){
+  const rows=section.visibleRows||section.rows
+
+  if(section.id==='prefixes'){
+    return {
+      columns:['Приставка','Обозначение и множитель'],
+      rows:rows.flatMap(row=>[
+        [row[0],`${row[1]} · ${row[2]}`],
+        [row[3],`${row[4]} · ${row[5]}`],
+      ]).filter(row=>row[0]||row[1]),
+    }
+  }
+
+  if(section.columns.length===4){
+    return {
+      columns:[section.columns[0],section.columns[1]],
+      rows:rows.flatMap(row=>[
+        [row[0],row[1]],
+        [row[2],row[3]],
+      ]).filter(row=>row[0]||row[1]),
+    }
+  }
+
+  if(section.columns.length===2)return {columns:section.columns,rows}
+
+  return {
+    columns:[section.columns[0],'Значение'],
+    rows:rows.map(row=>[row[0],row.slice(1).filter(Boolean).join(' · ')]),
+  }
+}
+
+function ReferenceTable({sectionId,columns,rows,className=''}){
+  return <div className={`rm-table-wrap ${className}`}>
+    <table>
+      <thead><tr>{columns.map((column,index)=><th key={`${sectionId}-h-${className}-${index}`}>{column}</th>)}</tr></thead>
+      <tbody>{rows.map((row,rowIndex)=><tr key={`${sectionId}-r-${className}-${rowIndex}`}>{row.map((cell,cellIndex)=><td key={`${sectionId}-${className}-${rowIndex}-${cellIndex}`}>{cell||'—'}</td>)}</tr>)}</tbody>
+    </table>
+  </div>
+}
+
 export default function ReferenceMaterials(){
   const [navAnchor,setNavAnchor]=useState(null)
   const [open,setOpen]=useState(false)
@@ -241,6 +281,7 @@ function ReferenceMaterialsPage({onClose}){
       <section className="rm-grid">
         {visible.map(section=>{
           const isOpen=q||expanded.has(section.id)
+          const mobile=mobileTableFor(section)
           return <article key={section.id} className={`rm-card rm-card-${section.id} ${isOpen?'open':''}`}>
             <button className="rm-card-head" type="button" onClick={()=>toggle(section.id)} aria-expanded={Boolean(isOpen)}>
               <span className="rm-card-icon" aria-hidden="true">{section.icon}</span>
@@ -248,12 +289,8 @@ function ReferenceMaterialsPage({onClose}){
               <span className="rm-chevron" aria-hidden="true">⌄</span>
             </button>
             <div className="rm-card-body">
-              <div className="rm-table-wrap">
-                <table>
-                  <thead><tr>{section.columns.map((column,index)=><th key={`${section.id}-h-${index}`}>{column}</th>)}</tr></thead>
-                  <tbody>{section.visibleRows.map((row,rowIndex)=><tr key={`${section.id}-r-${rowIndex}`}>{row.map((cell,cellIndex)=><td key={`${section.id}-${rowIndex}-${cellIndex}`}>{cell||'—'}</td>)}</tr>)}</tbody>
-                </table>
-              </div>
+              <ReferenceTable sectionId={section.id} columns={section.columns} rows={section.visibleRows} className="rm-desktop-table"/>
+              <ReferenceTable sectionId={section.id} columns={mobile.columns} rows={mobile.rows} className="rm-mobile-table"/>
             </div>
           </article>
         })}
