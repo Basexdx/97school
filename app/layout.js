@@ -4,9 +4,11 @@ import './genius-v17-base.css'
 import './genius-v17-reference.css'
 import './genius-v17-lesson.css'
 import './genius-v17-hotfix.css'
+import './cosmo-ui-restore.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
 import GeniusV17Enhancer from './genius-v17-enhancer'
+import CosmoUiCleanup from './cosmo-ui-cleanup'
 
 export const metadata = {
   title: 'Genius — физика, которую понимаешь',
@@ -41,6 +43,7 @@ export default function RootLayout({ children }) {
         <ApiOriginBridge />
         <PwaRegister />
         <GeniusV17Enhancer />
+        <CosmoUiCleanup />
         {children}
       </body>
     </html>
