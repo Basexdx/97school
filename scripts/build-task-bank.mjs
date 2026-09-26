@@ -60,8 +60,8 @@ function buildGrade7(){
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==7) throw Error(`${t.ID}: wrong class`)
-    if(!(Number.isInteger(t.PARAGRAPH)&&t.PARAGRAPH>=1&&t.PARAGRAPH<=7)) throw Error(`${t.ID}: paragraph mismatch`)
-    if(!['intro7','matter7','motion7'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 7 section`)
+    if(!(Number.isInteger(t.PARAGRAPH)&&t.PARAGRAPH>=1&&t.PARAGRAPH<=14)) throw Error(`${t.ID}: paragraph mismatch`)
+    if(!['intro7','matter7','motion7','interaction7','density7','gravity7','elasticity7','forces7'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 7 section`)
     if(t.SOURCE.organization!=='А. В. Перышкин — Сборник задач по физике 7–9 классы'||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
     if(t.TASK_TYPE==='qualitative') throw Error(`${t.ID}: qualitative task must not be published in grade 7 pack`)
   }
@@ -70,7 +70,7 @@ function buildGrade7(){
   const publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_7))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade7.json',{version:TASK_BANK_VERSION_7,grade:7,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,tasks:publicTasks})
-  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168',excludedQualitative:168-live.length,paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347',sourceRanges:[[1,168],[183,347]],excludedQualitative:97,excludedAdditionalRange:94,paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 
