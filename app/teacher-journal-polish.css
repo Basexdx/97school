@@ -56,7 +56,7 @@ html.cosmo-genius-restored [class*='gradebookWrap']::-webkit-scrollbar-track{bac
 html.cosmo-genius-restored [class*='gradebookWrap']::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#1c6fa9,#35a9ed);border:2px solid #06182a;border-radius:999px;box-shadow:none}
 html.cosmo-genius-restored [class*='gradebookWrap']::-webkit-scrollbar-thumb:hover{background:linear-gradient(90deg,#2689ca,#4bbcff)}
 html.cosmo-genius-restored [class*='gradebookWrap'] th{background:#0a2239!important;color:#9eb8d0!important}
-html.cosmo-genius-restored [class*='gradebookWrap'] th:first-child,
+html.cosmo-genius-restored [class*='gradebookWrap'] [class*='nameHeader'],
 html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child{background:#081d31!important}
 html.cosmo-genius-restored [class*='gradebookWrap'] td{background:rgba(5,24,41,.6)}
 
@@ -64,6 +64,9 @@ html.cosmo-genius-restored [class*='classAnalytics']{padding:20px!important;bord
 html.cosmo-genius-restored [class*='classAnalytics'] h2{margin:0 0 12px!important;font-size:27px;letter-spacing:-.02em}
 .cg-class-average{margin:0 0 13px!important;padding:14px 15px!important;border:1px solid rgba(66,162,226,.24)!important;border-radius:16px!important;background:linear-gradient(145deg,rgba(8,40,67,.82),rgba(5,24,43,.76))!important}
 .cg-class-average span,.cg-class-average small{display:block;color:#8ca7c0!important}.cg-class-average span{font-size:12px}.cg-class-average strong{display:block;margin:3px 0 1px;color:#f5f9ff!important;font-size:35px;line-height:1}.cg-class-average small{font-size:10px}
+.cg-class-average[data-tone='high'] strong{color:#55e6a1!important;text-shadow:0 0 18px rgba(66,216,145,.34)}
+.cg-class-average[data-tone='mid'] strong{color:#ffd256!important;text-shadow:0 0 18px rgba(249,192,53,.3)}
+.cg-class-average[data-tone='low'] strong{color:#ff8293!important;text-shadow:0 0 18px rgba(244,92,113,.3)}
 html.cosmo-genius-restored [class*='classAnalytics'] h3{color:#91a9c0!important;font-size:12px!important}
 html.cosmo-genius-restored [class*='classAnalytics'] div>p{grid-template-columns:34px 1fr 44px!important;padding:8px 0!important}
 html.cosmo-genius-restored [class*='classAnalytics'] p .cg-medal{width:30px!important;height:30px!important;border:2px solid rgba(255,255,255,.7);border-radius:50%;font-size:17px!important;font-weight:900;line-height:1!important;box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 3px rgba(255,255,255,.5)}

@@ -30,6 +30,7 @@ function ensureAverage(page){
   const analytics=page.querySelector('[class*="classAnalytics"]'),metrics=page.querySelector('[class*="teacherMetrics"]');if(!analytics||!metrics)return
   const avg=metrics.querySelector('article strong')?.textContent?.trim()||'—';let card=analytics.querySelector('.cg-class-average')
   if(!card){card=document.createElement('div');card.className='cg-class-average';analytics.querySelector('h2')?.insertAdjacentElement('afterend',card)}
+  const number=Number(avg);card.dataset.tone=Number.isFinite(number)?number>=4.6?'high':number>=3.6?'mid':'low':'none'
   const html=`<span>Средний балл по классу</span><strong>${avg}</strong><small>по всем оценкам в журнале</small>`;if(card.innerHTML!==html)card.innerHTML=html
 }
 function ensureMedals(page){
