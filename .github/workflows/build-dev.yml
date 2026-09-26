@@ -32,7 +32,7 @@ jobs:
           node - <<'NODE'
           const fs=require('fs')
           const b7=JSON.parse(fs.readFileSync('public/task-bank/grade7.json'))
-          if(b7.tasks.length!==71) process.exit(1)
+          if(b7.tasks.length!==142) process.exit(1)
           const t161=b7.tasks.find(x=>x.BOOK_TASK_NUMBER===161)
           if(!t161||t161.DIAGRAM?.type!=='multi-line-chart'||/рис/i.test(t161.TASK)) process.exit(1)
           const b9=JSON.parse(fs.readFileSync('public/task-bank/grade9.json'))
@@ -43,5 +43,5 @@ jobs:
           if(second.length!==24) process.exit(1)
           const i8=JSON.parse(fs.readFileSync('public/task-bank/index.json'))
           if(i8.tasks.length!==321) process.exit(1)
-          console.log('Banks OK: grade7=71, grade8=321, grade9=59')
+          console.log('Banks OK: grade7=142, grade8=321, grade9=59')
           NODE
