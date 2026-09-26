@@ -21,6 +21,10 @@ html.cosmo-genius-restored [class*='lessonEditor'] select{height:44px;border:1px
 .cg-calendar-button[aria-expanded='true']{border-color:#65d1ff;box-shadow:0 0 0 2px rgba(68,190,255,.09),0 0 24px rgba(30,163,255,.18)}
 
 .cg-calendar-popover{position:absolute;z-index:70;right:132px;top:76px;width:360px;padding:15px;border:1px solid rgba(72,153,220,.28);border-radius:20px;background:linear-gradient(180deg,rgba(6,26,47,.995),rgba(3,17,31,.995));box-shadow:0 24px 64px rgba(0,0,0,.46),0 0 0 1px rgba(255,255,255,.02);backdrop-filter:blur(18px);color:#eef7ff}
+.cg-calendar-popover[data-break-tone='autumn'],.cg-break-autumn{--holiday-accent:#ffad27;--holiday-rgb:255,173,39}
+.cg-calendar-popover[data-break-tone='winter'],.cg-break-winter{--holiday-accent:#70c9ff;--holiday-rgb:67,163,241}
+.cg-calendar-popover[data-break-tone='spring'],.cg-break-spring{--holiday-accent:#f0a4d0;--holiday-rgb:240,164,208}
+.cg-calendar-popover[data-break-tone='summer'],.cg-break-summer{--holiday-accent:#ffd241;--holiday-rgb:255,210,65}
 .cg-calendar-head{display:grid;grid-template-columns:38px 1fr 38px;align-items:center;gap:8px;margin-bottom:10px}
 .cg-calendar-head strong{text-align:center;font-size:16px}
 .cg-calendar-head button{width:36px;height:36px;border:1px solid rgba(90,151,202,.18);border-radius:10px;background:#071d34;color:#cbe8ff;font-size:23px;cursor:pointer}
@@ -33,7 +37,7 @@ html.cosmo-genius-restored [class*='lessonEditor'] select{height:44px;border:1px
 .cg-calendar-day.lesson{cursor:pointer;border-color:rgba(44,155,236,.22)}
 .cg-calendar-day.lesson:hover{background:#0a2a49;border-color:rgba(69,181,255,.5)}
 .cg-calendar-day.selected{border-color:var(--holiday-accent);box-shadow:inset 0 0 0 1px rgba(var(--holiday-rgb),.36),0 0 16px rgba(var(--holiday-rgb),.18)}
-.cg-calendar-day.holiday{background:linear-gradient(180deg,rgba(var(--holiday-rgb),.24),rgba(var(--holiday-rgb),.11));border-color:rgba(var(--holiday-rgb),.34);color:#fff0bd}
+.cg-calendar-day.holiday{background:linear-gradient(180deg,rgba(var(--holiday-rgb),.24),rgba(var(--holiday-rgb),.11));border-color:rgba(var(--holiday-rgb),.34);color:var(--holiday-accent)}
 .cg-calendar-day i{position:absolute;left:50%;bottom:5px;width:5px;height:5px;border-radius:50%;background:#29aaf5;transform:translateX(-50%);box-shadow:0 0 8px rgba(41,170,245,.65)}
 .cg-calendar-day em{position:absolute;right:3px;bottom:2px;font-size:9px;font-style:normal;color:var(--holiday-accent)}
 .cg-calendar-legend{display:flex;gap:13px;align-items:center;justify-content:center;margin-top:11px;color:#829ab3;font-size:10px}
@@ -62,7 +66,10 @@ html.cosmo-genius-restored [class*='classAnalytics'] h2{margin:0 0 12px!importan
 .cg-class-average span,.cg-class-average small{display:block;color:#8ca7c0!important}.cg-class-average span{font-size:12px}.cg-class-average strong{display:block;margin:3px 0 1px;color:#f5f9ff!important;font-size:35px;line-height:1}.cg-class-average small{font-size:10px}
 html.cosmo-genius-restored [class*='classAnalytics'] h3{color:#91a9c0!important;font-size:12px!important}
 html.cosmo-genius-restored [class*='classAnalytics'] div>p{grid-template-columns:34px 1fr 44px!important;padding:8px 0!important}
-html.cosmo-genius-restored [class*='classAnalytics'] p .cg-medal{width:30px!important;height:30px!important;background:transparent!important;font-size:24px!important;line-height:1!important;filter:drop-shadow(0 2px 5px rgba(0,0,0,.25))}
+html.cosmo-genius-restored [class*='classAnalytics'] p .cg-medal{width:30px!important;height:30px!important;border:2px solid rgba(255,255,255,.7);border-radius:50%;font-size:17px!important;font-weight:900;line-height:1!important;box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 3px rgba(255,255,255,.5)}
+html.cosmo-genius-restored [class*='classAnalytics'] p .cg-medal[data-place='1']{background:radial-gradient(circle at 32% 25%,#fff7a3,#ffc128 50%,#b87300)!important;border-color:#ffdf65;color:#402000!important}
+html.cosmo-genius-restored [class*='classAnalytics'] p .cg-medal[data-place='2']{background:radial-gradient(circle at 32% 25%,#fff,#c8d4dc 50%,#708394)!important;border-color:#edf4f8;color:#25313e!important}
+html.cosmo-genius-restored [class*='classAnalytics'] p .cg-medal[data-place='3']{background:radial-gradient(circle at 32% 25%,#ffdfae,#d98748 50%,#9b4a1c)!important;border-color:#f5b881;color:#3f210f!important}
 html.cosmo-genius-restored [class*='classAnalytics'] p b{color:#f0f6fb!important;font-size:13px}
 html.cosmo-genius-restored [class*='classAnalytics'] p em{color:#eef7ff!important;font-size:13px}
 html.cosmo-genius-restored [class*='workLegend'] span{font-size:10px!important;padding:6px 9px!important}

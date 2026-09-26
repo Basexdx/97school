@@ -84,9 +84,13 @@
 .gradebookWrap th b{white-space:nowrap}
 .gradebookWrap th small{margin-top:4px}
 .gradebookWrap .breakBands th{height:29px;padding:2px 0;border:0;background:transparent!important;box-shadow:none!important}
-.gradebookWrap .breakBands .breakBand{border:1px solid rgba(255,185,40,.4)!important;border-radius:12px;background:linear-gradient(90deg,#6d3b0b,#bd850d,#6d3b0b)!important;color:#ffe199!important;font-size:12px;white-space:nowrap}
-.gradebookWrap .holidayHead{background:rgba(115,75,10,.56)!important;color:#ffd45b!important;box-shadow:inset 0 3px #e7a523}
-.gradebookWrap .holidayCell{background:rgba(96,64,13,.38)!important;color:#e0a321;font-size:15px}
+.holidayAutumn{--break-rgb:166,105,14;--break-accent:#ffca48;--break-band:#a66e10}
+.holidayWinter{--break-rgb:31,112,190;--break-accent:#a7dfff;--break-band:#246cba}
+.holidaySpring{--break-rgb:171,56,135;--break-accent:#ffbded;--break-band:#ad478e}
+.holidaySummer{--break-rgb:176,140,18;--break-accent:#ffdd60;--break-band:#b49a1b}
+.gradebookWrap .breakBands .breakBand{border:1px solid rgba(var(--break-rgb),.72)!important;border-radius:12px;background:linear-gradient(90deg,rgba(var(--break-rgb),.55),var(--break-band),rgba(var(--break-rgb),.55))!important;color:#fff!important;font-size:12px;white-space:nowrap}
+.gradebookWrap .holidayHead{background:rgba(var(--break-rgb),.46)!important;color:var(--break-accent)!important;box-shadow:inset 0 3px var(--break-accent)}
+.gradebookWrap .holidayCell{background:rgba(var(--break-rgb),.27)!important;color:var(--break-accent);font-size:15px}
 .gradebookWrap .holidayCell::first-letter{filter:sepia(1)}
 .gradebookWrap .markSelect{min-width:44px;max-width:52px;padding:6px 2px}
 .classAnalytics{display:block}

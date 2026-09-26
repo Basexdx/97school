@@ -38,7 +38,7 @@ html.cosmo-genius-restored [class*='teacherGrid']{grid-template-columns:minmax(0
 html.cosmo-genius-restored [class*='gradebookHead'] h2{font-size:26px}
 html.cosmo-genius-restored [class*='classAnalytics']{padding:17px!important}
 html.cosmo-genius-restored [class*='classAnalytics'] h2{font-size:24px}
-html.cosmo-genius-restored [class*='gradebookWrap'] .holidayHead{background:rgba(115,75,10,.56)!important;color:#ffd45b!important}
-html.cosmo-genius-restored [class*='gradebookWrap'] .holidayCell{background:rgba(96,64,13,.38)!important}
+html.cosmo-genius-restored [class*='gradebookWrap'] [class*='holidayHead']{background:rgba(var(--break-rgb),.46)!important;color:var(--break-accent)!important}
+html.cosmo-genius-restored [class*='gradebookWrap'] [class*='holidayCell']{background:rgba(var(--break-rgb),.27)!important}
 @media(max-width:1100px){html.cosmo-genius-restored [class*='teacherGrid']{grid-template-columns:1fr!important}}
 @media(max-width:900px){html.cosmo-genius-restored .student-app{display:block}html.cosmo-genius-restored .sidebar-light{width:auto;background:#031321!important}html.cosmo-genius-restored .student-content{padding:16px 12px 88px!important}}
