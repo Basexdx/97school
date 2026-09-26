@@ -1,0 +1,20 @@
+/* Final visual alignment for approved Cosmic Genius seasonal sidebar. */
+html.cosmo-genius-restored .sidebar-light::after{
+  height:min(55vh,520px)!important;
+  opacity:.96!important;
+  background-image:var(--season-art)!important;
+  background-repeat:no-repeat!important;
+  background-position:left bottom!important;
+  background-size:118% auto!important;
+  mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 100%)!important;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 100%)!important;
+  filter:saturate(1.08) contrast(1.03);
+}
+html.cosmo-genius-restored .sidebar-light::before{
+  opacity:.34!important;
+}
+html[data-season='autumn'].cosmo-genius-restored .sidebar-light::after{background-position:-28px bottom!important;background-size:126% auto!important}
+html[data-season='winter'].cosmo-genius-restored .sidebar-light::after{background-position:-20px bottom!important;background-size:125% auto!important}
+html[data-season='spring'].cosmo-genius-restored .sidebar-light::after{background-position:-22px bottom!important;background-size:126% auto!important}
+html[data-season='summer'].cosmo-genius-restored .sidebar-light::after{background-position:-22px bottom!important;background-size:126% auto!important}
+@media(max-width:900px){html.cosmo-genius-restored .sidebar-light::after{display:none!important}}
