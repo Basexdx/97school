@@ -4,6 +4,7 @@ import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
 import {formatBytes} from './offline-db'
 import {bankIdentity,bankIndex,bankAttempts,loadBankTask,downloadBankPackage,saveBankAttempt,syncBankAttempts} from './task-store'
+import {useTaskViews} from './task-views'
 import MatchingTaskFields,{emptyMatchingAnswer,matchingAnswerReady} from './matching-task'
 
 const sections={thermal:'Тепловые явления',electric:'Электрические явления',extra8:'Электромагнитные и световые явления'}
@@ -23,6 +24,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
   const [section,setSection]=useState(''),[paragraph,setParagraph]=useState(''),[topic,setTopic]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[progress,setProgress]=useState(''),[query,setQuery]=useState('')
   const [task,setTask]=useState(null),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[online,setOnline]=useState(true)
   const [restoreTaskId,setRestoreTaskId]=useState('')
+  const {viewed,markViewed}=useTaskViews(student?.id)
 
   async function reload(sync=false) {
     try {
@@ -88,7 +90,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
     setRestoreTaskId(id)
     try{sessionStorage.setItem(BANK_POSITION_KEY,JSON.stringify({taskId:id,section,paragraph,topic,difficulty,type,progress,query,scrollY:window.scrollY}))}catch{}
   }
-  async function open(id){rememberPosition(id);setBusy(true);setMessage('');try{setTask(await loadBankTask(id,index.version))}catch(e){setMessage(e.message)}finally{setBusy(false)}}
+  async function open(id){rememberPosition(id);setBusy(true);setMessage('');try{setTask(await loadBankTask(id,index.version));markViewed(id)}catch(e){setMessage(e.message)}finally{setBusy(false)}}
   function backToBank(){const id=task?.ID||restoreTaskId;rememberPosition(id);setTask(null)}
   async function download(kind,value){setBusy(true);setMessage('');try{const result=await downloadBankPackage(index,kind,value);await refreshOffline();setMessage(`Готово: скачано ${result.count} задач · ${formatBytes(result.sizeBytes)}.`)}catch(e){setMessage(e.message)}finally{setBusy(false)}}
   async function submit(t,answer){
@@ -144,7 +146,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 
     <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!paragraph||busy||!online} onClick={()=>download('paragraph',paragraph)}>⇩ Скачать тему {paragraph&&`· ${formatBytes(index.tasks.filter(t=>t.paragraph===Number(paragraph)).reduce((a,t)=>a+t.bytes,0))}`}</button><button disabled={!section||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
 
-    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><div className="bank-tile-top"><span>{locationLabel(t)}</span><span>{t.xp} XP</span></div><h2>{t.topic}</h2><p>{typeLabels[t.type]||t.type} · {difficultyLabels[t.difficulty]||t.difficulty.toLowerCase()}</p><div className="bank-tile-meta"><span>{state?.count?`${state.count} попыт.`:'Новая'}</span>{state?.pending&&<span className="pending">SYNC</span>}</div><footer>{state?.repeat?'↻ Повторить':state?.solved?'✓ Решено':'Начать решение →'}</footer></button>})}</div>
+    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${viewed.has(t.id)?'viewed':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><div className="bank-tile-top"><span>{locationLabel(t)}</span><span>{t.xp} XP</span></div><h2>{t.topic}</h2><p>{typeLabels[t.type]||t.type} · {difficultyLabels[t.difficulty]||t.difficulty.toLowerCase()}</p><div className="bank-tile-meta"><span>{state?.solved?'Решено':viewed.has(t.id)?'Просмотрено':state?.count?`${state.count} попыт.`:'Новая'}</span>{state?.pending&&<span className="pending">SYNC</span>}</div><footer>{state?.repeat?'↻ Повторить':state?.solved?'✓ Решено':'Начать решение →'}</footer></button>})}</div>
     {index&&!rows.length&&<div className="bank-empty"><span>⌕</span><h2>Ничего не найдено</h2><p>Измени фильтры или вернись ко всему банку задач.</p><button onClick={resetFilters}>Показать все задачи</button></div>}
   </div>
 }

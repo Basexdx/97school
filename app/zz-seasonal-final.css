@@ -70,3 +70,60 @@ html.cosmo-genius-restored [class*='gradebookWrap'] [class*='holidayHead']{backg
 html.cosmo-genius-restored [class*='gradebookWrap'] [class*='holidayCell']{background:rgba(var(--break-rgb),.27)!important}
 @media(max-width:1100px){html.cosmo-genius-restored [class*='teacherGrid']{grid-template-columns:1fr!important}}
 @media(max-width:900px){html.cosmo-genius-restored .student-app{display:block}html.cosmo-genius-restored .sidebar-light{width:auto;background:#031321!important}html.cosmo-genius-restored .student-content{padding:16px 12px 88px!important}}
+
+.mobile-nav-toggle,.mobile-nav-backdrop{display:none}
+@media(max-width:900px){
+  html.cosmo-genius-restored .mobile-nav-toggle{
+    position:fixed;display:flex;align-items:center;gap:9px;top:12px;left:12px;z-index:62;
+    min-height:42px;padding:7px 13px;border:1px solid rgba(111,183,244,.42);border-radius:12px;
+    background:#09233b;color:#f4f9ff;box-shadow:0 7px 22px rgba(0,0,0,.3);
+    font-size:21px;line-height:1;
+  }
+  html.cosmo-genius-restored .mobile-nav-toggle span{font-size:14px;font-weight:600}
+  html.cosmo-genius-restored .mobile-nav-backdrop{position:fixed;display:block;inset:0;z-index:59;background:rgba(1,8,17,.68)}
+  html.cosmo-genius-restored .sidebar-light{
+    position:fixed;inset:0 auto 0 0;z-index:60;width:min(300px,84vw)!important;
+    height:100dvh;min-height:0;display:flex;flex-direction:column;align-items:stretch;
+    padding:74px 14px 20px;overflow-y:auto;border-right:1px solid rgba(111,183,244,.28);
+    border-top:0;background:#051729!important;transform:translateX(-105%);
+    visibility:hidden;transition:transform .2s ease,visibility .2s ease;
+  }
+  html.cosmo-genius-restored .sidebar-light.mobile-nav-open{transform:translateX(0);visibility:visible}
+  html.cosmo-genius-restored .sidebar-light nav{
+    height:auto;display:flex;flex-direction:column;gap:6px;overflow:visible;
+  }
+  html.cosmo-genius-restored .sidebar-light nav .side-nav,
+  html.cosmo-genius-restored .sidebar-light nav .side-nav:nth-child(n+6){
+    display:flex!important;flex:0 0 auto;width:100%;min-height:46px;justify-content:flex-start;
+    flex-direction:row;gap:12px;padding:10px 12px;font-size:15px;
+    font-weight:550;white-space:normal;text-align:left;
+  }
+  html.cosmo-genius-restored .sidebar-light nav .side-nav span{width:22px;font-size:19px}
+  html.cosmo-genius-restored .sidebar-light .brand-lockup{display:flex;margin:0 9px 22px}
+  html.cosmo-genius-restored .sidebar-light .logout{display:block;margin-top:auto;color:#e2efff}
+  html.cosmo-genius-restored .student-content{padding:68px 12px 36px!important}
+}
+@media(prefers-reduced-motion:reduce){html.cosmo-genius-restored .sidebar-light{transition:none}}
+
+/* More comfortable reading weight throughout the app, without changing the task card layout. */
+html.cosmo-genius-restored .student-app{font-weight:400}
+html.cosmo-genius-restored .student-content p,
+html.cosmo-genius-restored .student-content label{line-height:1.55}
+html.cosmo-genius-restored .student-content h1,
+html.cosmo-genius-restored .student-content h2{font-weight:700}
+html.cosmo-genius-restored .bank-tile.viewed:not(.solved){
+  background:linear-gradient(145deg,#0c2035,#0a192b)!important;
+  border-color:rgba(124,161,196,.3)!important;
+}
+html.cosmo-genius-restored .bank-tile.viewed:not(.solved) h2{color:#d5e1ee;font-weight:650}
+html.cosmo-genius-restored .bank-task-text{font-weight:400;line-height:1.65}
+@media(max-width:720px){
+  html.cosmo-genius-restored [class*='gradebookWrap'] th{font-size:12px!important}
+  html.cosmo-genius-restored [class*='gradebookWrap'] th b{font-size:13px}
+  html.cosmo-genius-restored [class*='gradebookWrap'] th small{font-size:11px}
+  html.cosmo-genius-restored [class*='gradebookWrap'] td{font-size:14px}
+  html.cosmo-genius-restored [class*='gradebookWrap'] [class*='nameHeader'],
+  html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child{min-width:190px;max-width:190px;width:190px}
+  html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child b{max-width:135px;font-weight:600}
+  html.cosmo-genius-restored [class*='gradebookWrap'] [class*='markSelect']{font-size:15px;min-height:35px}
+}

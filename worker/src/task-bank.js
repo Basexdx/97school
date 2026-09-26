@@ -2,10 +2,11 @@ import tasks8 from '../../bank/tasks.json'
 import tasks8extra from '../../bank/tasks-grade8-additions.json'
 import tasks7 from '../../bank/tasks-grade7.json'
 import tasks9 from '../../bank/tasks-grade9.json'
+import {grade7Additions,grade8Additions,grade9Additions} from '../../bank/peryshkin-additions.mjs'
 import {checkAnswer,publishable} from '../../shared/task-checker.mjs'
 import {TASK_BANK_VERSION,TASK_BANK_VERSION_7,TASK_BANK_VERSION_9} from '../../shared/task-bank-meta.mjs'
 
-const allTasks=[...tasks8,...tasks8extra,...tasks7,...tasks9]
+const allTasks=[...tasks8,...tasks8extra,...grade8Additions,...tasks7,...grade7Additions,...tasks9,...grade9Additions]
 const byId=new Map(allTasks.filter(publishable).map(t=>[t.ID,t]))
 const versionForGrade=grade=>Number(grade)===7?TASK_BANK_VERSION_7:Number(grade)===9?TASK_BANK_VERSION_9:TASK_BANK_VERSION
 const gradeSql="CASE WHEN task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END"

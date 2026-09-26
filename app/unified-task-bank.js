@@ -25,9 +25,9 @@ export default function UnifiedTaskBank({initialGrade=7,onXp=()=>{},refreshOffli
     <header className="task-grade-switch">
       <div><strong>Банк задач</strong><span>Школьные задачи и отдельный раздел подготовки к ОГЭ</span></div>
       <div role="tablist" aria-label="Раздел банка задач">
-        <button role="tab" aria-selected={grade===7} className={grade===7?'active':''} onClick={()=>chooseGrade(7)}><b>7 класс</b><small>71 задача</small></button>
-        <button role="tab" aria-selected={grade===8} className={grade===8?'active':''} onClick={()=>chooseGrade(8)}><b>8 класс</b><small>321 задача</small></button>
-        <button role="tab" aria-selected={grade===9} className={grade===9?'active':''} onClick={()=>chooseGrade(9)}><b>9 класс</b><small>59 задач</small></button>
+        <button role="tab" aria-selected={grade===7} className={grade===7?'active':''} onClick={()=>chooseGrade(7)}><b>7 класс</b><small>145 задач</small></button>
+        <button role="tab" aria-selected={grade===8} className={grade===8?'active':''} onClick={()=>chooseGrade(8)}><b>8 класс</b><small>324 задачи</small></button>
+        <button role="tab" aria-selected={grade===9} className={grade===9?'active':''} onClick={()=>chooseGrade(9)}><b>9 класс</b><small>65 задач</small></button>
         <button role="tab" aria-selected={grade==='oge'} className={grade==='oge'?'active':''} onClick={()=>chooseGrade('oge')}><b>ОГЭ</b><small>65 задач</small></button>
       </div>
     </header>

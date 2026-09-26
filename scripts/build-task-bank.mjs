@@ -3,6 +3,7 @@ import path from 'node:path'
 import {fileURLToPath} from 'node:url'
 import {publishable,TASK_TYPES} from '../shared/task-checker.mjs'
 import {enrichMatchingTask,matchingAnswerValues,matchingParts} from '../shared/matching-utils.mjs'
+import {grade7Additions,grade8Additions,grade9Additions} from '../bank/peryshkin-additions.mjs'
 import {TASK_BANK_ORIGIN,TASK_BANK_TITLE,TASK_BANK_VERSION,TASK_BANK_ORIGIN_7,TASK_BANK_TITLE_7,TASK_BANK_VERSION_7,TASK_BANK_ORIGIN_9,TASK_BANK_TITLE_9,TASK_BANK_VERSION_9} from '../shared/task-bank-meta.mjs'
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'))
@@ -35,7 +36,7 @@ function toPublicTask(t,version){
 }
 
 function buildGrade8(){
-  const tasks=[...read('bank/tasks.json'),...read('bank/tasks-grade8-additions.json')],paragraphs=read('bank/paragraphs.json'),ids=new Set()
+  const tasks=[...read('bank/tasks.json'),...read('bank/tasks-grade8-additions.json'),...grade8Additions],paragraphs=read('bank/paragraphs.json'),ids=new Set()
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==8) throw Error(`${t.ID}: wrong class`)
@@ -56,12 +57,12 @@ function buildGrade8(){
 }
 
 function buildGrade7(){
-  const tasks=read('bank/tasks-grade7.json'),paragraphs=read('bank/paragraphs-grade7.json'),ids=new Set()
+  const tasks=[...read('bank/tasks-grade7.json'),...grade7Additions],paragraphs=[...read('bank/paragraphs-grade7.json'),{paragraph:20,title:'Вес воздуха. Атмосферное давление',section:'pressure7'}],ids=new Set()
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==7) throw Error(`${t.ID}: wrong class`)
-    if(!(Number.isInteger(t.PARAGRAPH)&&t.PARAGRAPH>=1&&t.PARAGRAPH<=14)) throw Error(`${t.ID}: paragraph mismatch`)
-    if(!['intro7','matter7','motion7','interaction7','density7','gravity7','elasticity7','forces7'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 7 section`)
+    if(!(Number.isInteger(t.PARAGRAPH)&&((t.PARAGRAPH>=1&&t.PARAGRAPH<=14)||t.PARAGRAPH===20))) throw Error(`${t.ID}: paragraph mismatch`)
+    if(!['intro7','matter7','motion7','interaction7','density7','gravity7','elasticity7','forces7','pressure7'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 7 section`)
     if(t.SOURCE.organization!=='А. В. Перышкин — Сборник задач по физике 7–9 классы'||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
     if(t.TASK_TYPE==='qualitative') throw Error(`${t.ID}: qualitative task must not be published in grade 7 pack`)
   }
@@ -70,16 +71,16 @@ function buildGrade7(){
   const publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_7))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade7.json',{version:TASK_BANK_VERSION_7,grade:7,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,tasks:publicTasks})
-  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347',sourceRanges:[[1,168],[183,347]],excludedQualitative:97,excludedAdditionalRange:94,paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; 439–441',sourceRanges:[[1,168],[183,347],[439,441]],excludedQualitative:97,excludedAdditionalRange:94,paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 
 function buildGrade9(){
-  const tasks=read('bank/tasks-grade9.json'),ids=new Set(),allowedParagraphs=new Set([51,52,53,54,57])
+  const tasks=[...read('bank/tasks-grade9.json'),...grade9Additions],ids=new Set(),allowedParagraphs=new Set([51,52,53,54,57,61])
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==9) throw Error(`${t.ID}: wrong class`)
-    if(t.SECTION!=='kinematics9') throw Error(`${t.ID}: unknown grade 9 section`)
+    if(!['kinematics9','oscillations9'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 9 section`)
     if(!allowedParagraphs.has(t.PARAGRAPH)) throw Error(`${t.ID}: paragraph mismatch`)
     if(!Number.isInteger(t.BOOK_TASK_NUMBER)) throw Error(`${t.ID}: missing book number`)
     if(t.SOURCE.organization!=='А. В. Перышкин — Сборник задач по физике 7–9 классы'||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
@@ -91,7 +92,7 @@ function buildGrade9(){
   const live=tasks.filter(publishable),publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_9))
   const paragraphs=[...new Map(live.map(t=>[t.PARAGRAPH,{paragraph:t.PARAGRAPH,title:t.TOPIC,section:t.SECTION}])).values()].sort((a,b)=>a.paragraph-b.paragraph).map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade9.json',{version:TASK_BANK_VERSION_9,grade:9,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,tasks:publicTasks})
-  write('public/task-bank/index-grade9.json',{version:TASK_BANK_VERSION_9,grade:9,complete:true,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,sourceRanges:['1404–1513: числовой отбор без построения графиков','1588–1611: полный блок'],paragraphs,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade9.json',{version:TASK_BANK_VERSION_9,grade:9,complete:true,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,sourceRanges:['1404–1513: числовой отбор без построения графиков','1588–1611: полный блок','1717–1720: период и частота колебаний'],paragraphs,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 

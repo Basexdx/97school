@@ -3,6 +3,7 @@
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
 import {bankIdentity,bankAttempts,saveBankAttempt,syncBankAttempts} from './task-store'
+import {useTaskViews} from './task-views'
 import styles from './grade7-task-bank.module.css'
 
 const difficultyLabels={БАЗОВЫЙ:'Базовый',ПОВЫШЕННЫЙ:'Повышенный',ВЫСОКИЙ:'Высокий'}
@@ -14,6 +15,7 @@ const answerState=a=>a?.status==='CONFIRMED'?a.result?.correct:a?.localResult?.c
 export default function Grade9TaskBank({onXp=()=>{}}){
   const [bank,setBank]=useState(null),[index,setIndex]=useState(null),[student,setStudent]=useState(null),[attempts,setAttempts]=useState([])
   const [taskId,setTaskId]=useState(null),[paragraph,setParagraph]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState(''),[restoreTaskId,setRestoreTaskId]=useState('')
+  const {viewed,markViewed}=useTaskViews(student?.id)
 
   async function reloadAttempts(owner){setAttempts(await bankAttempts(owner))}
   useEffect(()=>{let live=true;try{const saved=JSON.parse(sessionStorage.getItem(POSITION_KEY)||'null');if(saved){setParagraph(saved.paragraph||'');setDifficulty(saved.difficulty||'');setType(saved.type||'');setQuery(saved.query||'');setRestoreTaskId(saved.taskId||'')}}catch{};(async()=>{try{
@@ -32,14 +34,14 @@ export default function Grade9TaskBank({onXp=()=>{}}){
 
   useEffect(()=>{if(current||!index||!restoreTaskId)return;const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById(`grade9-task-${restoreTaskId}`)?.scrollIntoView({block:'center',behavior:'auto'})));return()=>cancelAnimationFrame(frame)},[current,index,filtered.length,restoreTaskId])
   function rememberPosition(id){setRestoreTaskId(id);try{sessionStorage.setItem(POSITION_KEY,JSON.stringify({taskId:id,paragraph,difficulty,type,query}))}catch{}}
-  function openTask(id){rememberPosition(id);setTaskId(id)}
+  function openTask(id){markViewed(id);rememberPosition(id);setTaskId(id)}
   function backToBank(){rememberPosition(current?.ID||restoreTaskId);setTaskId(null)}
   async function submit(task,answer){const checked=checkAnswer(task,answer);await saveBankAttempt(student?.id,task,answer,checked);await reloadAttempts(student?.id);if(student&&navigator.onLine){try{const sync=await syncBankAttempts();if(Number.isFinite(sync.totalXp))onXp(sync.totalXp);await reloadAttempts(student.id)}catch(e){setMessage(e.message)}}return checked}
 
   if(current)return <Grade9TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={backToBank} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={openTask} position={navPos+1} total={nav.length} student={student}/>
   const solved=Object.values(taskStates).filter(s=>s.solved).length
   return <div className={styles.page}>
-    <section className={styles.hero}><div><div className={styles.kicker}>GENIUS · ФИЗИКА · 9 КЛАСС</div><h1>Задачи Перышкина</h1><p>Числовые задачи по кинематике без сложных построений из №1404–1513 и полный блок №1588–1611.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>№1404–1513</span><span>№1588–1611</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div></section>
+    <section className={styles.hero}><div><div className={styles.kicker}>GENIUS · ФИЗИКА · 9 КЛАСС</div><h1>Задачи Перышкина</h1><p>Кинематика и колебания: расчётные задачи из сборника Перышкина с проверкой числовых ответов.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>кинематика</span><span>колебания</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div></section>
     {message&&<div className={styles.notice}>{message}</div>}
     <section className={styles.stats}><article><small>Отобрано</small><strong>{index?.tasks.length||'…'}</strong><span>задач</span></article><article><small>Решено</small><strong>{solved}</strong><span>задач</span></article><article><small>Попытки</small><strong>{gradeAttempts.length}</strong><span>в этом классе</span></article><article><small>Источник</small><strong>9</strong><span>класс</span></article></section>
     <div className={styles.filterDock}><section className={styles.filters}>
@@ -50,7 +52,7 @@ export default function Grade9TaskBank({onXp=()=>{}}){
       <button onClick={()=>{setParagraph('');setDifficulty('');setType('');setQuery('')}}>Сбросить</button>
     </section></div>
     <div className={styles.summary}><span><b>{filtered.length}</b> задач</span><span>1-я попытка — полный XP · 2-я — 70% · 3-я — 40% · далее — 20%</span></div>
-    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade9-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><div className={styles.tileTop}><span>Задача {item.bookNumber}</span><span>{state.solved?'✓':`${next} XP`}</span></div><h2>{item.topic}</h2><p>{typeLabels[item.type]||item.type} · {difficultyLabels[item.difficulty]}</p><footer><span>{state.count?`${state.count} попыт.`:'Новая'}</span><b>{state.solved?'Решено':'Открыть →'}</b></footer></button>})}</section>
+    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade9-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${viewed.has(item.id)?styles.viewed:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><div className={styles.tileTop}><span>Задача {item.bookNumber}</span><span>{state.solved?'✓':`${next} XP`}</span></div><h2>{item.topic}</h2><p>{typeLabels[item.type]||item.type} · {difficultyLabels[item.difficulty]}</p><footer><span>{state.solved?'Решено':viewed.has(item.id)?'Просмотрено':state.count?`${state.count} попыт.`:'Новая'}</span><b>{state.solved?'Решено':'Открыть →'}</b></footer></button>})}</section>
   </div>
 }
 

@@ -254,16 +254,22 @@ function TeacherLogin({ setScreen }) {
 }
 
 function Sidebar({ screen, setScreen, grade, setGrade }) {
+  const [menuOpen,setMenuOpen]=useState(false)
+  const navigate=key=>{if(key==='oge'&&grade!==9)setGrade(9);setScreen(key);setMenuOpen(false)}
   return (
-    <aside className="sidebar-light">
+    <>
+      <button type="button" className="mobile-nav-toggle" aria-controls="student-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
+      {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
+    <aside className={`sidebar-light ${menuOpen?'mobile-nav-open':''}`}>
       <Brand dark onClick={() => setScreen('home')} />
-      <nav>
+      <nav id="student-sidebar-nav" aria-label="Разделы ученика">
         {navItems.map(([key, icon, label]) => (
-          <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => {if(key==='oge'&&grade!==9)setGrade(9);setScreen(key)}}><span>{icon}</span>{label}</button>
+          <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => navigate(key)}><span>{icon}</span>{label}</button>
         ))}
       </nav>
       <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
     </aside>
+    </>
   )
 }
 
@@ -783,6 +789,8 @@ function Profile({ grade, setGrade, xp }) {
 
 function TeacherDashboard({ setScreen, request, setRequest }) {
   const [tab, setTab] = useState(request?.status === 'PENDING' ? 'requests' : 'classes')
+  const [menuOpen,setMenuOpen]=useState(false)
+  const chooseTab=value=>{setTab(value);setMenuOpen(false)}
   const pendingCount = request?.status === 'PENDING' ? 1 : 0
 
   function approveRequest() {
@@ -796,15 +804,17 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
   }
 
   return <div className="student-app">
-    <aside className="sidebar-light">
+    <button type="button" className="mobile-nav-toggle" aria-controls="teacher-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
+    {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
+    <aside className={`sidebar-light ${menuOpen?'mobile-nav-open':''}`}>
       <Brand dark onClick={() => setTab('classes')} />
-      <nav>
-        <button className={`side-nav ${tab === 'classes' ? 'active' : ''}`} onClick={() => setTab('classes')}><span>▦</span>Мои классы</button>
-        <button className={`side-nav ${tab === 'academic' ? 'active' : ''}`} onClick={() => setTab('academic')}><span>▤</span>Дневник и ДЗ</button>
-        <button className={`side-nav ${tab === 'requests' ? 'active' : ''}`} onClick={() => setTab('requests')}><span>◎</span>Запросы {pendingCount > 0 && <b className="nav-badge">{pendingCount}</b>}</button>
-        <button className={`side-nav ${tab === 'keys' ? 'active' : ''}`} onClick={() => setTab('keys')}><span>⌁</span>Ключи доступа</button>
-        <button className={`side-nav ${tab === 'results' ? 'active' : ''}`} onClick={() => setTab('results')}><span>▣</span>Результаты</button>
-        <button className={`side-nav ${tab === 'bank' ? 'active' : ''}`} onClick={() => setTab('bank')}><span>◇</span>Банк задач</button>
+      <nav id="teacher-sidebar-nav" aria-label="Разделы учителя">
+        <button className={`side-nav ${tab === 'classes' ? 'active' : ''}`} onClick={() => chooseTab('classes')}><span>▦</span>Мои классы</button>
+        <button className={`side-nav ${tab === 'academic' ? 'active' : ''}`} onClick={() => chooseTab('academic')}><span>▤</span>Дневник и ДЗ</button>
+        <button className={`side-nav ${tab === 'requests' ? 'active' : ''}`} onClick={() => chooseTab('requests')}><span>◎</span>Запросы {pendingCount > 0 && <b className="nav-badge">{pendingCount}</b>}</button>
+        <button className={`side-nav ${tab === 'keys' ? 'active' : ''}`} onClick={() => chooseTab('keys')}><span>⌁</span>Ключи доступа</button>
+        <button className={`side-nav ${tab === 'results' ? 'active' : ''}`} onClick={() => chooseTab('results')}><span>▣</span>Результаты</button>
+        <button className={`side-nav ${tab === 'bank' ? 'active' : ''}`} onClick={() => chooseTab('bank')}><span>◇</span>Банк задач</button>
       </nav>
       <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
     </aside>

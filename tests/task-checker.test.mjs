@@ -3,10 +3,25 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {checkAnswer,numericValue,publishable} from '../shared/task-checker.mjs'
 import {enrichMatchingTask,matchingAnswerValues,matchingParts} from '../shared/matching-utils.mjs'
+import {grade7Additions,grade8Additions,grade9Additions} from '../bank/peryshkin-additions.mjs'
 const tasks=JSON.parse(fs.readFileSync(new URL('../bank/tasks.json',import.meta.url)))
 const grade8extra=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade8-additions.json',import.meta.url)))
 const grade7=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade7.json',import.meta.url)))
 const grade9=JSON.parse(fs.readFileSync(new URL('../bank/tasks-grade9.json',import.meta.url)))
+
+test('new scanned calculations belong to the correct grade and accept their independently computed answers',()=>{
+  for(const [grade,newTasks,existing] of [[7,grade7Additions,grade7],[8,grade8Additions,[...tasks,...grade8extra]],[9,grade9Additions,grade9]]){
+    const used=new Set(existing.map(t=>Number(t.SOURCE?.task_id)))
+    for(const task of newTasks){
+      assert.equal(task.CLASS,grade)
+      assert.equal(task.TASK_TYPE,'calculation')
+      assert.equal(used.has(task.BOOK_TASK_NUMBER),false,`duplicate ${task.BOOK_TASK_NUMBER}`)
+      assert.equal(publishable(task),true)
+      assert.equal(checkAnswer(task,String(task.ANSWER.value).replace('.',',')).correct,true)
+      assert.equal(checkAnswer(task,String(task.ANSWER.value+Math.max(10,task.ANSWER.value))).correct,false)
+    }
+  }
+})
 
 test('319 published grade 8 base tasks imported from user-supplied sources',()=>{
   assert.equal(tasks.length,319)

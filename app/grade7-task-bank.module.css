@@ -4,4 +4,9 @@
 
 .filterDock{position:sticky;top:78px;z-index:24;padding:8px 0;background:linear-gradient(180deg,rgba(6,19,38,.98) 0%,rgba(6,19,38,.94) 82%,transparent 100%);backdrop-filter:blur(16px)}
 .lastOpened{border-color:#f2b84c!important;box-shadow:0 0 0 2px rgba(242,184,76,.22),0 18px 42px rgba(0,0,0,.2)}
+.tile.viewed:not(.solved){background:linear-gradient(155deg,#0b2036,#08182a);border-color:rgba(119,159,193,.24)}
+.tile.viewed:not(.solved) h2{color:#d2deeb}
+.tile.viewed:not(.solved) footer span{color:#a7bad0}
+.tile h2{font-weight:650;line-height:1.45}
+.taskText{font-weight:400;line-height:1.65}
 @media(max-width:640px){.filterDock{top:70px;margin:0 -12px;padding:8px 12px}.filterDock .filters{display:flex;gap:8px;overflow-x:auto;padding:10px;scrollbar-width:thin}.filterDock .filters>*{flex:0 0 178px}.filterDock .filters button{flex-basis:105px}.filterDock .filters input{grid-column:auto}}

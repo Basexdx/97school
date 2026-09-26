@@ -52,7 +52,8 @@ test('Offline: explicit download, offline load, guest isolation, pending sync an
    const headers={...options.headers,...(auth?{cookie:'genius_student='+token}:{})}
    return worker.fetch(new Request('https://genius.test'+url,{...options,headers}),env)
  }
- const index=await store.bankIndex();assert.equal(index.tasks.length,321)
+ const index=await store.bankIndex();assert.equal(index.tasks.length,324)
+ assert.ok(index.tasks.some(t=>t.id==='genius-peryshkin8-1046'))
  assert.equal(networkCalls.filter(x=>x!=='/task-bank/index.json').length,0,'index must not auto-download tasks')
  await store.downloadBankPackage(index,'paragraph',1)
  navigator.onLine=false

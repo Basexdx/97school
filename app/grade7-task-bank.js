@@ -3,6 +3,7 @@
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
 import {bankIdentity,bankAttempts,saveBankAttempt,syncBankAttempts} from './task-store'
+import {useTaskViews} from './task-views'
 import styles from './grade7-task-bank.module.css'
 
 const difficultyLabels={БАЗОВЫЙ:'Базовый',ПОВЫШЕННЫЙ:'Повышенный',ВЫСОКИЙ:'Высокий'}
@@ -16,6 +17,7 @@ const numericText=v=>String(v).replace('.',',')
 export default function Grade7TaskBank({onXp=()=>{}}){
   const [bank,setBank]=useState(null),[index,setIndex]=useState(null),[student,setStudent]=useState(null),[attempts,setAttempts]=useState([])
   const [taskId,setTaskId]=useState(null),[paragraph,setParagraph]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState(''),[restoreTaskId,setRestoreTaskId]=useState('')
+  const {viewed,markViewed}=useTaskViews(student?.id)
 
   async function reloadAttempts(owner){setAttempts(await bankAttempts(owner))}
   useEffect(()=>{let live=true;try{const saved=JSON.parse(sessionStorage.getItem(POSITION_KEY)||'null');if(saved){setParagraph(saved.paragraph||'');setDifficulty(saved.difficulty||'');setType(saved.type||'');setQuery(saved.query||'');setRestoreTaskId(saved.taskId||'')}}catch{};(async()=>{try{
@@ -42,7 +44,7 @@ export default function Grade7TaskBank({onXp=()=>{}}){
     setRestoreTaskId(id)
     try{sessionStorage.setItem(POSITION_KEY,JSON.stringify({taskId:id,paragraph,difficulty,type,query}))}catch{}
   }
-  function openTask(id){rememberPosition(id);setTaskId(id)}
+  function openTask(id){markViewed(id);rememberPosition(id);setTaskId(id)}
   function backToBank(){rememberPosition(current?.ID||restoreTaskId);setTaskId(null)}
 
   async function submit(task,answer){
@@ -58,10 +60,10 @@ export default function Grade7TaskBank({onXp=()=>{}}){
   const solved=Object.values(taskStates).filter(s=>s.solved).length
   return <div className={styles.page}>
     <section className={styles.hero}>
-      <div><div className={styles.kicker}>GENIUS · ФИЗИКА · 7 КЛАСС</div><h1>Задачи Перышкина</h1><p>Отобраны задачи №1–168: расчётные, задачи с выбором ответа и задачи с графиками. Качественные задачи в банк не включены.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>№1–168</span><span>без подсказок</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div>
+      <div><div className={styles.kicker}>GENIUS · ФИЗИКА · 7 КЛАСС</div><h1>Задачи Перышкина</h1><p>Отобраны расчётные задачи, задания с выбором ответа и графиками. Новые задачи по атмосферному давлению добавлены из сборника.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>по темам 7 класса</span><span>без подсказок</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div>
     </section>
     {message&&<div className={styles.notice}>{message}</div>}
-    <section className={styles.stats}><article><small>Отобрано</small><strong>{index?.tasks.length||'…'}</strong><span>из 168</span></article><article><small>Решено</small><strong>{solved}</strong><span>задач</span></article><article><small>Попытки</small><strong>{gradeAttempts.length}</strong><span>в этом классе</span></article><article><small>Источник</small><strong>7</strong><span>класс</span></article></section>
+    <section className={styles.stats}><article><small>Отобрано</small><strong>{index?.tasks.length||'…'}</strong><span>задач</span></article><article><small>Решено</small><strong>{solved}</strong><span>задач</span></article><article><small>Попытки</small><strong>{gradeAttempts.length}</strong><span>в этом классе</span></article><article><small>Источник</small><strong>7</strong><span>класс</span></article></section>
 
     <div className={styles.filterDock}><section className={styles.filters}>
         <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти номер или тему" aria-label="Поиск"/>
@@ -72,7 +74,7 @@ export default function Grade7TaskBank({onXp=()=>{}}){
       </section></div>
 
     <div className={styles.summary}><span><b>{filtered.length}</b> задач</span><span>1-я попытка — полный XP · 2-я — 70% · 3-я — 40% · далее — 20%</span></div>
-    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,wrong:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade7-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><div className={styles.tileTop}><span>Задача {item.bookNumber}</span><span>{state.solved?'✓':`${next} XP`}</span></div><h2>{item.topic}</h2><p>{typeLabels[item.type]||item.type} · {difficultyLabels[item.difficulty]}</p><footer><span>{state.count?`${state.count} попыт.`:'Новая'}</span><b>{state.solved?'Решено':'Открыть →'}</b></footer></button>})}</section>
+    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,wrong:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade7-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${viewed.has(item.id)?styles.viewed:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><div className={styles.tileTop}><span>Задача {item.bookNumber}</span><span>{state.solved?'✓':`${next} XP`}</span></div><h2>{item.topic}</h2><p>{typeLabels[item.type]||item.type} · {difficultyLabels[item.difficulty]}</p><footer><span>{state.solved?'Решено':viewed.has(item.id)?'Просмотрено':state.count?`${state.count} попыт.`:'Новая'}</span><b>{state.solved?'Решено':'Открыть →'}</b></footer></button>})}</section>
   </div>
 }
 
