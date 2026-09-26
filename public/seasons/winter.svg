@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 560" fill="none">
+  <defs><radialGradient id="g"><stop stop-color="#8bdcff" stop-opacity=".28"/><stop offset="1" stop-color="#55b8ff" stop-opacity="0"/></radialGradient><linearGradient id="h" x1="220" y1="250" x2="220" y2="560" gradientUnits="userSpaceOnUse"><stop stop-color="#78cfff" stop-opacity=".04"/><stop offset="1" stop-color="#337ab0" stop-opacity=".3"/></linearGradient></defs>
+  <ellipse cx="320" cy="310" rx="210" ry="190" fill="url(#g)"/>
+  <path d="m0 425 102-95 75 55 88-145 79 108 96-72v284H0V425Z" fill="url(#h)"/><path d="M0 453c97-47 164-31 222 1 76 42 132 29 218-14v120H0V453Z" fill="#0d263b" fill-opacity=".92"/>
+  <g fill="#a6e5ff" fill-opacity=".77"><circle cx="69" cy="235" r="2"/><circle cx="141" cy="307" r="3"/><circle cx="221" cy="190" r="2"/><circle cx="345" cy="256" r="3"/><circle cx="397" cy="170" r="2"/><circle cx="287" cy="367" r="2"/><circle cx="112" cy="414" r="2"/><circle cx="368" cy="437" r="3"/></g>
+  <g stroke="#82bfdc" stroke-opacity=".5" stroke-width="4"><path d="M52 560V370m0 0-37 51m37-31 37 47m-37-14-31 40m31-24 36 38"/><path d="M372 560V335m0 0-47 61m47-38 48 57m-48-20-40 51m40-28 40 43"/></g>
+</svg>

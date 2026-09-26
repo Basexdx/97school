@@ -1,0 +1,194 @@
+/* Shared Cosmic Genius dashboard. Only the sidebar art and seasonal glow change. */
+:root {
+  --season-accent: #ffad27;
+  --season-accent-rgb: 255, 173, 39;
+  --season-glow-rgb: 255, 173, 39;
+  --season-particle-rgb: 255, 173, 39;
+  --season-art: url('/seasons/autumn.svg');
+}
+
+html[data-season='winter'] {
+  --season-glow-rgb: 130, 213, 255;
+  --season-particle-rgb: 172, 231, 255;
+  --season-art: url('/seasons/winter.svg');
+}
+html[data-season='spring'] {
+  --season-glow-rgb: 239, 163, 220;
+  --season-particle-rgb: 255, 183, 228;
+  --season-art: url('/seasons/spring.svg');
+}
+html[data-season='summer'] {
+  --season-glow-rgb: 166, 215, 123;
+  --season-particle-rgb: 239, 224, 130;
+  --season-art: url('/seasons/summer.svg');
+}
+html[data-season='autumn'] {
+  --season-glow-rgb: 255, 173, 39;
+  --season-particle-rgb: 255, 173, 39;
+  --season-art: url('/seasons/autumn.svg');
+}
+
+html.cosmo-genius-restored body { background: #020b15; color: #eef7ff; }
+html.cosmo-genius-restored .student-app {
+  min-height: 100vh;
+  grid-template-columns: 232px minmax(0, 1fr);
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(20, 111, 195, .12), transparent 34%),
+    linear-gradient(145deg, #020b15, #061729 58%, #03111e);
+}
+html.cosmo-genius-restored .student-content {
+  width: 100%; max-width: none !important; min-width: 0;
+  padding: clamp(22px, 3vw, 42px) clamp(20px, 3.5vw, 56px) 56px;
+  color: #edf7ff;
+}
+html.cosmo-genius-restored .sidebar-light {
+  width: 232px; padding: 27px 15px 18px;
+  background:
+    radial-gradient(ellipse at 60% 30%, rgba(var(--season-glow-rgb), .12), transparent 48%),
+    linear-gradient(180deg, #030d18, #061b2d 68%, #03101c) !important;
+  border-right: 1px solid rgba(89, 170, 232, .17);
+  box-shadow: 12px 0 38px rgba(0, 0, 0, .2);
+}
+html.cosmo-genius-restored .sidebar-light::before {
+  z-index: 0; opacity: .22;
+  background-image:
+    radial-gradient(circle at 16% 12%, #fff 0 1px, transparent 1.6px),
+    radial-gradient(circle at 76% 19%, rgba(var(--season-particle-rgb), .95) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 35% 33%, #8fd2ff 0 1px, transparent 1.6px),
+    radial-gradient(circle at 88% 45%, #fff 0 1px, transparent 1.6px),
+    radial-gradient(circle at 22% 61%, rgba(var(--season-particle-rgb), .9) 0 1px, transparent 1.6px);
+}
+html.cosmo-genius-restored .sidebar-light::after {
+  content: ''; position: absolute; z-index: 0; left: 0; right: 0; bottom: 0;
+  height: min(43vh, 410px); pointer-events: none; opacity: .72;
+  background-image: linear-gradient(180deg, #06192b 0%, rgba(6, 25, 43, .55) 18%, transparent 58%), var(--season-art);
+  background-repeat: no-repeat; background-position: center bottom; background-size: cover;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 26%);
+}
+html.cosmo-genius-restored .sidebar-light > * { z-index: 1; }
+html.cosmo-genius-restored .sidebar-light .brand-lockup-dark { color: #f5f9ff !important; }
+html.cosmo-genius-restored .side-nav {
+  min-height: 43px; padding: 10px 12px; gap: 12px;
+  color: #91a9bf !important; border: 1px solid transparent;
+  transition: color .18s ease, background .18s ease, border-color .18s ease;
+}
+html.cosmo-genius-restored .side-nav span { color: #65baff; font-size: 17px; }
+html.cosmo-genius-restored .side-nav:hover {
+  color: #eef8ff !important; background: rgba(29, 91, 139, .27) !important;
+  border-color: rgba(94, 175, 236, .18);
+}
+html.cosmo-genius-restored .side-nav.active {
+  color: #fff !important;
+  background: linear-gradient(95deg, rgba(var(--season-accent-rgb), .14), rgba(11, 51, 82, .68)) !important;
+  border-color: rgba(var(--season-accent-rgb), .26) !important;
+  box-shadow: inset 3px 0 0 var(--season-accent), 0 6px 22px rgba(0, 0, 0, .12) !important;
+}
+html.cosmo-genius-restored .side-nav.active span { color: var(--season-accent) !important; }
+html.cosmo-genius-restored .logout { color: #8ea8bf; }
+
+/* Student home, lessons, progress and teacher dashboard cards */
+html.cosmo-genius-restored .page-heading-row h1,
+html.cosmo-genius-restored .dashboard-section h2,
+html.cosmo-genius-restored .section-head h1,
+html.cosmo-genius-restored .teacher-head h1,
+html.cosmo-genius-restored .profile-title h1 { color: #f2f8ff; }
+html.cosmo-genius-restored .page-heading-row p,
+html.cosmo-genius-restored .teacher-head .subtle,
+html.cosmo-genius-restored .profile-title p { color: #8ba7c1 !important; }
+html.cosmo-genius-restored .level-card,
+html.cosmo-genius-restored .metric-card,
+html.cosmo-genius-restored .continue-card,
+html.cosmo-genius-restored .streak-pill,
+html.cosmo-genius-restored .recommend-grid button,
+html.cosmo-genius-restored .topic-list,
+html.cosmo-genius-restored .topic-list-row,
+html.cosmo-genius-restored .topic-header-card,
+html.cosmo-genius-restored .lesson-steps article,
+html.cosmo-genius-restored .result-white,
+html.cosmo-genius-restored .rating-list,
+html.cosmo-genius-restored .my-place,
+html.cosmo-genius-restored .achievement-grid article,
+html.cosmo-genius-restored .profile-settings,
+html.cosmo-genius-restored .teacher-classes > div,
+html.cosmo-genius-restored .quick-grid button,
+html.cosmo-genius-restored .connection-request,
+html.cosmo-genius-restored .security-table,
+html.cosmo-genius-restored .security-callout,
+html.cosmo-genius-restored .empty-state,
+html.cosmo-genius-restored .task-card,
+html.cosmo-genius-restored .hint-row {
+  color: #eaf5ff !important;
+  background: linear-gradient(145deg, rgba(9, 34, 58, .97), rgba(5, 22, 38, .98)) !important;
+  border-color: rgba(86, 157, 213, .17) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .13) !important;
+}
+html.cosmo-genius-restored .topic-list-row { border-bottom-color: rgba(86, 157, 213, .1) !important; }
+html.cosmo-genius-restored .topic-list-row:hover,
+html.cosmo-genius-restored .recommend-grid button:hover,
+html.cosmo-genius-restored .quick-grid button:hover {
+  background: linear-gradient(145deg, #0b3150, #071d30) !important;
+  border-color: rgba(var(--season-accent-rgb), .3) !important;
+}
+html.cosmo-genius-restored .metric-card span,
+html.cosmo-genius-restored .continue-main span,
+html.cosmo-genius-restored .topic-copy small,
+html.cosmo-genius-restored .profile-settings p,
+html.cosmo-genius-restored .teacher-classes small { color: #86a3bd !important; }
+html.cosmo-genius-restored .metric-card strong,
+html.cosmo-genius-restored .continue-main strong,
+html.cosmo-genius-restored .topic-copy strong,
+html.cosmo-genius-restored .teacher-classes strong { color: #f2f8ff !important; }
+html.cosmo-genius-restored .teacher-classes > div > span { background: #123450; color: var(--season-accent); }
+html.cosmo-genius-restored .metric-card .gold,
+html.cosmo-genius-restored .xp-orange { color: var(--season-accent) !important; }
+html.cosmo-genius-restored .level-progress,
+html.cosmo-genius-restored .mini-progress,
+html.cosmo-genius-restored .topic-progress-wrap > div { background: #0b2b45 !important; }
+html.cosmo-genius-restored .level-progress i,
+html.cosmo-genius-restored .mini-progress i { background: linear-gradient(90deg, #168fff, #5bc5ff) !important; }
+html.cosmo-genius-restored .teacher-head .blue-btn,
+html.cosmo-genius-restored .teacher-classes button,
+html.cosmo-genius-restored .quick-grid button { border-radius: 13px; }
+html.cosmo-genius-restored .connection-banner {
+  max-width: none; color: #91abc2 !important;
+  background: rgba(5, 21, 36, .74) !important;
+  border-color: rgba(83, 154, 211, .14) !important;
+}
+
+/* Compact and scrollable navigation keeps every section reachable on phones. */
+@media (max-width: 900px) {
+  html.cosmo-genius-restored .student-app { display: block; }
+  html.cosmo-genius-restored .sidebar-light {
+    position: fixed; inset: auto 0 0; z-index: 40; width: auto; height: 68px; min-height: 0;
+    padding: 5px 7px; overflow: hidden; border: 0; border-top: 1px solid rgba(89, 170, 232, .2);
+    background: rgba(3, 14, 25, .96) !important; backdrop-filter: blur(18px);
+  }
+  html.cosmo-genius-restored .sidebar-light::before,
+  html.cosmo-genius-restored .sidebar-light::after,
+  html.cosmo-genius-restored .sidebar-light .brand-lockup,
+  html.cosmo-genius-restored .sidebar-light .logout { display: none; }
+  html.cosmo-genius-restored .sidebar-light nav {
+    height: 100%; display: flex; gap: 4px; overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none; overscroll-behavior-x: contain;
+  }
+  html.cosmo-genius-restored .sidebar-light nav::-webkit-scrollbar { display: none; }
+  html.cosmo-genius-restored .sidebar-light nav .side-nav { display: flex; flex: 0 0 76px; min-width: 76px; min-height: 0; }
+  html.cosmo-genius-restored .side-nav { padding: 4px 2px; gap: 2px; font-size: 9px; border-radius: 10px; }
+  html.cosmo-genius-restored .side-nav span { font-size: 17px; }
+  html.cosmo-genius-restored .student-content { padding: 16px 16px 88px; }
+}
+@media (max-width: 560px) {
+  html.cosmo-genius-restored .student-content { padding: 14px 12px 88px; }
+  html.cosmo-genius-restored .page-heading-row { gap: 10px; }
+  html.cosmo-genius-restored .page-heading-row h1,
+  html.cosmo-genius-restored .teacher-head h1 { font-size: 23px; }
+  html.cosmo-genius-restored .teacher-head { align-items: flex-start; gap: 12px; }
+  html.cosmo-genius-restored .teacher-classes > div { grid-template-columns: 42px minmax(0, 1fr) auto; gap: 9px; padding: 12px; }
+  html.cosmo-genius-restored .teacher-classes button { padding: 8px; font-size: 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.cosmo-genius-restored *, html.cosmo-genius-restored *::before, html.cosmo-genius-restored *::after {
+    scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important;
+  }
+}

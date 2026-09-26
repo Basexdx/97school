@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 560" fill="none">
+  <defs>
+    <linearGradient id="h" x1="220" y1="210" x2="220" y2="560" gradientUnits="userSpaceOnUse"><stop stop-color="#f5a934" stop-opacity=".02"/><stop offset="1" stop-color="#db762c" stop-opacity=".32"/></linearGradient>
+    <radialGradient id="g"><stop stop-color="#ffcb68" stop-opacity=".34"/><stop offset="1" stop-color="#ff9d36" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="330" cy="320" rx="210" ry="180" fill="url(#g)"/>
+  <path d="M0 380 100 310l54 34 74-120 72 94 64-63 76 70v235H0V380Z" fill="url(#h)"/>
+  <path d="M0 435c72-47 124-38 189 5 69 46 125 25 251-44v164H0V435Z" fill="#10273a" fill-opacity=".88"/>
+  <g stroke="#d88736" stroke-opacity=".53" stroke-width="5" stroke-linecap="round"><path d="M342 560V345m0 63-63-70m63 39 54-77m-54 130 79-40"/><path d="M51 560V390m0 45-43-47m43 24 47-57"/></g>
+  <g fill="#ffb34d" fill-opacity=".8"><path d="m277 338 13-25 16 19-15 15-14-9Zm102-45 14-23 15 20-17 11-12-8ZM25 386l15-20 16 18-15 14-16-12Zm382 91 12-19 14 16-14 13-12-10Z"/><circle cx="103" cy="282" r="3"/><circle cx="239" cy="232" r="2"/><circle cx="381" cy="205" r="3"/><circle cx="160" cy="372" r="2"/></g>
+</svg>
