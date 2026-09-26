@@ -1,37 +1,94 @@
-/* Mobile reference-table fit: keep molar mass fully visible without horizontal scrolling. */
+/* Mobile reference tables: never require horizontal scrolling. Desktop keeps the source layout;
+   phone layout normalizes every section to at most two readable columns. */
+.rm-mobile-table{display:none}
+
 @media(max-width:900px){
-  .rm-card-molar-mass .rm-table-wrap{overflow-x:hidden}
-  .rm-card-molar-mass .rm-table-wrap table{
+  .rm-desktop-table{display:none!important}
+  .rm-mobile-table{
+    display:block;
+    width:100%;
+    overflow-x:hidden!important;
+  }
+  .rm-mobile-table table,
+  .rm-card-prefixes .rm-mobile-table table,
+  .rm-card-density .rm-mobile-table table,
+  .rm-card-heat-capacity .rm-mobile-table table,
+  .rm-card-molar-mass .rm-mobile-table table{
     width:100%;
     min-width:0!important;
     table-layout:fixed;
-    font-size:10.5px!important;
+    font-size:12px!important;
   }
-  .rm-card-molar-mass .rm-table-wrap th,
-  .rm-card-molar-mass .rm-table-wrap td{
-    padding:6px 5px;
-    white-space:normal;
-    overflow-wrap:anywhere;
+  .rm-mobile-table th,
+  .rm-mobile-table td{
+    padding:8px 9px;
+    white-space:normal!important;
+    overflow-wrap:break-word;
     word-break:normal;
-    line-height:1.18;
+    line-height:1.32;
+    vertical-align:top;
   }
-  .rm-card-molar-mass .rm-table-wrap th{
-    font-size:9.8px;
+  .rm-mobile-table th{
+    font-size:11.5px!important;
+    line-height:1.2;
   }
-  .rm-card-molar-mass .rm-table-wrap th:nth-child(1),
-  .rm-card-molar-mass .rm-table-wrap td:nth-child(1),
-  .rm-card-molar-mass .rm-table-wrap th:nth-child(3),
-  .rm-card-molar-mass .rm-table-wrap td:nth-child(3){width:30%}
-  .rm-card-molar-mass .rm-table-wrap th:nth-child(2),
-  .rm-card-molar-mass .rm-table-wrap td:nth-child(2),
-  .rm-card-molar-mass .rm-table-wrap th:nth-child(4),
-  .rm-card-molar-mass .rm-table-wrap td:nth-child(4){width:20%}
+  .rm-mobile-table th:first-child,
+  .rm-mobile-table td:first-child{width:56%}
+  .rm-mobile-table th:last-child,
+  .rm-mobile-table td:last-child{width:44%}
+
+  .rm-card-prefixes .rm-mobile-table th:first-child,
+  .rm-card-prefixes .rm-mobile-table td:first-child{width:45%}
+  .rm-card-prefixes .rm-mobile-table th:last-child,
+  .rm-card-prefixes .rm-mobile-table td:last-child{width:55%}
+
+  .rm-card-constants .rm-mobile-table th:first-child,
+  .rm-card-constants .rm-mobile-table td:first-child{width:52%}
+  .rm-card-constants .rm-mobile-table th:last-child,
+  .rm-card-constants .rm-mobile-table td:last-child{width:48%}
+
+  .rm-card-unit-relations .rm-mobile-table th:first-child,
+  .rm-card-unit-relations .rm-mobile-table td:first-child{width:44%}
+  .rm-card-unit-relations .rm-mobile-table th:last-child,
+  .rm-card-unit-relations .rm-mobile-table td:last-child{width:56%}
+
+  .rm-card-particle-mass .rm-mobile-table th:first-child,
+  .rm-card-particle-mass .rm-mobile-table td:first-child{width:34%}
+  .rm-card-particle-mass .rm-mobile-table th:last-child,
+  .rm-card-particle-mass .rm-mobile-table td:last-child{width:66%}
+
+  .rm-card-astronomy .rm-mobile-table th:first-child,
+  .rm-card-astronomy .rm-mobile-table td:first-child{width:53%}
+  .rm-card-astronomy .rm-mobile-table th:last-child,
+  .rm-card-astronomy .rm-mobile-table td:last-child{width:47%}
+
+  .rm-card-density .rm-mobile-table th:first-child,
+  .rm-card-density .rm-mobile-table td:first-child,
+  .rm-card-heat-capacity .rm-mobile-table th:first-child,
+  .rm-card-heat-capacity .rm-mobile-table td:first-child,
+  .rm-card-molar-mass .rm-mobile-table th:first-child,
+  .rm-card-molar-mass .rm-mobile-table td:first-child{width:58%}
+  .rm-card-density .rm-mobile-table th:last-child,
+  .rm-card-density .rm-mobile-table td:last-child,
+  .rm-card-heat-capacity .rm-mobile-table th:last-child,
+  .rm-card-heat-capacity .rm-mobile-table td:last-child,
+  .rm-card-molar-mass .rm-mobile-table th:last-child,
+  .rm-card-molar-mass .rm-mobile-table td:last-child{width:42%}
+
+  .rm-card-latent-heat .rm-mobile-table th:first-child,
+  .rm-card-latent-heat .rm-mobile-table td:first-child{width:58%}
+  .rm-card-latent-heat .rm-mobile-table th:last-child,
+  .rm-card-latent-heat .rm-mobile-table td:last-child{width:42%}
 }
 
 @media(max-width:420px){
-  .rm-card-molar-mass .rm-card-body{padding-left:7px;padding-right:7px}
-  .rm-card-molar-mass .rm-table-wrap table{font-size:10px!important}
-  .rm-card-molar-mass .rm-table-wrap th{font-size:9.3px}
-  .rm-card-molar-mass .rm-table-wrap th,
-  .rm-card-molar-mass .rm-table-wrap td{padding:5px 4px}
+  .rm-card-body{padding-left:8px!important;padding-right:8px!important}
+  .rm-mobile-table table,
+  .rm-card-prefixes .rm-mobile-table table,
+  .rm-card-density .rm-mobile-table table,
+  .rm-card-heat-capacity .rm-mobile-table table,
+  .rm-card-molar-mass .rm-mobile-table table{font-size:12px!important}
+  .rm-mobile-table th{font-size:11px!important}
+  .rm-mobile-table th,
+  .rm-mobile-table td{padding:7px 8px}
 }
