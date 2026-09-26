@@ -8,6 +8,8 @@ function normalize(value){
   return value
 }
 
+function plainRow(row){return row&&typeof row==='object'?{...row}:row}
+
 function toNumber(value){
   return typeof value==='bigint'&&value<=BigInt(Number.MAX_SAFE_INTEGER)?Number(value):value
 }
@@ -19,10 +21,11 @@ class D1PreparedStatement{
   async first(column){
     const row=this._statement().get(...this.params)
     if(row===undefined)return null
-    return column===undefined?row:row[column]
+    const plain=plainRow(row)
+    return column===undefined?plain:plain[column]
   }
   async all(){
-    const results=this._statement().all(...this.params)
+    const results=this._statement().all(...this.params).map(plainRow)
     return {success:true,results,meta:{rows_read:results.length}}
   }
   async run(){return this._run()}
