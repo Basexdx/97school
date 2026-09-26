@@ -24,7 +24,8 @@ html.cosmo-genius-restored .student-app{grid-template-columns:255px minmax(0,1fr
 html.cosmo-genius-restored .sidebar-light{
   width:255px;
   background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/autumn-cosmic.webp')!important;
-  background-size:cover!important;background-position:left center!important;background-repeat:no-repeat!important;
+  background-size:cover,auto calc(100% - 90px)!important;
+  background-position:left center,left bottom!important;background-repeat:no-repeat!important;
 }
 html[data-season='winter'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/winter-cosmic.webp')!important}
 html[data-season='spring'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/spring-cosmic.webp')!important}
@@ -36,6 +37,8 @@ html.cosmo-genius-restored .student-content{padding:28px 26px 40px!important}
 html.cosmo-genius-restored [class*='gradebookCard']{padding:15px!important}
 html.cosmo-genius-restored [class*='teacherGrid']{grid-template-columns:minmax(0,1fr) 335px!important}
 html.cosmo-genius-restored [class*='gradebookHead'] h2{font-size:26px}
+html.cosmo-genius-restored [class*='lessonEditor']{flex-wrap:nowrap!important}
+html.cosmo-genius-restored [class*='lessonEditor'] [class*='classSelect']{width:86px!important;min-width:86px!important;max-width:none!important;padding:0 24px 0 11px!important}
 html.cosmo-genius-restored [class*='classAnalytics']{padding:17px!important}
 html.cosmo-genius-restored [class*='classAnalytics'] h2{font-size:24px}
 html.cosmo-genius-restored [class*='gradebookWrap'] [class*='holidayHead']{background:rgba(var(--break-rgb),.46)!important;color:var(--break-accent)!important}
