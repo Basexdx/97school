@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      context: .
+      target: api
+    restart: unless-stopped
+    environment:
+      TEACHER_ID: ${TEACHER_ID:-teacher_01}
+      TEACHER_ACCESS_SECRET: ${TEACHER_ACCESS_SECRET}
+      RATE_LIMIT_SECRET: ${RATE_LIMIT_SECRET}
+      PENDING_TTL_MINUTES: ${PENDING_TTL_MINUTES:-15}
+      STUDENT_SESSION_DAYS: ${STUDENT_SESSION_DAYS:-30}
+      TEACHER_SESSION_HOURS: ${TEACHER_SESSION_HOURS:-12}
+      DB_PATH: /data/genius.db
+    volumes:
+      - /opt/genius/data:/data
+    expose:
+      - "8787"
+    healthcheck:
+      test: ["CMD","node","-e","fetch('http://127.0.0.1:8787/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  web:
+    build:
+      context: .
+      target: web
+    restart: unless-stopped
+    environment:
+      GENIUS_API_ORIGIN: http://api:8787
+    depends_on:
+      api:
+        condition: service_healthy
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+      - api
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
