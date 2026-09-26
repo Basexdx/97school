@@ -57,12 +57,29 @@ function buildGrade8(){
 }
 
 function buildGrade7(){
-  const tasks=[...read('bank/tasks-grade7.json'),...grade7Additions],paragraphs=[...read('bank/paragraphs-grade7.json'),{paragraph:20,title:'Вес воздуха. Атмосферное давление',section:'pressure7'}],ids=new Set()
+  const tasks=[...read('bank/tasks-grade7.json'),...grade7Additions]
+  const extraParagraphs=[
+    {paragraph:15,title:'Сила трения. Трение покоя. Трение в природе и технике',section:'forces7'},
+    {paragraph:16,title:'Давление. Единицы давления',section:'pressure7'},
+    {paragraph:17,title:'Давление газа. Закон Паскаля',section:'pressure7'},
+    {paragraph:18,title:'Давление в жидкости и газе',section:'pressure7'},
+    {paragraph:19,title:'Сообщающиеся сосуды',section:'pressure7'},
+    {paragraph:20,title:'Вес воздуха. Атмосферное давление. Гидравлические механизмы',section:'pressure7'},
+    {paragraph:21,title:'Архимедова сила. Плавание тел. Воздухоплавание',section:'pressure7'},
+    {paragraph:22,title:'Механическая работа',section:'work7'},
+    {paragraph:23,title:'Мощность',section:'work7'},
+    {paragraph:24,title:'Рычаг. Момент силы',section:'work7'},
+    {paragraph:25,title:'Простые механизмы. Золотое правило механики',section:'work7'},
+    {paragraph:26,title:'Коэффициент полезного действия механизма',section:'work7'},
+    {paragraph:27,title:'Потенциальная и кинетическая энергия',section:'energy7'},
+    {paragraph:28,title:'Превращение одного вида механической энергии в другой',section:'energy7'},
+  ]
+  const paragraphs=[...new Map([...read('bank/paragraphs-grade7.json'),...extraParagraphs].map(p=>[p.paragraph,p])).values()].sort((a,b)=>a.paragraph-b.paragraph),ids=new Set()
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==7) throw Error(`${t.ID}: wrong class`)
-    if(!(Number.isInteger(t.PARAGRAPH)&&((t.PARAGRAPH>=1&&t.PARAGRAPH<=14)||t.PARAGRAPH===20))) throw Error(`${t.ID}: paragraph mismatch`)
-    if(!['intro7','matter7','motion7','interaction7','density7','gravity7','elasticity7','forces7','pressure7'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 7 section`)
+    if(!(Number.isInteger(t.PARAGRAPH)&&t.PARAGRAPH>=1&&t.PARAGRAPH<=28)) throw Error(`${t.ID}: paragraph mismatch`)
+    if(!['intro7','matter7','motion7','interaction7','density7','gravity7','elasticity7','forces7','pressure7','work7','energy7'].includes(t.SECTION)) throw Error(`${t.ID}: unknown grade 7 section`)
     if(t.SOURCE.organization!=='А. В. Перышкин — Сборник задач по физике 7–9 классы'||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
     if(t.TASK_TYPE==='qualitative') throw Error(`${t.ID}: qualitative task must not be published in grade 7 pack`)
   }
@@ -71,7 +88,7 @@ function buildGrade7(){
   const publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_7))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade7.json',{version:TASK_BANK_VERSION_7,grade:7,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,tasks:publicTasks})
-  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; 439–441',sourceRanges:[[1,168],[183,347],[439,441]],excludedQualitative:97,excludedAdditionalRange:94,paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; расчётный отбор 381–559',sourceRanges:[[1,168],[183,347],[381,559]],paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 
