@@ -17,10 +17,25 @@ test('new scanned calculations belong to the correct grade and accept their inde
       assert.equal(task.TASK_TYPE,'calculation')
       assert.equal(used.has(task.BOOK_TASK_NUMBER),false,`duplicate ${task.BOOK_TASK_NUMBER}`)
       assert.equal(publishable(task),true)
-      assert.equal(checkAnswer(task,String(task.ANSWER.value).replace('.',',')).correct,true)
-      assert.equal(checkAnswer(task,String(task.ANSWER.value+Math.max(10,task.ANSWER.value))).correct,false)
+      const correct=task.ANSWER.mode==='numeric'
+        ? String(task.ANSWER.value).replace('.',',')
+        : task.ANSWER.values.map(value=>String(value).replace('.',','))
+      const incorrect=task.ANSWER.mode==='numeric'
+        ? String(task.ANSWER.value+Math.max(10,Math.abs(task.ANSWER.value)))
+        : task.ANSWER.values.map((value,index)=>index===0?String(value+Math.max(10,Math.abs(value))):String(value))
+      assert.equal(checkAnswer(task,correct).correct,true,task.ID)
+      assert.equal(checkAnswer(task,incorrect).correct,false,task.ID)
     }
   }
+})
+
+test('Peryshkin grade 7 numerical selection continues through task 675 without duplicates',()=>{
+  const range=grade7Additions.filter(t=>t.BOOK_TASK_NUMBER>=560&&t.BOOK_TASK_NUMBER<=675)
+  assert.equal(range.length,83)
+  assert.equal(new Set(range.map(t=>t.BOOK_TASK_NUMBER)).size,83)
+  assert.equal(range.every(t=>['numeric','numeric_list'].includes(t.ANSWER.mode)),true)
+  assert.equal(range.every(t=>t.CLASS===7&&t.TASK_TYPE==='calculation'&&publishable(t)),true)
+  assert.ok(range.filter(t=>t.DIAGRAM?.type==='peryshkin-schematic').length>=8)
 })
 
 test('319 published grade 8 base tasks imported from user-supplied sources',()=>{
