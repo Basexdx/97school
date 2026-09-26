@@ -1,0 +1,37 @@
+/* Mobile reference-table fit: keep molar mass fully visible without horizontal scrolling. */
+@media(max-width:900px){
+  .rm-card-molar-mass .rm-table-wrap{overflow-x:hidden}
+  .rm-card-molar-mass .rm-table-wrap table{
+    width:100%;
+    min-width:0!important;
+    table-layout:fixed;
+    font-size:10.5px!important;
+  }
+  .rm-card-molar-mass .rm-table-wrap th,
+  .rm-card-molar-mass .rm-table-wrap td{
+    padding:6px 5px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    word-break:normal;
+    line-height:1.18;
+  }
+  .rm-card-molar-mass .rm-table-wrap th{
+    font-size:9.8px;
+  }
+  .rm-card-molar-mass .rm-table-wrap th:nth-child(1),
+  .rm-card-molar-mass .rm-table-wrap td:nth-child(1),
+  .rm-card-molar-mass .rm-table-wrap th:nth-child(3),
+  .rm-card-molar-mass .rm-table-wrap td:nth-child(3){width:30%}
+  .rm-card-molar-mass .rm-table-wrap th:nth-child(2),
+  .rm-card-molar-mass .rm-table-wrap td:nth-child(2),
+  .rm-card-molar-mass .rm-table-wrap th:nth-child(4),
+  .rm-card-molar-mass .rm-table-wrap td:nth-child(4){width:20%}
+}
+
+@media(max-width:420px){
+  .rm-card-molar-mass .rm-card-body{padding-left:7px;padding-right:7px}
+  .rm-card-molar-mass .rm-table-wrap table{font-size:10px!important}
+  .rm-card-molar-mass .rm-table-wrap th{font-size:9.3px}
+  .rm-card-molar-mass .rm-table-wrap th,
+  .rm-card-molar-mass .rm-table-wrap td{padding:5px 4px}
+}
