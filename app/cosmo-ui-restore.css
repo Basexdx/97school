@@ -1,0 +1,193 @@
+/* Cosmic Genius visual restoration: space-blue, white and the brand yellow-orange. */
+:root{
+  --cosmo-bg:#020b15;
+  --cosmo-bg2:#05182a;
+  --cosmo-panel:#071d31;
+  --cosmo-panel2:#0a2946;
+  --cosmo-line:rgba(79,166,238,.18);
+  --cosmo-text:#eef7ff;
+  --cosmo-muted:#86a8c4;
+  --cosmo-blue:#1597ff;
+  --cosmo-orange:#ffad27;
+  --cosmo-orange2:#ff7a20;
+}
+
+html.cosmo-genius-restored body{background:var(--cosmo-bg);color:var(--cosmo-text)}
+html.cosmo-genius-restored .student-app{
+  background:
+    radial-gradient(circle at 78% 8%,rgba(22,145,255,.13),transparent 25%),
+    radial-gradient(circle at 24% 82%,rgba(255,139,29,.045),transparent 27%),
+    linear-gradient(180deg,#020b15,#06192b 48%,#03111f);
+  color:var(--cosmo-text);
+}
+html.cosmo-genius-restored .student-content{
+  max-width:none!important;
+  background:
+    radial-gradient(circle at 86% 4%,rgba(25,144,247,.09),transparent 23%),
+    radial-gradient(circle at 18% 68%,rgba(255,156,34,.035),transparent 28%);
+  color:var(--cosmo-text);
+}
+
+/* Main side navigation */
+html.cosmo-genius-restored .sidebar-light{
+  position:sticky;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 18% 8%,rgba(36,151,247,.22),transparent 22%),
+    radial-gradient(circle at 82% 34%,rgba(32,125,222,.12),transparent 18%),
+    radial-gradient(circle at 16% 70%,rgba(255,160,36,.055),transparent 16%),
+    linear-gradient(180deg,#020c17 0%,#041627 45%,#020d18 100%)!important;
+  border-right:1px solid rgba(76,164,239,.18);
+  box-shadow:14px 0 45px rgba(0,0,0,.2);
+}
+html.cosmo-genius-restored .sidebar-light::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.5;
+  background-image:
+    radial-gradient(circle at 18% 15%,rgba(255,255,255,.85) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 72% 23%,rgba(92,188,255,.8) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 42% 48%,rgba(255,255,255,.65) 0 1px,transparent 1.4px),
+    radial-gradient(circle at 80% 71%,rgba(255,180,55,.75) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 25% 86%,rgba(106,194,255,.65) 0 1px,transparent 1.4px);
+}
+html.cosmo-genius-restored .sidebar-light>*{position:relative;z-index:1}
+html.cosmo-genius-restored .sidebar-light .brand-lockup-dark{color:#fff!important}
+html.cosmo-genius-restored .side-nav{
+  color:#8eaac2!important;
+  border:1px solid transparent;
+  transition:.18s ease;
+}
+html.cosmo-genius-restored .side-nav:hover{
+  color:#f2f9ff!important;
+  background:linear-gradient(90deg,rgba(19,91,151,.46),rgba(6,31,53,.52))!important;
+  border-color:rgba(71,160,236,.16);
+}
+html.cosmo-genius-restored .side-nav.active{
+  color:#fff!important;
+  background:linear-gradient(90deg,rgba(255,163,32,.16),rgba(11,53,89,.74))!important;
+  border-color:rgba(255,173,39,.26)!important;
+  box-shadow:inset 3px 0 0 var(--cosmo-orange),0 0 22px rgba(23,137,235,.08)!important;
+}
+html.cosmo-genius-restored .side-nav span{color:#58b9ff}
+html.cosmo-genius-restored .side-nav.active span,
+html.cosmo-genius-restored .genius-ref-nav span{color:var(--cosmo-orange)!important;text-shadow:0 0 14px rgba(255,165,34,.25)}
+html.cosmo-genius-restored .genius-teacher-sidebar .genius-ref-nav{display:none!important}
+
+/* Restore dark Cosmic Genius cards on the home/course/teacher shells. */
+html.cosmo-genius-restored .page-heading-row h1,
+html.cosmo-genius-restored .dashboard-section h2,
+html.cosmo-genius-restored .section-head h1,
+html.cosmo-genius-restored .teacher-head h1,
+html.cosmo-genius-restored .profile-title h1{color:#f4f9ff}
+html.cosmo-genius-restored .page-heading-row p,
+html.cosmo-genius-restored .teacher-head .subtle,
+html.cosmo-genius-restored .profile-title p{color:#7f9fba!important}
+
+html.cosmo-genius-restored .level-card,
+html.cosmo-genius-restored .metric-card,
+html.cosmo-genius-restored .continue-card,
+html.cosmo-genius-restored .streak-pill,
+html.cosmo-genius-restored .recommend-grid button,
+html.cosmo-genius-restored .topic-list,
+html.cosmo-genius-restored .topic-list-row,
+html.cosmo-genius-restored .profile-settings,
+html.cosmo-genius-restored .teacher-classes>div,
+html.cosmo-genius-restored .quick-grid button,
+html.cosmo-genius-restored .connection-request,
+html.cosmo-genius-restored .security-callout,
+html.cosmo-genius-restored .sync-queue-card,
+html.cosmo-genius-restored .offline-summary-grid>div{
+  background:linear-gradient(145deg,rgba(9,34,58,.97),rgba(5,23,39,.97))!important;
+  color:#eaf6ff!important;
+  border-color:rgba(74,164,239,.16)!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.12)!important;
+}
+html.cosmo-genius-restored .topic-list-row{border-bottom-color:rgba(74,164,239,.09)!important}
+html.cosmo-genius-restored .topic-list-row:hover,
+html.cosmo-genius-restored .recommend-grid button:hover,
+html.cosmo-genius-restored .quick-grid button:hover{
+  background:linear-gradient(145deg,#0b3153,#071d31)!important;
+  border-color:rgba(255,173,39,.28)!important;
+}
+html.cosmo-genius-restored .metric-card span,
+html.cosmo-genius-restored .continue-main span,
+html.cosmo-genius-restored .topic-copy small,
+html.cosmo-genius-restored .profile-settings p{color:#7f9fba!important}
+html.cosmo-genius-restored .metric-card strong,
+html.cosmo-genius-restored .continue-main strong,
+html.cosmo-genius-restored .topic-copy strong{color:#f4f9ff!important}
+html.cosmo-genius-restored .level-progress,
+html.cosmo-genius-restored .mini-progress,
+html.cosmo-genius-restored .topic-progress-wrap>div{background:#0d2b46!important}
+html.cosmo-genius-restored .level-progress i,
+html.cosmo-genius-restored .mini-progress i{background:linear-gradient(90deg,#168fff,#54b8ff)!important;box-shadow:0 0 15px rgba(29,146,246,.26)}
+html.cosmo-genius-restored .grade-mini-row button,
+html.cosmo-genius-restored .course-tabs button{background:transparent;color:#7f9fba;border-color:rgba(73,158,230,.16)}
+html.cosmo-genius-restored .grade-mini-row button.active,
+html.cosmo-genius-restored .course-tabs button.active{color:#fff;background:linear-gradient(180deg,#ffc03d,#ff941d)!important;border-color:#ffb52d!important}
+
+/* Reference center: more of the original Cosmic Genius glow, less plain-table feeling. */
+html.cosmo-genius-restored .genius-reference-overlay{
+  background:
+    radial-gradient(circle at 84% 7%,rgba(30,152,255,.21),transparent 25%),
+    radial-gradient(circle at 16% 82%,rgba(255,143,30,.06),transparent 23%),
+    linear-gradient(180deg,#020a13,#041626 48%,#020e1a)!important;
+}
+html.cosmo-genius-restored .genius-reference-overlay::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.42;
+  background-image:
+    radial-gradient(circle at 12% 10%,rgba(255,255,255,.8) 0 1px,transparent 1.4px),
+    radial-gradient(circle at 43% 6%,rgba(91,188,255,.9) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 77% 23%,rgba(255,180,50,.65) 0 1px,transparent 1.5px),
+    radial-gradient(circle at 28% 55%,rgba(255,255,255,.6) 0 1px,transparent 1.3px),
+    radial-gradient(circle at 92% 68%,rgba(78,176,255,.65) 0 1px,transparent 1.4px);
+}
+html.cosmo-genius-restored .genius-reference-top,
+html.cosmo-genius-restored .genius-reference-scroll{position:relative;z-index:1}
+html.cosmo-genius-restored .genius-reference-top{
+  background:rgba(2,11,20,.88)!important;
+  border-bottom-color:rgba(79,169,244,.19)!important;
+  box-shadow:0 10px 34px rgba(0,0,0,.16);
+}
+html.cosmo-genius-restored .genius-reference-hero{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(circle at 92% 10%,rgba(34,151,249,.25),transparent 26%),
+    radial-gradient(circle at 75% 105%,rgba(255,149,26,.12),transparent 31%),
+    linear-gradient(145deg,#0a2c4b,#061827)!important;
+  border-color:rgba(80,173,250,.23)!important;
+  box-shadow:inset 0 0 38px rgba(28,139,235,.035),0 20px 55px rgba(0,0,0,.15);
+}
+html.cosmo-genius-restored .genius-reference-hero::after{
+  content:"Σ  π  ρ  Q";position:absolute;right:28px;bottom:16px;color:rgba(87,181,255,.12);font-size:38px;font-weight:1000;letter-spacing:.18em
+}
+html.cosmo-genius-restored .genius-reference-hero h1{color:#fff!important}
+html.cosmo-genius-restored .genius-reference-hero>span{color:var(--cosmo-orange)!important}
+html.cosmo-genius-restored .genius-constant-grid article,
+html.cosmo-genius-restored .genius-formula-grid article{
+  background:linear-gradient(145deg,#071e33,#051624)!important;
+  border-color:rgba(80,168,240,.16)!important;
+  box-shadow:inset 0 0 28px rgba(36,145,235,.025);
+}
+html.cosmo-genius-restored .genius-constant-grid article:hover,
+html.cosmo-genius-restored .genius-formula-grid article:hover{
+  border-color:rgba(255,173,39,.34)!important;
+  transform:translateY(-1px);
+}
+html.cosmo-genius-restored .genius-constant-grid article>div{color:var(--cosmo-orange)!important;text-shadow:0 0 16px rgba(255,164,35,.16)}
+html.cosmo-genius-restored .genius-formula-grid article>div{
+  background:linear-gradient(145deg,#0c365b,#08243e)!important;
+  border-color:rgba(255,173,39,.27)!important;
+  color:#fff1c9!important;
+}
+html.cosmo-genius-restored .genius-return-task{
+  background:linear-gradient(180deg,#ffc33f,#ff921b)!important;
+  box-shadow:0 14px 42px rgba(255,144,24,.31),0 0 0 1px rgba(255,211,103,.2) inset!important;
+}
+
+@media(max-width:900px){
+  html.cosmo-genius-restored .sidebar-light{position:fixed}
+}
