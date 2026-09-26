@@ -2,7 +2,7 @@ name: Build Genius dev
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, ui/cosmo-reference-cleanup-20260926-v3]
   workflow_dispatch:
 
 permissions:
