@@ -28,10 +28,12 @@ html.cosmo-genius-restored .student-app{grid-template-columns:255px minmax(0,1fr
 html.cosmo-genius-restored .sidebar-light{
   width:255px;
   /* The image is sized to the viewport, even when a long journal stretches the sidebar. */
-  background-image:var(--season-cosmic-art),linear-gradient(180deg,#020b16 0%,#041426 53%,#03101d 100%)!important;
-  background-size:auto min(820px,calc(100dvh - 60px)),cover!important;
-  background-position:left max(60px,calc(100dvh - 820px)),left top!important;
+  background-image:linear-gradient(90deg,transparent 42%,rgba(3,18,33,.6) 75%,#031221 100%),var(--season-cosmic-art),linear-gradient(180deg,#020b16 0%,#041426 53%,#03101d 100%)!important;
+  background-size:cover,auto min(820px,calc(100dvh - 60px)),cover!important;
+  background-position:left top,left max(60px,calc(100dvh - 820px)),left top!important;
   background-repeat:no-repeat!important;
+  border-right:0!important;
+  box-shadow:none!important;
 }
 html.cosmo-genius-restored .sidebar-light::after{display:none!important}
 html.cosmo-genius-restored .sidebar-light::before{opacity:.16!important}

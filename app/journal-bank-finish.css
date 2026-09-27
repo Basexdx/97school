@@ -1,6 +1,11 @@
 /* Seasonal artwork continues into the content column for both roles. */
 html.cosmo-genius-restored .student-content{
-  background:#031221 url('/seasons/cosmic-workspace.webp') left top / cover fixed no-repeat!important;
+  background-color:#031221!important;
+  background-image:linear-gradient(90deg,#031221 0%,rgba(3,18,33,.72) 55px,transparent 155px),url('/seasons/cosmic-workspace.webp')!important;
+  background-position:left top,left top!important;
+  background-size:cover,cover!important;
+  background-repeat:no-repeat,no-repeat!important;
+  background-attachment:scroll,fixed!important;
   position:relative;
 }
 html.cosmo-genius-restored .student-content::before{
