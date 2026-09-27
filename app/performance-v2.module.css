@@ -76,9 +76,12 @@
 .lessonEditor{flex-wrap:nowrap;min-width:0}
 .lessonEditor select{min-width:0}
 .lessonEditor select:last-child{width:86px;min-width:86px;max-width:none;padding:0 24px 0 11px!important}
-.teacherGrid{align-items:stretch}
-.gradebookCard,.classAnalytics{min-height:min(800px,calc(100dvh - 64px))}
-.gradebookWrap{margin-top:0}
+.teacherGrid{align-items:start}
+.gradebookCard,.classAnalytics{min-height:0}
+.gradebookWrap{margin-top:0;max-height:min(670px,calc(100dvh - 170px));overflow:auto}
+.gradebookWrap thead tr:nth-child(2) th{top:29px;z-index:3}
+.gradebookWrap .breakBands .nameHeader{top:0}
+.gradebookWrap .breakBands th:not(.nameHeader):not(.breakBand){background:#092239!important}
 .gradebookWrap table{table-layout:fixed}
 .nameColumn{width:250px}
 .lessonColumn{width:78px}
@@ -111,4 +114,11 @@
 .classAnalytics{display:block}
 
 @media(max-width:1100px){.gradebookCard,.classAnalytics{min-height:0}}
-@media(max-width:720px){.nameColumn{width:190px}.gradebookWrap .nameHeader,.gradebookWrap td:first-child{width:190px;min-width:190px;max-width:190px}.gradebookWrap td:first-child b{max-width:135px}.gradebookWrap th,.gradebookWrap td{min-width:64px}}
+@media(max-width:720px){.nameColumn{width:162px}.gradebookWrap .nameHeader,.gradebookWrap td:first-child{width:162px;min-width:162px;max-width:162px}.gradebookWrap td:first-child b{max-width:108px;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;line-height:1.2}.gradebookWrap th,.gradebookWrap td{min-width:64px}}
+
+.academicHeader{position:sticky;top:0;z-index:12;display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,380px) auto;align-items:center;gap:14px;min-width:0;margin-bottom:17px;padding:12px 14px;border:1px solid rgba(69,157,226,.3);border-radius:14px;background:rgba(3,17,32,.93);box-shadow:0 9px 30px rgba(0,8,20,.34);backdrop-filter:blur(15px)}
+.academicTitle{min-width:0}.academicTitle h1{margin:0 0 3px;color:#f1f7ff;font-size:clamp(23px,2.1vw,30px);font-weight:700;letter-spacing:-.025em}.academicTitle p{margin:0;color:#9db5cb;font-size:13px;line-height:1.35}
+.academicSearch{display:flex;align-items:center;gap:9px;min-width:0;height:48px;padding:0 13px;border:1px solid rgba(54,151,220,.52);border-radius:11px;background:rgba(5,32,55,.88);color:#b1d7ed}.academicSearch span{font-size:23px}.academicSearch input{width:100%;height:46px;min-width:0;border:0;outline:0;background:transparent;color:#eff8ff;font:inherit}.academicSearch input::placeholder{color:#8aa9c0}
+.academicNav{display:flex;align-items:center;gap:9px}.academicNav button{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 13px;border:1px solid rgba(54,151,220,.62);border-radius:11px;background:rgba(5,32,55,.88);color:#e3f2ff;font-size:13px;font-weight:550;white-space:nowrap;cursor:pointer}.academicNav button:hover,.academicNav button:focus-visible{border-color:#ffc34e;color:#fff}
+@media(max-width:1300px){.academicHeader{grid-template-columns:minmax(0,1fr) auto}.academicSearch{grid-column:1/-1;grid-row:2}.academicNav{grid-column:2;grid-row:1}}
+@media(max-width:720px){.academicHeader{top:0;gap:10px;padding:12px}.academicTitle h1{font-size:21px}.academicTitle p{font-size:11px}.academicNav{gap:5px}.academicNav button{height:42px;padding:0 9px;font-size:12px}.academicSearch{height:44px}.academicSearch input{height:42px}.gradebookWrap{max-height:min(590px,calc(100dvh - 180px))}}

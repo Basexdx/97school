@@ -70,6 +70,10 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
     font-weight:500!important;
     line-height:1.25!important;
   }
+  html.cosmo-genius-restored [class*='gradebookWrap'] [class*='breakBands'] th:not([class*='nameHeader']){
+    height:29px!important;
+    padding:2px 0!important;
+  }
   html.cosmo-genius-restored [class*='gradebookWrap'] th b{
     font-size:14px!important;
     font-weight:600!important;
@@ -88,12 +92,16 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
   }
   html.cosmo-genius-restored [class*='gradebookWrap'] [class*='nameHeader'],
   html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child{
-    width:200px!important;
-    min-width:200px!important;
-    max-width:200px!important;
+    width:162px!important;
+    min-width:162px!important;
+    max-width:162px!important;
   }
   html.cosmo-genius-restored [class*='gradebookWrap'] td:first-child b{
-    max-width:143px!important;
+    max-width:108px!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere;
     font-size:14.5px!important;
     font-weight:550!important;
     line-height:1.3!important;

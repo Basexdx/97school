@@ -809,8 +809,9 @@ function Profile({ grade, setGrade, xp }) {
 
 function TeacherDashboard({ setScreen, request, setRequest }) {
   const [tab, setTab] = useState(request?.status === 'PENDING' ? 'requests' : 'classes')
+  const [previousTab,setPreviousTab]=useState('classes')
   const [menuOpen,setMenuOpen]=useState(false)
-  const chooseTab=value=>{setTab(value);setMenuOpen(false)}
+  const chooseTab=value=>{if(value!==tab){setPreviousTab(tab);setTab(value)}setMenuOpen(false)}
   const pendingCount = request?.status === 'PENDING' ? 1 : 0
 
   function approveRequest() {
@@ -827,7 +828,7 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
     <button type="button" className="mobile-nav-toggle" aria-controls="teacher-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
     {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
     <aside className={`sidebar-light ${menuOpen?'mobile-nav-open':''}`}>
-      <Brand dark onClick={() => setTab('classes')} />
+      <Brand dark onClick={() => chooseTab('classes')} />
       <nav id="teacher-sidebar-nav" aria-label="Разделы учителя">
         <button className={`side-nav ${tab === 'classes' ? 'active' : ''}`} onClick={() => chooseTab('classes')}><span>▦</span>Мои классы</button>
         <button className={`side-nav ${tab === 'academic' ? 'active' : ''}`} onClick={() => chooseTab('academic')}><span>▤</span>Дневник и ДЗ</button>
@@ -841,12 +842,12 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
     <main className="student-content">
       {tab === 'classes' && <>
         <div className="teacher-head"><div><h1>Мои классы</h1><p className="subtle">Управление учебными группами без лишних персональных данных.</p></div><button className="blue-btn small">+ Создать класс</button></div>
-        <div className="teacher-classes">{[['7А','24 ученика','88%'],['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button onClick={() => setTab('academic')}>Открыть →</button></div>)}</div>
+        <div className="teacher-classes">{[['7А','24 ученика','88%'],['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button onClick={() => chooseTab('academic')}>Открыть →</button></div>)}</div>
         <h2 className="quick-title">Быстрые действия</h2>
-        <div className="quick-grid"><button onClick={() => setTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => setTab('requests')}>◎<span>Запросы на подключение</span></button><button onClick={() => setTab('academic')}>▤<span>Открыть дневник</span></button></div>
+        <div className="quick-grid"><button onClick={() => chooseTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => chooseTab('requests')}>◎<span>Запросы на подключение</span></button><button onClick={() => chooseTab('academic')}>▤<span>Открыть дневник</span></button></div>
       </>}
 
-      {tab === 'academic' && <TeacherAcademic />}
+      {tab === 'academic' && <TeacherAcademic onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
 
       {tab === 'requests' && <>
         <div className="teacher-head"><div><h1>Запросы на подключение</h1><p className="subtle">Код не открывает доступ автоматически — каждый запрос подтверждается учителем.</p></div><span className="pending-count-pill">{pendingCount} ожидает</span></div>
