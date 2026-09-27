@@ -1,0 +1,32 @@
+/* Continue the same seasonal artwork beyond the sidebar, then fade into stars. */
+@media(min-width:901px){
+  html.cosmo-genius-restored .sidebar-light{
+    background-image:linear-gradient(90deg,transparent 48%,rgba(3,18,33,.25) 78%,rgba(3,18,33,.55) 100%),var(--season-cosmic-art),linear-gradient(180deg,#020b16,#041426 53%,#03101d)!important;
+    border-right:1px solid rgba(117,186,237,.11)!important;
+    box-shadow:none!important;
+  }
+  html.cosmo-genius-restored .genius-reference-overlay,
+  html.cosmo-genius-restored .reference-materials-overlay{border-left:0!important}
+  html.cosmo-genius-restored .student-content{isolation:isolate}
+  html.cosmo-genius-restored .student-content::after,
+  html.cosmo-genius-restored .genius-reference-overlay::after,
+  html.cosmo-genius-restored .reference-materials-overlay::after{
+    content:"";
+    position:fixed;
+    top:0;
+    left:255px;
+    width:200px;
+    height:100dvh;
+    pointer-events:none;
+    background-image:var(--season-cosmic-art);
+    background-size:auto min(820px,calc(100dvh - 60px));
+    background-position:-255px max(60px,calc(100dvh - 820px));
+    background-repeat:no-repeat;
+    opacity:.5;
+    mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.8) 34%,transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.8) 34%,transparent 100%);
+  }
+  html.cosmo-genius-restored .student-content::after{z-index:-1}
+  html.cosmo-genius-restored .genius-reference-overlay::after,
+  html.cosmo-genius-restored .reference-materials-overlay::after{z-index:0}
+}
