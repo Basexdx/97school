@@ -23,14 +23,12 @@ html[data-season='summer'].cosmo-genius-restored .sidebar-light::after{backgroun
 html.cosmo-genius-restored .student-app{grid-template-columns:255px minmax(0,1fr)}
 html.cosmo-genius-restored .sidebar-light{
   width:255px;
-  background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/autumn-cosmic.webp')!important;
-  /* The sidebar can grow with a long page; keep its artwork sized to the viewport. */
-  background-size:cover,auto calc(100dvh - 90px)!important;
-  background-position:left center,left top 90px!important;background-repeat:no-repeat!important;
+  /* One compact illustration continues across the edge into the content pane. */
+  background-image:var(--season-art),linear-gradient(180deg,#020b16 0%,#041426 53%,#03101d 100%)!important;
+  background-size:440px 560px,cover!important;
+  background-position:left top calc(100dvh - 560px),left top!important;
+  background-repeat:no-repeat!important;
 }
-html[data-season='winter'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/winter-cosmic.webp')!important}
-html[data-season='spring'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/spring-cosmic.webp')!important}
-html[data-season='summer'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/summer-cosmic.webp')!important}
 html.cosmo-genius-restored .sidebar-light::after{display:none!important}
 html.cosmo-genius-restored .sidebar-light::before{opacity:.16!important}
 html.cosmo-genius-restored .sidebar-light .logout{position:relative;z-index:2;text-shadow:0 1px 8px #020b16;color:#fff}
@@ -38,10 +36,10 @@ html.cosmo-genius-restored .sidebar-light .logout{position:relative;z-index:2;te
 @media(min-width:901px){
   html.cosmo-genius-restored .sidebar-light .side-nav{
     color:#f1f7ff!important;
-    font-weight:600;
+    font-weight:500;
     text-shadow:0 1px 4px rgba(0,7,17,.9);
-    background:rgba(2,15,29,.77)!important;
-    border-color:rgba(110,182,242,.13);
+    background:transparent!important;
+    border-color:transparent;
   }
   html.cosmo-genius-restored .sidebar-light .side-nav:hover,
   html.cosmo-genius-restored .sidebar-light .side-nav:focus-visible{
@@ -54,9 +52,9 @@ html.cosmo-genius-restored .sidebar-light .logout{position:relative;z-index:2;te
     border-color:rgba(var(--season-accent-rgb),.55)!important;
   }
   html.cosmo-genius-restored .sidebar-light .logout{
-    background:rgba(2,15,29,.8);
+    background:transparent;
     border-radius:8px;
-    font-weight:600;
+    font-weight:500;
   }
 }
 html.cosmo-genius-restored .student-content{padding:28px 26px 40px!important}
