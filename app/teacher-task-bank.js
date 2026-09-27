@@ -9,7 +9,7 @@ function answerLabel(answer){
   return 'Ключ ответа доступен только для автоматической проверки.'
 }
 
-export default function TeacherTaskBank(){
+export default function TeacherTaskBank({onBack,onHome}){
   const [grade,setGrade]=useState(8),[query,setQuery]=useState(''),[page,setPage]=useState(0)
   const [catalog,setCatalog]=useState(null),[detail,setDetail]=useState(null),[selected,setSelected]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false)
   useEffect(()=>{let active=true;const timer=setTimeout(()=>{
@@ -24,7 +24,7 @@ export default function TeacherTaskBank(){
     setDetail(await response.json())
   }catch(e){setError(e.message)}finally{setBusy(false)}}
   return <section className="teacher-task-bank">
-    <header className="teacher-head"><div><h1>Банк задач</h1><p className="subtle">Ответы и результаты учеников по каждой задаче.</p></div></header>
+    <header className="teacher-head unified-section-header"><div className="unified-section-title"><h1>Банк задач</h1><p>Ответы и результаты учеников по каждой задаче.</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></header>
     <div className="teacher-task-controls"><label>Класс<select value={grade} onChange={e=>{setGrade(Number(e.target.value));setPage(0);setDetail(null)}}>{[7,8,9].map(x=><option key={x} value={x}>{x} класс</option>)}</select></label><label>Поиск<input type="search" value={query} onChange={e=>{setQuery(e.target.value);setPage(0);setDetail(null)}} placeholder="Номер, тема или текст"/></label></div>
     {error&&<p role="alert" className="bank-note">{error}</p>}
     <div className="teacher-task-layout"><div className="teacher-task-list" aria-label="Задачи">{catalog?.tasks.map(t=><button key={t.id} className={selected===t.id?'active':''} onClick={()=>open(t.id)}><small>№ {t.number||'—'} · {t.grade} класс · {t.xp} XP</small><strong>{t.topic}</strong><span>{t.preview}</span></button>)}{catalog&&!catalog.tasks.length&&<p>По запросу задач нет.</p>}<nav className="teacher-task-pages"><button disabled={!page} onClick={()=>setPage(page-1)}>← Назад</button><span>{catalog?`${page+1} / ${Math.max(1,Math.ceil(catalog.total/40))}`:'…'}</span><button disabled={!catalog||page+1>=Math.ceil(catalog.total/40)} onClick={()=>setPage(page+1)}>Далее →</button></nav></div>

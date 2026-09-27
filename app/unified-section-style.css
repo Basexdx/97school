@@ -1,0 +1,75 @@
+/* Shared page headings follow the formulas and reference materials toolbar. */
+html.cosmo-genius-restored .unified-section-header,
+html.cosmo-genius-restored .teacher-content .unified-section-header{
+  position:sticky;
+  top:0;
+  z-index:19;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  min-width:0;
+  margin:0 0 17px;
+  padding:12px 14px;
+  border:1px solid rgba(69,157,226,.3);
+  border-radius:14px;
+  background:rgba(3,17,32,.93);
+  box-shadow:0 9px 30px rgba(0,8,20,.34);
+  backdrop-filter:blur(15px);
+}
+.unified-section-title{min-width:0}
+html.cosmo-genius-restored .unified-section-title h1{margin:0 0 3px;color:#f1f7ff;font-size:clamp(23px,2.1vw,30px);font-weight:700;line-height:1.15;letter-spacing:-.025em}
+html.cosmo-genius-restored .unified-section-title p{margin:0;color:#9db5cb!important;font-size:13px;line-height:1.35}
+.unified-section-header nav,.unified-section-end{display:flex;align-items:center;gap:9px;min-width:0}
+.unified-section-header nav{flex:none}
+html.cosmo-genius-restored .unified-section-header nav button,
+html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-overlay) .genius-reference-top button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  height:48px;
+  padding:0 13px;
+  border:1px solid rgba(54,151,220,.62);
+  border-radius:11px;
+  background:rgba(5,32,55,.88);
+  color:#e3f2ff;
+  font-size:13px;
+  font-weight:550;
+  white-space:nowrap;
+  cursor:pointer;
+}
+html.cosmo-genius-restored .unified-section-header nav button:hover,
+html.cosmo-genius-restored .unified-section-header nav button:focus-visible,
+html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-overlay) .genius-reference-top button:hover,
+html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-overlay) .genius-reference-top button:focus-visible{border-color:#ffc34e;color:#fff}
+html.cosmo-genius-restored .student-content[data-section='home'] .page-heading-row{border-color:rgba(69,157,226,.3);border-radius:14px;background:rgba(3,17,32,.88);box-shadow:0 9px 30px rgba(0,8,20,.25)}
+html.cosmo-genius-restored .student-content[data-section='performance'] [class*='performanceHero'],
+html.cosmo-genius-restored .student-content[data-section='rating'] [class*='performanceHero'],
+html.cosmo-genius-restored .student-content[data-section='profile'] [class*='performanceHero'],
+html.cosmo-genius-restored .student-content[data-section='achievements'] .section-head{display:none}
+html.cosmo-genius-restored .student-content[data-section='offline'] .offline-head>div{display:none}
+html.cosmo-genius-restored .student-content[data-section='offline'] .offline-head{justify-content:flex-end;border:0;background:transparent;box-shadow:none;padding:0;margin:0 0 12px}
+html.cosmo-genius-restored .student-content[data-section='topic'] .topic-header-card h1{display:none}
+html.cosmo-genius-restored .student-content[data-section='topic'] .back-page{display:none}
+html.cosmo-genius-restored .student-content[data-section='labs'] [class*='placeholder'] h2{display:none}
+html.cosmo-genius-restored .student-content[data-section='practice'] .task-grade-switch{top:82px}
+html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-overlay) .genius-reference-top{height:72px;flex-basis:72px;margin:0;padding:11px 24px;border-bottom:1px solid rgba(69,157,226,.3);background:rgba(3,17,32,.93);box-shadow:0 9px 30px rgba(0,8,20,.34)}
+html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-overlay) .genius-reference-top strong{font-size:17px;letter-spacing:0;color:#f1f7ff}
+html.cosmo-genius-restored .student-profile-button i.is-online{background:#ffc044;color:#1a1405;box-shadow:0 0 10px rgba(255,192,68,.6)}
+@media(max-width:900px){
+  html.cosmo-genius-restored .unified-section-header,
+  html.cosmo-genius-restored .teacher-content .unified-section-header{top:58px;flex-wrap:wrap;gap:9px;padding:11px 12px}
+  .unified-section-header nav{margin-left:auto}
+  .unified-section-end{width:100%;justify-content:space-between;flex-wrap:wrap}
+  html.cosmo-genius-restored .unified-section-header nav button{height:42px;padding:0 11px}
+  html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-overlay) .genius-reference-top{padding-left:80px!important}
+  html.cosmo-genius-restored .teacher-content [class*='academicHeader']{top:58px}
+  html.cosmo-genius-restored .student-content[data-section='practice'] .task-grade-switch{top:160px}
+}
+@media(max-width:600px){
+  html.cosmo-genius-restored .unified-section-title h1{font-size:21px}
+  html.cosmo-genius-restored .unified-section-title p{font-size:11px}
+  html.cosmo-genius-restored .unified-section-header nav{width:100%;justify-content:flex-end}
+  html.cosmo-genius-restored .unified-section-header nav button{font-size:12px}
+}

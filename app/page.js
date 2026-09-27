@@ -286,6 +286,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
   const [openedSections,setOpenedSections]=useState([])
   const [syncMessage, setSyncMessage] = useState('')
   const currentTopics = useMemo(() => topicsByGrade[grade], [grade])
+  const sectionInfo={topics:['Учебник','Уроки физики и учебные материалы'],tests:['Тесты','Проверь свои знания'],oge:['Подготовка к ОГЭ','Задания и материалы для подготовки'],practice:['Задачник','Задачи по физике для практики'],lesson8:['Урок физики','Теория, примеры и проверка знаний'],topic:['Тема урока','Теория и тренировка'],quiz:['Тренировочный тест','Проверка знаний без начисления XP'],result:['Результат','Итоги тренировочного теста'],performance:['Успеваемость','Дневник и результаты по физике'],rating:['Рейтинг','Результаты и прогресс'],labs:['Лабораторные работы','Практические занятия по физике'],achievements:['Мои достижения','Твои успехи в Genius'],offline:['Офлайн-материалы','Учись и сохраняй прогресс без интернета'],profile:['Профиль','Настройки и результаты обучения']}
 
   const score = answers.reduce((acc, a, i) => acc + (a === quiz[i]?.correct ? 1 : 0), 0)
   const percent = Math.round((score / quiz.length) * 100)
@@ -363,8 +364,8 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
   return (
     <div className="student-app">
       <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
-      <main className="student-content">
-        {screen!=='home'&&<div className="student-section-actions"><button onClick={backFromSection}>← Назад</button><button onClick={()=>setScreen('home')}>⌂ В меню</button></div>}
+      <main className="student-content" data-section={screen}>
+        {sectionInfo[screen]&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && <HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
@@ -807,6 +808,10 @@ function Profile({ grade, setGrade, xp }) {
   </>
 }
 
+function TeacherSectionHeader({title,description,onBack,onHome,children}){
+  return <header className="teacher-head unified-section-header"><div className="unified-section-title"><h1>{title}</h1><p>{description}</p></div><div className="unified-section-end">{children}<nav aria-label="Навигация по разделам"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></div></header>
+}
+
 function TeacherDashboard({ setScreen, request, setRequest }) {
   const [tab, setTab] = useState(request?.status === 'PENDING' ? 'requests' : 'classes')
   const [previousTab,setPreviousTab]=useState('classes')
@@ -839,9 +844,9 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
       </nav>
       <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
     </aside>
-    <main className="student-content">
+    <main className="student-content teacher-content" data-section={tab}>
       {tab === 'classes' && <>
-        <div className="teacher-head"><div><h1>Мои классы</h1><p className="subtle">Управление учебными группами без лишних персональных данных.</p></div><button className="blue-btn small">+ Создать класс</button></div>
+        <TeacherSectionHeader title="Мои классы" description="Управление учебными группами без лишних персональных данных." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><button className="blue-btn small">+ Создать класс</button></TeacherSectionHeader>
         <div className="teacher-classes">{[['7А','24 ученика','88%'],['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button onClick={() => chooseTab('academic')}>Открыть →</button></div>)}</div>
         <h2 className="quick-title">Быстрые действия</h2>
         <div className="quick-grid"><button onClick={() => chooseTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => chooseTab('requests')}>◎<span>Запросы на подключение</span></button><button onClick={() => chooseTab('academic')}>▤<span>Открыть дневник</span></button></div>
@@ -850,7 +855,7 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
       {tab === 'academic' && <TeacherAcademic onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
 
       {tab === 'requests' && <>
-        <div className="teacher-head"><div><h1>Запросы на подключение</h1><p className="subtle">Код не открывает доступ автоматически — каждый запрос подтверждается учителем.</p></div><span className="pending-count-pill">{pendingCount} ожидает</span></div>
+        <TeacherSectionHeader title="Запросы на подключение" description="Каждый запрос подтверждается учителем." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><span className="pending-count-pill">{pendingCount} ожидает</span></TeacherSectionHeader>
         {!request && <div className="empty-state"><div>✓</div><h3>Новых запросов нет</h3><p>Когда ученик введёт выданный код, запрос появится здесь.</p></div>}
         {request && <article className={`connection-request ${request.status.toLowerCase()}`}>
           <div className="request-main">
@@ -863,7 +868,7 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
       </>}
 
       {tab === 'keys' && <>
-        <div className="teacher-head"><div><h1>Ключи доступа</h1><p className="subtle">Каждый ученик получает персональный одноразовый ключ.</p></div><button className="blue-btn small">+ Создать ключ</button></div>
+        <TeacherSectionHeader title="Ключи доступа" description="Каждый ученик получает персональный одноразовый ключ." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><button className="blue-btn small">+ Создать ключ</button></TeacherSectionHeader>
         <div className="security-table">
           <div className="security-table-head"><span>Класс</span><span>Ключ</span><span>Назначение</span><span>Статус</span></div>
           <div><b>8Б</b><code>GNS-8K4P-X7M2</code><span>ключ №17</span><em className={request ? 'status-used' : 'status-active'}>{request ? 'Запрос создан' : 'Активен'}</em></div>
@@ -873,12 +878,12 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
       </>}
 
       {tab === 'results' && <>
-        <div className="teacher-head"><div><h1>Результаты</h1><p className="subtle">Здесь будет только учебная активность внутри Genius.</p></div></div>
+        <TeacherSectionHeader title="Результаты" description="Учебная активность внутри Genius." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />
         <div className="metric-grid"><div className="metric-card"><strong>83</strong><span>Учеников</span></div><div className="metric-card"><strong>79%</strong><span>Средняя точность</span></div><div className="metric-card"><strong>1 248</strong><span>Задач за неделю</span></div><div className="metric-card"><strong>68%</strong><span>Активность</span></div></div>
         <div className="security-callout"><strong>Принцип приватности</strong><p>Учитель видит результаты тестов, XP, прогресс и активность внутри Genius. Геолокация, файлы, сообщения, контакты и активность в других приложениях не собираются.</p></div>
       </>}
 
-      {tab === 'bank' && <TeacherTaskBank />}
+      {tab === 'bank' && <TeacherTaskBank onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
     </main>
   </div>
 }
