@@ -1,11 +1,11 @@
 'use client'
 
-import {useEffect,useMemo,useState} from 'react'
+import {useEffect,useState} from 'react'
 import {createPortal} from 'react-dom'
 import {grade8Lessons} from './grade8-lessons'
 import Grade8Diagram from './grade8-diagrams'
 import {grade8Definitions} from './grade8-definitions'
-import {ogeFormulas,searchOgeReference} from './oge-reference-data.mjs'
+import PhysicsFormulas from './physics-formulas'
 import OgeTaskBank from './oge-task-bank'
 
 const VIEWED_KEY='genius:viewed-tasks:v17'
@@ -130,22 +130,15 @@ function enhanceTaskBank(hub){
 }
 
 export function ReferenceOverlay({mode,close,onMenu,returnToTask}){
-  return <div className="genius-reference-overlay">
+  return <div className={`genius-reference-overlay ${mode==='formulas'?'formula-reference-overlay':''}`}>
     <header className="genius-reference-top"><button onClick={close}>← Назад</button><strong>{mode==='fipi'?'Банк заданий ФИПИ':'Основные формулы'}</strong><button onClick={onMenu} aria-label="В меню">⌂ Меню</button></header>
-    <main className="genius-reference-scroll">{mode==='constants'?<ConstantsReference/>:mode==='formulas'?<FormulaReference/>:<div className="genius-fipi-wrap"><OgeTaskBank/></div>}</main>
+    <main className="genius-reference-scroll">{mode==='constants'?<ConstantsReference/>:mode==='formulas'?<PhysicsFormulas/>:<div className="genius-fipi-wrap"><OgeTaskBank/></div>}</main>
     {returnToTask&&<button className="genius-return-task" onClick={close}>← Вернуться к задаче</button>}
   </div>
 }
 
 function ConstantsReference(){
   return <section className="genius-reference-page"><div className="genius-reference-hero"><span>СПРАВОЧНИК 7–9 КЛАСС</span><h1>Постоянные величины</h1><p>Короткая таблица величин, которые часто используются в школьных задачах по физике.</p></div><div className="genius-constant-grid">{CONSTANTS.map(([symbol,value,title])=><article key={symbol}><div>{symbol}</div><strong>{value}</strong><p>{title}</p></article>)}</div></section>
-}
-
-function FormulaReference(){
-  const [query,setQuery]=useState('')
-  const results=useMemo(()=>searchOgeReference(query,ogeFormulas),[query])
-  const groups=useMemo(()=>results.reduce((acc,item)=>{(acc[item.section]??=[]).push(item);return acc},{}),[results])
-  return <section className="genius-reference-page"><div className="genius-reference-hero"><span>СПРАВОЧНИК 7–9 КЛАСС</span><h1>Основные формулы</h1><p>Найди нужную формулу по названию величины, обозначению или слову из условия задачи.</p></div><label className="genius-formula-search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Например: масса, давление, теплота, сопротивление…"/>{query&&<button onClick={()=>setQuery('')}>×</button>}</label>{Object.entries(groups).map(([section,items])=><section className="genius-formula-group" key={section}><h2>{section}<span>{items.length}</span></h2><div className="genius-formula-grid">{items.map(item=><article key={item.id}><small>{item.title}</small><div>{item.formula}</div><ul>{item.variables.map(v=><li key={v}>{v}</li>)}</ul></article>)}</div></section>)}</section>
 }
 
 function OnePageLesson({paragraph}){
