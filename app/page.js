@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import UnifiedTaskBank from './unified-task-bank'
+import TeacherTaskBank from './teacher-task-bank'
 import {ReferenceOverlay} from './genius-v17-enhancer'
 import {ReferenceMaterialsPage} from './reference-materials'
 import {bankPendingLocal,syncBankAttempts} from './task-store'
@@ -380,7 +381,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
         {screen === 'labs' && <LabsPlaceholder />}
         {screen === 'achievements' && <Achievements />}
         {screen === 'offline' && <OfflineMaterials grade={grade} topics={currentTopics} state={offlineState} refresh={refreshOfflineState} syncNow={() => trySync(true)} isOnline={isOnline} />}
-        {screen === 'profile' && <Profile grade={grade} setGrade={setGrade} xp={xp} />}
+        {screen === 'profile' && <><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>}
       </main>
     </div>
   )
@@ -876,12 +877,7 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
         <div className="security-callout"><strong>Принцип приватности</strong><p>Учитель видит результаты тестов, XP, прогресс и активность внутри Genius. Геолокация, файлы, сообщения, контакты и активность в других приложениях не собираются.</p></div>
       </>}
 
-      {tab === 'bank' && <>
-        <div className="teacher-head"><div><h1>Банк задач</h1><p className="subtle">Текущий учебный банк 8 класса: 319 задач, единое поле ответа, навигация стрелками и офлайн-пакеты. Для нового пакета из сборника решения пока скрыты, ответы сохраняются без автоматической проверки.</p></div><button className="blue-btn small" onClick={() => setScreen('practice')}>Открыть как ученик →</button></div>
-        <div className="metric-grid"><div className="metric-card"><strong>100</strong><span>Задач</span></div><div className="metric-card"><strong>3</strong><span>Тематических раздела</span></div><div className="metric-card"><strong>8</strong><span>Перерисованных схем</span></div><div className="metric-card"><strong>✓</strong><span>Ответы проверены</span></div></div>
-        <div className="teacher-bank-grid"><article><span>♨</span><div><small>§1–§26</small><strong>Тепловые явления</strong><p>Задачи распределены по темам учебника и доступны для локальной практики.</p></div></article><article><span>ϟ</span><div><small>§27–§40</small><strong>Электрические явления</strong><p>В банк входят задания по заряду, току, измерительным приборам и сопротивлению.</p></div></article><article><span>◎</span><div><small>Доп. темы</small><strong>Электромагнитные и световые явления</strong><p>Задачи вынесены отдельно, чтобы не придумывать номера параграфов, которых нет в загруженной части учебника.</p></div></article></div>
-        <div className="security-callout"><strong>Genius v13</strong><p>В банк добавлены 169 задач из предоставленного сборника Перышкина. Задачи со звёздочкой отмечены как повышенный уровень, графики 839 и 852 и рисунок 862 перерисованы в стиле Genius. Запуск на Windows доступен одним кликом.</p></div>
-      </>}
+      {tab === 'bank' && <TeacherTaskBank />}
     </main>
   </div>
 }

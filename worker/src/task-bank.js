@@ -13,6 +13,23 @@ const gradeSql="CASE WHEN task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN task_id
 const json=(v,status=200)=>new Response(JSON.stringify(v),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}})
 const digest=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))),b=>b.toString(16).padStart(2,'0')).join('')
 
+export async function teacherTaskCatalog(request){
+  const url=new URL(request.url),grade=Number(url.searchParams.get('grade')||8),page=Math.max(0,Math.min(1000,Number(url.searchParams.get('page'))||0))
+  if(![7,8,9].includes(grade))return json({error:'invalid_grade'},400)
+  const query=(url.searchParams.get('q')||'').trim().toLocaleLowerCase('ru-RU').slice(0,120)
+  const matches=[...byId.values()].filter(t=>Number(t.CLASS)===grade&&(!query||`${t.ID} ${t.BOOK_TASK_NUMBER||''} ${t.TOPIC} ${t.TASK}`.toLocaleLowerCase('ru-RU').includes(query)))
+  return json({total:matches.length,tasks:matches.slice(page*40,page*40+40).map(t=>({id:t.ID,number:t.BOOK_TASK_NUMBER,grade:t.CLASS,xp:t.XP,topic:t.TOPIC,preview:String(t.TASK||'').slice(0,160)}))})
+}
+
+export async function teacherTaskDetail(env,teacher,id){
+  const task=byId.get(id)
+  if(!task)return json({error:'task_not_found'},404)
+  const rows=await env.DB.prepare(`SELECT s.id,s.nickname,c.title AS class_name,w.amount AS xp
+    FROM task_awards w JOIN students s ON s.id=w.student_id JOIN classes c ON c.id=s.class_id
+    WHERE w.task_id=? AND c.teacher_id=? AND s.status='ACTIVE' ORDER BY c.title,s.nickname`).bind(id,teacher.id).all()
+  return json({task:{ID:task.ID,CLASS:task.CLASS,TOPIC:task.TOPIC,TASK:task.TASK,BOOK_TASK_NUMBER:task.BOOK_TASK_NUMBER,XP:task.XP,ANSWER:task.ANSWER},students:(rows.results||[]).map(s=>({id:s.id,nickname:s.nickname,className:s.class_name,xp:s.xp}))})
+}
+
 export async function taskProgress(env,student) {
   const grade=Number(student.grade)
   const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,

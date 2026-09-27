@@ -1,4 +1,4 @@
-import { submitTaskAttempts, taskProgress } from './task-bank.js'
+import { submitTaskAttempts, taskProgress, teacherTaskCatalog, teacherTaskDetail } from './task-bank.js'
 import { saveAttendance, saveGrade, saveHomework, saveHomeworkOverride, saveLessonAssessment, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic-v2.js'
 const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
 
@@ -48,6 +48,13 @@ async function handleRequest(request, env) {
   if (path === '/api/teacher/connection-requests' && request.method === 'GET') return teacherRequests(request, env)
   if (path === '/api/teacher/access-keys' && request.method === 'GET') return teacherAccessKeys(request, env)
   if (path === '/api/teacher/access-keys' && request.method === 'POST') return teacherCreateAccessKey(request, env)
+  if (path === '/api/teacher/tasks' && request.method === 'GET') {
+    const auth=await requireTeacher(request,env);return auth.ok?teacherTaskCatalog(request):auth.response
+  }
+  const teacherTaskMatch=path.match(/^\/api\/teacher\/tasks\/([^/]+)$/)
+  if (teacherTaskMatch && request.method === 'GET') {
+    const auth=await requireTeacher(request,env);return auth.ok?teacherTaskDetail(env,auth.teacher,decodeURIComponent(teacherTaskMatch[1])):auth.response
+  }
   if (path === '/api/teacher/academic' && request.method === 'GET') {
     const auth=await requireTeacher(request,env);return auth.ok?teacherAcademic(request,env,auth.teacher):auth.response
   }

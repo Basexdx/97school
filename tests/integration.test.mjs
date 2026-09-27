@@ -39,6 +39,20 @@ test('Worker: authentication, actual answer grading, replay, conflicts and untru
  r=await post({...payload,attempts:[{...payload.attempts[0],attemptId:'attempt_00003',eventId:'event_000003',taskId:'genius-src8-7-23867',answer:'999',xp:9999}]});assert.equal(r.data.results[0].correct,false);assert.equal(r.data.totalXp,10)
  r=await post({...payload,attempts:[{...payload.attempts[0],attemptId:'attempt_00004',eventId:'event_000004',version:'stale'}]});assert.equal(r.data.results[0].error,'content_version_mismatch')
 })
+test('Teacher sees answer and awarded XP only for own students after authentication',async()=>{
+ const teacherToken='teacher_task_test_token'
+ const teacherHash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(teacherToken))),b=>b.toString(16).padStart(2,'0')).join('')
+ dbCall("INSERT INTO teacher_sessions(id,teacher_id,token_hash,expires_at) VALUES('ts_task','teacher_01',?,'2099-01-01T00:00:00Z')",[teacherHash])
+ const get=async(pathname,cookie)=>{const response=await worker.fetch(new Request('https://genius.test'+pathname,{headers:cookie?{cookie:'genius_teacher='+teacherToken}:{}}),env);return {status:response.status,data:await response.json()}}
+ const path='/api/teacher/tasks/genius-src8-7-19601'
+ assert.equal((await get(path)).status,401)
+ assert.equal((await get('/api/teacher/tasks?grade=8&q=19601')).status,401)
+ const list=await get('/api/teacher/tasks?grade=8&q=19601',true)
+ assert.equal(list.status,200);assert.ok(list.data.tasks.some(t=>t.id==='genius-src8-7-19601'))
+ const detail=await get(path,true)
+ assert.equal(detail.status,200);assert.equal(detail.data.task.ANSWER.values[0],'4')
+ assert.equal(detail.data.students.length,1);assert.equal(detail.data.students[0].xp,10)
+})
 test('Offline: explicit download, offline load, guest isolation, pending sync and server reconciliation',async()=>{
  Object.defineProperty(globalThis,'navigator',{value:{onLine:true},configurable:true})
  globalThis.window={indexedDB};globalThis.indexedDB=indexedDB;globalThis.IDBKeyRange=IDBKeyRange

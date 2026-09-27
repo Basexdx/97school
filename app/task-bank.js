@@ -68,9 +68,10 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
     return {total:index?.tasks.length||0,solved:all.filter(x=>x.solved).length,repeat:all.filter(x=>x.repeat).length,pending:attempts.filter(x=>x.status==='PENDING_SYNC').length,accuracy:graded.length?Math.round(correct/graded.length*100):0}
   },[states,attempts,index])
 
+  const currentParagraphs=(index?.paragraphs||[]).filter(p=>!section||p.section===section)
   const rows=useMemo(()=>{
     const needle=query.trim().toLocaleLowerCase('ru-RU')
-    return (index?.tasks||[]).filter(t=>(!section||t.section===section)&&(!paragraph||t.paragraph===Number(paragraph))&&(!topic||t.topic===topic)&&(!difficulty||t.difficulty===difficulty)&&(!type||t.type===type)&&(!progress||(progress==='solved'?states[t.id]?.solved:progress==='repeat'?states[t.id]?.repeat:progress==='pending'?states[t.id]?.pending:!states[t.id]?.solved))&&(!needle||`${t.topic} ${locationLabel(t)} ${typeLabels[t.type]||t.type}`.toLocaleLowerCase('ru-RU').includes(needle)))
+    return (index?.tasks||[]).filter(t=>(!section||t.section===section)&&(!paragraph||`${locationLabel(t)}. ${currentParagraphs.find(p=>p.paragraph===t.paragraph)?.title||''}`.toLocaleLowerCase('ru-RU').includes(paragraph.trim().toLocaleLowerCase('ru-RU').replace(/^\d+$/,'§$&')))&&(!topic||t.topic.toLocaleLowerCase('ru-RU').includes(topic.trim().toLocaleLowerCase('ru-RU')))&&(!difficulty||t.difficulty===difficulty)&&(!type||t.type===type)&&(!progress||(progress==='solved'?states[t.id]?.solved:progress==='repeat'?states[t.id]?.repeat:progress==='pending'?states[t.id]?.pending:!states[t.id]?.solved))&&(!needle||`${t.topic} ${locationLabel(t)} ${typeLabels[t.type]||t.type}`.toLocaleLowerCase('ru-RU').includes(needle)))
   },[index,section,paragraph,topic,difficulty,type,progress,query,states])
 
   useEffect(()=>{
@@ -81,7 +82,6 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
     return()=>cancelAnimationFrame(frame)
   },[index,rows.length,restoreTaskId,task])
 
-  const currentParagraphs=(index?.paragraphs||[]).filter(p=>!section||p.section===section)
   function resetFilters(){setSection('');setParagraph('');setTopic('');setDifficulty('');setType('');setProgress('');setQuery('')}
   function selectSection(id){setSection(section===id?'':id);setParagraph('');setTopic('')}
   function selectParagraph(value){setParagraph(value?String(value):'');setTopic('')}
@@ -129,14 +129,9 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
     <div className="bank-sections">{Object.entries(sections).map(([id,label])=><button key={id} className={section===id?'selected':''} onClick={()=>selectSection(id)}><small>{sectionRanges[id]}</small><strong>{label}</strong><span>{index?.tasks.filter(t=>t.section===id).length??0} задач →</span></button>)}</div>
 
     <div className="bank-filter-dock">
-      <section className="bank-navigator">
-        <div className="bank-search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти тему" aria-label="Поиск по банку задач"/></div>
-        {!!currentParagraphs.length&&<div className="bank-paragraph-strip" aria-label="Параграфы"><button className={!paragraph?'active':''} onClick={()=>selectParagraph('')}>Все</button>{currentParagraphs.map(p=><button key={p.paragraph} title={p.title} className={Number(paragraph)===p.paragraph?'active':''} onClick={()=>selectParagraph(p.paragraph)}>§{p.paragraph}</button>)}</div>}
-      </section>
-
       <section className="bank-filters" aria-label="Фильтры задач">
-        <label>Параграф<select value={paragraph} onChange={e=>selectParagraph(e.target.value)} disabled={!currentParagraphs.length}><option value="">Все параграфы</option>{currentParagraphs.map(p=><option key={p.paragraph} value={p.paragraph}>§{p.paragraph}. {p.title}</option>)}</select></label>
-        <label>Тема<select value={topic} onChange={e=>setTopic(e.target.value)}><option value="">Все темы</option>{[...new Set((index?.tasks||[]).filter(t=>(!section||t.section===section)&&(!paragraph||t.paragraph===Number(paragraph))).map(t=>t.topic))].sort().map(x=><option key={x}>{x}</option>)}</select></label>
+        <label>Параграф<input type="search" list="bank-paragraph-options" value={paragraph} onChange={e=>setParagraph(e.target.value)} placeholder="Номер или название"/><datalist id="bank-paragraph-options">{currentParagraphs.map(p=><option key={p.paragraph} value={`§${p.paragraph}. ${p.title}`}/>)}</datalist></label>
+        <label>Тема<input type="search" list="bank-topic-options" value={topic} onChange={e=>setTopic(e.target.value)} placeholder="Введите тему"/><datalist id="bank-topic-options">{[...new Set((index?.tasks||[]).filter(t=>!section||t.section===section).map(t=>t.topic))].sort().map(x=><option key={x} value={x}/>)}</datalist></label>
         <label>Сложность<select value={difficulty} onChange={e=>setDifficulty(e.target.value)}><option value="">Любая сложность</option>{['БАЗОВЫЙ','ПОВЫШЕННЫЙ','ВЫСОКИЙ'].map(x=><option key={x} value={x}>{difficultyLabels[x]}</option>)}</select></label>
         <label>Тип<select value={type} onChange={e=>setType(e.target.value)}><option value="">Все типы</option>{[...new Set(index?.tasks.map(t=>t.type)||[])].map(x=><option key={x} value={x}>{typeLabels[x]||x}</option>)}</select></label>
         <label>Прогресс<select value={progress} onChange={e=>setProgress(e.target.value)}><option value="">Все задачи</option><option value="solved">Решённые</option><option value="unsolved">Нерешённые</option><option value="repeat">Требуют повторения</option><option value="pending">Ждут синхронизации</option></select></label>
@@ -144,7 +139,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
       </section>
     </div>
 
-    <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!paragraph||busy||!online} onClick={()=>download('paragraph',paragraph)}>⇩ Скачать тему {paragraph&&`· ${formatBytes(index.tasks.filter(t=>t.paragraph===Number(paragraph)).reduce((a,t)=>a+t.bytes,0))}`}</button><button disabled={!section||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
+    <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!/^§?\d+(?:\.|$)/.test(paragraph.trim())||busy||!online} onClick={()=>download('paragraph',paragraph.match(/\d+/)?.[0])}>⇩ Скачать тему</button><button disabled={!section||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
 
     <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${viewed.has(t.id)?'viewed':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><div className="bank-tile-top"><span>{locationLabel(t)}</span><span>{t.xp} XP</span></div><h2>{t.topic}</h2><p>{typeLabels[t.type]||t.type} · {difficultyLabels[t.difficulty]||t.difficulty.toLowerCase()}</p><div className="bank-tile-meta"><span>{state?.solved?'Решено':viewed.has(t.id)?'Просмотрено':state?.count?`${state.count} попыт.`:'Новая'}</span>{state?.pending&&<span className="pending">SYNC</span>}</div><footer>{state?.repeat?'↻ Повторить':state?.solved?'✓ Решено':'Начать решение →'}</footer></button>})}</div>
     {index&&!rows.length&&<div className="bank-empty"><span>⌕</span><h2>Ничего не найдено</h2><p>Измени фильтры или вернись ко всему банку задач.</p><button onClick={resetFilters}>Показать все задачи</button></div>}
