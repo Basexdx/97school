@@ -1,9 +1,15 @@
 /* Seasonal artwork continues into the content column for both roles. */
 html.cosmo-genius-restored .student-content{
-  background:
-    radial-gradient(circle at 92% 16%,rgba(66,156,231,.1),transparent 38%),
-    radial-gradient(circle at 42% 76%,rgba(var(--season-glow-rgb),.065),transparent 44%),
-    linear-gradient(145deg,#03111f,#061729 65%,#03111e)!important;
+  /* A quiet starfield carries the sidebar's space into the whole screen. */
+  background-color:#041423!important;
+  background-image:
+    radial-gradient(circle at 17px 29px,rgba(191,225,255,.36) 0 .7px,transparent 1.4px),
+    radial-gradient(circle at 108px 86px,rgba(122,195,255,.25) 0 .8px,transparent 1.5px),
+    radial-gradient(circle at 59px 163px,rgba(220,239,255,.18) 0 .6px,transparent 1.3px),
+    radial-gradient(ellipse at 0% 65%,rgba(25,84,141,.18),transparent 38%),
+    linear-gradient(90deg,#041423 0%,#061727 40%,#041321 100%)!important;
+  background-size:271px 223px,337px 307px,463px 401px,cover,cover!important;
+  background-repeat:repeat,repeat,repeat,no-repeat,no-repeat!important;
   position:relative;
 }
 html.cosmo-genius-restored .student-content::before{
