@@ -24,8 +24,9 @@ html.cosmo-genius-restored .student-app{grid-template-columns:255px minmax(0,1fr
 html.cosmo-genius-restored .sidebar-light{
   width:255px;
   background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/autumn-cosmic.webp')!important;
-  background-size:cover,auto calc(100% - 90px)!important;
-  background-position:left center,left bottom!important;background-repeat:no-repeat!important;
+  /* The sidebar can grow with a long page; keep its artwork sized to the viewport. */
+  background-size:cover,auto calc(100dvh - 90px)!important;
+  background-position:left center,left top 90px!important;background-repeat:no-repeat!important;
 }
 html[data-season='winter'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/winter-cosmic.webp')!important}
 html[data-season='spring'].cosmo-genius-restored .sidebar-light{background-image:linear-gradient(180deg,rgba(2,11,22,.18),rgba(2,11,22,.04) 45%,rgba(2,11,22,.1)),url('/seasons/spring-cosmic.webp')!important}
