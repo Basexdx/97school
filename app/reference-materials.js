@@ -211,7 +211,7 @@ export default function ReferenceMaterials(){
   </>
 }
 
-function ReferenceMaterialsPage({onClose}){
+export function ReferenceMaterialsPage({onClose,onMenu,active=true}){
   const [category,setCategory]=useState('all')
   const [query,setQuery]=useState('')
   const [expanded,setExpanded]=useState(()=>new Set(['prefixes','constants']))
@@ -219,12 +219,13 @@ function ReferenceMaterialsPage({onClose}){
   const q=normalize(query)
 
   useEffect(()=>{
+    if(!active)return undefined
     const previous=document.body.style.overflow
     document.body.style.overflow='hidden'
     const onKey=event=>{if(event.key==='Escape')onClose()}
     window.addEventListener('keydown',onKey)
     return()=>{document.body.style.overflow=previous;window.removeEventListener('keydown',onKey)}
-  },[onClose])
+  },[onClose,active])
 
   const visible=useMemo(()=>SECTIONS.map(section=>({
     ...section,
@@ -245,14 +246,15 @@ function ReferenceMaterialsPage({onClose}){
   }
 
   function openStudentMenu(){
-    onClose()
-    window.setTimeout(()=>document.querySelector('.mobile-nav-toggle')?.click(),30)
+    if(onMenu)onMenu()
+    else{onClose();window.setTimeout(()=>document.querySelector('.mobile-nav-toggle')?.click(),30)}
   }
 
   return <div className="reference-materials-overlay" role="dialog" aria-modal="true" aria-label="Справочные материалы по физике">
     <div className="rm-mobile-topbar">
       <div className="rm-mobile-brand"><span className="rm-brand-atom" aria-hidden="true"><i/><i/><i/><b/></span><strong>Genius</strong></div>
       <div className="rm-mobile-actions">
+        <button type="button" aria-label="Назад" onClick={onClose}>←</button>
         <button type="button" aria-label="Перейти к поиску" onClick={()=>searchRef.current?.focus()}>⌕</button>
         <button type="button" aria-label="Открыть меню" onClick={openStudentMenu}>☰</button>
       </div>
@@ -269,7 +271,7 @@ function ReferenceMaterialsPage({onClose}){
           <input ref={searchRef} value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по справочным материалам…" autoComplete="off"/>
           {query&&<button type="button" onClick={()=>setQuery('')} aria-label="Очистить поиск">×</button>}
         </label>
-        <button className="rm-close" type="button" onClick={onClose} aria-label="Закрыть справочник">×</button>
+        <div className="rm-header-actions"><button type="button" onClick={onClose}>← Назад</button><button className="rm-close" type="button" onClick={onMenu||onClose} aria-label="В меню">⌂</button></div>
       </header>
 
       <nav className="rm-categories" aria-label="Категории справочных материалов">

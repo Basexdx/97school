@@ -26,7 +26,7 @@ export default function OgeTaskBank(){
 
   return <div className={styles.page}>
     <section className={styles.hero}>
-      <div><span className={styles.kicker}>GENIUS · ПОДГОТОВКА К ОГЭ</span><h1>Задачи ОГЭ</h1><p>Отдельный банк заданий формата ОГЭ. Графики и рисунки перерисованы внутри Genius без водяных знаков и лишних элементов страницы.</p><div className={styles.pills}><span>{ogeCounts.total} задач</span><span>Задача 6 ОГЭ · {ogeCounts[6]}</span><span>Задача 7 ОГЭ · {ogeCounts[7]}</span></div></div>
+      <div><span className={styles.kicker}>GENIUS · ПОДГОТОВКА К ОГЭ</span><h1>Банк заданий ФИПИ</h1><p>Задания по физике для подготовки к ОГЭ.</p><div className={styles.pills}><span>{ogeCounts.total} задач</span><span>Задача 6 ОГЭ · {ogeCounts[6]}</span><span>Задача 7 ОГЭ · {ogeCounts[7]}</span></div></div>
       <div className={styles.heroMark} aria-hidden="true"><i/><i/><i/><b>ОГЭ</b></div>
     </section>
     <div className={styles.filterDock}><div className={styles.filters} role="tablist" aria-label="Тип задания ОГЭ">

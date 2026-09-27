@@ -50,12 +50,8 @@ function gradeSections(grade){
 function countByGrade(set,grade){return [...set].filter(id=>gradeFromDomId(id)===grade).length}
 
 export default function GeniusV17Enhancer(){
-  const [navAnchor,setNavAnchor]=useState(null)
-  const [searchAnchor,setSearchAnchor]=useState(null)
   const [lessonAnchor,setLessonAnchor]=useState(null)
   const [lessonParagraph,setLessonParagraph]=useState(null)
-  const [mode,setMode]=useState(null)
-  const [returnToTask,setReturnToTask]=useState(false)
 
   useEffect(()=>{
     let scheduled=false
@@ -70,27 +66,8 @@ export default function GeniusV17Enhancer(){
       const ogeCard=document.getElementById('oge')
       if(ogeCard)ogeCard.style.display='none'
 
-      const nav=document.querySelector('.sidebar-light nav')
-      if(nav){
-        const oldOge=[...nav.querySelectorAll(':scope > button')].find(button=>button.textContent?.includes('Подготовка к ОГЭ'))
-        if(oldOge)oldOge.style.display='none'
-        let anchor=nav.querySelector('[data-genius-v17-nav]')
-        if(!anchor){
-          anchor=document.createElement('span');anchor.dataset.geniusV17Nav='1';anchor.className='genius-v17-nav-anchor'
-          const buttons=[...nav.querySelectorAll(':scope > button')]
-          const after=buttons.find(button=>button.textContent?.includes('Учебник'))
-          if(after)after.insertAdjacentElement('afterend',anchor);else nav.append(anchor)
-        }
-        if(navAnchor!==anchor)setNavAnchor(anchor)
-      }else if(navAnchor)setNavAnchor(null)
-
       const hub=document.querySelector('.task-bank-hub')
-      if(hub){
-        let anchor=hub.querySelector('[data-genius-v17-search]')
-        if(!anchor){anchor=document.createElement('div');anchor.dataset.geniusV17Search='1';anchor.className='genius-global-search-anchor';const switcher=hub.querySelector('.task-grade-switch');switcher?.insertAdjacentElement('afterend',anchor)}
-        if(searchAnchor!==anchor)setSearchAnchor(anchor)
-        enhanceTaskBank(hub)
-      }else if(searchAnchor)setSearchAnchor(null)
+      if(hub)enhanceTaskBank(hub)
 
       const shell=document.querySelector('.lesson-dark-shell')
       if(shell){
@@ -106,8 +83,6 @@ export default function GeniusV17Enhancer(){
         if(lessonParagraph)setLessonParagraph(null)
       }
 
-      const fipiHeading=[...document.querySelectorAll('h1')].find(x=>x.textContent?.trim()==='Задачи ОГЭ')
-      if(fipiHeading&&fipiHeading.closest('.genius-reference-overlay'))fipiHeading.textContent='Банк задач ФИПИ'
     }
     function onClick(event){
       const tile=event.target.closest?.('button[id^="task-"],button[id^="grade7-task-"],button[id^="grade9-task-"]')
@@ -118,23 +93,10 @@ export default function GeniusV17Enhancer(){
     document.addEventListener('click',onClick,true)
     scan()
     return()=>{observer.disconnect();document.removeEventListener('click',onClick,true)}
-  },[navAnchor,searchAnchor,lessonAnchor,lessonParagraph])
-
-  function openReference(next){
-    const taskActive=Boolean(document.querySelector('.bank-detail, article[class*="_detail__"], article[class*="_detail_"]'))
-    setReturnToTask(taskActive)
-    setMode(next)
-  }
+  },[lessonAnchor,lessonParagraph])
 
   return <>
-    {navAnchor&&createPortal(<>
-      <button className={`side-nav genius-ref-nav ${mode==='constants'?'active':''}`} onClick={()=>openReference('constants')}><span>π</span>Постоянные величины</button>
-      <button className={`side-nav genius-ref-nav ${mode==='formulas'?'active':''}`} onClick={()=>openReference('formulas')}><span>Σ</span>Основные формулы</button>
-      <button className={`side-nav genius-ref-nav ${mode==='fipi'?'active':''}`} onClick={()=>openReference('fipi')}><span>Ф</span>Банк задач ФИПИ</button>
-    </>,navAnchor)}
-    {searchAnchor&&createPortal(<GlobalTaskSearch/>,searchAnchor)}
     {lessonAnchor&&lessonParagraph&&createPortal(<OnePageLesson paragraph={lessonParagraph}/>,lessonAnchor)}
-    {mode&&createPortal(<ReferenceOverlay mode={mode} close={()=>setMode(null)} returnToTask={returnToTask}/>,document.body)}
   </>
 }
 
@@ -167,30 +129,9 @@ function enhanceTaskBank(hub){
   compact.innerHTML=`<div class="genius-bank-sections"><span>Разделы</span><b>${gradeSections(grade)}</b></div><div class="genius-bank-mini-stats"><span><b>${solvedCount}</b><small>решено</small></span><span><b>${viewedCount}</b><small>просмотрено</small></span><span><b>${remaining}</b><small>осталось</small></span></div>`
 }
 
-function GlobalTaskSearch(){
-  const [items,setItems]=useState([]),[query,setQuery]=useState(''),[scope,setScope]=useState('all'),[loading,setLoading]=useState(true)
-  useEffect(()=>{let live=true;fetch('/task-bank/search-all.json',{cache:'no-store'}).then(r=>r.ok?r.json():Promise.reject()).then(data=>{if(live)setItems(data.tasks||[])}).catch(()=>{}).finally(()=>{if(live)setLoading(false)});return()=>{live=false}},[])
-  const results=useMemo(()=>{
-    const q=normalize(query);if(q.length<2)return []
-    return items.filter(item=>(scope==='all'||item.grade===Number(scope))&&item.searchText.includes(q)).slice(0,60)
-  },[items,query,scope])
-  function openResult(item){
-    const targetButton=[...document.querySelectorAll('.task-grade-switch button')].find(button=>button.textContent?.includes(`${item.grade} класс`))
-    targetButton?.click()
-    const selector=item.grade===7?`#grade7-task-${CSS.escape(item.id)}`:item.grade===9?`#grade9-task-${CSS.escape(item.id)}`:`#task-${CSS.escape(item.id)}`
-    let count=0
-    const timer=setInterval(()=>{const tile=document.querySelector(selector);if(tile){clearInterval(timer);tile.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(()=>tile.click(),180)}else if(++count>35)clearInterval(timer)},90)
-  }
-  return <section className="genius-global-search">
-    <div className="genius-global-search-head"><div><span>ПОИСК ПО БАНКУ</span><h2>Найти задачу по словам</h2></div><div className="genius-search-scopes">{[['all','Весь банк'],['7','7 класс'],['8','8 класс'],['9','9 класс']].map(([key,label])=><button key={key} className={scope===key?'active':''} onClick={()=>setScope(key)}>{label}</button>)}</div></div>
-    <label className="genius-global-search-box"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Например: плотность, поезд, сила тока, нагрев воды…"/>{query&&<button type="button" onClick={()=>setQuery('')}>×</button>}</label>
-    {query.trim().length>=2&&<div className="genius-search-results"><div className="genius-search-result-count">{loading?'Загружаю индекс…':`Найдено: ${results.length}`}</div>{results.map(item=><button key={`${item.grade}-${item.id}`} onClick={()=>openResult(item)}><div><span>{item.grade} класс</span><em>{item.area}</em>{item.bookNumber&&<small>№ {item.bookNumber}</small>}</div><strong>{item.topic}</strong><p>{item.excerpt}</p></button>)}</div>}
-  </section>
-}
-
-function ReferenceOverlay({mode,close,returnToTask}){
+export function ReferenceOverlay({mode,close,onMenu,returnToTask}){
   return <div className="genius-reference-overlay">
-    <header className="genius-reference-top"><button onClick={close}>← Назад</button><strong>Genius · справочник</strong><button onClick={close}>×</button></header>
+    <header className="genius-reference-top"><button onClick={close}>← Назад</button><strong>{mode==='fipi'?'Банк заданий ФИПИ':'Основные формулы'}</strong><button onClick={onMenu} aria-label="В меню">⌂ Меню</button></header>
     <main className="genius-reference-scroll">{mode==='constants'?<ConstantsReference/>:mode==='formulas'?<FormulaReference/>:<div className="genius-fipi-wrap"><OgeTaskBank/></div>}</main>
     {returnToTask&&<button className="genius-return-task" onClick={close}>← Вернуться к задаче</button>}
   </div>

@@ -1,7 +1,9 @@
 'use client'
 
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import UnifiedTaskBank from './unified-task-bank'
+import {ReferenceOverlay} from './genius-v17-enhancer'
+import {ReferenceMaterialsPage} from './reference-materials'
 import {bankPendingLocal,syncBankAttempts} from './task-store'
 import {TASK_BANK_VERSION} from '../shared/task-bank-meta.mjs'
 import { clearOfflinePackages, downloadGradeLessonsPackage, downloadGradePackage, downloadLessonPackage, downloadTopicPackage, formatBytes, getOfflineState, queueSyncEvent, removeOfflinePackage, syncPendingEvents } from './offline-db'
@@ -56,14 +58,11 @@ const quiz = [
 ]
 
 const navItems = [
-  ['home', '⌂', 'Главная'],
   ['practice', '◇', 'Задачник'],
   ['topics', '▦', 'Учебник'],
-  ['oge', '◈', 'Подготовка к ОГЭ'],
-  ['labs', '⚗', 'Лабораторные работы'],
-  ['performance', '⌁', 'Успеваемость'],
-  ['offline', '⇩', 'Офлайн-материалы'],
-  ['profile', '○', 'Профиль'],
+  ['fipi', 'Ф', 'Банк заданий ФИПИ'],
+  ['materials', '▤', 'Справочные материалы'],
+  ['formulas', 'Σ', 'Основные формулы'],
 ]
 
 const DEMO_CODE = 'GNS-8K4P-X7M2'
@@ -253,15 +252,15 @@ function TeacherLogin({ setScreen }) {
   )
 }
 
-function Sidebar({ screen, setScreen, grade, setGrade }) {
+function Sidebar({ screen, setScreen, isOnline, isPhone }) {
   const [menuOpen,setMenuOpen]=useState(false)
-  const navigate=key=>{if(key==='oge'&&grade!==9)setGrade(9);setScreen(key);setMenuOpen(false)}
+  const navigate=key=>{setScreen(key);setMenuOpen(false)}
   return (
     <>
       <button type="button" className="mobile-nav-toggle" aria-controls="student-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
       {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
     <aside className={`sidebar-light ${menuOpen?'mobile-nav-open':''}`}>
-      <Brand dark onClick={() => setScreen('home')} />
+      <div className="student-brand-row"><Brand dark onClick={() => navigate('home')} /><button className="student-profile-button" onClick={()=>navigate('profile')} aria-label={`Профиль · ${isOnline?'в сети':'нет сети'}${isPhone?' · телефон':''}`} title={`Профиль · ${isOnline?'в сети':'нет сети'}`}><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.5-3.5 2.9-5.5 7-5.5s6.5 2 7 5.5"/></svg><i className={isOnline?'is-online':'is-offline'} aria-hidden="true">{isPhone?'▯':''}</i></button></div>
       <nav id="student-sidebar-nav" aria-label="Разделы ученика">
         {navItems.map(([key, icon, label]) => (
           <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => navigate(key)}><span>{icon}</span>{label}</button>
@@ -273,7 +272,7 @@ function Sidebar({ screen, setScreen, grade, setGrade }) {
   )
 }
 
-function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
+function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp }) {
   const [selectedTopic, setSelectedTopic] = useState(0)
   const [selectedLessonId, setSelectedLessonId] = useState('8-1')
   const [courseMode, setCourseMode] = useState('school')
@@ -281,6 +280,9 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
   const [answers, setAnswers] = useState([])
   const [offlineState, setOfflineState] = useState({ supported: true, packages: [], pending: [], usedBytes: 0 })
   const [isOnline, setIsOnline] = useState(true)
+  const [isPhone, setIsPhone] = useState(false)
+  const [practiceVisited,setPracticeVisited]=useState(false)
+  const [openedSections,setOpenedSections]=useState([])
   const [syncMessage, setSyncMessage] = useState('')
   const currentTopics = useMemo(() => topicsByGrade[grade], [grade])
 
@@ -307,6 +309,7 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
 
   useEffect(() => {
     setIsOnline(navigator.onLine)
+    setIsPhone(Boolean(navigator.userAgentData?.mobile||/iPhone|iPod|Android.+Mobile/i.test(navigator.userAgent)))
     refreshOfflineState()
     const online = () => { setIsOnline(true); trySync(false) }
     const offline = () => setIsOnline(false)
@@ -315,6 +318,22 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
     if (navigator.onLine) trySync(false)
     return () => { window.removeEventListener('online', online); window.removeEventListener('offline', offline) }
   }, [])
+
+  useEffect(()=>{if(screen==='practice')setPracticeVisited(true)},[screen])
+  useEffect(()=>{if(['fipi','formulas','materials'].includes(screen))setOpenedSections(previous=>previous.includes(screen)?previous:[...previous,screen])},[screen])
+
+  function backFromSection(){
+    if(screen==='practice'){
+      const detail=document.querySelector('.task-bank-hub .bank-detail, .task-bank-hub article[class*="_detail__"], .task-bank-hub article[class*="_detail_"]')
+      const back=detail?.querySelector('nav button:first-child')
+      if(back){back.click();return}
+    }
+    if(screen==='fipi'){
+      const back=document.querySelector('.genius-fipi-wrap article nav button:first-child')
+      if(back){back.click();return}
+    }
+    goBack()
+  }
 
   function startQuiz() { setQuizIndex(0); setAnswers([]); setScreen('quiz') }
   function answer(i) { const next = [...answers, i]; setAnswers(next); if (quizIndex < quiz.length - 1) setQuizIndex(quizIndex + 1); else setScreen('result') }
@@ -342,17 +361,17 @@ function StudentShell({ screen, setScreen, grade, setGrade, xp, setXp }) {
 
   return (
     <div className="student-app">
-      <Sidebar screen={screen} setScreen={setScreen} grade={grade} setGrade={setGrade} />
+      <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
       <main className="student-content">
-        <div className={`connection-banner ${isOnline ? 'online' : 'offline'}`}>
-          <span>{isOnline ? '● Онлайн' : '○ Офлайн'}</span>
-          <small>{offlineState.pending.length ? `${offlineState.pending.length} действий ждут синхронизации` : 'Прогресс синхронизирован'}</small>
-          {isOnline && offlineState.pending.length > 0 && <button onClick={() => trySync(true)}>Синхронизировать</button>}
-        </div>
+        {screen!=='home'&&<div className="student-section-actions"><button onClick={backFromSection}>← Назад</button><button onClick={()=>setScreen('home')}>⌂ В меню</button></div>}
+        {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && <HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
         {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
-        {screen === 'practice' && <UnifiedTaskBank initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen} />}
+        {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
+        {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
+        {(openedSections.includes('formulas')||screen==='formulas')&&<div hidden={screen!=='formulas'}><ReferenceOverlay mode="formulas" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
+        {(openedSections.includes('materials')||screen==='materials')&&<div hidden={screen!=='materials'}><ReferenceMaterialsPage active={screen==='materials'} onClose={backFromSection} onMenu={()=>setScreen('home')}/></div>}
         {screen === 'lesson8' && <Grade8LessonScreen lessonId={selectedLessonId} setScreen={setScreen} offlineState={offlineState} refreshOfflineState={refreshOfflineState} />}
         {screen === 'topic' && <TopicScreen grade={grade} topic={currentTopics[selectedTopic]} topicIndex={selectedTopic} startQuiz={startQuiz} setScreen={setScreen} offlineState={offlineState} downloadCurrentTopic={downloadCurrentTopic} />}
         {screen === 'quiz' && <QuizScreen quizIndex={quizIndex} answer={answer} />}
@@ -868,10 +887,35 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
 }
 
 export default function Page() {
-  const [screen, setScreen] = useState('landing')
+  const [screen, setCurrentScreen] = useState('landing')
+  const screenRef=useRef('landing')
+  const historyRef=useRef([])
   const [grade, setGrade] = useState(8)
   const [xp, setXp] = useState(0)
   const [request, setRequest] = useState(null)
+  function setScreen(next){
+    const target=typeof next==='function'?next(screenRef.current):next
+    if(target===screenRef.current)return
+    const previous=historyRef.current.at(-1)
+    if(previous?.screen===target){
+      historyRef.current.pop()
+      screenRef.current=target
+      setCurrentScreen(target)
+      requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0,previous.scrollY)))
+      return
+    }
+    historyRef.current.push({screen:screenRef.current,scrollY:typeof window==='undefined'?0:window.scrollY})
+    screenRef.current=target
+    setCurrentScreen(target)
+    if(typeof window!=='undefined'&&target!=='lesson8')window.scrollTo(0,0)
+  }
+  function goBack(){
+    const previous=historyRef.current.pop()
+    if(!previous){setScreen('home');return}
+    screenRef.current=previous.screen
+    setCurrentScreen(previous.screen)
+    requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0,previous.scrollY)))
+  }
   useEffect(() => {
     const requested=new URLSearchParams(window.location.search).get('screen')
     if(['offline','performance','practice','topics','labs','oge'].includes(requested))setScreen(requested)
@@ -882,5 +926,5 @@ export default function Page() {
   if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} />
   if (screen === 'teacherLogin') return <TeacherLogin setScreen={setScreen} />
   if (screen === 'teacher') return <TeacherDashboard setScreen={setScreen} request={request} setRequest={setRequest} />
-  return <StudentShell screen={screen} setScreen={setScreen} grade={grade} setGrade={setGrade} xp={xp} setXp={setXp} />
+  return <StudentShell screen={screen} setScreen={setScreen} goBack={goBack} grade={grade} setGrade={setGrade} xp={xp} setXp={setXp} />
 }
