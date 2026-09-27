@@ -38,9 +38,9 @@ export default function PhysicsFormulas(){
             <span className="fl-card-index">{index+1}</span>
             <span className="fl-card-title">{item.title} <span className="fl-card-unit">({item.unit==='безразмерная'?'без ед.':item.unit})</span></span>
             <span className="fl-card-chevron" aria-hidden="true">⌄</span>
-            <span className="fl-math" role="math" aria-label={item.math} dangerouslySetInnerHTML={{__html:renderedFormulas.get(item.id)}}/>
+            <span className="fl-math" dangerouslySetInnerHTML={{__html:renderedFormulas.get(item.id)}}/>
           </button>
-          <div className="fl-card-detail">
+          <div className="fl-card-detail" hidden={!open}>
             <h3>Обозначения</h3>
             <ul>{showResult&&<li><span className="fl-variable-symbol" dangerouslySetInnerHTML={{__html:renderFormula(resultSymbol)}}/><span className="fl-variable-dash">—</span><span>{item.title.toLowerCase()}, <span className="fl-variable-unit">{item.unit==='безразмерная'?'без ед.':item.unit}</span></span></li>}{item.variables.map(variable=>{
               const [symbols,meaning]=variable.split(' — ')
