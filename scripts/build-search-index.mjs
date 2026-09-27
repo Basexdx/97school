@@ -16,11 +16,10 @@ function area(task){
   if(task.SECTION==='electric'||/ток|напряж|сопротив|электр|заряд|магнит|ампер|вольт|цеп/.test(text))return 'Электрические явления'
   return 'Электрические явления'
 }
-function compact(text){const value=String(text||'').replace(/\s+/g,' ').trim();return value.length>220?value.slice(0,217).trimEnd()+'…':value}
 function toSearch(task){
   const bookNumber=Number.isInteger(task.BOOK_TASK_NUMBER)?task.BOOK_TASK_NUMBER:null
   const text=[task.TOPIC,task.TASK,task.ANSWER_PROMPT,(task.OPTIONS||[]).map(x=>x.text).join(' ')].filter(Boolean).join(' ')
-  return {grade:task.CLASS,id:task.ID,bookNumber,paragraph:task.PARAGRAPH,section:task.SECTION,topic:task.TOPIC,area:area(task),excerpt:compact(task.TASK),searchText:normalize(`${bookNumber||''} ${text}`)}
+  return {grade:task.CLASS,id:task.ID,bookNumber,paragraph:task.PARAGRAPH,section:task.SECTION,topic:task.TOPIC,area:area(task),xp:task.XP,excerpt:String(task.TASK||'').trim(),searchText:normalize(`${bookNumber||''} ${text}`)}
 }
 
 const grade7=[...read('bank/tasks-grade7.json'),...grade7Additions].filter(publishable)

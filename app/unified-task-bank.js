@@ -19,7 +19,7 @@ export default function UnifiedTaskBank({initialGrade=7,onXp=()=>{},refreshOffli
     try{const saved=sessionStorage.getItem(GRADE_KEY);if([7,8,9].includes(Number(saved)))setGrade(Number(saved))}catch{}
   },[])
   useEffect(()=>{let live=true;fetch('/task-bank/search-all.json').then(r=>r.ok?r.json():Promise.reject()).then(data=>{if(live)setSearchData(data)}).catch(()=>{}).finally(()=>{if(live)setSearchLoading(false)});return()=>{live=false}},[])
-  const results=useMemo(()=>{const q=search.trim().toLocaleLowerCase('ru-RU').replaceAll('ё','е');return q.length<2?[]:(searchData.tasks||[]).filter(item=>item.searchText.includes(q)).slice(0,30)},[search,searchData])
+  const results=useMemo(()=>{const q=search.trim().toLocaleLowerCase('ru-RU').replaceAll('ё','е');return q?(searchData.tasks||[]).filter(item=>item.searchText.includes(q)):[]},[search,searchData])
 
   useEffect(()=>{
     if(!pendingTask)return undefined
@@ -52,21 +52,17 @@ export default function UnifiedTaskBank({initialGrade=7,onXp=()=>{},refreshOffli
     <header className="task-grade-switch">
       <div className="bank-header-search">
         <label><span aria-hidden="true">⌕</span><input type="search" value={search} onChange={event=>setSearch(event.target.value)} placeholder="Найти задачу по номеру или словам" aria-label="Поиск задачи" autoComplete="off"/></label>
-        {search.trim().length>=2&&<div className="bank-header-results" role="region" aria-label="Результаты поиска задач">
-          <small>{searchLoading?'Загружаю задачи…':`Найдено: ${results.length}${results.length===30?' (первые 30)':''}`}</small>
-          {results.map(item=><button type="button" key={`${item.grade}-${item.id}`} onClick={()=>openSearchResult(item)}><b>{item.bookNumber?`№ ${item.bookNumber}`:`${item.grade} класс`}</b><span>{item.grade} класс · {item.topic}</span></button>)}
-          {!searchLoading&&!results.length&&<p>Задачи не найдены</p>}
-        </div>}
       </div>
       <div role="tablist" aria-label="Раздел банка задач">
         {[7,8,9].map(value=><button key={value} role="tab" aria-selected={grade===value} className={grade===value?'active':''} onClick={()=>chooseGrade(value)}><b>{value} класс</b><small>{searchData.counts?.[value]||'…'} задач</small></button>)}
       </div>
     </header>
-    {grade===7
+    {!!search.trim()&&<section className="bank-live-search" aria-label="Найденные задачи"><div className="bank-live-search-heading"><strong>{searchLoading?'Ищем задачи…':`Найдено: ${results.length}`}</strong><button type="button" onClick={()=>setSearch('')}>Очистить поиск</button></div>{!searchLoading&&!results.length&&<p>Задачи не найдены. Попробуй другие слова или номер.</p>}<div className="bank-live-search-grid">{results.map(item=><button type="button" key={`${item.grade}-${item.id}`} onClick={()=>openSearchResult(item)}><span>{item.grade} класс · {item.bookNumber?`№ ${item.bookNumber}`:'задача'} · {item.xp} XP</span><strong>{item.topic}</strong><p>{item.excerpt}</p><em>Открыть задачу →</em></button>)}</div></section>}
+    <div hidden={!!search.trim()}>{grade===7
       ? <Grade7TaskBank onXp={onXp}/>
       : grade===8
         ? <TaskBank onXp={onXp} refreshOffline={refreshOffline} setScreen={setScreen}/>
         : <Grade9TaskBank onXp={onXp}/>
-    }
+    }</div>
   </section>
 }
