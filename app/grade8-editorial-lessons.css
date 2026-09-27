@@ -1,0 +1,274 @@
+/* First ten grade 8 lessons: calm editorial Cosmic Genius layout. */
+.g8-textbook-page.g8-editorial-first10{
+  max-width:1420px;
+  padding:18px 28px 30px!important;
+  background:
+    radial-gradient(circle at 84% 8%,rgba(32,112,178,.08),transparent 26%),
+    radial-gradient(circle at 14% 72%,rgba(26,87,140,.055),transparent 30%),
+    linear-gradient(180deg,#04111f 0%,#051523 54%,#04111d 100%)!important;
+  border-color:rgba(42,126,196,.28)!important;
+  box-shadow:0 22px 70px rgba(0,0,0,.22)!important;
+}
+.g8-textbook-page.g8-editorial-first10:before{
+  background-image:
+    radial-gradient(circle,rgba(136,196,239,.52) 0 1px,transparent 1.35px),
+    radial-gradient(circle,rgba(255,190,84,.32) 0 .8px,transparent 1.2px)!important;
+  background-size:168px 171px,241px 227px!important;
+  background-position:28px 34px,104px 78px!important;
+  opacity:.115!important;
+}
+.g8-editorial-first10 .genius-lesson-top{
+  margin-bottom:16px!important;
+  border-bottom:1px solid rgba(54,129,190,.16);
+  padding-bottom:11px;
+}
+.g8-editorial-first10 .genius-lesson-top span{
+  color:#8eabc2!important;
+  font-weight:500!important;
+  letter-spacing:.015em;
+}
+.g8-editorial-first10 .genius-lesson-top button{
+  color:#c7dcec!important;
+  font-weight:600!important;
+}
+
+/* Paragraph header = the strongest framed element on the page. */
+.g8-editorial-first10 .g8-textbook-hero{
+  min-height:188px!important;
+  grid-template-columns:minmax(0,1fr) 190px!important;
+  gap:22px!important;
+  padding:22px 26px!important;
+  border:1px solid rgba(36,148,226,.66)!important;
+  border-radius:18px!important;
+  background:
+    linear-gradient(90deg,rgba(4,18,34,.98),rgba(7,28,48,.94) 62%,rgba(7,34,56,.88)),
+    radial-gradient(circle at 86% 48%,rgba(36,126,194,.1),transparent 32%)!important;
+  box-shadow:inset 0 1px rgba(145,211,255,.05),0 12px 34px rgba(0,0,0,.18)!important;
+}
+.g8-editorial-first10 .g8-hero-copy{
+  align-items:center!important;
+  gap:20px!important;
+}
+.g8-editorial-first10 .g8-hero-copy>span{
+  display:grid!important;
+  place-items:center;
+  width:102px;
+  min-width:102px;
+  height:102px;
+  padding:0!important;
+  border:1px solid rgba(255,183,45,.74);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(16,35,49,.92),rgba(7,20,33,.96));
+  color:#ffc45b!important;
+  font-size:42px!important;
+  font-weight:600!important;
+  letter-spacing:-.045em;
+  text-shadow:0 0 13px rgba(255,173,39,.18)!important;
+  box-shadow:0 0 20px rgba(255,169,31,.09),inset 0 0 18px rgba(255,176,39,.025);
+}
+.g8-editorial-first10 .g8-hero-copy h1{
+  max-width:900px!important;
+  margin:0 0 10px!important;
+  font-size:clamp(27px,2.55vw,39px)!important;
+  line-height:1.13!important;
+  font-weight:650!important;
+  letter-spacing:-.018em;
+}
+.g8-editorial-first10 .g8-hero-copy p{
+  max-width:820px!important;
+  margin:0!important;
+  color:#b6c9da!important;
+  font-size:14px!important;
+  line-height:1.58!important;
+  font-weight:400!important;
+}
+.g8-editorial-first10 .g8-hero-copy small{
+  margin-top:13px!important;
+  color:#769bb8!important;
+  font-weight:500!important;
+}
+.g8-editorial-first10 .g8-hero-art{
+  width:176px!important;
+  height:142px!important;
+  opacity:.42;
+  filter:none!important;
+  transform:scale(.9);
+}
+.g8-editorial-first10 .g8-hero-art i{
+  width:172px!important;
+  border-color:rgba(75,167,232,.48)!important;
+  box-shadow:none!important;
+}
+.g8-editorial-first10 .g8-hero-art b{
+  width:72px!important;
+  height:72px!important;
+  font-size:38px!important;
+  color:#cde9ff!important;
+  background:radial-gradient(circle at 34% 30%,rgba(174,223,255,.82),rgba(34,117,180,.74) 38%,rgba(6,31,51,.92) 72%)!important;
+  box-shadow:0 0 28px rgba(42,139,209,.16)!important;
+}
+
+/* Opening: text is the page, not another card. Illustration stays aligned on the right. */
+.g8-editorial-first10 .g8-opening-grid{
+  grid-template-columns:minmax(0,.92fr) minmax(460px,1.08fr)!important;
+  gap:28px!important;
+  margin:24px 0 4px!important;
+  align-items:start!important;
+}
+.g8-editorial-first10 .g8-opening-card{
+  padding:0 6px 22px 2px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.g8-editorial-first10 .g8-section-title{
+  gap:0!important;
+  margin:0 0 10px!important;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(63,143,201,.24);
+}
+.g8-editorial-first10 .g8-section-title>span{display:none!important}
+.g8-editorial-first10 .g8-section-title h2{
+  margin:0!important;
+  color:#f1f7fc!important;
+  font-size:24px!important;
+  line-height:1.25!important;
+  font-weight:620!important;
+  letter-spacing:-.01em;
+}
+.g8-editorial-first10 .g8-opening-card>p,
+.g8-editorial-first10 .g8-topic-card>p{
+  color:#c4d3df!important;
+  font-size:14.5px!important;
+  line-height:1.68!important;
+  font-weight:400!important;
+}
+.g8-editorial-first10 .g8-definition{
+  margin-top:18px!important;
+  padding:13px 15px!important;
+  border:1px solid rgba(228,161,33,.78)!important;
+  border-radius:11px!important;
+  background:linear-gradient(90deg,rgba(87,57,14,.22),rgba(15,26,35,.54))!important;
+  box-shadow:0 0 20px rgba(255,170,28,.05)!important;
+}
+.g8-editorial-first10 .g8-book-icon{
+  width:36px!important;
+  height:36px!important;
+  border:0!important;
+  border-radius:0!important;
+  color:#ffc85b!important;
+  font-size:20px!important;
+}
+.g8-editorial-first10 .g8-definition p{
+  color:#dce5ec!important;
+  font-size:13.5px!important;
+  line-height:1.58!important;
+  font-weight:400!important;
+}
+.g8-editorial-first10 .g8-definition strong{font-weight:650!important}
+.g8-editorial-first10 .g8-diagram{
+  min-height:300px;
+  margin:0!important;
+  padding:10px 12px!important;
+  border:1px solid rgba(42,136,201,.58)!important;
+  border-radius:14px!important;
+  background:linear-gradient(180deg,rgba(5,23,39,.82),rgba(4,18,32,.92))!important;
+  box-shadow:none!important;
+}
+.g8-editorial-first10 .g8-diagram svg{
+  width:100%!important;
+  max-height:310px!important;
+}
+.g8-editorial-first10 .g8-diagram figcaption{display:none!important}
+
+/* Remaining paragraphs flow like a digital textbook: no stack of cards, no numbers. */
+.g8-editorial-first10 .g8-lesson-continuation{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:0!important;
+  margin:2px 0 0!important;
+}
+.g8-editorial-first10 .g8-topic-card{
+  padding:18px 4px 20px 2px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(52,130,188,.2)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.g8-editorial-first10 .g8-topic-card:last-child{border-bottom:0!important}
+
+.g8-editorial-first10 .genius-lesson-formula{
+  margin:18px 0 4px!important;
+  padding:15px 18px!important;
+  grid-template-columns:110px minmax(0,1fr)!important;
+  border:1px solid rgba(209,151,47,.58)!important;
+  border-radius:11px!important;
+  background:linear-gradient(90deg,rgba(89,57,12,.19),rgba(5,24,40,.42))!important;
+  box-shadow:none!important;
+}
+.g8-editorial-first10 .genius-lesson-formula span{font-weight:650!important}
+.g8-editorial-first10 .genius-lesson-formula div{
+  color:#ffe4a8!important;
+  font-weight:520!important;
+  font-family:Georgia,'Times New Roman',serif;
+}
+
+/* Only the final takeaway returns to a framed block. */
+.g8-editorial-first10 .g8-recap{
+  margin-top:18px!important;
+  padding:18px 22px!important;
+  border:1px solid rgba(226,161,35,.76)!important;
+  border-radius:12px!important;
+  background:linear-gradient(90deg,rgba(78,51,12,.18),rgba(5,24,40,.42))!important;
+  box-shadow:0 0 22px rgba(255,172,30,.045)!important;
+}
+.g8-editorial-first10 .g8-recap>span{
+  color:#ffc451!important;
+  font-size:10px!important;
+  font-weight:650!important;
+  letter-spacing:.1em!important;
+}
+.g8-editorial-first10 .g8-recap h2{
+  margin:4px 0 10px!important;
+  color:#f4f7fa!important;
+  font-size:21px!important;
+  font-weight:620!important;
+}
+.g8-editorial-first10 .g8-recap ul{
+  columns:1!important;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:5px 34px;
+  padding-left:20px!important;
+}
+.g8-editorial-first10 .g8-recap li{
+  color:#c5d4df!important;
+  font-size:13.5px!important;
+  line-height:1.55!important;
+  font-weight:400!important;
+  margin-bottom:4px!important;
+}
+.g8-editorial-first10 .genius-lesson-summary{display:none!important}
+
+@media(max-width:1000px){
+  .g8-editorial-first10 .g8-opening-grid{grid-template-columns:1fr!important;gap:16px!important}
+  .g8-editorial-first10 .g8-diagram{min-height:0!important}
+  .g8-editorial-first10 .g8-recap ul{grid-template-columns:1fr!important}
+}
+@media(max-width:700px){
+  .g8-textbook-page.g8-editorial-first10{padding:12px!important}
+  .g8-editorial-first10 .g8-textbook-hero{grid-template-columns:1fr!important;padding:16px!important;min-height:0!important}
+  .g8-editorial-first10 .g8-hero-copy{gap:12px!important;align-items:flex-start!important}
+  .g8-editorial-first10 .g8-hero-copy>span{width:68px!important;min-width:68px!important;height:68px!important;border-radius:12px!important;font-size:30px!important}
+  .g8-editorial-first10 .g8-hero-copy h1{font-size:23px!important}
+  .g8-editorial-first10 .g8-hero-copy p{font-size:12.5px!important;line-height:1.52!important}
+  .g8-editorial-first10 .g8-hero-art{display:none!important}
+  .g8-editorial-first10 .g8-opening-grid{margin-top:16px!important}
+  .g8-editorial-first10 .g8-section-title h2{font-size:19px!important}
+  .g8-editorial-first10 .g8-opening-card>p,.g8-editorial-first10 .g8-topic-card>p{font-size:13px!important;line-height:1.62!important}
+  .g8-editorial-first10 .g8-topic-card{padding:15px 1px 17px!important}
+  .g8-editorial-first10 .genius-lesson-formula{grid-template-columns:1fr!important;gap:6px!important;padding:13px!important}
+  .g8-editorial-first10 .g8-recap{padding:15px!important}
+}
