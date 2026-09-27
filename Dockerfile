@@ -7,7 +7,7 @@ RUN npm ci
 COPY . .
 
 FROM build-base AS api-build
-RUN npm run build:api
+RUN npm run bank:build && npm run build:api
 
 FROM node:24-bookworm-slim AS api
 WORKDIR /app
