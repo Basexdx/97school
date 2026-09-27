@@ -20,13 +20,17 @@ html[data-season='summer'].cosmo-genius-restored .sidebar-light::after{backgroun
 @media(max-width:900px){html.cosmo-genius-restored .sidebar-light::after{display:none!important}}
 
 /* Full-height seasonal artwork in the desktop sidebar. */
+:root{--season-cosmic-art:url('/seasons/autumn-compact.webp')}
+html[data-season='winter']{--season-cosmic-art:url('/seasons/winter-compact.webp')}
+html[data-season='spring']{--season-cosmic-art:url('/seasons/spring-compact.webp')}
+html[data-season='summer']{--season-cosmic-art:url('/seasons/summer-compact.webp')}
 html.cosmo-genius-restored .student-app{grid-template-columns:255px minmax(0,1fr)}
 html.cosmo-genius-restored .sidebar-light{
   width:255px;
-  /* One compact illustration continues across the edge into the content pane. */
-  background-image:var(--season-art),linear-gradient(180deg,#020b16 0%,#041426 53%,#03101d 100%)!important;
-  background-size:440px 560px,cover!important;
-  background-position:left top calc(100dvh - 560px),left top!important;
+  /* The image is sized to the viewport, even when a long journal stretches the sidebar. */
+  background-image:var(--season-cosmic-art),linear-gradient(180deg,#020b16 0%,#041426 53%,#03101d 100%)!important;
+  background-size:auto min(820px,calc(100dvh - 60px)),cover!important;
+  background-position:left max(60px,calc(100dvh - 820px)),left top!important;
   background-repeat:no-repeat!important;
 }
 html.cosmo-genius-restored .sidebar-light::after{display:none!important}
