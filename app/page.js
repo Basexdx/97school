@@ -407,7 +407,7 @@ function Grade8CourseMap({ openLesson }) {
       <div>
         <span className="g8-kicker">8 КЛАСС · БАЗОВЫЙ УРОВЕНЬ</span>
         <h1>Курс по учебнику</h1>
-        <p>40 уроков по параграфам в едином стиле Genius. Тепловой блок постепенно превращается в полноценные интерактивные уроки с моделями, проверками и офлайн-доступом.</p>
+        <p>62 одностраничных урока по параграфам учебника: тепловые, электрические и электромагнитные явления. Определения, формулы и наглядные рисунки собраны в одном месте.</p>
       </div>
       <div className="g8-course-atom"><AtomMark/></div>
     </div>
@@ -423,7 +423,7 @@ function Grade8CourseMap({ openLesson }) {
           {lessons.map(lesson => <button key={lesson.id} className="g8-lesson-row" onClick={() => openLesson(lesson.id)}>
             <span className="g8-paragraph">§{lesson.paragraph}</span>
             <div className="g8-lesson-name"><strong>{lesson.shortTitle}</strong><small>стр. {lesson.pages} · ~{lesson.duration} мин</small></div>
-            <span className="g8-ready interactive">Интерактив</span>
+            <span className="g8-ready">Урок</span>
             <span className="g8-arrow">→</span>
           </button>)}
         </div>

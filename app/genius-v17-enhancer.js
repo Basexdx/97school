@@ -3,12 +3,13 @@
 import {useEffect,useMemo,useState} from 'react'
 import {createPortal} from 'react-dom'
 import {grade8Lessons} from './grade8-lessons'
+import Grade8Diagram from './grade8-diagrams'
+import {grade8Definitions} from './grade8-definitions'
 import {ogeFormulas,searchOgeReference} from './oge-reference-data.mjs'
 import OgeTaskBank from './oge-task-bank'
 
 const VIEWED_KEY='genius:viewed-tasks:v17'
 const SOLVED_KEY='genius:solved-tasks:v17'
-const FIGURES={1:'/lesson-figures/lesson-1.webp',2:'/lesson-figures/lesson-2.webp',10:'/lesson-figures/lesson-10.webp',13:'/lesson-figures/lesson-13.webp',17:'/lesson-figures/lesson-17.webp'}
 const CONSTANTS=[
   ['g','9,8 Н/кг','Ускорение свободного падения у поверхности Земли'],
   ['c','3,0 · 10⁸ м/с','Скорость света в вакууме'],
@@ -209,25 +210,21 @@ function FormulaReference(){
 function OnePageLesson({paragraph}){
   const lesson=grade8Lessons.find(item=>item.paragraph===paragraph)
   if(!lesson)return null
-  const figure=FIGURES[paragraph]
+  const ideas=lesson.steps.filter(item=>item.type!=='summary')
+  const firstDefinition=lesson.keyPoints.find(point=>/\s[—–]\s/.test(point))||lesson.keyPoints[0]
+  const [definitionTerm,definitionText]=grade8Definitions[paragraph]||(/\s[—–]\s/.test(firstDefinition)?[firstDefinition.split(/\s[—–]\s/)[0],firstDefinition.split(/\s[—–]\s/).slice(1).join(' — ')]:[ideas[0]?.title,firstDefinition])
+  const chapter=lesson.chapter==='magnetic'?'Электромагнитные явления':lesson.chapter==='electric'?'Электрические явления':'Тепловые явления'
   function sourceButton(selector){document.querySelector(`.lesson-dark-shell ${selector}`)?.click()}
-  return <article className="genius-one-page-lesson">
-    <div className="genius-lesson-top"><button onClick={()=>sourceButton('.lesson-dark-topbar > button:first-child')}>← К урокам</button><span>8 класс · §{lesson.paragraph} · стр. {lesson.pages}</span><button onClick={()=>sourceButton('.offline-download-btn, .offline-saved-btn')}>⇩ Офлайн</button></div>
-    <header className="genius-lesson-hero"><div><span>§{lesson.paragraph}</span><h1>{lesson.title}</h1><p>{lesson.teaser}</p></div><div className="genius-lesson-orbit"><i/><i/><b>⚛</b></div></header>
-    <section className="genius-lesson-lead"><h2>Что важно понять</h2><div>{lesson.objectives.map(item=><p key={item}><span>•</span>{item}</p>)}</div></section>
-    {figure&&<figure className="genius-textbook-figure"><img src={figure} alt={`Иллюстрация к §${paragraph} из учебника`}/><figcaption>Иллюстрация из учебника к §{paragraph}. В приложении она используется как часть объяснения, а не как отдельная страница учебника.</figcaption></figure>}
-    <section className="genius-key-points"><div className="genius-section-kicker">ОСНОВНЫЕ ПОЛОЖЕНИЯ</div><h2>Ключевые мысли урока</h2><div className="genius-key-grid">{lesson.keyPoints.map((item,i)=><article key={item}><span>{String(i+1).padStart(2,'0')}</span><p>{item}</p></article>)}</div></section>
+  return <article className="genius-one-page-lesson g8-textbook-page">
+    <div className="genius-lesson-top"><button onClick={()=>sourceButton('.lesson-dark-topbar > button:first-child')}>← К урокам</button><span>8 класс › {chapter} › §{lesson.paragraph}</span><button onClick={()=>sourceButton('.offline-download-btn, .offline-saved-btn')}>⇩ Офлайн</button></div>
+    <header className="genius-lesson-hero g8-textbook-hero"><div className="g8-hero-copy"><span>§{lesson.paragraph}</span><div><h1>{lesson.title}</h1><p>{lesson.teaser}</p><small>Учебник: стр. {lesson.pages} · ~{lesson.duration} мин</small></div></div><div className="g8-hero-art" aria-hidden="true"><i/><i/><b>{lesson.chapter==='magnetic'?'⊙':lesson.chapter==='electric'?'ϟ':'⚛'}</b></div></header>
+    <div className="g8-opening-grid">
+      <section className="g8-opening-card"><div className="g8-section-title"><span>1</span><h2>{ideas[0]?.title||'Главная идея'}</h2></div><p>{ideas[0]?.text||lesson.teaser}</p><div className="g8-definition"><div className="g8-book-icon" aria-hidden="true">▣</div><p><strong>{definitionTerm}</strong> — {definitionText}</p></div></section>
+      <Grade8Diagram lesson={lesson}/>
+    </div>
     {lesson.formula&&<section className="genius-lesson-formula"><span>ФОРМУЛА</span><div>{lesson.formula}</div></section>}
-    <div className="genius-lesson-sections">{lesson.steps.map((step,i)=><section key={`${step.title}-${i}`}><div className="genius-lesson-section-no">{String(i+1).padStart(2,'0')}</div><div className="genius-lesson-section-copy"><h2>{step.title}</h2><p>{step.text}</p><LessonConceptVisual type={step.type}/></div></section>)}</div>
-    <footer className="genius-lesson-summary"><span>ИТОГ</span><h2>{lesson.shortTitle}</h2><p>{lesson.keyPoints.at(-1)||lesson.teaser}</p><button onClick={()=>sourceButton('.lesson-dark-topbar > button:first-child')}>Вернуться к списку уроков</button></footer>
+    <div className="g8-lesson-continuation">{ideas.slice(1).map((step,i)=><section key={`${step.title}-${i}`} className="g8-topic-card"><div className="g8-section-title"><span>{i+2}</span><h2>{step.title}</h2></div><p>{step.text}</p>{step.definition&&<div className="g8-definition"><div className="g8-book-icon" aria-hidden="true">▣</div><p><strong>{step.title}.</strong> {step.text}</p></div>}</section>)}</div>
+    <section className="g8-recap"><span>ЗАПОМНИ</span><h2>Главное в §{lesson.paragraph}</h2><ul>{lesson.keyPoints.map((point,i)=><li key={i}>{point}</li>)}</ul></section>
+    <footer className="genius-lesson-summary"><span>ИТОГ УРОКА</span><h2>{lesson.shortTitle}</h2><p>{lesson.steps.find(step=>step.type==='summary')?.text||lesson.keyPoints.at(-1)}</p><button onClick={()=>sourceButton('.lesson-dark-topbar > button:first-child')}>← К списку уроков</button></footer>
   </article>
-}
-
-function LessonConceptVisual({type}){
-  if(['brownian','diffusion','states','solid','liquid','gas','crystal','interaction'].includes(type))return <div className={`genius-concept-visual particles ${type}`}><i/><i/><i/><i/><i/><i/><b>движение частиц</b></div>
-  if(['conduction','convection','radiation','heat-quantity','specific-heat','heat-balance','fuel','fuel-calc','energy-conservation','energy-flow'].includes(type))return <div className="genius-concept-visual energy"><span>Q</span><em>→</em><span>ΔU</span><b>передача и превращение энергии</b></div>
-  if(['phase-change','phase-graph','latent-heat','latent-heat-calc','evaporation','evaporation-controls','condensation','vapor-equilibrium','boiling','boiling-graph','pressure-boiling','vaporization-heat','vaporization-calc'].includes(type))return <div className="genius-concept-visual phase"><span>❄</span><em>⇄</em><span>💧</span><em>⇄</em><span>≈</span><b>изменение состояния вещества</b></div>
-  if(['electrostatics','charge-interaction','elementary-charge','electron','charge-count','charge-transfer','charge-conservation','induction','static-use','grounding','coulomb','electric-field','field-lines','field-superposition','electroscope','conductors','atom','ions'].includes(type))return <div className="genius-concept-visual charge"><span>+</span><em>↔</em><span>−</span><b>электрическое взаимодействие</b></div>
-  if(['current-source','source','source-types','circuit','circuit-symbols','metal-current','current-direction','current-effects','electrolysis','magnetic-current','current-meter','current-calc','ammeter','voltage','voltage-calc','voltmeter','resistance','ohm','ohm-lab'].includes(type))return <div className="genius-concept-visual circuit"><span>＋</span><i/><span>💡</span><i/><span>−</span><b>электрическая цепь</b></div>
-  return null
 }

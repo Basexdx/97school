@@ -1,3 +1,5 @@
+import { extendedGrade8Lessons } from './grade8-extended-lessons'
+
 export const grade8Chapters = [
   {
     id: 'thermal',
@@ -13,7 +15,15 @@ export const grade8Chapters = [
     icon: 'ϟ',
     accent: 'blue',
     description: 'От электризации и строения атома до силы тока, напряжения и закона Ома.',
-    paragraphRange: '§27–§40',
+    paragraphRange: '§27–§49',
+  },
+  {
+    id: 'magnetic',
+    title: 'Электромагнитные явления',
+    icon: '⊙',
+    accent: 'blue',
+    description: 'Магнитное поле, электромагнитная индукция и передача энергии.',
+    paragraphRange: '§50–§62',
   },
 ]
 
@@ -512,7 +522,7 @@ const interactiveEnhancements = {
   },
 }
 
-export const grade8Lessons = baseGrade8Lessons.map((lesson) => ({
+export const grade8Lessons = [...baseGrade8Lessons, ...extendedGrade8Lessons].map((lesson) => ({
   ...lesson,
   ...(interactiveEnhancements[lesson.id] || {}),
 }))
