@@ -146,7 +146,10 @@ function Magnetism({ n }) {
     <rect x="210" y="91" width="180" height="60" rx="11" fill="#102c50" stroke="#79bdff" strokeWidth="2" />
     <path d="M300 93v56" stroke="#8cbddb" strokeWidth="2" />
     <Label x={255} y={132} size={28} color="#5bbcff">N</Label><Label x={345} y={132} size={28} color="#ffbc4b">S</Label>
-    {[-2, -1, 0, 1, 2].map(i => <path key={i} d={`M224 ${100 + i * 9} C${90 - Math.abs(i) * 9} ${12 + i * 13},${80 - Math.abs(i) * 9} ${205 + i * 7},375 ${205 + i * 7},${510 + Math.abs(i) * 9} ${10 + i * 13},${380} ${100 + i * 9}`} fill="none" stroke="#44aaff" opacity=".45" strokeWidth="1.5" />)}
+    {[-2, -1, 0, 1, 2].map(i => <g key={i} fill="none" stroke="#44aaff" opacity=".5" strokeWidth="1.5">
+      <path d={`M210 ${106 + i * 7} C${100 - Math.abs(i) * 8} ${25 + i * 8},${500 + Math.abs(i) * 8} ${25 + i * 8},390 ${106 + i * 7}`} />
+      <path d={`M210 ${136 + i * 7} C${100 - Math.abs(i) * 8} ${225 + i * 7},${500 + Math.abs(i) * 8} ${225 + i * 7},390 ${136 + i * 7}`} />
+    </g>)}
     {rotating && <><circle cx="300" cy="121" r="90" fill="none" stroke="#ffbb49" strokeDasharray="7 8" strokeWidth="2" /><path d="M302 25l12 18-24 0z" fill="#ffc54e" /></>}
     {induced && <><path d="M410 120h70" stroke="#ffbe49" strokeWidth="3" markerEnd="url(#arrow)" /><rect x="484" y="89" width="48" height="62" rx="12" fill="none" stroke="#ffbe49" strokeWidth="3" /></>}
     <Label x={300} y={232} color="#ffcc77" size={13}>{rotating ? 'ВРАЩЕНИЕ · ЭНЕРГИЯ' : induced ? 'ИЗМЕНЕНИЕ МАГНИТНОГО ПОТОКА' : magnet ? 'МАГНИТНОЕ ПОЛЕ И ЕГО ЛИНИИ' : 'ДЕЙСТВИЕ МАГНИТНОГО ПОЛЯ'}</Label>
