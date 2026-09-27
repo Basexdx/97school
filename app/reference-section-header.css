@@ -1,0 +1,69 @@
+/* Shared navigation geometry for the reference materials and formula pages. */
+.reference-materials-page .rm-hero,
+.formula-reference-overlay .fl-toolbar{
+  position:sticky;
+  top:0;
+  z-index:12;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(240px,380px) auto;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+  padding:12px 14px;
+  border:1px solid rgba(69,157,226,.3);
+  border-radius:14px;
+  background:rgba(3,17,32,.93);
+  box-shadow:0 9px 30px rgba(0,8,20,.34);
+  backdrop-filter:blur(15px);
+}
+.reference-materials-page .rm-hero{margin-bottom:17px;padding-right:14px}
+.reference-materials-page .rm-search,
+.formula-reference-overlay .fl-search{height:48px;min-height:48px;min-width:0;margin:0}
+.reference-materials-page .rm-search input,
+.formula-reference-overlay .fl-search input{height:46px}
+.reference-materials-page .rm-header-actions,
+.formula-reference-overlay .fl-header-actions{position:static;display:flex;align-items:center;gap:9px;min-width:0}
+.reference-materials-page .rm-header-actions button,
+.formula-reference-overlay .fl-header-actions button{
+  position:static;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:auto;
+  height:48px;
+  padding:0 13px;
+  border:1px solid rgba(54,151,220,.62);
+  border-radius:11px;
+  background:rgba(5,32,55,.88);
+  color:#e3f2ff;
+  font-size:13px;
+  font-weight:550;
+  white-space:nowrap;
+}
+.reference-materials-page .rm-header-actions button:hover,
+.formula-reference-overlay .fl-header-actions button:hover,
+.reference-materials-page .rm-header-actions button:focus-visible,
+.formula-reference-overlay .fl-header-actions button:focus-visible{border-color:#ffc34e;color:#fff}
+.formula-reference-overlay .fl-toolbar{margin-bottom:14px}
+.formula-reference-overlay .fl-toolbar .fl-hero{min-width:0;margin:0;padding:0;border:0;background:none;box-shadow:none}
+.formula-mobile-top{display:none}
+@media(max-width:1300px){
+  .reference-materials-page .rm-hero,
+  .formula-reference-overlay .fl-toolbar{grid-template-columns:minmax(0,1fr) auto}
+  .reference-materials-page .rm-search,
+  .formula-reference-overlay .fl-search{grid-column:1/-1;grid-row:2}
+  .reference-materials-page .rm-header-actions,
+  .formula-reference-overlay .fl-header-actions{grid-column:2;grid-row:1}
+}
+@media(max-width:900px){
+  .reference-materials-overlay .rm-mobile-topbar{position:sticky;top:0;z-index:20;background:rgba(3,17,32,.94);backdrop-filter:blur(15px);box-shadow:0 5px 20px rgba(0,8,20,.3)}
+  .reference-materials-page .rm-hero{position:static;display:block;margin-bottom:13px;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none}
+  .reference-materials-page .rm-header-actions{display:none}
+  .reference-materials-page .rm-search{width:100%;height:52px}
+  .formula-reference-overlay .formula-mobile-top{display:flex;justify-content:space-between;align-items:center;min-height:60px;height:60px;flex:0 0 60px;padding:0 16px!important}
+  .formula-reference-overlay .formula-mobile-top button{height:44px;padding:0 12px;border:1px solid rgba(54,151,220,.62);border-radius:11px;background:rgba(5,32,55,.88);color:#e3f2ff;font-size:13px;white-space:nowrap}
+  .formula-reference-overlay .fl-toolbar{position:static;display:block;padding:15px}
+  .formula-reference-overlay .fl-header-actions{display:none}
+  .formula-reference-overlay .fl-toolbar .fl-hero{margin-bottom:13px}
+}

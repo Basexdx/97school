@@ -245,9 +245,9 @@ export function ReferenceMaterialsPage({onClose,onMenu,active=true}){
     })
   }
 
-  function openStudentMenu(){
+  function goHome(){
     if(onMenu)onMenu()
-    else{onClose();window.setTimeout(()=>document.querySelector('.mobile-nav-toggle')?.click(),30)}
+    else{onClose();window.setTimeout(()=>document.querySelector('.student-profile-button')?.click(),30)}
   }
 
   return <div className="reference-materials-overlay" role="dialog" aria-modal="true" aria-label="Справочные материалы по физике">
@@ -256,7 +256,7 @@ export function ReferenceMaterialsPage({onClose,onMenu,active=true}){
       <div className="rm-mobile-actions">
         <button type="button" aria-label="Назад" onClick={onClose}>←</button>
         <button type="button" aria-label="Перейти к поиску" onClick={()=>searchRef.current?.focus()}>⌕</button>
-        <button type="button" aria-label="Открыть меню" onClick={openStudentMenu}>☰</button>
+        <button type="button" aria-label="На страницу профиля" onClick={goHome}>⌂</button>
       </div>
     </div>
 
@@ -271,7 +271,7 @@ export function ReferenceMaterialsPage({onClose,onMenu,active=true}){
           <input ref={searchRef} value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по справочным материалам…" autoComplete="off"/>
           {query&&<button type="button" onClick={()=>setQuery('')} aria-label="Очистить поиск">×</button>}
         </label>
-        <div className="rm-header-actions"><button type="button" onClick={onClose}>← Назад</button><button className="rm-close" type="button" onClick={onMenu||onClose} aria-label="В меню">⌂</button></div>
+        <div className="rm-header-actions"><button type="button" onClick={onClose}>← Назад</button><button className="rm-close" type="button" onClick={goHome} aria-label="На страницу профиля">⌂ Домой</button></div>
       </header>
 
       <nav className="rm-categories" aria-label="Категории справочных материалов">

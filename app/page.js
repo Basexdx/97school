@@ -371,8 +371,8 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
         {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
         {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
         {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
-        {(openedSections.includes('formulas')||screen==='formulas')&&<div hidden={screen!=='formulas'}><ReferenceOverlay mode="formulas" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
-        {(openedSections.includes('materials')||screen==='materials')&&<div hidden={screen!=='materials'}><ReferenceMaterialsPage active={screen==='materials'} onClose={backFromSection} onMenu={()=>setScreen('home')}/></div>}
+        {(openedSections.includes('formulas')||screen==='formulas')&&<div hidden={screen!=='formulas'}><ReferenceOverlay mode="formulas" close={backFromSection} onMenu={()=>setScreen('profile')} returnToTask={false}/></div>}
+        {(openedSections.includes('materials')||screen==='materials')&&<div hidden={screen!=='materials'}><ReferenceMaterialsPage active={screen==='materials'} onClose={backFromSection} onMenu={()=>setScreen('profile')}/></div>}
         {screen === 'lesson8' && <Grade8LessonScreen lessonId={selectedLessonId} setScreen={setScreen} offlineState={offlineState} refreshOfflineState={refreshOfflineState} />}
         {screen === 'topic' && <TopicScreen grade={grade} topic={currentTopics[selectedTopic]} topicIndex={selectedTopic} startQuiz={startQuiz} setScreen={setScreen} offlineState={offlineState} downloadCurrentTopic={downloadCurrentTopic} />}
         {screen === 'quiz' && <QuizScreen quizIndex={quizIndex} answer={answer} />}
