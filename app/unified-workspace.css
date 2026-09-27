@@ -1,0 +1,21 @@
+/* One continuous star field behind every student and teacher workspace. */
+html.cosmo-genius-restored .student-content{
+  background-color:#031221!important;
+  background-image:linear-gradient(90deg,rgba(3,18,33,.82),rgba(3,18,33,.3) 74px,transparent 180px),url('/seasons/cosmic-workspace.webp')!important;
+  background-position:left top,center top!important;
+  background-size:cover,cover!important;
+  background-repeat:no-repeat!important;
+  background-attachment:scroll,fixed!important;
+}
+@media(min-width:901px){
+  html.cosmo-genius-restored .sidebar-light{border-right:1px solid rgba(117,186,237,.23)!important;box-shadow:10px 0 28px rgba(1,10,23,.18)!important}
+  html.cosmo-genius-restored .genius-reference-overlay,
+  html.cosmo-genius-restored .reference-materials-overlay{background-image:linear-gradient(90deg,rgba(3,18,33,.78),rgba(3,18,33,.24) 84px,transparent 190px),url('/seasons/cosmic-workspace.webp')!important;background-position:left top,center top!important;background-size:cover,cover!important;background-repeat:no-repeat!important;background-attachment:scroll,fixed!important;border-left:1px solid rgba(117,186,237,.23)}
+  html.cosmo-genius-restored .reference-materials-overlay::before{left:255px}
+}
+@media(max-width:900px){
+  html.cosmo-genius-restored .student-content{background-image:linear-gradient(180deg,rgba(3,18,33,.32),transparent 120px),url('/seasons/cosmic-workspace.webp')!important;background-position:center top!important;background-attachment:scroll!important}
+  html.cosmo-genius-restored .genius-reference-overlay,
+  html.cosmo-genius-restored .reference-materials-overlay{background-image:url('/seasons/cosmic-workspace.webp')!important;background-position:center top!important;background-size:cover!important;background-attachment:scroll!important}
+  html.cosmo-genius-restored .sidebar-light.mobile-nav-open{border-right:1px solid rgba(117,186,237,.23)!important;box-shadow:14px 0 32px rgba(1,10,23,.38)!important}
+}
