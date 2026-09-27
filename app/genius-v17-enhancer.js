@@ -132,7 +132,7 @@ function enhanceTaskBank(hub){
 export function ReferenceOverlay({mode,close,onMenu,returnToTask}){
   return <div className={`genius-reference-overlay ${mode==='formulas'?'formula-reference-overlay':''}`}>
     {mode!=='formulas'&&<header className="genius-reference-top"><button onClick={close}>← Назад</button><strong>{mode==='fipi'?'Банк заданий ФИПИ':'Основные формулы'}</strong><button onClick={onMenu} aria-label="В меню">⌂ Меню</button></header>}
-    {mode==='formulas'&&<header className="genius-reference-top formula-mobile-top"><button onClick={close}>← Назад</button><button onClick={onMenu} aria-label="На страницу профиля">⌂ Домой</button></header>}
+    {mode==='formulas'&&<header className="genius-reference-top formula-mobile-top"><button onClick={close}>← Назад</button><button onClick={onMenu} aria-label="На главную страницу">⌂ Домой</button></header>}
     <main className="genius-reference-scroll">{mode==='constants'?<ConstantsReference/>:mode==='formulas'?<PhysicsFormulas onBack={close} onHome={onMenu}/>:<div className="genius-fipi-wrap"><OgeTaskBank/></div>}</main>
     {returnToTask&&<button className="genius-return-task" onClick={close}>← Вернуться к задаче</button>}
   </div>
