@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
+import LandingRoom from './landing-room'
 import {ReferenceOverlay} from './genius-v17-enhancer'
 import {ReferenceMaterialsPage} from './reference-materials'
 import {bankPendingLocal,syncBankAttempts} from './task-store'
@@ -80,141 +81,7 @@ function Brand({ dark = false, onClick }) {
   )
 }
 
-function Landing({ onStudentAccess, onTeacherLogin }) {
-  return (
-    <main className="landing-page landing-v15-page">
-      <section className="landing-card landing-v15-card">
-        <nav className="landing-nav landing-v15-nav" aria-label="Главная навигация">
-          <Brand dark onClick={() => {}} />
-          <div className="landing-v15-menu">
-            <a href="#features">Возможности</a>
-            <a href="#program">Программа</a>
-            <a href="#oge">ОГЭ</a>
-            <button onClick={onTeacherLogin}>Для учителей</button>
-            <a href="#features">Тарифы</a>
-            <a href="#about">О нас</a>
-          </div>
-          <div className="landing-v15-nav-actions">
-            <button className="landing-v15-nav-student" onClick={onStudentAccess}>Войти как ученик</button>
-            <button className="landing-v15-nav-teacher" onClick={onTeacherLogin}>Войти как учитель</button>
-          </div>
-        </nav>
-        <div className="landing-grid landing-v15-grid">
-          <div className="landing-copy landing-v15-copy">
-            <span className="landing-eyebrow">ФИЗИКА · 7–9 КЛАСС</span>
-            <h1>Понимай<br/>физику. <span>Решай</span><br/><span>уверенно.</span></h1>
-            <p>Учебник, задачи, лабораторные работы и подготовка к ОГЭ — в одной системе.</p>
-            <div className="landing-v15-cta">
-              <button className="blue-btn" onClick={onStudentAccess}>Войти как ученик <span aria-hidden="true">→</span></button>
-              <button className="ghost-dark" onClick={onTeacherLogin}>Войти как учитель <span aria-hidden="true">→</span></button>
-            </div>
-            <div className="landing-v15-assurance" id="benefits">
-              <span><i aria-hidden="true">✓</i> Работает на всех устройствах</span>
-              <span><i aria-hidden="true">✓</i> Прогресс сохраняется</span>
-              <span><i aria-hidden="true">✓</i> Доступно офлайн</span>
-            </div>
-          </div>
-          <div className="landing-v15-visual" aria-hidden="true">
-            <div className="landing-v15-horizon" />
-            <div className="landing-v15-planet landing-v15-planet-left" />
-            <div className="landing-v15-planet landing-v15-planet-right" />
-            <span className="landing-v15-formula landing-v15-formula-one">E = mc²</span>
-            <span className="landing-v15-formula landing-v15-formula-two">F = ma</span>
-            <span className="landing-v15-formula landing-v15-formula-three">v = s/t</span>
-            <div className="landing-v15-atom">
-              <div className="landing-v15-nucleus" />
-              <div className="landing-v15-orbit landing-v15-orbit-one"><i /></div>
-              <div className="landing-v15-orbit landing-v15-orbit-two"><i /></div>
-              <div className="landing-v15-orbit landing-v15-orbit-three"><i /></div>
-            </div>
-          </div>
-        </div>
-        <section className="landing-v15-features" id="features" aria-label="Разделы Genius">
-          <article className="landing-v15-feature" id="program">
-            <span className="landing-v15-feature-icon" aria-hidden="true">▤</span>
-            <div><strong>Учебник</strong><span>Понятная теория с примерами и схемами.</span></div>
-            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
-          </article>
-          <article className="landing-v15-feature">
-            <span className="landing-v15-feature-icon" aria-hidden="true">☷</span>
-            <div><strong>Задачи</strong><span>Практика по темам с решениями и подсказками.</span></div>
-            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
-          </article>
-          <article className="landing-v15-feature">
-            <span className="landing-v15-feature-icon" aria-hidden="true">⚗</span>
-            <div><strong>Лабораторные работы</strong><span>Интерактивные модели и практические опыты.</span></div>
-            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
-          </article>
-          <article className="landing-v15-feature" id="oge">
-            <span className="landing-v15-feature-icon" aria-hidden="true">◎</span>
-            <div><strong>Подготовка к ОГЭ</strong><span>Тренировка по темам и типам заданий.</span></div>
-            <span className="landing-v15-feature-arrow" aria-hidden="true">→</span>
-          </article>
-        </section>
-        <div className="landing-v15-about" id="about">Genius <span>·</span> физика для 7–9 классов</div>
-      </section>
-    </main>
-  )
-}
-
-function StudentAccess({ setScreen, request, setRequest, setGrade }) {
-  const [code, setCode] = useState('')
-  const [error, setError] = useState('')
-
-  function submitCode() {
-    const normalized = code.trim().toUpperCase()
-    if (normalized !== DEMO_CODE) {
-      setError('Код не найден или уже недействителен.')
-      return
-    }
-    setError('')
-    setGrade(8)
-    setRequest({
-      id: 'REQ-482731',
-      code: DEMO_CODE,
-      codeLabel: 'ключ №17',
-      grade: 8,
-      className: '8Б',
-      requestedAt: new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}),
-      status: 'PENDING',
-    })
-    setScreen('pending')
-  }
-
-  return (
-    <main className="access-page">
-      <section className="access-hero">
-        <Brand dark onClick={() => setScreen('landing')} />
-        <div className="access-hero-copy">
-          <span className="security-kicker">БЕЗОПАСНЫЙ ДОСТУП</span>
-          <h1>Вход без почты,<br/>телефона и пароля</h1>
-          <p>Персональный код выдаёт учитель. После ввода кода подключение должен подтвердить учитель.</p>
-          <div className="security-points">
-            <div><span>✓</span><p><strong>Минимум данных</strong><small>Мы не просим email, номер телефона или ФИО.</small></p></div>
-            <div><span>✓</span><p><strong>Ручное подтверждение</strong><small>Один код сам по себе не даёт доступ к аккаунту.</small></p></div>
-            <div><span>✓</span><p><strong>Один прогресс</strong><small>После подключения прогресс будет храниться на сервере Genius.</small></p></div>
-          </div>
-        </div>
-      </section>
-      <section className="access-form-wrap">
-        <div className="access-form-card">
-          <button className="back-link" onClick={() => setScreen('landing')}>← На главную</button>
-          <div className="access-icon">⌁</div>
-          <h2>Вход ученика</h2>
-          <p className="subtle">Введи персональный код, который выдал учитель.</p>
-          <label className="access-label">Код доступа</label>
-          <input className="access-code-input" value={code} onChange={e => setCode(e.target.value)} onKeyDown={e => e.key === 'Enter' && submitCode()} placeholder="GNS-XXXX-XXXX" autoComplete="off" />
-          {error && <div className="access-error">{error}</div>}
-          <button className="blue-btn full" onClick={submitCode}>Отправить запрос учителю</button>
-          <div className="demo-code-note"><strong>Для прототипа:</strong> {DEMO_CODE}</div>
-          <div className="teacher-entry"><span>Ты учитель?</span><button onClick={() => setScreen('teacherLogin')}>Войти в кабинет →</button></div>
-        </div>
-      </section>
-    </main>
-  )
-}
-
-function PendingAccess({ setScreen, request }) {
+function PendingAccess({ setScreen, request, openStudent, openTeacher }) {
   if (!request) return null
   const approved = request.status === 'APPROVED'
   const rejected = request.status === 'REJECTED'
@@ -227,27 +94,12 @@ function PendingAccess({ setScreen, request }) {
         <p className="subtle">{approved ? 'Учитель подтвердил подключение. Можно входить в Genius.' : rejected ? 'Учитель не подтвердил этот запрос. Обратись к учителю за новым кодом.' : 'Код проверен. Запрос отправлен учителю и пока не даёт доступ к учебным данным.'}</p>
         <div className="request-summary"><span>{request.className}</span><strong>{request.codeLabel}</strong><small>Запрос: {request.requestedAt}</small></div>
         {approved && <button className="blue-btn full" onClick={() => setScreen('home')}>Открыть Genius</button>}
-        {rejected && <button className="blue-btn full" onClick={() => setScreen('studentAccess')}>Ввести другой код</button>}
+        {rejected && <button className="blue-btn full" onClick={openStudent}>Ввести другой код</button>}
         {!approved && !rejected && <>
           <div className="pending-note">В рабочей версии этот экран будет автоматически проверять статус запроса.</div>
-          <button className="soft-btn full-width-soft" onClick={() => setScreen('teacherLogin')}>Открыть кабинет учителя для демо</button>
+          <button className="soft-btn full-width-soft" onClick={openTeacher}>Открыть вход учителя для демо</button>
         </>}
         <button className="text-link" onClick={() => setScreen('landing')}>Вернуться на главную</button>
-      </div>
-    </main>
-  )
-}
-
-function TeacherLogin({ setScreen }) {
-  return (
-    <main className="auth-page">
-      <div className="auth-panel compact-auth">
-        <Brand onClick={() => setScreen('landing')} />
-        <button className="back-link" onClick={() => setScreen('landing')}>← Назад</button>
-        <h1>Вход для учителя</h1>
-        <p className="subtle">В прототипе используется демонстрационный вход. В production здесь будет усиленная авторизация учителя.</p>
-        <div className="input-stack"><input type="email" placeholder="Email учителя" defaultValue="teacher@example.com" /><input type="password" placeholder="Пароль" defaultValue="password123" /></div>
-        <button className="blue-btn full" onClick={() => setScreen('teacher')}>Войти</button>
       </div>
     </main>
   )
@@ -895,9 +747,20 @@ export default function Page() {
   const [grade, setGrade] = useState(8)
   const [xp, setXp] = useState(0)
   const [request, setRequest] = useState(null)
+  const [entryRole,setEntryRole]=useState(null)
+  function submitStudentCode(rawCode){
+    const normalized=rawCode.trim().toUpperCase()
+    if(normalized!==DEMO_CODE)return 'Код не найден или уже недействителен.'
+    setGrade(8)
+    setRequest({id:'REQ-482731',code:DEMO_CODE,codeLabel:'ключ №17',grade:8,className:'8Б',requestedAt:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),status:'PENDING'})
+    setScreen('pending')
+    return ''
+  }
+  function openLandingRole(role){setScreen('landing');setEntryRole(role)}
   function setScreen(next){
     const target=typeof next==='function'?next(screenRef.current):next
     if(target===screenRef.current)return
+    if(target==='landing')setEntryRole(null)
     const previous=historyRef.current.at(-1)
     if(previous?.screen===target){
       historyRef.current.pop()
@@ -923,10 +786,8 @@ export default function Page() {
     if(['offline','performance','practice','topics','labs','oge'].includes(requested))setScreen(requested)
   }, [])
 
-  if (screen === 'landing') return <Landing onStudentAccess={() => setScreen('studentAccess')} onTeacherLogin={() => setScreen('teacherLogin')} />
-  if (screen === 'studentAccess') return <StudentAccess setScreen={setScreen} request={request} setRequest={setRequest} setGrade={setGrade} />
-  if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} />
-  if (screen === 'teacherLogin') return <TeacherLogin setScreen={setScreen} />
+  if (screen === 'landing') return <LandingRoom Brand={Brand} role={entryRole} setRole={setEntryRole} onStudentSubmit={submitStudentCode} onTeacherSubmit={()=>setScreen('teacher')} demoCode={DEMO_CODE}/>
+  if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} openStudent={()=>openLandingRole('student')} openTeacher={()=>openLandingRole('teacher')} />
   if (screen === 'teacher') return <TeacherDashboard setScreen={setScreen} request={request} setRequest={setRequest} />
   return <StudentShell screen={screen} setScreen={setScreen} goBack={goBack} grade={grade} setGrade={setGrade} xp={xp} setXp={setXp} />
 }

@@ -1,13 +1,8 @@
 'use client'
 
 import { useEffect } from 'react'
-
-const SEASONS=['winter','spring','summer','autumn']
-
-function currentSeason(){
-  const month=new Date().getMonth()
-  return SEASONS[Math.floor(((month+1)%12)/3)]
-}
+import {seasonForMonth} from '../shared/season.mjs'
+function currentSeason(){return seasonForMonth(new Date().getMonth())}
 
 export default function SeasonalTheme(){
   useEffect(()=>{

@@ -22,6 +22,7 @@ import './unified-workspace.css'
 import './reference-section-header.css'
 import './seasonal-seam.css'
 import './unified-section-style.css'
+import './landing-room.css'
 import PwaRegister from './pwa-register'
 import ApiOriginBridge from './api-origin-bridge'
 import GeniusV17Enhancer from './genius-v17-enhancer'
@@ -29,6 +30,7 @@ import Grade8EditorialLessons from './grade8-editorial-lessons'
 import CosmoUiCleanup from './cosmo-ui-cleanup'
 import SeasonalTheme from './seasonal-theme'
 import TeacherJournalEnhancer from './teacher-journal-enhancer'
+import {seasonBootstrap} from '../shared/season.mjs'
 
 export const metadata = {
   title: 'Genius — физика, которую понимаешь',
@@ -58,7 +60,8 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{__html:seasonBootstrap}}/></head>
       <body>
         <ApiOriginBridge />
         <PwaRegister />
