@@ -42,7 +42,7 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
   function selectRole(next){setError('');setBusy(false);setRole(next)}
 
   return <main className="landing-page genius-room-landing">
-    <section className={`genius-room-shell${role?` genius-room-shell--form genius-room-shell--${role}`:''}`}>
+    <section className={`genius-room-shell${role?' genius-room-shell--form':''}`}>
       <header className="genius-room-header"><Brand dark onClick={()=>selectRole(null)}/></header>
       <div className="genius-room-layout">
         <div className="genius-room-copy">
@@ -85,7 +85,6 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
               {error&&<p className="genius-room-error" role="alert">{error}</p>}
               <button className="genius-room-primary" type="submit" disabled={busy}>{busy?'Входим…':'Войти →'}</button>
             </form>}
-            <button type="button" className="genius-room-collapse" onClick={()=>selectRole(null)} disabled={busy}>← Свернуть форму</button>
           </div>}
         </div>
       </div>

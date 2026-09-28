@@ -14,7 +14,7 @@ html[data-season='winter'] .genius-room-scene{background-image:url('/landing/gen
 html[data-season='spring'] .genius-room-scene{background-image:url('/landing/genius-room-spring.webp')}
 html[data-season='summer'] .genius-room-scene{background-image:url('/landing/genius-room-summer.webp')}
 .genius-room-scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,9,21,.5),rgba(1,9,21,.1) 42%,transparent 70%)}
-.genius-room-books{position:absolute;z-index:2;left:65%;top:46.3%;width:21%;height:22.2%;display:flex;flex-direction:column;justify-content:space-around;transform:skewY(-1deg);color:#e79a66;font-size:clamp(10px,1.02vw,17px);font-weight:650;letter-spacing:.02em;text-shadow:0 0 8px rgba(254,104,17,.5),0 1px 3px #0b0b15;white-space:nowrap}
+.genius-room-books{position:absolute;z-index:2;left:65%;top:46.7%;width:21%;height:22.2%;display:flex;flex-direction:column;justify-content:space-around;transform:skewY(-1deg);color:#e79a66;font-size:clamp(10px,1.02vw,17px);font-weight:650;letter-spacing:.02em;text-shadow:0 0 8px rgba(254,104,17,.5),0 1px 3px #0b0b15;white-space:nowrap}
 .genius-room-books span{display:flex;align-items:center;height:25%;padding-left:2%}
 .genius-room-entry{grid-row:2;align-self:start;min-height:285px;margin-top:20px}
 .genius-room-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:590px;animation:roomFormIn .22s ease-out both}
@@ -37,8 +37,6 @@ html[data-season='summer'] .genius-room-scene{background-image:url('/landing/gen
 .genius-room-login form>.genius-room-primary{width:100%;min-height:48px;margin-top:6px}
 .genius-room-login form small{color:#7697b4;font-size:10px}
 .genius-room-error{margin:1px 0;color:#ffb6b8;font-size:12px}
-.genius-room-collapse{display:block;margin:8px auto 0;padding:5px;border:0;background:transparent;color:#a6bdd3;font-size:12px;cursor:pointer}
-.genius-room-collapse:hover{text-decoration:underline;color:#fff}
 .genius-room-effects{position:absolute;z-index:1;inset:0;overflow:hidden;pointer-events:none}
 .genius-room-effects i{position:absolute;display:none}
 html[data-season='autumn'] .genius-room-leaf{display:block;top:-4%;width:10px;height:15px;border-radius:0 75% 0 75%;background:#ef8e24;opacity:.65;animation-name:roomFall;animation-timing-function:linear;animation-iteration-count:infinite}
@@ -62,7 +60,7 @@ html[data-season='summer'] .genius-room-star{display:block;left:64%;top:13%;widt
   .genius-room-copy p{margin:15px 0 0;font-size:15px;line-height:1.43}
   .genius-room-scene{position:relative;order:2;inset:auto;flex:none;width:100%;height:clamp(240px,36vh,340px);margin-top:4px;background-size:auto 100%;background-position:80% center}
   .genius-room-scene:after{background:linear-gradient(180deg,#020b18 0%,transparent 23%,transparent 83%,#020b18 100%)}
-  .genius-room-books{left:58%;top:46.3%;width:38%;height:22.2%;font-size:clamp(8px,2.15vw,11px)}
+  .genius-room-books{left:58%;top:46.7%;width:38%;height:22.2%;font-size:clamp(8px,2.15vw,11px)}
   .genius-room-entry{order:3;align-self:auto;max-width:none;min-height:250px;margin:-6px 18px 0}
   .genius-room-choices{grid-template-columns:1fr 1fr;gap:8px}
   .genius-room-choices button{min-height:54px;padding:8px;font-size:12px}
@@ -77,9 +75,8 @@ html[data-season='summer'] .genius-room-star{display:block;left:64%;top:13%;widt
 .genius-room-entry{z-index:6}
 .genius-room-shell--form .genius-room-layout{align-content:start;padding-top:clamp(12px,2vh,22px)}
 .genius-room-shell--form .genius-room-copy{align-self:start}
-.genius-room-shell--form .genius-room-copy h1{font-size:clamp(48px,min(4vw,7vh),64px);line-height:.91}
-.genius-room-shell--student .genius-room-copy h1{font-size:clamp(62px,min(5.5vw,10.5vh),96px)}
-.genius-room-shell--teacher .genius-room-copy h1{font-size:clamp(52px,min(4.2vw,7.7vh),72px)}
+.genius-room-shell--form .genius-room-copy h1{font-size:clamp(62px,min(5.5vw,10.5vh),96px);line-height:.91}
+.genius-room-shell--form .genius-room-copy p{display:none}
 .genius-room-shell--form .genius-room-entry{min-height:0;margin:0}
 .genius-room-landing .genius-room-login{position:fixed;z-index:10;left:clamp(24px,4.5vw,80px);bottom:clamp(14px,2vh,24px);width:min(590px,44vw);max-height:calc(100dvh - 32px);overflow:auto;animation:none}
 .genius-room-front-leaves{position:absolute;z-index:5;inset:0;overflow:hidden;pointer-events:none}
@@ -93,10 +90,7 @@ html[data-season='autumn'] .genius-room-front-leaves i{display:block}
   .genius-room-front-leaves i{width:11px;height:16px}
 }
 @media(max-height:740px) and (min-width:701px){
-  .genius-room-shell--form .genius-room-copy h1{font-size:clamp(42px,7vh,52px)}
-  .genius-room-shell--student .genius-room-copy h1{font-size:clamp(60px,min(5.2vw,11vh),82px)}
-  .genius-room-shell--teacher .genius-room-copy h1{font-size:clamp(48px,min(4vw,8vh),58px)}
-  .genius-room-shell--form .genius-room-copy p{display:none}
+  .genius-room-shell--form .genius-room-copy h1{font-size:clamp(60px,min(5.2vw,11vh),82px)}
   .genius-room-login{padding:9px 13px}
   .genius-room-login form{gap:5px;margin-top:9px}
   .genius-room-login input{height:40px}
