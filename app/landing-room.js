@@ -35,13 +35,13 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
   function selectRole(next){setError('');setBusy(false);setRole(next)}
 
   return <main className="landing-page genius-room-landing">
-    <section className="genius-room-shell">
+    <section className={`genius-room-shell${role?' genius-room-shell--form':''}`}>
       <header className="genius-room-header"><Brand dark onClick={()=>selectRole(null)}/></header>
       <div className="genius-room-layout">
         <div className="genius-room-copy">
           <span className="genius-room-kicker">ФИЗИКА · 7–9 КЛАСС</span>
-          <h1><span>Понимай<br/>физику.</span><span>Решай<br/>уверенно.</span></h1>
-          <p>Учебник, задачи и справочные материалы по физике — в одной системе.</p>
+          <h1><span>Понимай физику.</span><span>Решай уверенно.</span></h1>
+          <p>Учебник, задачи и<br/>справочные материалы<br/>по физике — в одной системе.</p>
         </div>
         <div className="genius-room-scene" aria-hidden="true">
           <div className="genius-room-books">{bookSections.map(name=><span key={name}>{name}</span>)}</div>
@@ -51,6 +51,9 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
             {Array.from({length:5},(_,i)=><i className="genius-room-petal" style={{left:`${68+i*5}%`,animationDuration:`${12+i}s`,animationDelay:`-${i*2}s`}} key={`petal-${i}`}/>) }
             <i className="genius-room-star"/>
           </div>
+        </div>
+        <div className="genius-room-front-leaves" aria-hidden="true">
+          {Array.from({length:5},(_,i)=><i style={{left:`${48+i*11}%`,animationDuration:`${12+i*1.5}s`,animationDelay:`-${i*3.2}s`}} key={i}/>)}
         </div>
         <div className="genius-room-entry" aria-live="polite">
           {!role?<div className="genius-room-choices">
