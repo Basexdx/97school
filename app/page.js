@@ -126,12 +126,8 @@ function Sidebar({ screen, setScreen, isOnline, isPhone }) {
 }
 
 function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp }) {
-  const [selectedTopic, setSelectedTopic] = useState(() => {
-    try {return Math.max(0,Number(sessionStorage.getItem('genius:topic:v1'))||0)} catch {return 0}
-  })
-  const [selectedLessonId, setSelectedLessonId] = useState(() => {
-    try {return sessionStorage.getItem('genius:lesson:v1')||'8-1'} catch {return '8-1'}
-  })
+  const [selectedTopic, setSelectedTopic] = useState(0)
+  const [selectedLessonId, setSelectedLessonId] = useState('8-1')
   const [courseMode, setCourseMode] = useState('school')
   const [quizIndex, setQuizIndex] = useState(0)
   const [answers, setAnswers] = useState([])
@@ -142,7 +138,6 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
   const [openedSections,setOpenedSections]=useState([])
   const [syncMessage, setSyncMessage] = useState('')
   const currentTopics = useMemo(() => topicsByGrade[grade], [grade])
-  useEffect(()=>{try {sessionStorage.setItem('genius:topic:v1',String(selectedTopic));sessionStorage.setItem('genius:lesson:v1',selectedLessonId)} catch {}},[selectedTopic,selectedLessonId])
   const sectionInfo={topics:['Учебник','Уроки физики и учебные материалы'],tests:['Тесты','Проверь свои знания'],oge:['Подготовка к ОГЭ','Задания и материалы для подготовки'],practice:['Задачник','Задачи по физике для практики'],lesson8:['Урок физики','Теория, примеры и проверка знаний'],topic:['Тема урока','Теория и тренировка'],quiz:['Тренировочный тест','Проверка знаний без начисления XP'],result:['Результат','Итоги тренировочного теста'],performance:['Успеваемость','Дневник и результаты по физике'],rating:['Рейтинг','Результаты и прогресс'],labs:['Лабораторные работы','Практические занятия по физике'],achievements:['Мои достижения','Твои успехи в Genius'],offline:['Офлайн-материалы','Учись и сохраняй прогресс без интернета'],profile:['Профиль','Настройки и результаты обучения']}
 
   const score = answers.reduce((acc, a, i) => acc + (a === quiz[i]?.correct ? 1 : 0), 0)
@@ -670,10 +665,7 @@ function TeacherSectionHeader({title,description,onBack,onHome,children}){
 }
 
 function TeacherDashboard({ setScreen, request, setRequest }) {
-  const [tab, setTab] = useState(() => {
-    try {return sessionStorage.getItem('genius:teacher-tab:v1')|| (request?.status === 'PENDING' ? 'requests' : 'classes')} catch {return request?.status === 'PENDING' ? 'requests' : 'classes'}
-  })
-  useEffect(()=>{try {sessionStorage.setItem('genius:teacher-tab:v1',tab)} catch {}},[tab])
+  const [tab, setTab] = useState(request?.status === 'PENDING' ? 'requests' : 'classes')
   const [previousTab,setPreviousTab]=useState('classes')
   const [menuOpen,setMenuOpen]=useState(false)
   const chooseTab=value=>{if(value!==tab){setPreviousTab(tab);setTab(value)}setMenuOpen(false)}
@@ -756,7 +748,6 @@ export default function Page() {
   const [xp, setXp] = useState(0)
   const [request, setRequest] = useState(null)
   const [entryRole,setEntryRole]=useState(null)
-  const [restored,setRestored]=useState(false)
   function submitStudentCode(rawCode){
     const normalized=rawCode.trim().toUpperCase()
     if(normalized!==DEMO_CODE)return 'Код не найден или уже недействителен.'
@@ -791,28 +782,9 @@ export default function Page() {
     requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0,previous.scrollY)))
   }
   useEffect(() => {
-    const allowed=['landing','pending','teacher','home','topics','tests','oge','practice','fipi','formulas','materials','lesson8','topic','quiz','result','performance','rating','labs','achievements','offline','profile']
-    try {
-      const saved=JSON.parse(sessionStorage.getItem('genius:view:v1')||'null')
-      if(saved){
-        if(saved.request&&typeof saved.request==='object')setRequest(saved.request)
-        if([7,8,9].includes(saved.grade))setGrade(saved.grade)
-        if(Number.isFinite(saved.xp))setXp(saved.xp)
-        if(saved.entryRole==='student'||saved.entryRole==='teacher')setEntryRole(saved.entryRole)
-        if(Array.isArray(saved.history))historyRef.current=saved.history.filter(item=>allowed.includes(item?.screen)&&Number.isFinite(item?.scrollY)).slice(-25)
-      }
-      const requested=new URLSearchParams(window.location.search).get('screen')
-      const target=allowed.includes(requested)&&requested!=='pending'&&requested!=='teacher'?requested:allowed.includes(saved?.screen)?saved.screen:'landing'
-      const validTarget=target==='pending'&&!saved?.request?'landing':target
-      screenRef.current=validTarget
-      setCurrentScreen(validTarget)
-    } catch { /* Storage can be unavailable in private browsing. */ }
-    setRestored(true)
+    const requested=new URLSearchParams(window.location.search).get('screen')
+    if(['offline','performance','practice','topics','labs','oge'].includes(requested))setScreen(requested)
   }, [])
-  useEffect(() => {
-    if(!restored)return
-    try {sessionStorage.setItem('genius:view:v1',JSON.stringify({screen,entryRole,request,grade,xp,history:historyRef.current}))} catch { /* Continue without persistence if storage is full or blocked. */ }
-  },[restored,screen,entryRole,request,grade,xp])
 
   if (screen === 'landing') return <LandingRoom Brand={Brand} role={entryRole} setRole={setEntryRole} onStudentSubmit={submitStudentCode} onTeacherSubmit={()=>setScreen('teacher')} demoCode={DEMO_CODE}/>
   if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} openStudent={()=>openLandingRole('student')} openTeacher={()=>openLandingRole('teacher')} />
