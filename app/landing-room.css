@@ -14,7 +14,7 @@ html[data-season='winter'] .genius-room-scene{background-image:url('/landing/gen
 html[data-season='spring'] .genius-room-scene{background-image:url('/landing/genius-room-spring.webp')}
 html[data-season='summer'] .genius-room-scene{background-image:url('/landing/genius-room-summer.webp')}
 .genius-room-scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,9,21,.5),rgba(1,9,21,.1) 42%,transparent 70%)}
-.genius-room-books{position:absolute;z-index:2;left:65%;top:46.9%;width:21%;height:19.8%;display:flex;flex-direction:column;justify-content:space-around;transform:skewY(-1deg);color:#e79a66;font-size:clamp(10px,1.02vw,17px);font-weight:650;letter-spacing:.02em;text-shadow:0 0 8px rgba(254,104,17,.5),0 1px 3px #0b0b15;white-space:nowrap}
+.genius-room-books{position:absolute;z-index:2;left:65%;top:46.3%;width:21%;height:22.2%;display:flex;flex-direction:column;justify-content:space-around;transform:skewY(-1deg);color:#e79a66;font-size:clamp(10px,1.02vw,17px);font-weight:650;letter-spacing:.02em;text-shadow:0 0 8px rgba(254,104,17,.5),0 1px 3px #0b0b15;white-space:nowrap}
 .genius-room-books span{display:flex;align-items:center;height:25%;padding-left:2%}
 .genius-room-entry{grid-row:2;align-self:start;min-height:285px;margin-top:20px}
 .genius-room-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:590px;animation:roomFormIn .22s ease-out both}
@@ -62,7 +62,7 @@ html[data-season='summer'] .genius-room-star{display:block;left:64%;top:13%;widt
   .genius-room-copy p{margin:15px 0 0;font-size:15px;line-height:1.43}
   .genius-room-scene{position:relative;order:2;inset:auto;flex:none;width:100%;height:clamp(240px,36vh,340px);margin-top:4px;background-size:auto 100%;background-position:80% center}
   .genius-room-scene:after{background:linear-gradient(180deg,#020b18 0%,transparent 23%,transparent 83%,#020b18 100%)}
-  .genius-room-books{left:58%;top:47%;width:38%;height:20%;font-size:clamp(8px,2.15vw,11px)}
+  .genius-room-books{left:58%;top:46.3%;width:38%;height:22.2%;font-size:clamp(8px,2.15vw,11px)}
   .genius-room-entry{order:3;align-self:auto;max-width:none;min-height:250px;margin:-6px 18px 0}
   .genius-room-choices{grid-template-columns:1fr 1fr;gap:8px}
   .genius-room-choices button{min-height:54px;padding:8px;font-size:12px}
