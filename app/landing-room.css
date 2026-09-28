@@ -78,6 +78,8 @@ html[data-season='summer'] .genius-room-star{display:block;left:64%;top:13%;widt
 .genius-room-shell--form .genius-room-layout{align-content:start;padding-top:clamp(12px,2vh,22px)}
 .genius-room-shell--form .genius-room-copy{align-self:start}
 .genius-room-shell--form .genius-room-copy h1{font-size:clamp(48px,min(4vw,7vh),64px);line-height:.91}
+.genius-room-shell--student .genius-room-copy h1{font-size:clamp(62px,min(5.5vw,10.5vh),96px)}
+.genius-room-shell--teacher .genius-room-copy h1{font-size:clamp(52px,min(4.2vw,7.7vh),72px)}
 .genius-room-shell--form .genius-room-entry{min-height:0;margin:0}
 .genius-room-landing .genius-room-login{position:fixed;z-index:10;left:clamp(24px,4.5vw,80px);bottom:clamp(14px,2vh,24px);width:min(590px,44vw);max-height:calc(100dvh - 32px);overflow:auto;animation:none}
 .genius-room-front-leaves{position:absolute;z-index:5;inset:0;overflow:hidden;pointer-events:none}
@@ -92,6 +94,8 @@ html[data-season='autumn'] .genius-room-front-leaves i{display:block}
 }
 @media(max-height:740px) and (min-width:701px){
   .genius-room-shell--form .genius-room-copy h1{font-size:clamp(42px,7vh,52px)}
+  .genius-room-shell--student .genius-room-copy h1{font-size:clamp(60px,min(5.2vw,11vh),82px)}
+  .genius-room-shell--teacher .genius-room-copy h1{font-size:clamp(48px,min(4vw,8vh),58px)}
   .genius-room-shell--form .genius-room-copy p{display:none}
   .genius-room-login{padding:9px 13px}
   .genius-room-login form{gap:5px;margin-top:9px}
