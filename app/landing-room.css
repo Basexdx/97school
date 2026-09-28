@@ -72,3 +72,16 @@ html[data-season='summer'] .genius-room-star{display:block;left:64%;top:13%;widt
 }
 @media(max-width:380px){.genius-room-copy h1{font-size:42px}.genius-room-choices button{font-size:11px}.genius-room-books{font-size:7.5px}}
 @media(prefers-reduced-motion:reduce){.genius-room-scene,.genius-room-login,.genius-room-choices,.genius-room-effects i{animation:none!important}.genius-room-effects i{display:none!important}.genius-room-primary,.genius-room-secondary{transition:none!important}}
+
+/* The form floats over the room, so opening or focusing it never moves the page. */
+.genius-room-entry{z-index:6}
+.genius-room-landing .genius-room-login{position:fixed;z-index:10;top:50%;right:clamp(24px,5vw,100px);width:min(560px,40vw);max-height:calc(100dvh - 32px);overflow:auto;transform:translateY(-50%);animation:none}
+.genius-room-front-leaves{position:absolute;z-index:5;inset:0;overflow:hidden;pointer-events:none}
+.genius-room-front-leaves i{position:absolute;display:none;top:-5%;width:17px;height:23px;border-radius:8% 85% 12% 85%;background:linear-gradient(135deg,#ffbc37,#ec6e20 58%,#963a18);box-shadow:0 2px 14px rgba(243,107,21,.25);opacity:0;animation:roomFrontFall linear infinite}
+html[data-season='autumn'] .genius-room-front-leaves i{display:block}
+@keyframes roomFrontFall{0%{transform:translate3d(0,-25px,0) rotate(-30deg);opacity:0}9%{opacity:.68}85%{opacity:.6}100%{transform:translate3d(-110px,110vh,0) rotate(430deg);opacity:0}}
+@media(max-width:700px){
+  .genius-room-landing .genius-room-login{top:auto;right:12px;bottom:12px;left:12px;width:auto;max-height:calc(100dvh - 24px);transform:none}
+  .genius-room-front-leaves i{width:11px;height:16px}
+}
+@media(prefers-reduced-motion:reduce){.genius-room-front-leaves i{display:none!important}}
