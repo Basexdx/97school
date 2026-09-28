@@ -42,7 +42,7 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
   function selectRole(next){setError('');setBusy(false);setRole(next)}
 
   return <main className="landing-page genius-room-landing">
-    <section className="genius-room-shell">
+    <section className={`genius-room-shell${role?' genius-room-shell--form':''}`}>
       <header className="genius-room-header"><Brand dark onClick={()=>selectRole(null)}/></header>
       <div className="genius-room-layout">
         <div className="genius-room-copy">
