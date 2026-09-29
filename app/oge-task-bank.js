@@ -1,50 +1,100 @@
 'use client'
 
-import {useEffect,useMemo,useState} from 'react'
+import {useEffect,useMemo,useRef,useState} from 'react'
 import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
+import {filterOgeTasks,sectionForTask} from './oge-task-filters.mjs'
 import styles from './oge-task-bank.module.css'
 
-const POS_KEY='genius:oge-task-position:v1'
+const FILTER_KEY='genius:oge-bank:v2',PROGRESS_KEY='genius:oge-progress:v1'
+const sectionNames=[...new Set(ogeTasks.map(sectionForTask))]
+const taskTypes=Array.from({length:22},(_,index)=>index+1)
+const statusNames={unsolved:'Нерешённые',solved:'Решённые',viewed:'Просмотренные'}
 const parseNumber=v=>{const s=String(v??'').trim().replace(',', '.');if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s))return null;const n=Number(s);return Number.isFinite(n)?n:null}
 const isCorrect=(value,expected)=>{const n=parseNumber(value);return n!==null&&Math.abs(n-expected)<=Math.max(1e-6,Math.abs(expected)*1e-4)}
 
-export default function OgeTaskBank(){
-  const [filter,setFilter]=useState('all')
+export default function OgeTaskBank({onBack,onHome}){
+  const [sections,setSections]=useState([])
+  const [types,setTypes]=useState([])
+  const [statuses,setStatuses]=useState([])
+  const [query,setQuery]=useState('')
+  const [search,setSearch]=useState('')
   const [currentId,setCurrentId]=useState(null)
-  const [restoreId,setRestoreId]=useState('')
-  const filtered=useMemo(()=>filter==='all'?ogeTasks:ogeTasks.filter(t=>t.type===Number(filter)),[filter])
+  const [detailIds,setDetailIds]=useState([])
+  const [lastId,setLastId]=useState('')
+  const [viewed,setViewed]=useState(new Set())
+  const [solved,setSolved]=useState(new Set())
+  const [ready,setReady]=useState(false)
+  const scrollTop=useRef(0)
+  const filtered=useMemo(()=>filterOgeTasks(ogeTasks,{sections,types,statuses,query:search},viewed,solved),[sections,types,statuses,search,viewed,solved])
   const current=currentId?ogeTasks.find(t=>t.id===currentId):null
-  const pos=current?filtered.findIndex(t=>t.id===current.id):-1
+  const detailTasks=detailIds.length?detailIds.map(id=>ogeTasks.find(task=>task.id===id)).filter(Boolean):filtered
+  const pos=current?detailTasks.findIndex(t=>t.id===current.id):-1
 
-  useEffect(()=>{try{const saved=JSON.parse(sessionStorage.getItem(POS_KEY)||'null');if(saved){setFilter(saved.filter||'all');setRestoreId(saved.taskId||'')}}catch{}},[])
-  useEffect(()=>{if(current||!restoreId)return;const id=requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById(`oge-tile-${restoreId}`)?.scrollIntoView({block:'center'})));return()=>cancelAnimationFrame(id)},[current,restoreId,filter])
-  function remember(id){setRestoreId(id);try{sessionStorage.setItem(POS_KEY,JSON.stringify({filter,taskId:id}))}catch{}}
-  function open(id){remember(id);setCurrentId(id)}
-  function back(){remember(current?.id||restoreId);setCurrentId(null)}
+  useEffect(()=>{
+    try{
+      const saved=JSON.parse(sessionStorage.getItem(FILTER_KEY)||'null')
+      if(saved){
+        setSections((saved.sections||[]).filter(value=>sectionNames.includes(value)))
+        setTypes((saved.types||[]).filter(value=>Number.isInteger(value)&&value>=1&&value<=22))
+        setStatuses((saved.statuses||[]).filter(value=>value in statusNames))
+        setQuery(saved.query||'');setSearch(saved.query||'')
+        setLastId(saved.lastId||'')
+        scrollTop.current=Number(saved.scrollTop)||0
+        if(ogeTasks.some(task=>task.id===saved.currentId)){setCurrentId(saved.currentId);setDetailIds((saved.detailIds||[]).filter(id=>ogeTasks.some(task=>task.id===id)))}
+      }
+      const progress=JSON.parse(localStorage.getItem(PROGRESS_KEY)||'null')
+      if(progress){setViewed(new Set(progress.viewed||[]));setSolved(new Set(progress.solved||[]))}
+    }catch{}
+    setReady(true)
+  },[])
+  useEffect(()=>{const timeout=setTimeout(()=>setSearch(query),200);return()=>clearTimeout(timeout)},[query])
+  useEffect(()=>{if(!ready)return;try{sessionStorage.setItem(FILTER_KEY,JSON.stringify({sections,types,statuses,query,lastId,currentId,detailIds,scrollTop:scrollTop.current}))}catch{}},[ready,sections,types,statuses,query,lastId,currentId,detailIds])
+  useEffect(()=>{if(!ready)return;try{localStorage.setItem(PROGRESS_KEY,JSON.stringify({viewed:[...viewed],solved:[...solved]}))}catch{}},[ready,viewed,solved])
+  useEffect(()=>{
+    if(!ready||currentId)return
+    const id=requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const root=document.querySelector('.genius-fipi-wrap')?.closest('.genius-reference-scroll')
+      if(root)root.scrollTop=scrollTop.current
+    }))
+    return()=>cancelAnimationFrame(id)
+  },[ready,currentId])
+  function toggle(setter,value){setter(previous=>previous.includes(value)?previous.filter(item=>item!==value):[...previous,value])}
+  function reset(){setSections([]);setTypes([]);setStatuses([]);setQuery('');setSearch('')}
+  function open(id){
+    if(!currentId){
+      const root=document.querySelector('.genius-fipi-wrap')?.closest('.genius-reference-scroll')
+      scrollTop.current=root?.scrollTop||0
+      setDetailIds(filtered.map(task=>task.id))
+    }
+    setLastId(id);setViewed(previous=>new Set(previous).add(id));setCurrentId(id)
+  }
+  function back(){setCurrentId(null)}
+  function markSolved(id){setSolved(previous=>new Set(previous).add(id))}
+  const active=[...sections.map(value=>({label:value,remove:()=>toggle(setSections,value)})),...types.map(value=>({label:`Тип ${value}`,remove:()=>toggle(setTypes,value)})),...statuses.map(value=>({label:statusNames[value],remove:()=>toggle(setStatuses,value)}))]
 
-  if(current)return <OgeTaskDetail task={current} position={pos+1} total={filtered.length} back={back} previous={pos>0?filtered[pos-1]:null} next={pos>=0&&pos<filtered.length-1?filtered[pos+1]:null} navigate={t=>open(t.id)}/>
+  if(current)return <OgeTaskDetail task={current} position={pos+1} total={detailTasks.length} back={back} previous={pos>0?detailTasks[pos-1]:null} next={pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null} navigate={t=>open(t.id)} onSolved={()=>markSolved(current.id)}/>
 
   return <div className={styles.page}>
-    <section className={styles.hero}>
-      <div><span className={styles.kicker}>GENIUS · ПОДГОТОВКА К ОГЭ</span><h1>Банк заданий ФИПИ</h1><p>Задания по физике для подготовки к ОГЭ.</p><div className={styles.pills}><span>{ogeCounts.total} задач</span><span>Задача 6 ОГЭ · {ogeCounts[6]}</span><span>Задача 7 ОГЭ · {ogeCounts[7]}</span></div></div>
-      <div className={styles.heroMark} aria-hidden="true"><i/><i/><i/><b>ОГЭ</b></div>
-    </section>
-    <div className={styles.filterDock}><div className={styles.filters} role="tablist" aria-label="Тип задания ОГЭ">
-      <button className={filter==='all'?styles.active:''} onClick={()=>setFilter('all')}>Все <b>{ogeCounts.total}</b></button>
-      <button className={filter==='6'?styles.active:''} onClick={()=>setFilter('6')}>Задача 6 ОГЭ <b>{ogeCounts[6]}</b></button>
-      <button className={filter==='7'?styles.active:''} onClick={()=>setFilter('7')}>Задача 7 ОГЭ <b>{ogeCounts[7]}</b></button>
-    </div></div>
-    <div className={styles.summary}><strong>{filtered.length}</strong> заданий в выбранном разделе</div>
-    <section className={styles.grid}>{filtered.map((t,i)=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${restoreId===t.id?styles.last:''}`} onClick={()=>open(t.id)}><div><span>{t.label}</span><em>№ {t.sourceNo}</em></div><h2>{compact(t.text)}</h2><footer><span>{t.diagram?'График / рисунок':'Числовой ответ'}</span><b>Открыть →</b></footer></button>)}</section>
+    <header className={styles.bankHeader}>
+      <div className={styles.bankTitle}><span className={styles.bankIcon} aria-hidden="true">Φ</span><div><h1>Банк заданий ФИПИ</h1><p>Задания по физике для подготовки к ОГЭ.</p></div></div>
+      <label className={styles.bankSearch}><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по номеру, теме или ключевому слову..." aria-label="Поиск задач ФИПИ"/>{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}} aria-label="Очистить поиск">×</button>}</label>
+      <nav className={styles.bankNav} aria-label="Навигация"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav>
+    </header>
+    <div className={styles.filterDock}>
+      <div className={styles.filterGroup}><span>Разделы</span><div className={styles.filterScroll}><button type="button" aria-pressed={!sections.length} className={!sections.length?styles.active:''} onClick={()=>setSections([])}>Все разделы</button>{sectionNames.map(section=><button type="button" key={section} aria-pressed={sections.includes(section)} className={sections.includes(section)?styles.active:''} onClick={()=>toggle(setSections,section)}>{section}</button>)}</div></div>
+      <div className={styles.filterGroup}><span>Тип задания</span><div className={styles.filterScroll}><button type="button" aria-pressed={!types.length} className={!types.length?styles.active:''} onClick={()=>setTypes([])}>Все</button>{taskTypes.map(type=><button type="button" key={type} aria-label={`Тип задания ${type}, ${ogeCounts[type]||0} задач`} aria-pressed={types.includes(type)} className={types.includes(type)?styles.active:''} onClick={()=>toggle(setTypes,type)}>{type}</button>)}</div></div>
+      <div className={styles.filterGroup}><span>Статус</span><div className={styles.filterScroll}><button type="button" aria-pressed={!statuses.length} className={!statuses.length?styles.active:''} onClick={()=>setStatuses([])}>Все</button>{Object.entries(statusNames).map(([key,label])=><button type="button" key={key} aria-pressed={statuses.includes(key)} className={statuses.includes(key)?styles.active:''} onClick={()=>toggle(setStatuses,key)}>{label}</button>)}</div></div>
+      {(active.length||query)&&<div className={styles.activeFilters}><span>Выбрано:</span>{active.map(item=><button type="button" key={item.label} onClick={item.remove} aria-label={`Убрать фильтр ${item.label}`}>{item.label} ×</button>)}{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}}>«{query}» ×</button>}<button type="button" className={styles.clear} onClick={reset}>Сбросить всё</button></div>}
+    </div>
+    <div className={styles.summary} aria-live="polite"><strong>{filtered.length}</strong> {filtered.length===1?'задание':filtered.length%10>=2&&filtered.length%10<=4&&(filtered.length%100<10||filtered.length%100>=20)?'задания':'заданий'}{active.length||query?' по выбранным фильтрам':''}</div>
+    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><div><span>{t.label}</span><em>№ {t.sourceNo}</em></div><small className={styles.taskSection}>{sectionForTask(t)}</small><h2>{t.text}</h2><footer><span>{solved.has(t.id)?'Решена':viewed.has(t.id)?'Просмотрена':t.diagram?'График / рисунок':'Числовой ответ'}</span><b>Решить задачу →</b></footer></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
   </div>
 }
 
-function compact(text){return text.length>132?text.slice(0,129).trimEnd()+'…':text}
-
-function OgeTaskDetail({task,position,total,back,previous,next,navigate}){
+function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved}){
   const [answer,setAnswer]=useState(''),[state,setState]=useState(null)
   useEffect(()=>{setAnswer('');setState(null)},[task.id])
-  function check(e){e.preventDefault();setState(isCorrect(answer,task.answer)?'right':'wrong')}
+  function check(e){e.preventDefault();const right=isCorrect(answer,task.answer);setState(right?'right':'wrong');if(right)onSolved()}
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
     <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.diagram?'График / рисунок':'Числовой ответ'}</span><span>Без подсказок</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>

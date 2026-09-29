@@ -7,3 +7,5 @@
 
 @media(max-width:900px){.genius-reference-overlay{left:0;bottom:66px}.genius-reference-scroll{padding:16px 12px 86px}.genius-reference-top{padding:0 12px}.genius-constant-grid,.genius-formula-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.genius-constant-grid,.genius-formula-grid{grid-template-columns:1fr}.genius-reference-hero h1{font-size:29px}.genius-return-task{right:14px;bottom:80px}}
+.fipi-reference-overlay .genius-reference-scroll{padding:0;scroll-padding-top:168px}
+.fipi-reference-overlay .genius-fipi-wrap{max-width:none}
