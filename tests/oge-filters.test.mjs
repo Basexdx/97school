@@ -25,3 +25,15 @@ test('viewed intersects solved or unsolved, including with a search query',()=>{
   assert.deepEqual(filterOgeTasks(ogeTasks,{sections:['Механика','Оптика'],types:[6,7,10],statuses:['unsolved','viewed'],query:'скорость'},viewed,solved).map(task=>task.sourceNo),[12419])
   assert.deepEqual(filterOgeTasks(ogeTasks,{statuses:['viewed']},viewed,solved).map(task=>task.sourceNo),[12419,23873,8903])
 })
+
+test('six PDF batches expose the expected task types, sections and answer state',()=>{
+  const imported=ogeTasks.filter(task=>task.kind==='choice')
+  assert.equal(imported.length,152)
+  assert.equal(imported.reduce((count,task)=>count+task.figures.length,0),143)
+  assert.deepEqual(imported.reduce((counts,task)=>(counts[task.type]=(counts[task.type]||0)+1,counts),{}),{14:56,15:41,16:55})
+  assert(imported.every(task=>task.options.length===(task.type===15?4:5)))
+  assert.equal(filterOgeTasks(ogeTasks,{sections:['Тепловые явления'],types:[14]}).length,28)
+  const answered=new Set(['oge-14-48'])
+  assert.deepEqual(filterOgeTasks(ogeTasks,{types:[14],statuses:['answered']},new Set(),new Set(),answered).map(task=>task.sourceNo),[48])
+  assert(!filterOgeTasks(ogeTasks,{types:[14],statuses:['unsolved']},new Set(),new Set(),answered).some(task=>task.sourceNo===48))
+})

@@ -1,4 +1,6 @@
-export const OGE_BANK_VERSION='1.0.0-oge-6-7'
+import {ogeImportedTasks} from './oge-task-data-14-16.mjs'
+
+export const OGE_BANK_VERSION='2.0.0-oge-6-7-14-16'
 
 const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
   id:`oge-${type}-${sourceNo}`,
@@ -78,6 +80,8 @@ export const ogeTasks=[
   task(7,29742,'Изображённая на рисунке система находится в равновесии. Блоки и нить очень лёгкие, трение пренебрежимо мало. Масса груза 1 равна 6 кг. Чему равна масса груза 2?',3,'кг',{kind:'pulley',variant:'movable6'}),
   task(7,29835,'Два шара полностью погружены в воду: шар 1 на глубину 8 см, шар 2 на глубину 20 см. Объём шара 1 в два раза больше объёма шара 2. На шар 2 действует выталкивающая сила, равная 2,4 Н. Определите выталкивающую силу, действующую на шар 1. Ответ запишите в ньютонах.',4.8,'Н',{kind:'buoyancy'}),
   task(7,32438,'Какой выигрыш в силе при подъёме тела даёт система из идеальных блоков, показанная на рисунке?',2,'раз',{kind:'pulley',variant:'advantage2'}),
+  ...ogeImportedTasks,
 ]
 
-export const ogeCounts={6:ogeTasks.filter(t=>t.type===6).length,7:ogeTasks.filter(t=>t.type===7).length,total:ogeTasks.length}
+export const ogeCounts=Object.fromEntries([...Array(22)].map((_,index)=>[index+1,ogeTasks.filter(t=>t.type===index+1).length]))
+ogeCounts.total=ogeTasks.length

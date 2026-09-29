@@ -5,10 +5,10 @@ import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
 import {filterOgeTasks,ogeSections,sectionForTask} from './oge-task-filters.mjs'
 import styles from './oge-task-bank.module.css'
 
-const FILTER_KEY='genius:oge-bank:v2',PROGRESS_KEY='genius:oge-progress:v1'
+const FILTER_KEY='genius:oge-bank:v2',PROGRESS_KEY='genius:oge-progress:v1',ANSWERS_KEY='genius:oge-choice-answers:v1'
 const sectionNames=ogeSections
 const taskTypes=Array.from({length:22},(_,index)=>index+1)
-const statusNames={unsolved:'Нерешённые',solved:'Решённые',viewed:'Просмотренные'}
+const statusNames={unsolved:'Нерешённые',solved:'Решённые',answered:'С ответом',viewed:'Просмотренные'}
 const parseNumber=v=>{const s=String(v??'').trim().replace(',', '.');if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s))return null;const n=Number(s);return Number.isFinite(n)?n:null}
 const isCorrect=(value,expected)=>{const n=parseNumber(value);return n!==null&&Math.abs(n-expected)<=Math.max(1e-6,Math.abs(expected)*1e-4)}
 
@@ -24,9 +24,11 @@ export default function OgeTaskBank({onBack,onHome}){
   const [lastId,setLastId]=useState('')
   const [viewed,setViewed]=useState(new Set())
   const [solved,setSolved]=useState(new Set())
+  const [answers,setAnswers]=useState({})
   const [ready,setReady]=useState(false)
   const scrollTop=useRef(0)
-  const filtered=useMemo(()=>filterOgeTasks(ogeTasks,{sections,types,statuses,query:search},viewed,solved),[sections,types,statuses,search,viewed,solved])
+  const answered=useMemo(()=>new Set(Object.keys(answers)),[answers])
+  const filtered=useMemo(()=>filterOgeTasks(ogeTasks,{sections,types,statuses,query:search},viewed,solved,answered),[sections,types,statuses,search,viewed,solved,answered])
   const current=currentId?ogeTasks.find(t=>t.id===currentId):null
   const detailTasks=detailIds.length?detailIds.map(id=>ogeTasks.find(task=>task.id===id)).filter(Boolean):filtered
   const pos=current?detailTasks.findIndex(t=>t.id===current.id):-1
@@ -45,12 +47,15 @@ export default function OgeTaskBank({onBack,onHome}){
       }
       const progress=JSON.parse(localStorage.getItem(PROGRESS_KEY)||'null')
       if(progress){setViewed(new Set(progress.viewed||[]));setSolved(new Set(progress.solved||[]))}
+      const savedAnswers=JSON.parse(localStorage.getItem(ANSWERS_KEY)||'null')
+      if(savedAnswers&&typeof savedAnswers==='object'&&!Array.isArray(savedAnswers))setAnswers(savedAnswers)
     }catch{}
     setReady(true)
   },[])
   useEffect(()=>{const timeout=setTimeout(()=>setSearch(query),200);return()=>clearTimeout(timeout)},[query])
   useEffect(()=>{if(!ready)return;try{sessionStorage.setItem(FILTER_KEY,JSON.stringify({sections,types,statuses,query,lastId,currentId,detailIds,scrollTop:scrollTop.current}))}catch{}},[ready,sections,types,statuses,query,lastId,currentId,detailIds])
   useEffect(()=>{if(!ready)return;try{localStorage.setItem(PROGRESS_KEY,JSON.stringify({viewed:[...viewed],solved:[...solved]}))}catch{}},[ready,viewed,solved])
+  useEffect(()=>{if(!ready)return;try{localStorage.setItem(ANSWERS_KEY,JSON.stringify(answers))}catch{}},[ready,answers])
   useEffect(()=>{
     if(!ready||currentId)return
     const id=requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -73,7 +78,10 @@ export default function OgeTaskBank({onBack,onHome}){
   function markSolved(id){setSolved(previous=>new Set(previous).add(id))}
   const active=[...sections.map(value=>({label:value,remove:()=>toggle(setSections,value)})),...types.map(value=>({label:`Тип ${value}`,remove:()=>toggle(setTypes,value)})),...statuses.map(value=>({label:statusNames[value],remove:()=>toggle(setStatuses,value)}))]
 
-  if(current)return <OgeTaskDetail task={current} position={pos+1} total={detailTasks.length} back={back} previous={pos>0?detailTasks[pos-1]:null} next={pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null} navigate={t=>open(t.id)} onSolved={()=>markSolved(current.id)}/>
+  if(current){
+    const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id)}
+    return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>setAnswers(previous=>({...previous,[current.id]:selection}))}/>:<OgeTaskDetail {...props} onSolved={()=>markSolved(current.id)}/>
+  }
 
   return <div className={styles.page}>
     <header className={styles.bankHeader}>
@@ -91,8 +99,29 @@ export default function OgeTaskBank({onBack,onHome}){
       {(active.length||query)&&<div className={styles.activeFilters}><span>Выбрано:</span>{active.map(item=><button type="button" key={item.label} onClick={item.remove} aria-label={`Убрать фильтр ${item.label}`}>{item.label} ×</button>)}{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}}>«{query}» ×</button>}<button type="button" className={styles.clear} onClick={reset}>Сбросить всё</button></div>}
     </div>
     <div className={styles.summary} aria-live="polite"><strong>{filtered.length}</strong> {filtered.length===1?'задание':filtered.length%10>=2&&filtered.length%10<=4&&(filtered.length%100<10||filtered.length%100>=20)?'задания':'заданий'}{active.length||query?' по выбранным фильтрам':''}</div>
-    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><div><span>{t.label}</span><em>№ {t.sourceNo}</em></div><small className={styles.taskSection}>{sectionForTask(t)}</small><h2>{t.text}</h2><footer><span>{solved.has(t.id)?'Решена':viewed.has(t.id)?'Просмотрена':t.diagram?'График / рисунок':'Числовой ответ'}</span><b>Решить задачу →</b></footer></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
+    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><div><span>{t.label}</span><em>№ {t.sourceNo}</em></div><small className={styles.taskSection}>{sectionForTask(t)}</small><h2>{t.text}</h2><footer><span>{solved.has(t.id)?'Решена':answered.has(t.id)?'Ответ сохранён':viewed.has(t.id)?'Просмотрена':t.figures?.length||t.diagram?'График / рисунок':t.kind==='choice'?'Выбор ответа':'Числовой ответ'}</span><b>Решить задачу →</b></footer></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
   </div>
+}
+
+function OgeChoiceDetail({task,position,total,back,previous,next,navigate,saved,onSave}){
+  const [selection,setSelection]=useState(saved)
+  const count=task.type===15?1:2
+  const isSaved=selection.length===count&&selection.join(',')===saved.join(',')
+  function choose(index){
+    setSelection(previous=>previous.includes(index)?previous.filter(value=>value!==index):count===1?[index]:[...previous.slice(-(count-1)),index].sort((a,b)=>a-b))
+  }
+  return <article className={styles.detail}>
+    <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
+    <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label} · {task.section}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.figures.length?'С рисунком или таблицей':'Без рисунка'}</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
+    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.choicePrompt}>{task.text}</p>
+      {task.figures.map((src,index)=><figure className={styles.sourceFigure} key={src}><img src={src} alt={`Рисунок или таблица к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/><figcaption>Рисунок к заданию{task.figures.length>1?` · часть ${index+1}`:''}</figcaption></figure>)}
+      <div className={styles.choiceHeading}>Выберите {count===1?'один вариант':'два утверждения'}</div>
+      <div className={styles.choiceOptions}>{task.options.map((option,index)=><button type="button" key={index} aria-pressed={selection.includes(index+1)} className={selection.includes(index+1)?styles.chosen:''} onClick={()=>choose(index+1)}><span>{index+1}</span>{option}</button>)}</div>
+      <button className={styles.primary} disabled={selection.length!==count||isSaved} onClick={()=>onSave(selection)}>{isSaved?'Ответ сохранён':'Сохранить ответ'}</button>
+      <p className={styles.answerNotice} aria-live="polite">{isSaved?'Ответ записан. Ключа в предоставленном PDF нет, поэтому автоматическая проверка пока недоступна.':`Выберите ${count===1?'один вариант':'два варианта'} и сохраните ответ. Проверка появится после добавления ключей.`}</p>
+    </section>
+    <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
+  </article>
 }
 
 function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved}){

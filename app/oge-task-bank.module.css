@@ -40,3 +40,12 @@
 
 /* Show the shared cosmic artwork through the FIPI list and task detail. */
 .page,.detail{background:transparent;backdrop-filter:none}
+
+.choicePrompt{white-space:pre-line}.sourceFigure{max-width:900px;margin:18px auto;padding:12px;border:1px solid rgba(62,155,227,.4);border-radius:15px;background:#051629;text-align:center;overflow-x:auto}
+.sourceFigure img{display:block;width:auto;max-width:100%;height:auto;margin:auto;border-radius:7px}.sourceFigure figcaption{margin-top:8px;color:#8aacc8;font-size:12px}
+.choiceHeading{margin:24px 0 12px;color:#b8d9f2;font-weight:800}.choiceOptions{display:grid;gap:10px}
+.choiceOptions button{display:flex;align-items:flex-start;gap:13px;width:100%;padding:14px 16px;border:1px solid rgba(67,155,228,.4);border-radius:12px;background:rgba(4,26,48,.85);color:#e4f2ff;font-size:16px;line-height:1.5;text-align:left}
+.choiceOptions button:hover,.choiceOptions button:focus-visible{border-color:#ffbf53}.choiceOptions button.chosen{border-color:#ffc34e;background:rgba(155,102,27,.24)}
+.choiceOptions button span{display:grid;place-items:center;flex:none;width:27px;height:27px;border:1px solid #ffc34e;border-radius:50%;color:#ffcf75;font-size:13px;font-weight:800}
+.answerNotice{margin:12px 0 0;color:#a5c4dc;font-size:14px;line-height:1.5}
+@media(max-width:700px){.sourceFigure{margin:14px -5px;padding:7px}.choiceOptions button{padding:11px;font-size:14px}.choicePrompt{font-size:18px!important}}
