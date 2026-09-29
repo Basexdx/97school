@@ -1,10 +1,8 @@
-const waves=new Set([8886,8893,8895,8896,8898,9120,9121,9122,9159,9160,9161,9162,9163,13134,14298,14323,24047,26080,29555])
-const liquids=new Set([25881,29835])
+export const ogeSections=['Механика','Тепловые явления','Электродинамика','Оптика','Атомная физика','ОГЭ эксперимент']
 
 export function sectionForTask(task){
   if(task.sourceNo===8903)return 'Оптика'
-  if(liquids.has(task.sourceNo))return 'Давление и жидкости'
-  if(waves.has(task.sourceNo))return 'Колебания и волны'
+  // Oscillations, waves and pressure in the current bank are mechanics topics.
   return 'Механика'
 }
 

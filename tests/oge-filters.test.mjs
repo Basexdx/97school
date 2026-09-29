@@ -1,16 +1,18 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import {ogeTasks} from '../app/oge-task-data.mjs'
-import {filterOgeTasks,matchesOgeStatus,sectionForTask} from '../app/oge-task-filters.mjs'
+import {filterOgeTasks,matchesOgeStatus,ogeSections,sectionForTask} from '../app/oge-task-filters.mjs'
 
-test('sections come from the existing task content and combine with task types',()=>{
+test('all OGE sections are available and combine with task types',()=>{
+  assert.deepEqual(ogeSections,['Механика','Тепловые явления','Электродинамика','Оптика','Атомная физика','ОГЭ эксперимент'])
   assert.equal(sectionForTask(ogeTasks.find(task=>task.sourceNo===8903)),'Оптика')
-  assert.equal(sectionForTask(ogeTasks.find(task=>task.sourceNo===8886)),'Колебания и волны')
-  assert.equal(filterOgeTasks(ogeTasks,{sections:['Механика'],types:[6],statuses:['unsolved']}).length,27)
+  assert.equal(sectionForTask(ogeTasks.find(task=>task.sourceNo===8886)),'Механика')
+  assert.equal(filterOgeTasks(ogeTasks,{sections:['Механика'],types:[6],statuses:['unsolved']}).length,ogeTasks.filter(task=>task.type===6).length)
   const mixed=filterOgeTasks(ogeTasks,{sections:['Механика','Оптика'],types:[6,7]})
   assert(mixed.some(task=>task.sourceNo===8903))
   assert(mixed.some(task=>task.sourceNo===12419))
-  assert(!mixed.some(task=>task.sourceNo===8886))
+  assert(mixed.some(task=>task.sourceNo===8886))
+  assert.equal(filterOgeTasks(ogeTasks,{sections:['Атомная физика']}).length,0)
   assert.equal(filterOgeTasks(ogeTasks,{types:[1,2,3]}).length,0)
 })
 

@@ -16,3 +16,24 @@
 .page button:focus-visible,.detail button:focus-visible{outline:2px solid #ffc34e;outline-offset:2px}
 @media(max-width:1100px){.bankHeader{grid-template-columns:minmax(0,1fr) auto}.bankSearch{grid-column:1/-1;grid-row:2}.bankNav{grid-column:2;grid-row:1}}
 @media(max-width:700px){.page{padding:12px 12px 60px}.bankHeader{gap:10px;padding:12px;grid-template-columns:minmax(0,1fr) auto}.bankTitle{gap:9px}.bankIcon{width:43px;height:43px;font-size:29px}.bankTitle h1{font-size:19px}.bankTitle p{font-size:11px}.bankSearch{grid-column:1/-1;grid-row:2}.bankNav{grid-column:1/-1;grid-row:3}.bankNav button{flex:1;height:40px}.filterDock{margin:10px -4px 0;padding:6px;top:0}.filterGroup{display:block}.filterGroup>span{display:block;margin:1px 2px 4px}.filterScroll button{min-height:32px;padding:0 9px}.grid{grid-template-columns:1fr}.tile{min-height:0}.tile h2{margin:10px 0 15px}}
+
+/* FIPI section navigation and expandable task filters. */
+.bankHeader{grid-template-columns:minmax(0,1fr) minmax(260px,475px) auto;gap:18px;padding:18px;border-radius:18px}
+.bankTitle{gap:20px}.bankIcon{width:70px;height:70px;border-radius:15px;font-size:47px}
+.bankTitle h1{font-size:clamp(31px,2.45vw,46px);line-height:1.08;margin:0 0 7px;white-space:nowrap}
+.bankTitle p{font-size:15px;line-height:1.4}.bankSearch,.bankNav button{height:58px;border-radius:14px;font-size:15px}
+.bankSearch input{font-size:15px}
+.filterDock{position:relative;top:auto;z-index:auto;margin:18px 0 0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none}
+.sectionScroll{display:flex;gap:12px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#2497d5 transparent;padding:0 0 11px}
+.sectionScroll button{flex:none;min-height:52px;padding:0 22px;border:1px solid rgba(48,161,238,.65);border-radius:13px;background:#061c33;color:#d6e9f7;font-size:15px;white-space:nowrap}
+.sectionScroll button:hover,.sectionScroll button:focus-visible{border-color:#ffc34e}
+.sectionScroll button.active{border-color:#ffc34e;background:rgba(185,111,25,.17);color:#ffda86;box-shadow:0 0 14px rgba(255,179,52,.13)}
+.filterToggle{display:flex;align-items:center;gap:12px;width:max-content;min-height:46px;margin-top:10px;padding:0 17px;border:1px solid rgba(48,161,238,.65);border-radius:11px;background:#061c33;color:#e6f3ff;font-size:15px;font-weight:700;cursor:pointer}
+.filterToggle>span:first-child{font-size:24px;line-height:1;color:#9bcbeb}.filterToggle>span:last-child{margin-left:6px;color:#a9cde8}.filterToggle b{padding:2px 7px;border-radius:20px;background:#ffc34e;color:#061326;font-size:12px}
+.filterPanel{margin-top:10px;padding:13px;border:1px solid rgba(62,149,238,.29);border-radius:14px;background:rgba(3,17,32,.94)}
+.filterPanel[hidden]{display:none}
+.filterGroup{grid-template-columns:108px minmax(0,1fr)}.filterGroup>span{font-size:14px}
+.filterScroll{gap:8px}.filterScroll button{min-height:39px;padding:0 13px;font-size:14px}
+.activeFilters{padding:12px 2px 0;font-size:13px}.summary{font-size:15px}.summary strong{font-size:21px}
+@media(max-width:1350px){.bankHeader{grid-template-columns:minmax(0,1fr) auto}.bankSearch{grid-column:1/-1;grid-row:2}.bankNav{grid-column:2;grid-row:1}}
+@media(max-width:700px){.bankHeader{gap:11px;padding:13px;grid-template-columns:minmax(0,1fr)}.bankTitle{gap:11px}.bankIcon{width:49px;height:49px;font-size:34px}.bankTitle h1{font-size:clamp(23px,6vw,31px);white-space:normal}.bankTitle p{font-size:12px}.bankSearch{grid-column:1;grid-row:2;height:46px}.bankSearch input{font-size:13px}.bankNav{grid-column:1;grid-row:3}.bankNav button{height:44px;font-size:13px}.filterDock{margin:12px 0 0;padding:0}.sectionScroll{gap:8px}.sectionScroll button{min-height:43px;padding:0 13px;font-size:13px}.filterToggle{min-height:42px;margin-top:7px;font-size:13px}.filterPanel{padding:9px}.filterGroup{display:block}.filterGroup>span{display:block;margin:4px 2px;font-size:12px}.filterScroll button{min-height:34px;padding:0 10px;font-size:12px}}

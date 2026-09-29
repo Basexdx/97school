@@ -2,11 +2,11 @@
 
 import {useEffect,useMemo,useRef,useState} from 'react'
 import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
-import {filterOgeTasks,sectionForTask} from './oge-task-filters.mjs'
+import {filterOgeTasks,ogeSections,sectionForTask} from './oge-task-filters.mjs'
 import styles from './oge-task-bank.module.css'
 
 const FILTER_KEY='genius:oge-bank:v2',PROGRESS_KEY='genius:oge-progress:v1'
-const sectionNames=[...new Set(ogeTasks.map(sectionForTask))]
+const sectionNames=ogeSections
 const taskTypes=Array.from({length:22},(_,index)=>index+1)
 const statusNames={unsolved:'Нерешённые',solved:'Решённые',viewed:'Просмотренные'}
 const parseNumber=v=>{const s=String(v??'').trim().replace(',', '.');if(!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(s))return null;const n=Number(s);return Number.isFinite(n)?n:null}
@@ -16,6 +16,7 @@ export default function OgeTaskBank({onBack,onHome}){
   const [sections,setSections]=useState([])
   const [types,setTypes]=useState([])
   const [statuses,setStatuses]=useState([])
+  const [filtersOpen,setFiltersOpen]=useState(false)
   const [query,setQuery]=useState('')
   const [search,setSearch]=useState('')
   const [currentId,setCurrentId]=useState(null)
@@ -81,9 +82,12 @@ export default function OgeTaskBank({onBack,onHome}){
       <nav className={styles.bankNav} aria-label="Навигация"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav>
     </header>
     <div className={styles.filterDock}>
-      <div className={styles.filterGroup}><span>Разделы</span><div className={styles.filterScroll}><button type="button" aria-pressed={!sections.length} className={!sections.length?styles.active:''} onClick={()=>setSections([])}>Все разделы</button>{sectionNames.map(section=><button type="button" key={section} aria-pressed={sections.includes(section)} className={sections.includes(section)?styles.active:''} onClick={()=>toggle(setSections,section)}>{section}</button>)}</div></div>
-      <div className={styles.filterGroup}><span>Тип задания</span><div className={styles.filterScroll}><button type="button" aria-pressed={!types.length} className={!types.length?styles.active:''} onClick={()=>setTypes([])}>Все</button>{taskTypes.map(type=><button type="button" key={type} aria-label={`Тип задания ${type}, ${ogeCounts[type]||0} задач`} aria-pressed={types.includes(type)} className={types.includes(type)?styles.active:''} onClick={()=>toggle(setTypes,type)}>{type}</button>)}</div></div>
-      <div className={styles.filterGroup}><span>Статус</span><div className={styles.filterScroll}><button type="button" aria-pressed={!statuses.length} className={!statuses.length?styles.active:''} onClick={()=>setStatuses([])}>Все</button>{Object.entries(statusNames).map(([key,label])=><button type="button" key={key} aria-pressed={statuses.includes(key)} className={statuses.includes(key)?styles.active:''} onClick={()=>toggle(setStatuses,key)}>{label}</button>)}</div></div>
+      <div className={styles.sectionScroll} aria-label="Разделы физики"><button type="button" aria-pressed={!sections.length} className={!sections.length?styles.active:''} onClick={()=>setSections([])}>Все разделы</button>{sectionNames.map(section=><button type="button" key={section} aria-pressed={sections.includes(section)} className={sections.includes(section)?styles.active:''} onClick={()=>toggle(setSections,section)}>{section}</button>)}</div>
+      <button className={styles.filterToggle} type="button" aria-expanded={filtersOpen} aria-controls="oge-filter-panel" onClick={()=>setFiltersOpen(open=>!open)}><span aria-hidden="true">☷</span> Фильтры{types.length+statuses.length>0&&<b>{types.length+statuses.length}</b>}<span aria-hidden="true">{filtersOpen?'▴':'▾'}</span></button>
+      <div id="oge-filter-panel" className={styles.filterPanel} hidden={!filtersOpen}>
+        <div className={styles.filterGroup}><span>Тип задания</span><div className={styles.filterScroll}><button type="button" aria-pressed={!types.length} className={!types.length?styles.active:''} onClick={()=>setTypes([])}>Все</button>{taskTypes.map(type=><button type="button" key={type} aria-label={`Тип задания ${type}, ${ogeCounts[type]||0} задач`} aria-pressed={types.includes(type)} className={types.includes(type)?styles.active:''} onClick={()=>toggle(setTypes,type)}>{type}</button>)}</div></div>
+        <div className={styles.filterGroup}><span>Статус</span><div className={styles.filterScroll}><button type="button" aria-pressed={!statuses.length} className={!statuses.length?styles.active:''} onClick={()=>setStatuses([])}>Все</button>{Object.entries(statusNames).map(([key,label])=><button type="button" key={key} aria-pressed={statuses.includes(key)} className={statuses.includes(key)?styles.active:''} onClick={()=>toggle(setStatuses,key)}>{label}</button>)}</div></div>
+      </div>
       {(active.length||query)&&<div className={styles.activeFilters}><span>Выбрано:</span>{active.map(item=><button type="button" key={item.label} onClick={item.remove} aria-label={`Убрать фильтр ${item.label}`}>{item.label} ×</button>)}{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}}>«{query}» ×</button>}<button type="button" className={styles.clear} onClick={reset}>Сбросить всё</button></div>}
     </div>
     <div className={styles.summary} aria-live="polite"><strong>{filtered.length}</strong> {filtered.length===1?'задание':filtered.length%10>=2&&filtered.length%10<=4&&(filtered.length%100<10||filtered.length%100>=20)?'задания':'заданий'}{active.length||query?' по выбранным фильтрам':''}</div>
