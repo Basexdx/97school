@@ -37,3 +37,6 @@
 .activeFilters{padding:12px 2px 0;font-size:13px}.summary{font-size:15px}.summary strong{font-size:21px}
 @media(max-width:1350px){.bankHeader{grid-template-columns:minmax(0,1fr) auto}.bankSearch{grid-column:1/-1;grid-row:2}.bankNav{grid-column:2;grid-row:1}}
 @media(max-width:700px){.bankHeader{gap:11px;padding:13px;grid-template-columns:minmax(0,1fr)}.bankTitle{gap:11px}.bankIcon{width:49px;height:49px;font-size:34px}.bankTitle h1{font-size:clamp(23px,6vw,31px);white-space:normal}.bankTitle p{font-size:12px}.bankSearch{grid-column:1;grid-row:2;height:46px}.bankSearch input{font-size:13px}.bankNav{grid-column:1;grid-row:3}.bankNav button{height:44px;font-size:13px}.filterDock{margin:12px 0 0;padding:0}.sectionScroll{gap:8px}.sectionScroll button{min-height:43px;padding:0 13px;font-size:13px}.filterToggle{min-height:42px;margin-top:7px;font-size:13px}.filterPanel{padding:9px}.filterGroup{display:block}.filterGroup>span{display:block;margin:4px 2px;font-size:12px}.filterScroll button{min-height:34px;padding:0 10px;font-size:12px}}
+
+/* Show the shared cosmic artwork through the FIPI list and task detail. */
+.page,.detail{background:transparent;backdrop-filter:none}
