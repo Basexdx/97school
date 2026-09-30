@@ -2,6 +2,17 @@
 import {openOfflineDb} from './offline-db'
 const request=r=>new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})
 const done=tx=>new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})
+function attemptId() {
+  const cryptoApi=globalThis.crypto
+  if(typeof cryptoApi?.randomUUID==='function') return cryptoApi.randomUUID()
+  if(typeof cryptoApi?.getRandomValues==='function') {
+    const bytes=new Uint8Array(16);cryptoApi.getRandomValues(bytes)
+    bytes[6]=(bytes[6]&15)|64;bytes[8]=(bytes[8]&63)|128
+    const hex=Array.from(bytes,b=>b.toString(16).padStart(2,'0'))
+    return `${hex.slice(0,4).join('')}-${hex.slice(4,6).join('')}-${hex.slice(6,8).join('')}-${hex.slice(8,10).join('')}-${hex.slice(10).join('')}`
+  }
+  return `genius-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,12)}`
+}
 async function meta(key,value) {
   const db=await openOfflineDb(), tx=db.transaction('meta',value===undefined?'readonly':'readwrite'), wait=done(tx)
   const result=await request(value===undefined?tx.objectStore('meta').get(key):tx.objectStore('meta').put({key,value}))
@@ -66,7 +77,7 @@ export async function bankAttempts(owner) {
   return rows.filter(x=>x.owner===(owner||'guest')).sort((a,b)=>a.createdAt.localeCompare(b.createdAt))
 }
 export async function saveBankAttempt(owner,task,answer,localResult) {
-  const id=crypto.randomUUID()
+  const id=attemptId()
   return putAttempt({attemptId:id,eventId:id,owner:owner||'guest',taskId:task.ID,version:task.VERSION,answer,createdAt:new Date().toISOString(),status:owner?'PENDING_SYNC':'LOCAL_PRACTICE',localResult})
 }
 let syncing=null
