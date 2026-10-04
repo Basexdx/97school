@@ -1,8 +1,9 @@
 import {ogeImportedTasks} from './oge-task-data-14-16.mjs'
 import {ogeMatchingTasks} from './oge-task-data-1.mjs'
 import {ogeType3Tasks} from './oge-task-data-3.mjs'
+import {ogeType4Tasks} from './oge-task-data-4.mjs'
 
-export const OGE_BANK_VERSION='2.2.0-oge-1-3-6-7-14-16'
+export const OGE_BANK_VERSION='2.3.0-oge-1-3-4-6-7-14-16'
 
 const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
   id:`oge-${type}-${sourceNo}`,
@@ -18,6 +19,7 @@ const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
 export const ogeTasks=[
   ...ogeMatchingTasks,
   ...ogeType3Tasks,
+  ...ogeType4Tasks,
   task(6,12419,'Автобус везёт пассажиров по прямой дороге со скоростью 10 м/с. Пассажир равномерно идёт по салону автобуса со скоростью 1 м/с относительно автобуса, двигаясь от задней двери к кабине водителя. Чему равен модуль скорости пассажира относительно дороги? Ответ запишите в метрах в секунду.',11,'м/с'),
   task(6,23873,'Скорость человека, первоначально находящегося в покое, в течение 2 секунд достигла значения 10 м/с. Какой путь пробежал он за это время? Ответ запишите в метрах.',10,'м'),
   task(6,24046,'Радиус окружности, по которой движется тело, увеличили в 4 раза, линейную скорость тела увеличили в √2 раза. Во сколько раз уменьшилось центростремительное ускорение тела?',2,'раз'),

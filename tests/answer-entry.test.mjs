@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
+import {checkOgeClozeAnswer,ogeClozeAnswerReady} from '../app/oge-cloze-answer.mjs'
 import {ogeTasks} from '../app/oge-task-data.mjs'
 import {parseOgeChoiceInput,requiredOgeChoices,restoreOgeChoiceAnswers,toggleOgeChoice} from '../app/oge-choice-answer.mjs'
 import {isCorrectOgeNumber,parseOgeNumber} from '../app/oge-number-answer.mjs'
@@ -15,7 +16,10 @@ test('every FIPI task accepts its intended entry format and rejects malformed re
   assert.equal(new Set(ogeTasks.map(task=>task.id)).size,ogeTasks.length)
   const stored={}
   for(const task of ogeTasks){
-    if(task.kind==='matching'){
+    if(task.kind==='cloze'){
+      assert.equal(ogeClozeAnswerReady(task.answer,task),true,task.id)
+      assert.equal(checkOgeClozeAnswer(task,task.answer),true,task.id)
+    }else if(task.kind==='matching'){
       assert.equal(ogeMatchingAnswerReady(task.left.map(()=>task.right[0].id),task),true,task.id)
     }else if(task.kind==='choice'){
       const count=requiredOgeChoices(task)
