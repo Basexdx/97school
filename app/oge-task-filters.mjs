@@ -7,6 +7,10 @@ export function sectionForTask(task){
   return 'Механика'
 }
 
+export function sectionsForTask(task){
+  return task.sections?.length?task.sections:[sectionForTask(task)]
+}
+
 export const normalizeOgeText=value=>String(value??'').toLocaleLowerCase('ru-RU').replaceAll('ё','е').replace(/\s+/g,' ').trim()
 
 export function matchesOgeStatus(id,selected,viewed,solved,answered=new Set()){
@@ -23,10 +27,10 @@ export function matchesOgeStatus(id,selected,viewed,solved,answered=new Set()){
 export function filterOgeTasks(tasks,{sections=[],types=[],statuses=[],query=''},viewed=new Set(),solved=new Set(),answered=new Set()){
   const words=normalizeOgeText(query).split(' ').filter(Boolean)
   return tasks.filter(task=>{
-    if(sections.length&&!sections.includes(sectionForTask(task)))return false
+    if(sections.length&&!sectionsForTask(task).some(section=>sections.includes(section)))return false
     if(types.length&&!types.includes(task.type))return false
     if(!matchesOgeStatus(task.id,statuses,viewed,solved,answered))return false
-    const haystack=normalizeOgeText([task.sourceNo,task.label,task.type,sectionForTask(task),task.text].join(' '))
+    const haystack=normalizeOgeText([task.sourceNo,task.label,task.type,...sectionsForTask(task),task.text,...(task.left||[]).map(item=>item.text),...(task.right||[]).map(item=>item.text)].join(' '))
     return words.every(word=>haystack.includes(word))
   })
 }

@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import {ogeTasks} from '../app/oge-task-data.mjs'
 import {parseOgeChoiceInput,requiredOgeChoices,restoreOgeChoiceAnswers,toggleOgeChoice} from '../app/oge-choice-answer.mjs'
 import {isCorrectOgeNumber,parseOgeNumber} from '../app/oge-number-answer.mjs'
+import {ogeMatchingAnswerReady} from '../app/oge-matching-answer.mjs'
 import {grade7Additions,grade8Additions,grade9Additions} from '../bank/peryshkin-additions.mjs'
 import {checkAnswer,publishable} from '../shared/task-checker.mjs'
 import {matchingAnswerValues,matchingParts} from '../shared/matching-utils.mjs'
@@ -14,7 +15,9 @@ test('every FIPI task accepts its intended entry format and rejects malformed re
   assert.equal(new Set(ogeTasks.map(task=>task.id)).size,ogeTasks.length)
   const stored={}
   for(const task of ogeTasks){
-    if(task.kind==='choice'){
+    if(task.kind==='matching'){
+      assert.equal(ogeMatchingAnswerReady(task.left.map(()=>task.right[0].id),task),true,task.id)
+    }else if(task.kind==='choice'){
       const count=requiredOgeChoices(task)
       assert.ok(task.options.length>=count,task.id)
       assert.ok(task.options.every(option=>typeof option==='string'&&option.trim()),task.id)

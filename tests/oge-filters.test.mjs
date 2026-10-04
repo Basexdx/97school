@@ -12,8 +12,8 @@ test('all OGE sections are available and combine with task types',()=>{
   assert(mixed.some(task=>task.sourceNo===8903))
   assert(mixed.some(task=>task.sourceNo===12419))
   assert(mixed.some(task=>task.sourceNo===8886))
-  assert.equal(filterOgeTasks(ogeTasks,{sections:['Атомная физика']}).length,0)
-  assert.equal(filterOgeTasks(ogeTasks,{types:[1,2,3]}).length,0)
+  assert.equal(filterOgeTasks(ogeTasks,{sections:['Атомная физика'],types:[1]}).length,2)
+  assert.equal(filterOgeTasks(ogeTasks,{types:[1,2,3]}).length,61)
 })
 
 test('viewed intersects solved or unsolved, including with a search query',()=>{
