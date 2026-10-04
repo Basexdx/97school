@@ -1,5 +1,7 @@
 'use client'
 
+import BookBankFilters from './book-bank-filters'
+import {matchesBookFilters} from '../shared/book-filters.mjs'
 import TaskTile from './task-tile'
 
 import {useEffect,useMemo,useState} from 'react'
@@ -14,13 +16,17 @@ const POSITION_KEY='genius:task-bank-position:grade9:v1'
 const xpForAttempt=(max,count)=>count===0?max:count===1?Math.floor(max*.7):count===2?Math.floor(max*.4):Math.floor(max*.2)
 const answerState=a=>a?.status==='CONFIRMED'?a.result?.correct:a?.localResult?.correct
 
-export default function Grade9TaskBank({onXp=()=>{}}){
+export default function Grade9TaskBank({onXp=()=>{},searchIds=null,clearSearch=()=>{}}){
   const [bank,setBank]=useState(null),[index,setIndex]=useState(null),[student,setStudent]=useState(null),[attempts,setAttempts]=useState([])
   const [taskId,setTaskId]=useState(null),[paragraph,setParagraph]=useState(''),[difficulty,setDifficulty]=useState(''),[type,setType]=useState(''),[query,setQuery]=useState(''),[message,setMessage]=useState(''),[restoreTaskId,setRestoreTaskId]=useState('')
+  const [section,setSection]=useState(''),[topic,setTopic]=useState(''),[progress,setProgress]=useState('')
   const {viewed,markViewed}=useTaskViews(student?.id)
+  useEffect(()=>{
+    setTaskId(null)
+  },[searchIds])
 
   async function reloadAttempts(owner){setAttempts(await bankAttempts(owner))}
-  useEffect(()=>{let live=true;try{const saved=JSON.parse(sessionStorage.getItem(POSITION_KEY)||'null');if(saved){setParagraph(saved.paragraph||'');setDifficulty(saved.difficulty||'');setType(saved.type||'');setQuery(saved.query||'');setRestoreTaskId(saved.taskId||'')}}catch{};(async()=>{try{
+  useEffect(()=>{let live=true;try{const saved=JSON.parse(sessionStorage.getItem(POSITION_KEY)||'null');if(saved){setParagraph(saved.paragraph||'');setDifficulty(saved.difficulty||'');setType(saved.type||'');setSection(saved.section||'');setTopic(saved.topic||'');setProgress(saved.progress||'');setRestoreTaskId(saved.taskId||'')}}catch{};(async()=>{try{
     const [b,i]=await Promise.all([fetch('/task-bank/grade9.json',{cache:'no-store'}),fetch('/task-bank/index-grade9.json',{cache:'no-store'})])
     if(!b.ok||!i.ok)throw Error('Банк 9 класса ещё не подготовлен. Перезапустите Genius после обновления.')
     const [bankData,indexData]=await Promise.all([b.json(),i.json()]);if(!live)return;setBank(bankData);setIndex(indexData)
@@ -28,33 +34,24 @@ export default function Grade9TaskBank({onXp=()=>{}}){
   }catch(e){if(live)setMessage(e.message)}})();return()=>{live=false}},[])
 
   const gradeAttempts=useMemo(()=>attempts.filter(a=>String(a.taskId||'').startsWith('genius-peryshkin9-')),[attempts])
-  const taskStates=useMemo(()=>{const m={};for(const a of gradeAttempts){const s=m[a.taskId]||{count:0,solved:false};s.count++;if(answerState(a)===true)s.solved=true;m[a.taskId]=s}return m},[gradeAttempts])
-  const filtered=useMemo(()=>{const q=query.trim().toLocaleLowerCase('ru-RU');return (index?.tasks||[]).filter(t=>(!paragraph||t.paragraph===Number(paragraph))&&(!difficulty||t.difficulty===difficulty)&&(!type||t.type===type)&&(!q||`${t.bookNumber} ${t.topic}`.toLocaleLowerCase('ru-RU').includes(q)))},[index,paragraph,difficulty,type,query])
+  const taskStates=useMemo(()=>{const m={};for(const a of gradeAttempts){const s=m[a.taskId]||{count:0,solved:false};s.count++;if(a.status==='PENDING_SYNC')s.pending=true;if(answerState(a)===true)s.solved=true;if(answerState(a)===false)s.wrong=(s.wrong||0)+1;m[a.taskId]=s}return m},[gradeAttempts])
+  const filtered=useMemo(()=>(index?.tasks||[]).filter(t=>(!searchIds||searchIds.has(t.id))&&matchesBookFilters(t,{section,paragraph,topic,difficulty,type,progress,query},taskStates[t.id],viewed.has(t.id),index?.paragraphs)),[index,section,paragraph,topic,difficulty,type,progress,query,taskStates,viewed,searchIds])
   const current=taskId&&bank?.tasks.find(t=>t.ID===taskId)
   const nav=filtered.length?filtered:index?.tasks||[]
   const navPos=current?nav.findIndex(t=>t.id===current.ID):-1
 
   useEffect(()=>{if(current||!index||!restoreTaskId)return;const frame=requestAnimationFrame(()=>requestAnimationFrame(()=>document.getElementById(`grade9-task-${restoreTaskId}`)?.scrollIntoView({block:'center',behavior:'auto'})));return()=>cancelAnimationFrame(frame)},[current,index,filtered.length,restoreTaskId])
-  function rememberPosition(id){setRestoreTaskId(id);try{sessionStorage.setItem(POSITION_KEY,JSON.stringify({taskId:id,paragraph,difficulty,type,query}))}catch{}}
+  function rememberPosition(id){setRestoreTaskId(id);try{sessionStorage.setItem(POSITION_KEY,JSON.stringify({taskId:id,section,paragraph,topic,difficulty,type,progress,query}))}catch{}}
   function openTask(id){markViewed(id);rememberPosition(id);setTaskId(id)}
   function backToBank(){rememberPosition(current?.ID||restoreTaskId);setTaskId(null)}
   async function submit(task,answer){const checked=checkAnswer(task,answer);await saveBankAttempt(student?.id,task,answer,checked);await reloadAttempts(student?.id);if(student&&navigator.onLine){try{const sync=await syncBankAttempts();if(Number.isFinite(sync.totalXp))onXp(sync.totalXp);await reloadAttempts(student.id)}catch(e){setMessage(e.message)}}return checked}
 
   if(current)return <Grade9TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={backToBank} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={openTask} position={navPos+1} total={nav.length} student={student}/>
-  const solved=Object.values(taskStates).filter(s=>s.solved).length
-  return <div className={styles.page}>
-    <section className={styles.hero}><div><div className={styles.kicker}>GENIUS · ФИЗИКА · 9 КЛАСС</div><h1>Задачи Перышкина</h1><p>Кинематика и колебания: расчётные задачи из сборника Перышкина с проверкой числовых ответов.</p><div className={styles.heroPills}><span>{index?.tasks.length||'…'} задач</span><span>кинематика</span><span>колебания</span><span>XP по попыткам</span></div></div><div className={styles.atom} aria-hidden="true"><i/><i/><i/><b/></div></section>
-    {message&&<div className={styles.notice}>{message}</div>}
-    <section className={styles.stats}><article><small>Отобрано</small><strong>{index?.tasks.length||'…'}</strong><span>задач</span></article><article><small>Решено</small><strong>{solved}</strong><span>задач</span></article><article><small>Попытки</small><strong>{gradeAttempts.length}</strong><span>в этом классе</span></article><article><small>Источник</small><strong>9</strong><span>класс</span></article></section>
-    <div className={styles.filterDock}><section className={styles.filters}>
-      <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Найти номер или тему" aria-label="Поиск"/>
-      <select value={paragraph} onChange={e=>setParagraph(e.target.value)}><option value="">Все темы</option>{(index?.paragraphs||[]).map(p=><option key={p.paragraph} value={p.paragraph}>§{p.paragraph}. {p.title}</option>)}</select>
-      <select value={difficulty} onChange={e=>setDifficulty(e.target.value)}><option value="">Любая сложность</option>{Object.entries(difficultyLabels).map(([k,v])=><option key={k} value={k}>{v}</option>)}</select>
-      <select value={type} onChange={e=>setType(e.target.value)}><option value="">Все типы</option>{[...new Set((index?.tasks||[]).map(t=>t.type))].map(k=><option key={k} value={k}>{typeLabels[k]||k}</option>)}</select>
-      <button onClick={()=>{setParagraph('');setDifficulty('');setType('');setQuery('')}}>Сбросить</button>
-    </section></div>
-    <div className={styles.summary}><span><b>{filtered.length}</b> задач</span><span>1-я попытка — полный XP · 2-я — 70% · 3-я — 40% · далее — 20%</span></div>
+  return <div className={`${styles.page} compact-book-page`}>
+    <BookBankFilters values={{section,paragraph,topic,difficulty,type,progress}} setters={{section:value=>{setSection(value);setParagraph('');setTopic('')},paragraph:setParagraph,topic:setTopic,difficulty:setDifficulty,type:setType,progress:setProgress}} index={index} typeLabels={typeLabels} reset={()=>{setSection('');setParagraph('');setTopic('');setDifficulty('');setType('');setProgress('');setQuery('');clearSearch()}}/>
     <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade9-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${viewed.has(item.id)?styles.viewed:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><TaskTile type={typeLabels[item.type]||item.type} section={item.topic} number={item.bookNumber} status={state.solved?'Решена':viewed.has(item.id)?'Просмотрена':state.count?`${state.count} попыт.`:'Новая'} xp={state.solved?0:next} preview={item.preview||item.topic} action={state.solved?'Открыть решение →':'Решить задачу →'}/></button>})}</section>
+    {message&&<p role="status" className={styles.notice}>{message}</p>}
+    {index&&!filtered.length&&<p className="book-empty">По выбранным фильтрам задач нет. Измени фильтры или выбери другой класс.</p>}
   </div>
 }
 

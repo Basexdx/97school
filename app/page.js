@@ -1,6 +1,7 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import ConnectionScreen from './connection-screen'
 import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
 import LandingRoom from './landing-room'
@@ -81,28 +82,9 @@ function Brand({ dark = false, onClick }) {
   )
 }
 
-function PendingAccess({ setScreen, request, openStudent, openTeacher }) {
-  if (!request) return null
-  const approved = request.status === 'APPROVED'
-  const rejected = request.status === 'REJECTED'
-  return (
-    <main className="auth-page">
-      <div className="auth-panel pending-panel">
-        <Brand onClick={() => setScreen('landing')} />
-        <div className={`pending-status-icon ${approved ? 'approved' : rejected ? 'rejected' : ''}`}>{approved ? '✓' : rejected ? '×' : '…'}</div>
-        <h1>{approved ? 'Подключение подтверждено' : rejected ? 'Запрос отклонён' : 'Ждём подтверждения'}</h1>
-        <p className="subtle">{approved ? 'Учитель подтвердил подключение. Можно входить в Genius.' : rejected ? 'Учитель не подтвердил этот запрос. Обратись к учителю за новым кодом.' : 'Код проверен. Запрос отправлен учителю и пока не даёт доступ к учебным данным.'}</p>
-        <div className="request-summary"><span>{request.className}</span><strong>{request.codeLabel}</strong><small>Запрос: {request.requestedAt}</small></div>
-        {approved && <button className="blue-btn full" onClick={() => setScreen('home')}>Открыть Genius</button>}
-        {rejected && <button className="blue-btn full" onClick={openStudent}>Ввести другой код</button>}
-        {!approved && !rejected && <>
-          <div className="pending-note">В рабочей версии этот экран будет автоматически проверять статус запроса.</div>
-          <button className="soft-btn full-width-soft" onClick={openTeacher}>Открыть вход учителя для демо</button>
-        </>}
-        <button className="text-link" onClick={() => setScreen('landing')}>Вернуться на главную</button>
-      </div>
-    </main>
-  )
+function PendingAccess({setScreen,request,openStudent,openTeacher}){
+ if(!request)return null
+ return <ConnectionScreen request={request} onHome={()=>setScreen('landing')} onOpen={()=>setScreen('home')} onRetry={openStudent} onDemo={openTeacher}/>
 }
 
 function Sidebar({ screen, setScreen, isOnline, isPhone }) {
@@ -222,12 +204,12 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
     <div className="student-app">
       <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
       <main className="student-content" data-section={screen}>
-        {sectionInfo[screen]&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
+        {sectionInfo[screen]&&screen!=='practice'&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && <HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
         {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
-        {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
+        {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank onBack={backFromSection} initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
         {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
         {(openedSections.includes('formulas')||screen==='formulas')&&<div hidden={screen!=='formulas'}><ReferenceOverlay mode="formulas" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
         {(openedSections.includes('materials')||screen==='materials')&&<div hidden={screen!=='materials'}><ReferenceMaterialsPage active={screen==='materials'} onClose={backFromSection} onMenu={()=>setScreen('home')}/></div>}
@@ -716,15 +698,8 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
 
       {tab === 'requests' && <>
         <TeacherSectionHeader title="Запросы на подключение" description="Каждый запрос подтверждается учителем." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><span className="pending-count-pill">{pendingCount} ожидает</span></TeacherSectionHeader>
-        {!request && <div className="empty-state"><div>✓</div><h3>Новых запросов нет</h3><p>Когда ученик введёт выданный код, запрос появится здесь.</p></div>}
-        {request && <article className={`connection-request ${request.status.toLowerCase()}`}>
-          <div className="request-main">
-            <div className="request-avatar">{request.grade}</div>
-            <div><span className={`status-chip ${request.status.toLowerCase()}`}>{request.status === 'PENDING' ? 'ОЖИДАЕТ' : request.status === 'APPROVED' ? 'ОДОБРЕНО' : 'ОТКЛОНЕНО'}</span><h3>{request.className} · {request.codeLabel}</h3><p>Запрос создан в {request.requestedAt}. Genius не передаёт учителю модель устройства или другие данные телефона.</p></div>
-          </div>
-          {request.status === 'PENDING' && <div className="request-actions"><button className="reject-btn" onClick={rejectRequest}>Отклонить</button><button className="blue-btn small" onClick={approveRequest}>Подтвердить подключение</button></div>}
-          {request.status !== 'PENDING' && <div className="request-actions"><button className="soft-btn" onClick={() => setScreen('pending')}>Открыть экран ученика (демо)</button></div>}
-        </article>}
+        <ConnectionScreen teacher request={request} onHome={()=>chooseTab('classes')} onApprove={approveRequest} onReject={rejectRequest} onOpen={()=>setScreen('pending')}/>
+
       </>}
 
       {tab === 'keys' && <>

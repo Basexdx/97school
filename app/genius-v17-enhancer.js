@@ -37,6 +37,8 @@ function areaFromText(text,grade){
   return 'Механические явления'
 }
 function activeGrade(){
+  const select=document.querySelector('.task-bank-grade select')
+  if(select)return Number(select.value)
   const button=[...document.querySelectorAll('.task-grade-switch button')].find(x=>x.getAttribute('aria-selected')==='true'||x.classList.contains('active'))
   const match=button?.textContent?.match(/[789]/)
   return match?Number(match[0]):null
@@ -101,6 +103,7 @@ export default function GeniusV17Enhancer(){
 }
 
 function enhanceTaskBank(hub){
+  if(hub.dataset.nativeLayout==='true')return
   const viewed=loadSet(VIEWED_KEY),solved=loadSet(SOLVED_KEY)
   const tiles=[...hub.querySelectorAll('button[id^="task-"],button[id^="grade7-task-"],button[id^="grade9-task-"]')]
   for(const tile of tiles){

@@ -1,68 +1,15 @@
 'use client'
-
-import {useEffect,useMemo,useState} from 'react'
+import {useEffect,useMemo,useRef,useState} from 'react'
 import Grade7TaskBank from './grade7-task-bank'
 import TaskBank from './task-bank'
 import Grade9TaskBank from './grade9-task-bank'
-
 const GRADE_KEY='genius:task-bank-grade:v3'
-
-export default function UnifiedTaskBank({initialGrade=7,onXp=()=>{},refreshOffline=async()=>{},setScreen=()=>{}}){
-  const normalized=[7,8,9].includes(initialGrade)?initialGrade:7
-  const [grade,setGrade]=useState(normalized)
-  const [search,setSearch]=useState('')
-  const [searchData,setSearchData]=useState({tasks:[],counts:{}})
-  const [searchLoading,setSearchLoading]=useState(true)
-  const [pendingTask,setPendingTask]=useState(null)
-
-  useEffect(()=>{
-    try{const saved=sessionStorage.getItem(GRADE_KEY);if([7,8,9].includes(Number(saved)))setGrade(Number(saved))}catch{}
-  },[])
-  useEffect(()=>{let live=true;fetch('/task-bank/search-all.json').then(r=>r.ok?r.json():Promise.reject()).then(data=>{if(live)setSearchData(data)}).catch(()=>{}).finally(()=>{if(live)setSearchLoading(false)});return()=>{live=false}},[])
-  const results=useMemo(()=>{const q=search.trim().toLocaleLowerCase('ru-RU').replaceAll('ё','е');return q?(searchData.tasks||[]).filter(item=>item.searchText.includes(q)):[]},[search,searchData])
-
-  useEffect(()=>{
-    if(!pendingTask)return undefined
-    let attempts=0
-    const timer=setInterval(()=>{
-      const prefix=pendingTask.grade===7?'grade7-task-':pendingTask.grade===9?'grade9-task-':'task-'
-      const tile=document.getElementById(`${prefix}${pendingTask.id}`)
-      if(tile){clearInterval(timer);tile.scrollIntoView({block:'center',behavior:'smooth'});tile.click();setPendingTask(null)}
-      else{
-        attempts++
-        if(attempts===10)[...document.querySelectorAll('.task-bank-hub button')].find(button=>button.textContent?.startsWith('Сбросить'))?.click()
-        if(attempts>50){clearInterval(timer);setPendingTask(null)}
-      }
-    },100)
-    return()=>clearInterval(timer)
-  },[pendingTask,grade])
-
-  function chooseGrade(value){
-    setGrade(value)
-    try{sessionStorage.setItem(GRADE_KEY,String(value))}catch{}
-  }
-
-  function openSearchResult(item){
-    const detail=document.querySelector('.task-bank-hub .bank-detail, .task-bank-hub article[class*="_detail__"], .task-bank-hub article[class*="_detail_"]')
-    detail?.querySelector('nav button:first-child')?.click()
-    chooseGrade(item.grade);setSearch('');setPendingTask(item)
-  }
-
-  return <section className="task-bank-hub">
-    <header className="task-grade-switch">
-      <div className="bank-header-search">
-        <label><span aria-hidden="true">⌕</span><input type="search" value={search} onChange={event=>setSearch(event.target.value)} placeholder="Найти задачу по номеру или словам" aria-label="Поиск задачи" autoComplete="off"/></label>
-      </div>
-      <div role="tablist" aria-label="Раздел банка задач">
-        {[7,8,9].map(value=><button key={value} role="tab" aria-selected={grade===value} className={grade===value?'active':''} onClick={()=>chooseGrade(value)}><b>{value} класс</b><small>{searchData.counts?.[value]||'…'} задач</small></button>)}
-      </div>
-    </header>
-    {!!search.trim()&&<section className="bank-live-search" aria-label="Найденные задачи"><div className="bank-live-search-heading"><strong>{searchLoading?'Ищем задачи…':`Найдено: ${results.length}`}</strong><button type="button" onClick={()=>setSearch('')}>Очистить поиск</button></div>{!searchLoading&&!results.length&&<p>Задачи не найдены. Попробуй другие слова или номер.</p>}<div className="bank-live-search-grid">{results.map(item=><button type="button" key={`${item.grade}-${item.id}`} onClick={()=>openSearchResult(item)}><span>{item.grade} класс · {item.bookNumber?`№ ${item.bookNumber}`:'задача'} · {item.xp} XP</span><strong>{item.topic}</strong><p>{item.excerpt}</p><em>Открыть задачу →</em></button>)}</div></section>}
-    <div hidden={!!search.trim()}>{grade===7
-      ? <Grade7TaskBank onXp={onXp}/>
-      : grade===8
-        ? <TaskBank onXp={onXp} refreshOffline={refreshOffline} setScreen={setScreen}/>
-        : <Grade9TaskBank onXp={onXp}/>
-    }</div>
-  </section>
+export default function UnifiedTaskBank({initialGrade=7,onXp=()=>{},refreshOffline=async()=>{},setScreen=()=>{},onBack=()=>{}}){
+ const hub=useRef(null)
+ function back(){const button=hub.current?.querySelector('.bank-detail .bank-back, article[class*="detail"] nav button:first-child');if(button)button.click();else onBack()}
+ const [grade,setGrade]=useState([7,8,9].includes(initialGrade)?initialGrade:7),[search,setSearch]=useState(''),[data,setData]=useState(null)
+ useEffect(()=>{try{const saved=Number(sessionStorage.getItem(GRADE_KEY));if([7,8,9].includes(saved))setGrade(saved);setSearch(sessionStorage.getItem('genius:task-bank-search:v1')||'')}catch{};let live=true;fetch('/task-bank/search-all.json').then(r=>r.ok?r.json():Promise.reject()).then(value=>{if(live)setData(value)}).catch(()=>{});return()=>{live=false}},[])
+ const searchIds=useMemo(()=>{const q=search.trim().toLocaleLowerCase('ru-RU').replaceAll('ё','е');return q&&data?new Set(data.tasks.filter(t=>t.grade===grade&&t.searchText.includes(q)).map(t=>t.id)):null},[search,data,grade])
+ const props={onXp,searchIds,clearSearch:()=>{setSearch('');try{sessionStorage.removeItem('genius:task-bank-search:v1')}catch{}}}
+ return <section ref={hub} className="task-bank-hub" data-native-layout="true"><header className="book-bank-header"><div className="book-heading"><span aria-hidden="true">◇</span><div><h1>Задачник</h1><p>Задачи по физике для практики</p></div></div><div className="book-header-controls"><label className="task-bank-grade"><span className="sr-only">Класс</span><select aria-label="Класс задачника" value={grade} onChange={e=>{const value=Number(e.target.value);setGrade(value);try{sessionStorage.setItem(GRADE_KEY,String(value))}catch{}}}>{[7,8,9].map(value=><option key={value} value={value}>{value} класс</option>)}</select></label><label className="book-search"><span aria-hidden="true">⌕</span><input type="search" value={search} onChange={e=>{setSearch(e.target.value);try{sessionStorage.setItem('genius:task-bank-search:v1',e.target.value)}catch{}}} placeholder="Поиск по номеру, теме или ключевому слову…" aria-label="Поиск задачи"/></label><button type="button" onClick={back}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></div></header>{search.trim()&&!data&&<p role="status">Загружаем поиск…</p>}{grade===7?<Grade7TaskBank {...props}/>:grade===8?<TaskBank {...props} refreshOffline={refreshOffline} setScreen={setScreen}/>:<Grade9TaskBank {...props}/>}</section>
 }
