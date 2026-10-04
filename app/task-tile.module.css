@@ -11,3 +11,5 @@
 .xp{flex-shrink:0;border-radius:8px;padding:5px 9px;background:#f2bf6414;color:#f2bf64;font-size:12px;font-weight:800;white-space:nowrap}
 .action{color:#bcd9ee;font-size:12px;font-weight:700;text-align:right;line-height:1.45}
 @media(max-width:420px){.card{gap:14px}.head{gap:9px}.right{max-width:125px}.card .preview{font-size:14px}.type,.section{font-size:11px}}
+
+.reward{display:flex;align-items:center;gap:9px;flex-shrink:0}.difficulty{display:block;width:24px;height:20px;flex-shrink:0}

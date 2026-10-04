@@ -2,6 +2,7 @@
 
 import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
+import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import TaskTile from './task-tile'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useState} from 'react'
@@ -111,7 +112,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 
   return <div className="bank-page bank-v11 bank-v12 compact-book-page">
     <BookBankFilters values={{section,paragraph,topic,difficulty,type,progress}} setters={{section:value=>{setSection(value);setParagraph('');setTopic('')},paragraph:setParagraph,topic:setTopic,difficulty:setDifficulty,type:setType,progress:setProgress}} index={index} typeLabels={typeLabels} reset={()=>{resetFilters();clearSearch()}}/>
-    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${viewed.has(t.id)?'viewed':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><TaskTile type={typeLabels[t.type]||t.type} section={t.topic} number={t.bookNumber??t.id.match(/(\d+)$/)?.[1]??t.id} status={state?.solved?'Решена':state?.repeat?'Повторить':viewed.has(t.id)?'Просмотрена':state?.count?`${state.count} попыт.`:'Новая'} xp={state?.solved?0:t.xp} preview={t.preview||t.topic} pending={state?.pending}/></button>})}</div>
+    <div className="bank-grid book-task-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile book-task-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${viewed.has(t.id)?'viewed':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><TaskTile answerFormat={textbookAnswerFormat(t)} difficulty={t.difficulty} type={typeLabels[t.type]||t.type} section={t.topic} number={t.bookNumber??t.id.match(/(\d+)$/)?.[1]??t.id} status={state?.solved?'Решена':state?.repeat?'Повторить':viewed.has(t.id)?'Просмотрена':state?.count?`${state.count} попыт.`:'Новая'} xp={state?.solved?0:t.xp} preview={t.preview||t.topic} pending={state?.pending}/></button>})}</div>
     <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!/^§?\d+(?:\.|$)/.test(paragraph.trim())||busy||!online} onClick={()=>download('paragraph',paragraph.match(/\d+/)?.[0])}>⇩ Скачать тему</button><button disabled={!['thermal','electric','extra8'].includes(section)||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
     {message&&<p role="status" className="bank-note">{message}</p>}
     {index&&!rows.length&&<div className="bank-empty"><span>⌕</span><h2>Ничего не найдено</h2><p>Измени фильтры или вернись ко всему банку задач.</p><button onClick={()=>{resetFilters();clearSearch()}}>Показать все задачи</button></div>}

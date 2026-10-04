@@ -2,6 +2,7 @@
 
 import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
+import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import TaskTile from './task-tile'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useState} from 'react'
@@ -68,7 +69,7 @@ export default function Grade7TaskBank({onXp=()=>{},searchIds=null,clearSearch=(
 
   return <div className={`${styles.page} compact-book-page`}>
     <BookBankFilters values={{section,paragraph,topic,difficulty,type,progress}} setters={{section:value=>{setSection(value);setParagraph('');setTopic('')},paragraph:setParagraph,topic:setTopic,difficulty:setDifficulty,type:setType,progress:setProgress}} index={index} typeLabels={typeLabels} reset={()=>{setSection('');setParagraph('');setTopic('');setDifficulty('');setType('');setProgress('');setQuery('');clearSearch()}}/>
-    <section className={styles.grid}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,wrong:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade7-task-${item.id}`} key={item.id} className={`${styles.tile} ${state.solved?styles.solved:''} ${viewed.has(item.id)?styles.viewed:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><TaskTile type={typeLabels[item.type]||item.type} section={item.topic} number={item.bookNumber} status={state.solved?'Решена':viewed.has(item.id)?'Просмотрена':state.count?`${state.count} попыт.`:'Новая'} xp={state.solved?0:next} preview={item.preview||item.topic} action={state.solved?'Открыть решение →':'Решить задачу →'}/></button>})}</section>
+    <section className={`${styles.grid} book-task-grid`}>{filtered.map(item=>{const state=taskStates[item.id]||{count:0,wrong:0,solved:false};const next=xpForAttempt(item.xp,state.count);return <button id={`grade7-task-${item.id}`} key={item.id} className={`${styles.tile} book-task-tile ${state.solved?styles.solved:''} ${viewed.has(item.id)?styles.viewed:''} ${restoreTaskId===item.id?styles.lastOpened:''}`} onClick={()=>openTask(item.id)}><TaskTile answerFormat={textbookAnswerFormat(item)} difficulty={item.difficulty} type={typeLabels[item.type]||item.type} section={item.topic} number={item.bookNumber} status={state.solved?'Решена':viewed.has(item.id)?'Просмотрена':state.count?`${state.count} попыт.`:'Новая'} xp={state.solved?0:next} preview={item.preview||item.topic} action={state.solved?'Открыть решение →':'Решить задачу →'}/></button>})}</section>
     {message&&<p role="status" className={styles.notice}>{message}</p>}
     {index&&!filtered.length&&<p className="book-empty">По выбранным фильтрам задач нет. Измени фильтры или выбери другой класс.</p>}
   </div>
