@@ -35,5 +35,14 @@ test('rendered numeric forms display source figures and proper units; choice for
  const bundle=await build({entryPoints:[new URL('../app/oge-task-bank.js',import.meta.url).pathname],bundle:true,platform:'node',format:'cjs',write:false,jsx:'automatic',loader:{'.js':'jsx'},external:['react','react/jsx-runtime'],plugins:[{name:'css-module-stub',setup(builder){builder.onLoad({filter:/\.css$/},()=>({contents:'export default {}',loader:'js'}))}}]})
  const mod={exports:{}};new Function('require','module','exports',bundle.outputFiles[0].text)(createRequire(import.meta.url),mod,mod.exports)
  for(const task of tasks){const choice=task.kind==='choice',Detail=choice?mod.exports.OgeChoiceDetail:mod.exports.OgeTaskDetail,html=renderToStaticMarkup(React.createElement(Detail,{task,position:1,total:56,back:()=>{},navigate:()=>{},onSolved:()=>{},saved:[],onSave:()=>{}}));assert.equal((html.match(/<input /g)||[]).length,1,task.id);for(const src of task.figures)assert.ok(html.includes(`src="${src}"`),task.id);assert.ok(html.includes(choice?'inputMode="numeric"':'inputMode="decimal"'));assert.ok(!html.includes(task.explanation));if(choice){const solved=renderToStaticMarkup(React.createElement(Detail,{task,position:1,total:56,saved:task.answer}));assert.ok(solved.includes('Верно!'))}}
+ // Read the actual plotted SVG anchors: curve 2 has T=8, curve 1 has T=4.
+ for(const sourceNo of [9159,9160]){
+  const task=ogeTasks.find(t=>t.sourceNo===sourceNo),html=renderToStaticMarkup(React.createElement(mod.exports.OgeDiagram,{spec:task.diagram}))
+  const curves=[...html.matchAll(/<path[^>]*d="([^"]+)"/g)].map(m=>m[1].match(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi).map(Number))
+  const yAt=(curve,index)=>index===0?curve[1]:curve[2+(index-1)*6+5]
+  assert.ok(Math.abs(yAt(curves[0],75)-(165+2/3.5*115))<1e-9,'second pendulum is at its negative extremum at t=4')
+  assert.ok(Math.abs(yAt(curves[1],75)-165)<1e-9,'first pendulum crosses equilibrium at t=4')
+  assert.ok(Math.abs(yAt(curves[1],19)-(165-Math.sin(2*Math.PI*(8*19/150)/4)/3.5*115))<1e-9)
+ }
  for(const task of ogeTasks.filter(t=>t.diagram&&['graph','wave','oscillation','doubleOsc'].includes(t.diagram.kind))){const svg=renderToStaticMarkup(React.createElement(mod.exports.OgeDiagram,{spec:task.diagram}));assert.doesNotMatch(svg,/NaN|Infinity|<polyline/);assert.match(svg,/viewBox="0 0 720 (?:350|330)"/);assert.match(svg,/<path/)}
 })
