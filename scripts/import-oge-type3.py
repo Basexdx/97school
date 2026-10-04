@@ -13,6 +13,7 @@ from collections import Counter
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
+from oge_svg_cleanup import remove_source_footer
 import fitz
 from PIL import Image
 
@@ -157,6 +158,7 @@ def vector_crop(doc, page_index, clip, destination):
                 element.set(attribute, palette(element.get(attribute)))
     root.set("width", str(round(clip.width*3)))
     root.set("height", str(round(clip.height*3)))
+    remove_source_footer(root)
     destination.write_text(ET.tostring(root, encoding="unicode"), encoding="utf-8")
 
 

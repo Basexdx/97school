@@ -1,3 +1,4 @@
+import {taskPreview} from '../shared/task-preview.mjs'
 import fs from 'node:fs'
 import path from 'node:path'
 import {fileURLToPath} from 'node:url'
@@ -52,7 +53,7 @@ function buildGrade8(){
   for(const t of live)write(`public/task-bank/${t.ID}.json`,toPublicTask(t,TASK_BANK_VERSION))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:tasks.filter(t=>t.PARAGRAPH===p.paragraph&&t.STATUS==='REVIEW_REQUIRED').length,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('bank/coverage.json',coverage);write('bank/answer-mismatch.json',tasks.filter(t=>t.STATUS==='ANSWER_MISMATCH'));write('bank/review-required.json',tasks.filter(t=>t.STATUS==='REVIEW_REQUIRED'))
-  write('public/task-bank/index.json',{version:TASK_BANK_VERSION,grade:8,complete:true,origin:TASK_BANK_ORIGIN,title:TASK_BANK_TITLE,paragraphs:coverage,tasks:live.map(t=>({id:t.ID,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP,bytes:fs.statSync(path.join(publicDir,t.ID+'.json')).size}))})
+  write('public/task-bank/index.json',{version:TASK_BANK_VERSION,grade:8,complete:true,origin:TASK_BANK_ORIGIN,title:TASK_BANK_TITLE,paragraphs:coverage,tasks:live.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER??Number(t.ID.match(/(\d+)$/)?.[1]),paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,preview:taskPreview(t.TASK),difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP,bytes:fs.statSync(path.join(publicDir,t.ID+'.json')).size}))})
   return live.length
 }
 
@@ -88,7 +89,7 @@ function buildGrade7(){
   const publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_7))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade7.json',{version:TASK_BANK_VERSION_7,grade:7,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,tasks:publicTasks})
-  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; расчётный отбор 381–675',sourceRanges:[[1,168],[183,347],[381,675]],paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade7.json',{version:TASK_BANK_VERSION_7,grade:7,complete:true,origin:TASK_BANK_ORIGIN_7,title:TASK_BANK_TITLE_7,sourceRange:'1–168; 183–347; расчётный отбор 381–675',sourceRanges:[[1,168],[183,347],[381,675]],paragraphs:coverage,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,preview:taskPreview(t.TASK),difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 
@@ -109,7 +110,7 @@ function buildGrade9(){
   const live=tasks.filter(publishable),publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_9))
   const paragraphs=[...new Map(live.map(t=>[t.PARAGRAPH,{paragraph:t.PARAGRAPH,title:t.TOPIC,section:t.SECTION}])).values()].sort((a,b)=>a.paragraph-b.paragraph).map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade9.json',{version:TASK_BANK_VERSION_9,grade:9,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,tasks:publicTasks})
-  write('public/task-bank/index-grade9.json',{version:TASK_BANK_VERSION_9,grade:9,complete:true,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,sourceRanges:['1404–1513: числовой отбор без построения графиков','1588–1611: полный блок','1717–1720: период и частота колебаний'],paragraphs,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
+  write('public/task-bank/index-grade9.json',{version:TASK_BANK_VERSION_9,grade:9,complete:true,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,sourceRanges:['1404–1513: числовой отбор без построения графиков','1588–1611: полный блок','1717–1720: период и частота колебаний'],paragraphs,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,preview:taskPreview(t.TASK),difficulty:t.DIFFICULTY,type:t.TASK_TYPE,xp:t.XP}))})
   return live.length
 }
 

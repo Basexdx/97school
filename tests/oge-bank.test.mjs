@@ -4,10 +4,10 @@ import {ogeCounts,ogeTasks} from '../app/oge-task-data.mjs'
 
 test('OGE bank imports task 6 and task 7 source packs completely',()=>{
   assert.equal(ogeCounts[6],83)
-  assert.equal(ogeCounts[7],38)
+  assert.equal(ogeCounts[7],50)
   assert.equal(ogeCounts[1],61)
   assert.equal(ogeCounts[3],60)
-  assert.equal(ogeCounts.total,440)
+  assert.equal(ogeCounts.total,513)
   assert.equal(new Set(ogeTasks.map(t=>t.id)).size,ogeTasks.length)
   assert.equal(ogeTasks.every(t=>t.label===`Задача ${t.type} ОГЭ`),true)
   assert.equal(ogeTasks.filter(t=>t.kind!=='choice'&&t.kind!=='matching'&&t.kind!=='cloze').every(t=>Number.isFinite(t.answer)),true)

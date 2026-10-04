@@ -1,5 +1,6 @@
 'use client'
 
+import TaskTile from './task-tile'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
@@ -142,7 +143,7 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 
     <div className="bank-tools"><span><b>{rows.length}</b> из {stats.total} задач</span><button disabled={!/^§?\d+(?:\.|$)/.test(paragraph.trim())||busy||!online} onClick={()=>download('paragraph',paragraph.match(/\d+/)?.[0])}>⇩ Скачать тему</button><button disabled={!section||busy||!online} onClick={()=>download('section',section)}>⇩ Скачать раздел {section&&`· ${formatBytes(index.tasks.filter(t=>t.section===section).reduce((a,t)=>a+t.bytes,0))}`}</button><button onClick={()=>setScreen('offline')}>Офлайн-материалы</button></div>
 
-    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${viewed.has(t.id)?'viewed':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><div className="bank-tile-top"><span>{locationLabel(t)}</span><span>{t.xp} XP</span></div><h2>{t.topic}</h2><p>{typeLabels[t.type]||t.type} · {difficultyLabels[t.difficulty]||t.difficulty.toLowerCase()}</p><div className="bank-tile-meta"><span>{state?.solved?'Решено':viewed.has(t.id)?'Просмотрено':state?.count?`${state.count} попыт.`:'Новая'}</span>{state?.pending&&<span className="pending">SYNC</span>}</div><footer>{state?.repeat?'↻ Повторить':state?.solved?'✓ Решено':'Начать решение →'}</footer></button>})}</div>
+    <div className="bank-grid">{rows.map(t=>{const state=states[t.id];return <button id={`task-${t.id}`} disabled={busy} className={`bank-tile ${state?.solved?'solved':''} ${state?.repeat?'repeat':''} ${viewed.has(t.id)?'viewed':''} ${restoreTaskId===t.id?'last-opened':''}`} key={t.id} onClick={()=>open(t.id)}><TaskTile type={typeLabels[t.type]||t.type} section={t.topic} number={t.bookNumber??t.id.match(/(\d+)$/)?.[1]??t.id} status={state?.solved?'Решена':state?.repeat?'Повторить':viewed.has(t.id)?'Просмотрена':state?.count?`${state.count} попыт.`:'Новая'} xp={state?.solved?0:t.xp} preview={t.preview||t.topic} pending={state?.pending}/></button>})}</div>
     {index&&!rows.length&&<div className="bank-empty"><span>⌕</span><h2>Ничего не найдено</h2><p>Измени фильтры или вернись ко всему банку задач.</p><button onClick={resetFilters}>Показать все задачи</button></div>}
   </div>
 }

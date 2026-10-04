@@ -13,6 +13,7 @@ import unicodedata
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import fitz
+from oge_svg_cleanup import remove_source_footer
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=ROOT/'public/oge-figures'
@@ -91,6 +92,7 @@ def native_crop(doc,page_number,rect,destination):
   for attr in ['fill','stroke']:
    if attr in el.attrib:el.set(attr,old.palette(el.get(attr)))
  root.set('width',str(round(clip.width*3)));root.set('height',str(round(clip.height*3)))
+ remove_source_footer(root)
  destination.write_text(ET.tostring(root,encoding='unicode'))
 
 def main(paths):

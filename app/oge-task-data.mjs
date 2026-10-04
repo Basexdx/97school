@@ -2,9 +2,11 @@ import {ogeImportedTasks} from './oge-task-data-14-16.mjs'
 import {ogeMatchingTasks} from './oge-task-data-1.mjs'
 import {ogeType3Tasks} from './oge-task-data-3.mjs'
 import {ogeType4Tasks} from './oge-task-data-4.mjs'
+import {ogeType5Tasks} from './oge-task-data-5.mjs'
 import {ogeType6Tasks} from './oge-task-data-6.mjs'
+import {ogeType7Tasks} from './oge-task-data-7.mjs'
 
-export const OGE_BANK_VERSION='2.4.0-oge-1-3-4-6-7-14-16'
+export const OGE_BANK_VERSION='2.5.0-oge-1-3-4-5-6-7-14-16'
 
 const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
   id:`oge-${type}-${sourceNo}`,
@@ -21,7 +23,9 @@ export const ogeTasks=[
   ...ogeMatchingTasks,
   ...ogeType3Tasks,
   ...ogeType4Tasks,
+  ...ogeType5Tasks,
   ...ogeType6Tasks,
+  ...ogeType7Tasks,
   task(6,12419,'Автобус везёт пассажиров по прямой дороге со скоростью 10 м/с. Пассажир равномерно идёт по салону автобуса со скоростью 1 м/с относительно автобуса, двигаясь от задней двери к кабине водителя. Чему равен модуль скорости пассажира относительно дороги? Ответ запишите в метрах в секунду.',11,'м/с'),
   task(6,23873,'Скорость человека, первоначально находящегося в покое, в течение 2 секунд достигла значения 10 м/с. Какой путь пробежал он за это время? Ответ запишите в метрах.',10,'м'),
   task(6,24046,'Радиус окружности, по которой движется тело, увеличили в 4 раза, линейную скорость тела увеличили в √2 раза. Во сколько раз уменьшилось центростремительное ускорение тела?',2,'раз'),
@@ -89,7 +93,7 @@ export const ogeTasks=[
   task(7,29835,'Два шара полностью погружены в воду: шар 1 на глубину 8 см, шар 2 на глубину 20 см. Объём шара 1 в два раза больше объёма шара 2. На шар 2 действует выталкивающая сила, равная 2,4 Н. Определите выталкивающую силу, действующую на шар 1. Ответ запишите в ньютонах.',4.8,'Н',{kind:'buoyancy'}),
   task(7,32438,'Какой выигрыш в силе при подъёме тела даёт система из идеальных блоков, показанная на рисунке?',2,'раз',{kind:'pulley',variant:'advantage2'}),
   ...ogeImportedTasks,
-]
+].map(t=>({...t,xp:t.xp??([1,4,14,16].includes(t.type)?20:10)}))
 
 export const ogeCounts=Object.fromEntries([...Array(22)].map((_,index)=>[index+1,ogeTasks.filter(t=>t.type===index+1).length]))
 ogeCounts.total=ogeTasks.length
