@@ -13,7 +13,7 @@ test('all OGE sections are available and combine with task types',()=>{
   assert(mixed.some(task=>task.sourceNo===12419))
   assert(mixed.some(task=>task.sourceNo===8886))
   assert.equal(filterOgeTasks(ogeTasks,{sections:['Атомная физика'],types:[1]}).length,2)
-  assert.equal(filterOgeTasks(ogeTasks,{types:[1,2,3]}).length,61)
+  assert.equal(filterOgeTasks(ogeTasks,{types:[1,2,3]}).length,121)
 })
 
 test('viewed intersects solved or unsolved, including with a search query',()=>{
@@ -27,7 +27,7 @@ test('viewed intersects solved or unsolved, including with a search query',()=>{
 })
 
 test('six PDF batches expose the expected task types, sections and answer state',()=>{
-  const imported=ogeTasks.filter(task=>task.kind==='choice')
+  const imported=ogeTasks.filter(task=>[14,15,16].includes(task.type))
   assert.equal(imported.length,152)
   assert.equal(imported.reduce((count,task)=>count+task.figures.length,0),143)
   assert.deepEqual(imported.reduce((counts,task)=>(counts[task.type]=(counts[task.type]||0)+1,counts),{}),{14:56,15:41,16:55})

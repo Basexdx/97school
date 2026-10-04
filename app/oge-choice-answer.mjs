@@ -1,5 +1,12 @@
 export function requiredOgeChoices(task){
-  return task.type===15?1:2
+  return task.type===3||task.type===15?1:2
+}
+
+export function checkOgeChoiceAnswer(task,selection){
+  if(!Array.isArray(task.answer))return null
+  if(!Array.isArray(selection)||selection.length!==requiredOgeChoices(task))return false
+  const parsed=parseOgeChoiceInput(selection.join(''),task)
+  return parsed!==null&&parsed.length===task.answer.length&&parsed.every(value=>task.answer.includes(value))
 }
 
 export function parseOgeChoiceInput(value,task){

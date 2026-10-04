@@ -5,7 +5,7 @@ import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
 import {filterOgeTasks,ogeSections,sectionsForTask} from './oge-task-filters.mjs'
 import OgeMatchingDetail from './oge-matching-detail'
 import {restoreOgeMatchingAnswers} from './oge-matching-answer.mjs'
-import {parseOgeChoiceInput,requiredOgeChoices,restoreOgeChoiceAnswers,toggleOgeChoice} from './oge-choice-answer.mjs'
+import {checkOgeChoiceAnswer,parseOgeChoiceInput,requiredOgeChoices,restoreOgeChoiceAnswers,toggleOgeChoice} from './oge-choice-answer.mjs'
 import {isCorrectOgeNumber,parseOgeNumber} from './oge-number-answer.mjs'
 import styles from './oge-task-bank.module.css'
 
@@ -87,7 +87,7 @@ export default function OgeTaskBank({onBack,onHome}){
   if(current){
     const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id)}
     if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>setMatchingAnswers(previous=>({...previous,[current.id]:answer}))}/>
-    return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>setAnswers(previous=>({...previous,[current.id]:selection}))}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)}/>
+    return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>{setAnswers(previous=>({...previous,[current.id]:selection}));if(checkOgeChoiceAnswer(current,selection)===true)markSolved(current.id)}}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)}/>
   }
 
   return <div className={styles.page}>
@@ -110,13 +110,16 @@ export default function OgeTaskBank({onBack,onHome}){
   </div>
 }
 
-function OgeChoiceDetail({task,position,total,back,previous,next,navigate,saved,onSave}){
+export function OgeChoiceDetail({task,position,total,back,previous,next,navigate,saved,onSave}){
   const [selection,setSelection]=useState(saved)
   const savedKey=saved.join(',')
   useEffect(()=>setSelection(saved),[task.id,savedKey])
   const count=requiredOgeChoices(task)
   const isSaved=selection.length===count&&selection.join(',')===saved.join(',')
+  const hasKey=Array.isArray(task.answer)
+  const checked=isSaved&&hasKey?checkOgeChoiceAnswer(task,selection):null
   function choose(index){setSelection(previous=>toggleOgeChoice(previous,index,task))}
+  function save(event){event.preventDefault();if(selection.length===count&&!isSaved)onSave([...selection])}
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
     <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label} · {task.section}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.figures.length?'С рисунком или таблицей':'Без рисунка'}</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
@@ -124,9 +127,9 @@ function OgeChoiceDetail({task,position,total,back,previous,next,navigate,saved,
       {task.figures.map((src,index)=><figure className={styles.sourceFigure} key={src}><img src={src} alt={`Рисунок или таблица к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/><figcaption>Рисунок к заданию{task.figures.length>1?` · часть ${index+1}`:''}</figcaption></figure>)}
       <div className={styles.choiceHeading}>Выберите {count===1?'один вариант':'два утверждения'}</div>
       <div className={styles.choiceOptions}>{task.options.map((option,index)=><button type="button" key={index} aria-pressed={selection.includes(index+1)} className={selection.includes(index+1)?styles.chosen:''} onClick={()=>choose(index+1)}><span>{index+1}</span>{option}</button>)}</div>
-      <label className={styles.choiceAnswerInput}><span>Или введите {count===1?'номер варианта':'два номера вариантов'}</span><input type="text" inputMode="numeric" autoComplete="off" value={selection.join('')} onChange={event=>{const parsed=parseOgeChoiceInput(event.target.value,task);if(parsed)setSelection(parsed)}} placeholder={count===1?'Например, 3':'Например, 24'} aria-label="Номера выбранных ответов"/><small>Номера от 1 до {task.options.length}{count===2?', без повторов':''}.</small></label>
-      <button className={styles.primary} disabled={selection.length!==count||isSaved} onClick={()=>onSave(selection)}>{isSaved?'Ответ сохранён':'Сохранить ответ'}</button>
-      <p className={styles.answerNotice} aria-live="polite">{isSaved?'Ответ записан. Ключа в предоставленном PDF нет, поэтому автоматическая проверка пока недоступна.':`Выберите ${count===1?'один вариант':'два варианта'} и сохраните ответ. Проверка появится после добавления ключей.`}</p>
+      <form onSubmit={save}><label className={styles.choiceAnswerInput}><span>Или введите {count===1?'номер варианта':'два номера вариантов'}</span><input type="text" inputMode="numeric" autoComplete="off" value={selection.join('')} onChange={event=>{const parsed=parseOgeChoiceInput(event.target.value,task);if(parsed)setSelection(parsed)}} placeholder={count===1?'Например, 3':'Например, 24'} aria-label="Номера выбранных ответов"/><small>Номера от 1 до {task.options.length}{count===2?', без повторов':''}.</small></label>
+      <button type="submit" className={styles.primary} disabled={selection.length!==count||isSaved}>{hasKey?(isSaved?'Ответ проверен':'Проверить ответ'):(isSaved?'Ответ сохранён':'Сохранить ответ')}</button></form>
+      {hasKey?(checked!==null?<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong><p>{checked?task.explanation:'Прочитайте условие ещё раз, выберите другой вариант и проверьте ответ.'}</p></div>:<p className={styles.answerNotice}>Выберите вариант и проверьте ответ. Результат сохранится после обновления страницы.</p>):<p className={styles.answerNotice} aria-live="polite">{isSaved?'Ответ записан. Ключа в предоставленном PDF нет, поэтому автоматическая проверка пока недоступна.':`Выберите ${count===1?'один вариант':'два варианта'} и сохраните ответ. Проверка появится после добавления ключей.`}</p>}
     </section>
     <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>
