@@ -1,5 +1,6 @@
 'use client'
 
+import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useRef,useState} from 'react'
 import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
 import {filterOgeTasks,ogeSections,sectionsForTask} from './oge-task-filters.mjs'
@@ -142,19 +143,19 @@ export function OgeChoiceDetail({task,position,total,back,previous,next,navigate
   </article>
 }
 
-function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved}){
+export function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved}){
   const [answer,setAnswer]=useState(''),[state,setState]=useState(null)
   useEffect(()=>{setAnswer('');setState(null)},[task.id])
   function check(e){e.preventDefault();const right=isCorrectOgeNumber(answer,task.answer);setState(right?'right':'wrong');if(right)onSolved()}
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
-    <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.diagram?'График / рисунок':'Числовой ответ'}</span><span>Без подсказок</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
-    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p>{task.text}</p>{task.diagram&&<OgeDiagram spec={task.diagram}/>}<form onSubmit={check}><label className={styles.answer}><span>Ответ</span><div><input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setState(null)}} placeholder="Введите число"/><em>{task.unit}</em></div></label><button className={styles.primary} disabled={parseOgeNumber(answer)===null}>Проверить ответ</button></form>{state&&<div className={`${styles.feedback} ${state==='right'?styles.right:styles.wrong}`}><strong>{state==='right'?'Верно!':'Пока неверно'}</strong><p>{state==='right'?'Ответ совпадает. Можно переходить к следующему заданию.':'Проверь вычисления и ещё раз внимательно считай данные с рисунка.'}</p></div>}</section>
+    <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.diagram||task.figures?.length?'График / рисунок':'Числовой ответ'}</span><span>Без подсказок</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
+    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p>{task.text}</p>{task.diagram&&<OgeDiagram spec={task.diagram}/>}{(task.figures||[]).map((src,index)=><figure className={styles.sourceFigure} key={src}><img src={src} alt={`Рисунок к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure>)}<form onSubmit={check}><label className={styles.answer}><span>Ответ</span><div><input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setState(null)}} placeholder="Введите число"/><em>{task.unit}</em></div></label><button className={styles.primary} disabled={parseOgeNumber(answer)===null}>Проверить ответ</button></form>{state&&<div className={`${styles.feedback} ${state==='right'?styles.right:styles.wrong}`}><strong>{state==='right'?'Верно!':'Пока неверно'}</strong><p>{state==='right'?(task.explanation||'Ответ совпадает. Можно переходить к следующему заданию.'):'Проверь вычисления и ещё раз внимательно считай данные с рисунка.'}</p></div>}</section>
     <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>
 }
 
-function OgeDiagram({spec}){
+export function OgeDiagram({spec}){
   if(['graph','oscillation','wave','doubleOsc'].includes(spec.kind))return <GraphVisual spec={spec}/>
   if(spec.kind==='timeline')return <Timeline spec={spec}/>
   if(spec.kind==='inclineMarks')return <InclineMarks mode={spec.mode}/>
@@ -178,11 +179,10 @@ function GraphVisual({spec}){
   if(spec.kind==='oscillation'){
     const xr=spec.xRange||[0,10],amp=spec.amplitude,period=spec.period,phase=spec.phase||0
     const pts=Array.from({length:121},(_,i)=>{const x=xr[0]+(xr[1]-xr[0])*i/120;return[x,amp*Math.sin(2*Math.PI*x/period+phase)]})
-    return <GraphVisual spec={{kind:'graph',xLabel:spec.xLabel||(spec.xUnit?`t, ${spec.xUnit}`:'t, c'),yLabel:spec.yLabel||'x, см',xRange:xr,yRange:[-Math.abs(amp)*1.18,Math.abs(amp)*1.18],xTicks:spec.xTicks||[],yTicks:spec.yTicks||[],series:[{mode:'poly',points:pts}],grid:false}}/>
+    return <GraphVisual spec={{kind:'graph',xLabel:spec.xLabel||(spec.xUnit?`t, ${spec.xUnit}`:'t, c'),yLabel:spec.yLabel||'x, см',xRange:xr,yRange:[-Math.abs(amp)*1.18,Math.abs(amp)*1.18],xTicks:spec.xTicks||[],yTicks:spec.yTicks||[],series:[{mode:'poly',points:pts,smooth:true}],grid:false}}/>
   }
   const W=720,H=350,p={l:82,r:34,t:30,b:62},[xmin,xmax]=spec.xRange,[ymin,ymax]=spec.yRange
   const X=x=>p.l+(x-xmin)/(xmax-xmin)*(W-p.l-p.r),Y=y=>H-p.b-(y-ymin)/(ymax-ymin)*(H-p.t-p.b)
-  const poly=points=>points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')
   return <div className={styles.visual}><svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Перерисованный график к заданию">
     {spec.grid&&Array.from({length:11},(_,i)=><line key={'v'+i} className={styles.gridLine} x1={p.l+(W-p.l-p.r)*i/10} y1={p.t} x2={p.l+(W-p.l-p.r)*i/10} y2={H-p.b}/>)}
     {spec.grid&&Array.from({length:9},(_,i)=><line key={'h'+i} className={styles.gridLine} x1={p.l} y1={p.t+(H-p.t-p.b)*i/8} x2={W-p.r} y2={p.t+(H-p.t-p.b)*i/8}/>)}
@@ -190,15 +190,15 @@ function GraphVisual({spec}){
     <line className={styles.axis} x1={p.l} y1={Y(Math.max(ymin,Math.min(ymax,0)))} x2={W-p.r+12} y2={Y(Math.max(ymin,Math.min(ymax,0)))} /><line className={styles.axis} x1={p.l} y1={H-p.b+6} x2={p.l} y2={p.t-10}/>
     {(spec.xTicks||[]).map(v=><g key={'x'+v}><line className={styles.tick} x1={X(v)} y1={H-p.b} x2={X(v)} y2={H-p.b+7}/><text className={styles.tickText} x={X(v)} y={H-p.b+28} textAnchor="middle">{fmt(v)}</text></g>)}
     {(spec.yTicks||[]).map(v=><g key={'y'+v}><line className={styles.tick} x1={p.l-7} y1={Y(v)} x2={p.l} y2={Y(v)}/><text className={styles.tickText} x={p.l-13} y={Y(v)+5} textAnchor="end">{fmt(v)}</text></g>)}
-    {(spec.series||[]).map((s,i)=><polyline key={i} points={poly(s.points)} className={i?styles.series2:styles.series}/>) }
+    {(spec.series||[]).map((s,i)=><path key={i} d={graphSeriesPath(s,X,Y)} className={i?styles.series2:styles.series}/>) }
     {(spec.labels||[]).map(([txt,x,y],i)=><text key={i} className={styles.pointLabel} x={X(x)+8} y={Y(y)-9}>{txt}</text>)}
     <text className={styles.axisLabel} x={W-p.r} y={H-p.b+45} textAnchor="end">{spec.xLabel}</text><text className={styles.axisLabel} x={p.l+5} y={p.t-10}>{spec.yLabel}</text>
   </svg></div>
 }
 const fmt=v=>String(Number(v.toFixed?.(3)??v)).replace('.',',')
 
-function WaveGraph({spec}){const pts=Array.from({length:121},(_,i)=>{const x=spec.range*i/120;return[x,Math.sin(2*Math.PI*x/spec.period+Math.PI/4)]});return <GraphVisual spec={{kind:'graph',xLabel:spec.xLabel,yLabel:'p, Па',xRange:[0,spec.range],yRange:[-1.8,1.8],xTicks:spec.xTicks,yTicks:[],series:[{mode:'poly',points:pts}],guides:[[0,0,spec.range,0]]}}/>}
-function DoubleOsc({mode}){const W=720,H=330,pts=(amp,per,phase=0)=>Array.from({length:151},(_,i)=>{const x=8*i/150,y=amp*Math.sin(2*Math.PI*x/per+phase);return `${65+x/8*610},${165-y/3.5*115}`}).join(' ');return <div className={styles.visual}><svg viewBox={`0 0 ${W} ${H}`}><line className={styles.axis} x1="55" y1="165" x2="690" y2="165"/><line className={styles.axis} x1="65" y1="290" x2="65" y2="35"/>{Array.from({length:9},(_,i)=><line key={i} className={styles.gridLine} x1={65+i*76.25} y1="48" x2={65+i*76.25} y2="282"/>)}{Array.from({length:7},(_,i)=><line key={i} className={styles.gridLine} x1="65" y1={48+i*39} x2="675" y2={48+i*39}/>)}<polyline className={styles.seriesOrange} points={pts(mode==='amp'?3:2,mode==='amp'?8:4,Math.PI/2)}/><polyline className={styles.series2} points={pts(1,mode==='amp'?4:8,0)}/><text className={styles.pointLabel} x="635" y="90">2</text><text className={styles.pointLabelBlue} x="635" y="148">1</text><text className={styles.axisLabel} x="675" y="190">t</text><text className={styles.axisLabel} x="72" y="45">x</text></svg></div>}
+function WaveGraph({spec}){const pts=Array.from({length:121},(_,i)=>{const x=spec.range*i/120;return[x,Math.sin(2*Math.PI*x/spec.period+Math.PI/4)]});return <GraphVisual spec={{kind:'graph',xLabel:spec.xLabel,yLabel:'p, Па',xRange:[0,spec.range],yRange:[-1.8,1.8],xTicks:spec.xTicks,yTicks:[],series:[{mode:'poly',points:pts,smooth:true}],guides:[[0,0,spec.range,0]]}}/>}
+function DoubleOsc({mode}){const W=720,H=330,pts=(amp,per,phase=0)=>Array.from({length:151},(_,i)=>{const x=8*i/150,y=amp*Math.sin(2*Math.PI*x/per+phase);return [x,y]});return <div className={styles.visual}><svg viewBox={`0 0 ${W} ${H}`}><line className={styles.axis} x1="55" y1="165" x2="690" y2="165"/><line className={styles.axis} x1="65" y1="290" x2="65" y2="35"/>{Array.from({length:9},(_,i)=><line key={i} className={styles.gridLine} x1={65+i*76.25} y1="48" x2={65+i*76.25} y2="282"/>)}{Array.from({length:7},(_,i)=><line key={i} className={styles.gridLine} x1="65" y1={48+i*39} x2="675" y2={48+i*39}/>)}<path className={styles.seriesOrange} d={graphSeriesPath({smooth:true,points:pts(mode==='amp'?3:2,mode==='amp'?8:4,Math.PI/2)},x=>65+x/8*610,y=>165-y/3.5*115)}/><path className={styles.series2} d={graphSeriesPath({smooth:true,points:pts(1,mode==='amp'?4:8,0)},x=>65+x/8*610,y=>165-y/3.5*115)}/><text className={styles.pointLabel} x="635" y="90">2</text><text className={styles.pointLabelBlue} x="635" y="148">1</text><text className={styles.axisLabel} x="675" y="190">t</text><text className={styles.axisLabel} x="72" y="45">x</text></svg></div>}
 
 function Timeline({spec}){const total=spec.distances.at(-1),X=v=>70+v/total*580;return <div className={styles.visual}><svg viewBox="0 0 720 220"><line className={styles.axis} x1="65" y1="105" x2="655" y2="105"/>{spec.distances.map((v,i)=><circle key={v} className={styles.dot} cx={X(v)} cy="105" r="6"/>)}{spec.times.map((t,i)=><g key={t+i}><text className={styles.segmentNo} x={(X(spec.distances[i])+X(spec.distances[i+1]))/2} y="65" textAnchor="middle">({i+1})</text><text className={styles.tickText} x={(X(spec.distances[i])+X(spec.distances[i+1]))/2} y="145" textAnchor="middle">{t}</text></g>)}</svg></div>}
 function InclineMarks({mode}){const timed=mode==='timed';return <div className={styles.visual}><svg viewBox="0 0 720 260"><g transform="translate(70 55) rotate(9 280 70)"><line className={styles.rulerLine} x1="20" y1="90" x2="610" y2="90"/>{Array.from({length:13},(_,i)=><line key={i} className={styles.rulerTick} x1={35+i*43} y1="90" x2={35+i*43} y2={i%2?112:118}/>)}{timed?<><circle className={styles.ball} cx="35" cy="68" r="17"/><circle className={styles.ball} cx="78" cy="68" r="17"/><circle className={styles.ball} cx="207" cy="68" r="17"/>{[1,2,3,4].map((n,i)=><text className={styles.tickText} key={n} x={379+i*43} y="136" textAnchor="middle">{n}</text>)}</>:<><circle className={styles.ball} cx="35" cy="68" r="18"/><circle className={styles.ball} cx="78" cy="68" r="18"/><circle className={styles.ball} cx="207" cy="68" r="18"/><circle className={styles.ball} cx="422" cy="68" r="18"/><text className={styles.tickText} x="36" y="145">5 см</text></>}</g></svg></div>}

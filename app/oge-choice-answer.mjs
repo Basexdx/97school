@@ -1,5 +1,5 @@
 export function requiredOgeChoices(task){
-  return task.type===3||task.type===15?1:2
+  return task.type===3||task.type===6||task.type===15?1:2
 }
 
 export function checkOgeChoiceAnswer(task,selection){

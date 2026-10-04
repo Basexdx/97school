@@ -1,5 +1,6 @@
 'use client'
 
+import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
 import {formatBytes} from './offline-db'
@@ -190,7 +191,7 @@ function TaskDiagram({spec}){
 
   if(['line-chart','multi-line-chart'].includes(spec.type)){
     const W=700,H=420,left=92,right=72,top=44,bottom=86
-    const series=spec.type==='multi-line-chart'?spec.series:[{label:'',points:spec.points}]
+    const series=spec.type==='multi-line-chart'?spec.series:[{...spec,label:'',points:spec.points}]
     const allPoints=series.flatMap(s=>s.points)
     const xVals=[...(spec.xTicks||[]),...allPoints.map(p=>p[0])],yVals=[...(spec.yTicks||[]),...allPoints.map(p=>p[1])]
     const xMin=spec.xMin??Math.min(0,...xVals),xMax=spec.xMax??Math.max(...xVals,1),yMin=spec.yMin??Math.min(0,...yVals),yMax=spec.yMax??Math.max(...yVals,1)
@@ -199,7 +200,7 @@ function TaskDiagram({spec}){
       {(spec.yTicks||[]).map((v,i)=><g key={`y${i}`}><line className="grid" x1={left} x2={W-right} y1={Y(v)} y2={Y(v)}/><text className="tick" x={left-12} y={Y(v)+5} textAnchor="end">{String(v).replace('.',',')}</text></g>)}
       {(spec.xTicks||[]).map((v,i)=><g key={`x${i}`}><line className="grid" y1={top} y2={H-bottom} x1={X(v)} x2={X(v)}/><text className="tick" x={X(v)} y={H-bottom+25} textAnchor="middle">{String(v).replace('.',',')}</text></g>)}
       <line className="axis" x1={left} x2={W-right} y1={Y(yMin)} y2={Y(yMin)}/><line className="axis" x1={X(xMin)} x2={X(xMin)} y1={top} y2={H-bottom}/>
-      {series.map((sr,i)=>{const last=sr.points.at(-1),lx=Math.min(W-right-8,Math.max(left+8,X(last[0])+(i%2?-10:12))),ly=Math.min(H-bottom-12,Math.max(top+18,Y(last[1])+(i%2?18:-14)));return <g key={i}><polyline className={`series s${i+1}`} points={sr.points.map(([x,y])=>`${X(x)},${Y(y)}`).join(' ')}/>{sr.label&&<text className="series-label" x={lx} y={ly} textAnchor={i%2?'end':'start'}>{sr.label}</text>}</g>})}
+      {series.map((sr,i)=>{const last=sr.points.at(-1),lx=Math.min(W-right-8,Math.max(left+8,X(last[0])+(i%2?-10:12))),ly=Math.min(H-bottom-12,Math.max(top+18,Y(last[1])+(i%2?18:-14)));return <g key={i}><path className={`series s${i+1}`} d={graphSeriesPath(sr,X,Y)}/>{sr.label&&<text className="series-label" x={lx} y={ly} textAnchor={i%2?'end':'start'}>{sr.label}</text>}</g>})}
       <text className="axis-label" x={W-right} y={H-14} textAnchor="end">{spec.xLabel}</text><text className="axis-label" x={18} y={top+8}>{spec.yLabel}</text>
     </svg><figcaption>{spec.label}</figcaption></figure>
   }
