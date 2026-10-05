@@ -6,7 +6,7 @@ directories:
   output: release/windows
 
 files:
-  - desktop/main.cjs
+  - desktop/*.cjs
   - out/**/*
 
 extraMetadata:

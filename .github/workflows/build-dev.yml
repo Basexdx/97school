@@ -23,6 +23,8 @@ jobs:
         run: npm run test:bank
       - name: Test OGE answer forms and imports
         run: node --test tests/answer-entry.test.mjs tests/oge-bank.test.mjs tests/oge-filters.test.mjs tests/oge-matching.test.mjs tests/oge-type3.test.mjs tests/oge-type4.test.mjs tests/oge-type6.test.mjs tests/oge-type5-7.test.mjs tests/oge-type8-12.test.mjs tests/graph-path.test.mjs tests/book-filters.test.mjs tests/connection-screen.test.mjs tests/textbook-card.test.mjs
+      - name: Test student access and saved profiles
+        run: node --test tests/student-access.test.mjs tests/desktop-api.test.mjs tests/access-view.test.mjs
       - name: Test SQLite server adapter
         run: npm run test:server
       - name: Validate preview gate syntax

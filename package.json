@@ -10,7 +10,7 @@
     "dev:web": "next dev --hostname 127.0.0.1",
     "dev:api": "wrangler dev --config wrangler.jsonc --port 8787",
     "prebuild": "npm run bank:build",
-    "build": "next build",
+    "build": "next build && node scripts/write-native-config.mjs",
     "build:api": "esbuild server/api.mjs --bundle --platform=node --format=esm --target=node24 --outfile=dist/api.mjs",
     "start": "next start",
     "start:api:server": "node dist/api.mjs",

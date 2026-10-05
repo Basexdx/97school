@@ -2,6 +2,7 @@ const {app,BrowserWindow,shell,session}=require('electron')
 const http=require('node:http')
 const fs=require('node:fs')
 const path=require('node:path')
+const {createApiProxy}=require('./api-proxy.cjs')
 
 const MIME={
   '.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8',
@@ -15,14 +16,19 @@ function staticRoot(){return path.join(__dirname,'..','out')}
 
 function startStaticServer(){
   const root=staticRoot()
+  const configFile=path.join(root,'native-api.json')
+  const apiOrigin=fs.existsSync(configFile)?JSON.parse(fs.readFileSync(configFile,'utf8')).origin:''
+  if(apiOrigin&&new URL(apiOrigin).protocol!=='https:')throw new Error('Native API origin must use HTTPS')
+  const proxy=createApiProxy(apiOrigin)
   server=http.createServer((req,res)=>{
     try{
       const url=new URL(req.url,'http://127.0.0.1')
+      if(url.pathname.startsWith('/api/')){proxy(req,res);return}
       let pathname=decodeURIComponent(url.pathname)
       if(pathname.endsWith('/'))pathname+='index.html'
       const relative=pathname.replace(/^\/+/, '')
       let file=path.resolve(root,relative)
-      if(!file.startsWith(path.resolve(root)))throw new Error('unsafe_path')
+      if(file!==path.resolve(root)&&!file.startsWith(path.resolve(root)+path.sep))throw new Error('unsafe_path')
       if(!fs.existsSync(file)||fs.statSync(file).isDirectory())file=path.join(root,'index.html')
       const ext=path.extname(file).toLowerCase()
       res.writeHead(200,{
@@ -48,7 +54,7 @@ async function createWindow(){
   const win=new BrowserWindow({
     width:1440,height:920,minWidth:980,minHeight:680,
     backgroundColor:'#071525',show:false,autoHideMenuBar:true,
-    webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true}
+    webPreferences:{contextIsolation:true,nodeIntegration:false,sandbox:true,preload:path.join(__dirname,'preload.cjs')}
   })
   win.removeMenu()
   win.once('ready-to-show',()=>{win.maximize();win.show()})

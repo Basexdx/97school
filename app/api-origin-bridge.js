@@ -6,7 +6,7 @@ const configuredOrigin=(process.env.NEXT_PUBLIC_GENIUS_API_ORIGIN||'').replace(/
 
 export default function ApiOriginBridge(){
   useEffect(()=>{
-    if(!configuredOrigin||typeof window==='undefined')return
+    if(!configuredOrigin||typeof window==='undefined'||window.geniusDesktop?.apiProxy)return
     const originalFetch=window.fetch.bind(window)
     window.fetch=(input,init)=>{
       if(typeof input==='string'&&input.startsWith('/api/'))return originalFetch(`${configuredOrigin}${input}`,init)

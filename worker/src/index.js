@@ -1,6 +1,7 @@
+import {studentAvatar} from '../../shared/student-avatars.mjs'
 import { submitTaskAttempts, taskProgress, teacherTaskCatalog, teacherTaskDetail } from './task-bank.js'
 import { saveAttendance, saveGrade, saveHomework, saveHomeworkOverride, saveLessonAssessment, studentPerformance, studentRanking, teacherAcademic, updateHomeworkProgress } from './academic-v2.js'
-const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8' }
+const JSON_HEADERS = { 'content-type': 'application/json; charset=utf-8', 'cache-control':'no-store' }
 
 export default {
   async fetch(request, env) {
@@ -27,6 +28,7 @@ async function handleRequest(request, env) {
 
   if (path === '/api/student/access/request' && request.method === 'POST') return studentRequestAccess(request, env)
   if (path === '/api/student/access/status' && request.method === 'GET') return studentAccessStatus(request, env)
+  if (path === '/api/student/profile' && request.method === 'POST') return studentProfile(request,env)
   if (path === '/api/student/me' && request.method === 'GET') return studentMe(request, env)
   if (path === '/api/student/sync' && request.method === 'POST') return studentSync(request, env)
   if (path === '/api/student/logout' && request.method === 'POST') return studentLogout(request, env)
@@ -103,11 +105,20 @@ async function studentRequestAccess(request, env) {
     LIMIT 1
   `).bind(keyHash).first()
 
+  if(key?.status==='PENDING'){
+    const pending=getCookie(request,'genius_pending')
+    if(pending){
+      const existing=await env.DB.prepare(`SELECT id FROM connection_requests WHERE access_key_id=? AND pending_token_hash=? AND status='PENDING' AND expires_at>?`).bind(key.id,await sha256(pending),now).first()
+      if(existing)return studentAccessStatus(request,env)
+    }
+    return json({error:'code_already_in_use'},409)
+  }
+  if(key?.status==='USED')return json({error:'code_used'},409)
   if (!key || key.status !== 'ACTIVE' || key.expires_at <= now) {
     if (key && key.expires_at <= now && key.status === 'ACTIVE') {
       await env.DB.prepare(`UPDATE access_keys SET status='EXPIRED' WHERE id=?`).bind(key.id).run()
     }
-    return json({ error: 'invalid_code' }, 400)
+    return json({ error: key?.expires_at<=now?'code_expired':'invalid_code' }, 400)
   }
 
   const pendingTtl = Math.max(5, Number(env.PENDING_TTL_MINUTES || 15))
@@ -117,17 +128,18 @@ async function studentRequestAccess(request, env) {
   const pendingHash = await sha256(pendingToken)
 
   try {
-    await env.DB.batch([
+    const claimed=await env.DB.batch([
       env.DB.prepare(`
         INSERT INTO connection_requests (id, access_key_id, student_id, pending_token_hash, status, expires_at)
-        VALUES (?, ?, ?, ?, 'PENDING', ?)
-      `).bind(requestId, key.id, key.student_id || null, pendingHash, expiresAt),
+        SELECT ?, ?, ?, ?, 'PENDING', ? FROM access_keys WHERE id=? AND status='ACTIVE'
+      `).bind(requestId, key.id, key.student_id || null, pendingHash, expiresAt,key.id),
       env.DB.prepare(`UPDATE access_keys SET status='PENDING' WHERE id=? AND status='ACTIVE'`).bind(key.id),
       env.DB.prepare(`
         INSERT INTO audit_log (id, actor_role, action, target_type, target_id)
-        VALUES (?, 'SYSTEM', 'CREATE_CONNECTION_REQUEST', 'connection_request', ?)
-      `).bind(crypto.randomUUID(), requestId),
+        SELECT ?, 'SYSTEM', 'CREATE_CONNECTION_REQUEST', 'connection_request', ? WHERE EXISTS(SELECT 1 FROM connection_requests WHERE id=?)
+      `).bind(crypto.randomUUID(), requestId,requestId),
     ])
+    if(claimed[0]?.meta?.changes===0)return json({error:'code_already_in_use'},409)
   } catch {
     return json({ error: 'code_already_in_use' }, 409)
   }
@@ -139,6 +151,7 @@ async function studentRequestAccess(request, env) {
     grade: key.grade,
     codeLabel: key.key_label,
     expiresAt,
+    requestedAt:new Date().toISOString(),
   }, 201)
   response.headers.append('set-cookie', makeCookie('genius_pending', pendingToken, pendingTtl * 60, request))
   return response
@@ -150,7 +163,7 @@ async function studentAccessStatus(request, env) {
 
   const pendingHash = await sha256(pendingToken)
   const row = await env.DB.prepare(`
-    SELECT cr.id, cr.student_id, cr.status, cr.expires_at,
+    SELECT cr.id, cr.student_id, cr.status, cr.expires_at, cr.created_at,
            ak.key_label, ak.class_id,
            c.title AS class_title, c.grade
     FROM connection_requests cr
@@ -175,7 +188,7 @@ async function studentAccessStatus(request, env) {
   }
 
   if (row.status === 'PENDING') {
-    return json({ status: 'PENDING', requestId: row.id, className: row.class_title, grade: row.grade, codeLabel: row.key_label, expiresAt: row.expires_at })
+    return json({ status: 'PENDING', requestId: row.id, className: row.class_title, grade: row.grade, codeLabel: row.key_label, expiresAt: row.expires_at,requestedAt: row.created_at })
   }
 
   if (row.status === 'REJECTED' || row.status === 'EXPIRED') {
@@ -185,8 +198,8 @@ async function studentAccessStatus(request, env) {
   if (row.status !== 'APPROVED' || !row.student_id) return json({ status: row.status }, 409)
 
   const student = await env.DB.prepare(`
-    SELECT s.id, s.nickname, s.current_grade, s.status, c.title AS class_title
-    FROM students s JOIN classes c ON c.id=s.class_id
+    SELECT s.id, s.nickname, s.current_grade, s.status, c.title AS class_title, p.avatar_id, p.profile_setup_completed
+    FROM students s JOIN classes c ON c.id=s.class_id LEFT JOIN student_profiles p ON p.student_id=s.id
     WHERE s.id=? LIMIT 1
   `).bind(row.student_id).first()
   if (!student || student.status !== 'ACTIVE') return clearPending(json({ status: 'REJECTED' }), request)
@@ -211,7 +224,7 @@ async function studentAccessStatus(request, env) {
 
   const response = json({
     status: 'APPROVED',
-    student: { id: student.id, nickname: student.nickname, grade: student.current_grade, className: student.class_title },
+    student: { id: student.id, nickname: student.nickname, grade: student.current_grade, className: student.class_title, avatarId:student.avatar_id||null,profileSetupCompleted:Boolean(student.profile_setup_completed) },
   })
   response.headers.append('set-cookie', makeCookie('genius_student', sessionToken, sessionDays * 86_400, request))
   response.headers.append('set-cookie', expireCookie('genius_pending', request))
@@ -222,6 +235,16 @@ async function studentMe(request, env) {
   const auth = await requireStudent(request, env)
   if (!auth.ok) return auth.response
   return json({ student: auth.student })
+}
+
+async function studentProfile(request,env){
+  const auth=await requireStudent(request,env)
+  if(!auth.ok)return auth.response
+  const body=await safeJson(request)
+  if(!studentAvatar(body?.avatarId))return json({error:'invalid_avatar'},400)
+  await env.DB.prepare(`INSERT INTO student_profiles(student_id,avatar_id,profile_setup_completed) VALUES(?,?,1)
+    ON CONFLICT(student_id) DO UPDATE SET avatar_id=excluded.avatar_id,profile_setup_completed=1,updated_at=CURRENT_TIMESTAMP`).bind(auth.student.id,body.avatarId).run()
+  return json({student:{...auth.student,avatarId:body.avatarId,profileSetupCompleted:true}})
 }
 
 async function studentLogout(request, env) {
@@ -422,6 +445,8 @@ async function teacherCreateAccessKey(request, env) {
   const classRow = await env.DB.prepare(`SELECT id, title, grade FROM classes WHERE id=? AND teacher_id=? LIMIT 1`).bind(classId, auth.teacher.id).first()
   if (!classRow) return json({ error: 'class_not_found' }, 404)
   if ((purpose === 'NEW_DEVICE' || purpose === 'RECOVERY') && !studentId) return json({ error: 'student_required' }, 400)
+  if(studentId){const owned=await env.DB.prepare(`SELECT id FROM students WHERE id=? AND class_id=? AND status='ACTIVE'`).bind(studentId,classId).first();if(!owned)return json({error:'student_unavailable'},404)}
+  if(purpose==='INITIAL_ACCESS'&&studentId)return json({error:'invalid_purpose'},400)
 
   const code = generateAccessCode()
   const keyHash = await sha256(code)
@@ -462,18 +487,19 @@ async function teacherDecideRequest(request, env, requestId, decision) {
   if (row.status !== 'PENDING') return json({ error: 'request_already_decided', status: row.status }, 409)
   if (row.expires_at <= now) {
     await env.DB.batch([
-      env.DB.prepare(`UPDATE connection_requests SET status='EXPIRED' WHERE id=?`).bind(row.id),
+      env.DB.prepare(`UPDATE connection_requests SET status='EXPIRED' WHERE id=? AND status='PENDING'`).bind(row.id),
       env.DB.prepare(`UPDATE access_keys SET status='ACTIVE' WHERE id=? AND status='PENDING'`).bind(row.access_key_id),
     ])
     return json({ error: 'request_expired' }, 409)
   }
 
   if (decision === 'REJECTED') {
-    await env.DB.batch([
-      env.DB.prepare(`UPDATE connection_requests SET status='REJECTED', decided_at=CURRENT_TIMESTAMP, decided_by=? WHERE id=?`).bind(auth.teacher.id, row.id),
-      env.DB.prepare(`UPDATE access_keys SET status='REVOKED', revoked_at=CURRENT_TIMESTAMP WHERE id=?`).bind(row.access_key_id),
-      env.DB.prepare(`INSERT INTO audit_log (id, actor_role, actor_id, action, target_type, target_id) VALUES (?, 'TEACHER', ?, 'REJECT_CONNECTION', 'connection_request', ?)`).bind(crypto.randomUUID(), auth.teacher.id, row.id),
+    const rejected=await env.DB.batch([
+      env.DB.prepare(`UPDATE connection_requests SET status='REJECTED', decided_at=CURRENT_TIMESTAMP, decided_by=? WHERE id=? AND status='PENDING'`).bind(auth.teacher.id, row.id),
+      env.DB.prepare(`UPDATE access_keys SET status='REVOKED', revoked_at=CURRENT_TIMESTAMP WHERE id=? AND status='PENDING' AND EXISTS(SELECT 1 FROM connection_requests WHERE id=? AND status='REJECTED')`).bind(row.access_key_id,row.id),
+      env.DB.prepare(`INSERT INTO audit_log (id, actor_role, actor_id, action, target_type, target_id) SELECT ?, 'TEACHER', ?, 'REJECT_CONNECTION', 'connection_request', ? WHERE EXISTS(SELECT 1 FROM connection_requests WHERE id=? AND status='REJECTED')`).bind(crypto.randomUUID(), auth.teacher.id, row.id,row.id),
     ])
+    if(rejected[0]?.meta?.changes===0)return json({error:'request_already_decided'},409)
     return json({ status: 'REJECTED' })
   }
 
@@ -482,20 +508,22 @@ async function teacherDecideRequest(request, env, requestId, decision) {
   if (!studentId) {
     studentId = crypto.randomUUID()
     statements.push(
-      env.DB.prepare(`INSERT INTO students (id, class_id, nickname, current_grade, status) VALUES (?, ?, ?, ?, 'ACTIVE')`).bind(studentId, row.class_id, row.key_label, row.grade),
-      env.DB.prepare(`INSERT INTO class_progress (id, student_id, grade, total_xp) VALUES (?, ?, ?, 0)`).bind(crypto.randomUUID(), studentId, row.grade),
+      env.DB.prepare(`INSERT INTO students (id, class_id, nickname, current_grade, status) SELECT ?, ?, ?, ?, 'ACTIVE' FROM connection_requests WHERE id=? AND status='PENDING'`).bind(studentId, row.class_id, row.key_label, row.grade,row.id),
+      env.DB.prepare(`INSERT INTO class_progress (id, student_id, grade, total_xp) SELECT ?, ?, ?, 0 WHERE EXISTS(SELECT 1 FROM students WHERE id=?)`).bind(crypto.randomUUID(), studentId, row.grade,studentId),
     )
   } else {
-    const existingStudent = await env.DB.prepare(`SELECT id, status FROM students WHERE id=? LIMIT 1`).bind(studentId).first()
+    const existingStudent = await env.DB.prepare(`SELECT id, status FROM students WHERE id=? AND class_id=? LIMIT 1`).bind(studentId,row.class_id).first()
     if (!existingStudent || existingStudent.status !== 'ACTIVE') return json({ error: 'student_unavailable' }, 409)
   }
 
+  const decisionIndex=statements.length
   statements.push(
-    env.DB.prepare(`UPDATE connection_requests SET status='APPROVED', student_id=?, decided_at=CURRENT_TIMESTAMP, decided_by=? WHERE id=?`).bind(studentId, auth.teacher.id, row.id),
-    env.DB.prepare(`UPDATE access_keys SET status='USED', student_id=?, used_at=CURRENT_TIMESTAMP WHERE id=?`).bind(studentId, row.access_key_id),
-    env.DB.prepare(`INSERT INTO audit_log (id, actor_role, actor_id, action, target_type, target_id) VALUES (?, 'TEACHER', ?, 'APPROVE_CONNECTION', 'connection_request', ?)`).bind(crypto.randomUUID(), auth.teacher.id, row.id),
+    env.DB.prepare(`UPDATE connection_requests SET status='APPROVED', student_id=?, decided_at=CURRENT_TIMESTAMP, decided_by=? WHERE id=? AND status='PENDING'`).bind(studentId, auth.teacher.id, row.id),
+    env.DB.prepare(`UPDATE access_keys SET status='USED', student_id=?, used_at=CURRENT_TIMESTAMP WHERE id=? AND EXISTS(SELECT 1 FROM connection_requests WHERE id=? AND status='APPROVED' AND student_id=?)`).bind(studentId, row.access_key_id,row.id,studentId),
+    env.DB.prepare(`INSERT INTO audit_log (id, actor_role, actor_id, action, target_type, target_id) SELECT ?, 'TEACHER', ?, 'APPROVE_CONNECTION', 'connection_request', ? WHERE EXISTS(SELECT 1 FROM connection_requests WHERE id=? AND status='APPROVED' AND student_id=?)`).bind(crypto.randomUUID(), auth.teacher.id, row.id,row.id,studentId),
   )
-  await env.DB.batch(statements)
+  const results=await env.DB.batch(statements)
+  if(results[decisionIndex]?.meta?.changes===0)return json({error:'request_already_decided'},409)
   return json({ status: 'APPROVED', studentId })
 }
 
@@ -505,15 +533,16 @@ async function requireStudent(request, env) {
   const hash = await sha256(token)
   const now = new Date().toISOString()
   const row = await env.DB.prepare(`
-    SELECT ss.id AS session_id, ss.expires_at, s.id, s.class_id, s.nickname, s.current_grade, s.status, c.title AS class_title
+    SELECT ss.id AS session_id, ss.expires_at, s.id, s.class_id, s.nickname, s.current_grade, s.status, c.title AS class_title, p.avatar_id, p.profile_setup_completed
     FROM student_sessions ss
     JOIN students s ON s.id=ss.student_id
     JOIN classes c ON c.id=s.class_id
+    LEFT JOIN student_profiles p ON p.student_id=s.id
     WHERE ss.token_hash=? AND ss.revoked_at IS NULL AND ss.expires_at>? LIMIT 1
   `).bind(hash, now).first()
   if (!row || row.status !== 'ACTIVE') return { ok: false, response: json({ error: 'student_auth_required' }, 401) }
   await env.DB.prepare(`UPDATE student_sessions SET last_active_at=CURRENT_TIMESTAMP WHERE id=?`).bind(row.session_id).run()
-  return { ok: true, student: { id: row.id, classId: row.class_id, nickname: row.nickname, grade: row.current_grade, className: row.class_title } }
+  return { ok: true, student: { id: row.id, classId: row.class_id, nickname: row.nickname, grade: row.current_grade, className: row.class_title, avatarId:row.avatar_id||null, profileSetupCompleted:Boolean(row.profile_setup_completed) } }
 }
 
 async function requireTeacher(request, env) {
@@ -537,7 +566,7 @@ async function expireOldPending(env) {
   if (!old.results?.length) return
   const statements = []
   for (const row of old.results) {
-    statements.push(env.DB.prepare(`UPDATE connection_requests SET status='EXPIRED' WHERE id=?`).bind(row.id))
+    statements.push(env.DB.prepare(`UPDATE connection_requests SET status='EXPIRED' WHERE id=? AND status='PENDING'`).bind(row.id))
     statements.push(env.DB.prepare(`UPDATE access_keys SET status='ACTIVE' WHERE id=? AND status='PENDING'`).bind(row.access_key_id))
   }
   await env.DB.batch(statements)

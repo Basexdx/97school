@@ -26,6 +26,14 @@ CREATE TABLE IF NOT EXISTS students (
   FOREIGN KEY (class_id) REFERENCES classes(id)
 );
 
+-- Profile setup is tied to the existing student, including recovery/new devices.
+CREATE TABLE IF NOT EXISTS student_profiles (
+  student_id TEXT PRIMARY KEY REFERENCES students(id),
+  avatar_id TEXT NOT NULL,
+  profile_setup_completed INTEGER NOT NULL DEFAULT 1 CHECK(profile_setup_completed=1),
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS access_keys (
   id TEXT PRIMARY KEY,
   class_id TEXT NOT NULL,
