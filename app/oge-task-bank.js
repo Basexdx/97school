@@ -94,7 +94,7 @@ export default function OgeTaskBank({onBack,onHome}){
 
   if(current){
     const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id)}
-    if(current.kind==='cloze')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
+    if(current.kind==='cloze'||current.kind==='change')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
     if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>setMatchingAnswers(previous=>({...previous,[current.id]:answer}))}/>
     return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>{setAnswers(previous=>({...previous,[current.id]:selection}));if(checkOgeChoiceAnswer(current,selection)===true)markSolved(current.id)}}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)}/>
   }

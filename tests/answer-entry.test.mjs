@@ -16,7 +16,7 @@ test('every FIPI task accepts its intended entry format and rejects malformed re
   assert.equal(new Set(ogeTasks.map(task=>task.id)).size,ogeTasks.length)
   const stored={}
   for(const task of ogeTasks){
-    if(task.kind==='cloze'){
+    if(task.kind==='cloze'||task.kind==='change'){
       assert.equal(ogeClozeAnswerReady(task.answer,task),true,task.id)
       assert.equal(checkOgeClozeAnswer(task,task.answer),true,task.id)
     }else if(task.kind==='matching'){

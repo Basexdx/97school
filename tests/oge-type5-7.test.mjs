@@ -15,7 +15,7 @@ import {taskPreview} from '../shared/task-preview.mjs'
 test('new source packs add 61 single-choice and 12 numeric tasks without duplicating 38 diagrams',()=>{
  assert.equal(ogeType5Tasks.length,61);assert.equal(ogeCounts[5],61)
  assert.equal(ogeType7Tasks.length,12);assert.equal(ogeCounts[7],50)
- assert.equal(ogeCounts.total,513);assert.equal(new Set(ogeTasks.map(t=>t.id)).size,513)
+ assert.equal(ogeCounts.total,639);assert.equal(new Set(ogeTasks.map(t=>t.id)).size,639)
  assert.equal(ogeType5Tasks.filter(t=>t.section==='Механика').length,26)
  assert.equal(ogeType5Tasks.filter(t=>t.section==='Тепловые явления').length,35)
  for(const t of ogeType5Tasks){
