@@ -17,3 +17,5 @@ test('teacher connection has approval actions only while a request is pending',(
  for(const status of ['APPROVED','REJECTED']){const html=render({teacher:true,request:{...base,status}});assert.doesNotMatch(html,/Открыть экран ученика/);assert.doesNotMatch(html,/Отклонить запрос/)}
  assert.match(render({teacher:true,request:null}),/Новых запросов нет/)
 })
+
+test('expired requests offer retry and do not show a class label without server details',()=>{const html=render({request:{status:'EXPIRED'}});assert.match(html,/Время ожидания истекло/);assert.match(html,/Ввести другой код/);assert.doesNotMatch(html,/Класс undefined/);assert.doesNotMatch(html,/Запрос: —/)})
