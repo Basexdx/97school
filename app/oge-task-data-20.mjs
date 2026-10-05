@@ -35,7 +35,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -52,7 +52,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -69,7 +69,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-24064-1.svg"
@@ -110,7 +110,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -127,7 +127,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -144,7 +144,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -161,7 +161,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -178,7 +178,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-26065-1.svg"
@@ -197,7 +197,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -214,7 +214,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-26258-1.svg"
@@ -233,7 +233,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -272,7 +272,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -289,7 +289,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -306,7 +306,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-8827-1.svg"
@@ -325,7 +325,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-8828-1.svg"
@@ -344,7 +344,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -361,7 +361,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -378,7 +378,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -395,7 +395,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -412,7 +412,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -429,7 +429,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -447,7 +447,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-8846-1.svg"
@@ -467,7 +467,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -484,7 +484,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-8851-1.svg"
@@ -504,7 +504,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-8853-1.svg"
@@ -523,7 +523,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -540,7 +540,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -557,7 +557,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -574,7 +574,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -591,7 +591,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -608,7 +608,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-9048-1.svg"
@@ -627,7 +627,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-9049-1.svg"
@@ -646,7 +646,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-9050-1.svg"
@@ -665,7 +665,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-9051-1.svg"
@@ -684,7 +684,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -701,7 +701,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-9113-1.svg"
@@ -720,7 +720,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-9119-1.svg"
@@ -739,7 +739,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-13151-1.svg"
@@ -758,7 +758,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -775,7 +775,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -792,7 +792,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -809,7 +809,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -826,7 +826,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-14572-1.svg"
@@ -845,7 +845,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -862,7 +862,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -879,7 +879,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -897,7 +897,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -914,7 +914,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -931,7 +931,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -948,7 +948,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -965,7 +965,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -982,7 +982,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1000,7 +1000,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1017,7 +1017,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1034,7 +1034,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1051,7 +1051,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1068,7 +1068,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1085,7 +1085,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1102,7 +1102,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1119,7 +1119,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1136,7 +1136,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1153,7 +1153,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1170,7 +1170,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1187,7 +1187,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1204,7 +1204,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1222,7 +1222,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1239,7 +1239,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1256,7 +1256,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1273,7 +1273,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-26114-1.svg"
@@ -1292,7 +1292,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1329,7 +1329,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1346,7 +1346,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1363,7 +1363,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1380,7 +1380,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1397,7 +1397,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-20-31724-1.svg"
@@ -1416,7 +1416,7 @@ export const ogeType20Tasks=[
     "label": "Задача 20 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   }

@@ -41,7 +41,7 @@ export default function OgeTaskBank({onBack,onHome}){
   const [calculationAnswers,setCalculationAnswers]=useState({})
   const [ready,setReady]=useState(false)
   const scrollTop=useRef(0)
-  const answered=useMemo(()=>new Set([...Object.keys(answers),...Object.keys(matchingAnswers),...Object.keys(clozeAnswers),...Object.entries(calculationAnswers).filter(([,draft])=>draft.answer.trim()||draft.solution.trim()).map(([id])=>id)]),[answers,matchingAnswers,clozeAnswers,calculationAnswers])
+  const answered=useMemo(()=>new Set([...Object.keys(answers),...Object.keys(matchingAnswers),...Object.keys(clozeAnswers),...Object.entries(calculationAnswers).filter(([,draft])=>draft.answer.trim()).map(([id])=>id)]),[answers,matchingAnswers,clozeAnswers,calculationAnswers])
   const filtered=useMemo(()=>filterOgeTasks(ogeTasks,{sections,types,statuses,query:search},viewed,solved,answered),[sections,types,statuses,search,viewed,solved,answered])
   const current=currentId?ogeTasks.find(t=>t.id===currentId):null
   const detailTasks=detailIds.length?detailIds.map(id=>ogeTasks.find(task=>task.id===id)).filter(Boolean):filtered

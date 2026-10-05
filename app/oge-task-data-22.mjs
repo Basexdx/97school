@@ -13,7 +13,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -30,7 +30,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -48,7 +48,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -65,7 +65,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -82,7 +82,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -99,7 +99,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -117,7 +117,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -135,7 +135,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -152,7 +152,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -169,7 +169,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-25316-1.svg"
@@ -188,7 +188,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -205,7 +205,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -222,7 +222,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -239,7 +239,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -256,7 +256,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -274,7 +274,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -292,7 +292,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -309,7 +309,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -326,7 +326,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -344,7 +344,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -361,7 +361,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -378,7 +378,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -395,7 +395,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -412,7 +412,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -430,7 +430,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -447,7 +447,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -464,7 +464,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -481,7 +481,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -498,7 +498,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -515,7 +515,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -532,7 +532,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -549,7 +549,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -566,7 +566,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -583,7 +583,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -600,7 +600,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -617,7 +617,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -634,7 +634,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -651,7 +651,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -668,7 +668,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -686,7 +686,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -704,7 +704,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -721,7 +721,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -738,7 +738,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -755,7 +755,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -772,7 +772,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -793,7 +793,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-729-1.svg",
@@ -813,7 +813,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-756-1.svg"
@@ -833,7 +833,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -851,7 +851,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -868,7 +868,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-891-1.svg"
@@ -887,7 +887,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -904,7 +904,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -921,7 +921,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-989-1.svg"
@@ -940,7 +940,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-1016-1.svg"
@@ -963,7 +963,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-1079-1.svg",
@@ -987,7 +987,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-1106-1.svg",
@@ -1007,7 +1007,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1024,7 +1024,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1042,7 +1042,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1059,7 +1059,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1076,7 +1076,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1093,7 +1093,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1110,7 +1110,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1127,7 +1127,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1144,7 +1144,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1161,7 +1161,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1178,7 +1178,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1195,7 +1195,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1212,7 +1212,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-431-1.svg"
@@ -1231,7 +1231,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-485-1.svg"
@@ -1250,7 +1250,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-1502-1.svg"
@@ -1269,7 +1269,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1286,7 +1286,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1303,7 +1303,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1321,7 +1321,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1339,7 +1339,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1356,7 +1356,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1373,7 +1373,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1390,7 +1390,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1407,7 +1407,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1424,7 +1424,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-22-23870-1.svg"
@@ -1444,7 +1444,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1461,7 +1461,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1478,7 +1478,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1495,7 +1495,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1512,7 +1512,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1529,7 +1529,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1547,7 +1547,7 @@ export const ogeType22Tasks=[
     "label": "Задача 22 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   }

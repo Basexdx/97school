@@ -13,7 +13,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-23895-1.svg"
@@ -32,7 +32,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-29569-1.svg"
@@ -51,7 +51,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -68,7 +68,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-80-1.svg"
@@ -87,7 +87,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -104,7 +104,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -121,7 +121,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -138,7 +138,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -155,7 +155,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -172,7 +172,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -189,7 +189,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -206,7 +206,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -223,7 +223,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -240,7 +240,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -257,7 +257,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -274,7 +274,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -291,7 +291,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -308,7 +308,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -325,7 +325,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -342,7 +342,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -360,7 +360,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -378,7 +378,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -395,7 +395,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -413,7 +413,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -430,7 +430,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -447,7 +447,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -464,7 +464,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -481,7 +481,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -498,7 +498,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-1333-1.svg"
@@ -517,7 +517,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-1397-1.svg"
@@ -536,7 +536,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-1424-1.svg"
@@ -555,7 +555,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -572,7 +572,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -589,7 +589,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-1528-1.svg"
@@ -608,7 +608,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": [
       "/oge-figures/oge-21-1555-1.svg"
@@ -627,7 +627,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -645,7 +645,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -662,7 +662,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -679,7 +679,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -696,7 +696,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -713,7 +713,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -730,7 +730,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -747,7 +747,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -764,7 +764,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -781,7 +781,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -798,7 +798,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -815,7 +815,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -832,7 +832,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -849,7 +849,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -866,7 +866,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -883,7 +883,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -900,7 +900,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -917,7 +917,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -934,7 +934,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -951,7 +951,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -968,7 +968,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -985,7 +985,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1002,7 +1002,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1019,7 +1019,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1036,7 +1036,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1053,7 +1053,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1070,7 +1070,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1088,7 +1088,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1105,7 +1105,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1122,7 +1122,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1139,7 +1139,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1156,7 +1156,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1173,7 +1173,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1190,7 +1190,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1207,7 +1207,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1224,7 +1224,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1241,7 +1241,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1258,7 +1258,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1276,7 +1276,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1294,7 +1294,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1312,7 +1312,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1330,7 +1330,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1348,7 +1348,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   },
@@ -1366,7 +1366,7 @@ export const ogeType21Tasks=[
     "label": "Задача 21 ОГЭ",
     "kind": "calculation",
     "difficulty": "ВЫСОКИЙ",
-    "answerFormat": "Развёрнутый ответ",
+    "answerFormat": "Краткий ответ",
     "xp": 40,
     "figures": []
   }

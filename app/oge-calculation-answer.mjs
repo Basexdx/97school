@@ -1,4 +1,4 @@
-// Calculation answers keep the final result separate from the written solution.
+// Numeric calculation answers support fractions and scientific notation.
 export function parseOgeCalculationNumber(value){
  let text=String(value??'').trim().replace(/,/g,'.').replace(/[−–]/g,'-')
  // Spaces may group thousands, but must not join unrelated numbers.
@@ -21,5 +21,5 @@ export function checkOgeCalculationAnswer(task,value){
 export function restoreOgeCalculationDrafts(saved,tasks){
  if(!saved||typeof saved!=='object'||Array.isArray(saved))return {}
  const validIds=new Set(tasks.filter(task=>task.kind==='calculation').map(task=>task.id))
- return Object.fromEntries(Object.entries(saved).filter(([id,draft])=>validIds.has(id)&&draft&&typeof draft.answer==='string'&&draft.answer.length<=100&&typeof draft.solution==='string'&&draft.solution.length<=10000).map(([id,draft])=>[id,{answer:draft.answer,solution:draft.solution,checked:draft.checked===true}]))
+ return Object.fromEntries(Object.entries(saved).filter(([id,draft])=>validIds.has(id)&&draft&&typeof draft.answer==='string'&&draft.answer.length<=100).map(([id,draft])=>[id,{answer:draft.answer,checked:draft.checked===true}]))
 }

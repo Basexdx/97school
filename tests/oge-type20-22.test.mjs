@@ -22,7 +22,7 @@ test('all nine PDF packs are imported by type and section, at high difficulty',(
  let figures=0,tables=0
  for(const task of tasks){
   assert.equal(task.difficulty,'ВЫСОКИЙ');assert.equal(difficultySignal(task.difficulty).level,3)
-  assert.equal(task.xp,40);assert.equal(task.answerFormat,'Развёрнутый ответ')
+  assert.equal(task.xp,40);assert.equal(task.answerFormat,'Краткий ответ')
   assert.ok(Number.isFinite(task.answer));assert.ok(task.text.length>80,task.id)
   assert.match(task.answerSource,/^https:\/\/phys-oge\.sdamgia\.ru\/problem\?id=\d+$/)
   assert.doesNotMatch(task.text,/\u00ad|РЕШУ ОГЭ|https?:|Рисунок задачи|дробь:|конец дроби|\\[A-Za-z]|^Рис\. \d/m,task.id)
@@ -56,26 +56,28 @@ test('numeric input accepts decimals, negative work, fractions and scientific no
  for(const invalid of ['', '1 2','abc','1,2,3','2/0','Infinity','1e999','<script>','3 кг','1+2'])assert.equal(parseOgeCalculationNumber(invalid),null,invalid)
  assert.equal(checkOgeCalculationAnswer(byNo(25367),'1,15·10^8'),true)
  assert.equal(checkOgeCalculationAnswer(byNo(14316),'−2,4'),true)
- const drafts=Object.fromEntries(tasks.map(t=>[t.id,{answer:String(t.answer),solution:'Дано, формулы, перевод единиц и вычисления.',checked:true}]))
+ const drafts=Object.fromEntries(tasks.map(t=>[t.id,{answer:String(t.answer),checked:true}]))
  assert.deepEqual(restoreOgeCalculationDrafts(JSON.parse(JSON.stringify(drafts)),ogeTasks),drafts)
+ const legacy=Object.fromEntries(Object.entries(drafts).map(([id,draft])=>[id,{...draft,solution:'Старый текст'}]))
+ assert.deepEqual(restoreOgeCalculationDrafts(legacy,ogeTasks),drafts)
  assert.deepEqual(restoreOgeCalculationDrafts({unknown:{answer:'1',solution:'x'}},ogeTasks),{})
  assert.deepEqual(restoreOgeCalculationDrafts({[tasks[0].id]:{answer:1,solution:'x'}},ogeTasks),{})
  assert.equal(filterOgeTasks(ogeTasks,{types:[20],statuses:['answered']},new Set(),new Set(),new Set(Object.keys(drafts))).length,76)
 })
 
-test('every imported task renders a solution field and a labelled final result, including restored feedback',async()=>{
+test('every imported task renders only a labelled answer field, including restored feedback',async()=>{
  const result=await build({entryPoints:[new URL('../app/oge-calculation-detail.js',import.meta.url).pathname],bundle:true,platform:'node',format:'cjs',write:false,jsx:'automatic',loader:{'.js':'jsx'},external:['react','react/jsx-runtime'],plugins:[{name:'css-stub',setup(b){b.onLoad({filter:/\.css$/},()=>({contents:'export default {}',loader:'js'}))}}]})
  const mod={exports:{}};new Function('require','module','exports',result.outputFiles[0].text)(createRequire(import.meta.url),mod,mod.exports)
  for(const task of tasks){
   const props={task,position:1,total:243,back:()=>{},navigate:()=>{},onSave:()=>{}}
   const blank=renderToStaticMarkup(React.createElement(mod.exports.default,props))
-  assert.equal((blank.match(/<textarea/g)||[]).length,1,task.id)
+  assert.equal((blank.match(/<textarea/g)||[]).length,0,task.id)
   assert.equal((blank.match(/<input /g)||[]).length,1,task.id)
   assert.ok(blank.includes('Высокая сложность'));assert.ok(blank.includes('40 XP'))
   assert.ok(blank.includes('Числовой ответ'));assert.ok(blank.includes('disabled=""'))
   const saved={answer:String(task.answer),solution:'Мой ход решения',checked:true}
   const right=renderToStaticMarkup(React.createElement(mod.exports.default,{...props,saved}))
-  assert.ok(right.includes('Мой ход решения'));assert.ok(right.includes('Числовой ответ верный!'),task.id)
+  assert.doesNotMatch(right,/Ход решения|ход решения|<textarea/);assert.ok(right.includes('Числовой ответ верный!'),task.id)
   const wrong=renderToStaticMarkup(React.createElement(mod.exports.default,{...props,saved:{...saved,answer:String(task.answer+Math.max(2,Math.abs(task.answer)*.1))}}))
   assert.ok(wrong.includes('Пока неверно'),task.id)
  }

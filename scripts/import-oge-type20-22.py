@@ -21,7 +21,7 @@ def main(folder):
   t={k:v for k,v in record.items() if k!='clips'}
   kind=t['type'];n=t['sourceNo'];identity=(kind,n)
   assert identity not in seen;seen.add(identity)
-  t.update(id=f'oge-{kind}-{n}',label=f'Задача {kind} ОГЭ',kind='calculation',difficulty='ВЫСОКИЙ',answerFormat='Развёрнутый ответ',xp=40,figures=[])
+  t.update(id=f'oge-{kind}-{n}',label=f'Задача {kind} ОГЭ',kind='calculation',difficulty='ВЫСОКИЙ',answerFormat='Краткий ответ',xp=40,figures=[])
   assert isinstance(t['answer'],(float,int)) and len(t['text'])>50
   for index,clip in enumerate(record['clips'],1):
    source=clip['source'];assert source==t['source']
