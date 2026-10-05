@@ -5,6 +5,7 @@ import {checkOgeClozeAnswer,ogeClozeAnswerReady} from '../app/oge-cloze-answer.m
 import {ogeTasks} from '../app/oge-task-data.mjs'
 import {parseOgeChoiceInput,requiredOgeChoices,restoreOgeChoiceAnswers,toggleOgeChoice} from '../app/oge-choice-answer.mjs'
 import {isCorrectOgeNumber,parseOgeNumber} from '../app/oge-number-answer.mjs'
+import {checkOgeCalculationAnswer,parseOgeCalculationNumber} from '../app/oge-calculation-answer.mjs'
 import {ogeMatchingAnswerReady} from '../app/oge-matching-answer.mjs'
 import {grade7Additions,grade8Additions,grade9Additions} from '../bank/peryshkin-additions.mjs'
 import {checkAnswer,publishable} from '../shared/task-checker.mjs'
@@ -31,6 +32,10 @@ test('every FIPI task accepts its intended entry format and rejects malformed re
       assert.equal(parseOgeChoiceInput(String(task.options.length+1),task),null,task.id)
       assert.deepEqual(entered.reduce((previous,value)=>toggleOgeChoice(previous,value,task),[]),entered,task.id)
       stored[task.id]=entered
+    }else if(task.kind==='calculation'){
+      assert.equal(checkOgeCalculationAnswer(task,String(task.answer).replace('.',',')),true,task.id)
+      assert.equal(checkOgeCalculationAnswer(task,String(task.answer+Math.max(1,Math.abs(task.answer)))),false,task.id)
+      assert.equal(parseOgeCalculationNumber('1,2,3'),null,task.id)
     }else{
       assert.ok(task.kind==null||task.kind==='numeric',task.id)
       assert.ok(Number.isFinite(task.answer),task.id)

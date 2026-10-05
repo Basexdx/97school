@@ -7,7 +7,7 @@ test('OGE bank imports task 6 and task 7 source packs completely',()=>{
   assert.equal(ogeCounts[7],50)
   assert.equal(ogeCounts[1],61)
   assert.equal(ogeCounts[3],60)
-  assert.equal(ogeCounts.total,639)
+  assert.equal(ogeCounts.total,882)
   assert.equal(new Set(ogeTasks.map(t=>t.id)).size,ogeTasks.length)
   assert.equal(ogeTasks.every(t=>t.label===`Задача ${t.type} ОГЭ`),true)
   assert.equal(ogeTasks.filter(t=>t.kind!=='choice'&&t.kind!=='matching'&&t.kind!=='cloze'&&t.kind!=='change').every(t=>Number.isFinite(t.answer)),true)

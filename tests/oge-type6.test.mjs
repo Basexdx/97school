@@ -11,7 +11,7 @@ import {isCorrectOgeNumber} from '../app/oge-number-answer.mjs'
 import {requiredOgeChoices,checkOgeChoiceAnswer,restoreOgeChoiceAnswers} from '../app/oge-choice-answer.mjs'
 
 test('all three type-6 packs are represented once, with 56 new keyed tasks and original figures',()=>{
- assert.equal(ogeCounts[6],83);assert.equal(ogeCounts.total,639)
+ assert.equal(ogeCounts[6],83);assert.equal(ogeCounts.total,882)
  assert.equal(tasks.length,56);assert.equal(tasks.filter(t=>t.topic==='Динамика').length,43);assert.equal(tasks.filter(t=>t.topic==='Гидростатика').length,13)
  assert.equal(new Set(ogeTasks.filter(t=>t.type===6).map(t=>t.sourceNo)).size,83)
  let figures=0

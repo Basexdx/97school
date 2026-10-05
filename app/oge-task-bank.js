@@ -11,11 +11,14 @@ import OgeMatchingDetail from './oge-matching-detail'
 import {restoreOgeMatchingAnswers} from './oge-matching-answer.mjs'
 import {checkOgeChoiceAnswer,parseOgeChoiceInput,requiredOgeChoices,restoreOgeChoiceAnswers,toggleOgeChoice} from './oge-choice-answer.mjs'
 import {isCorrectOgeNumber,parseOgeNumber} from './oge-number-answer.mjs'
+import OgeCalculationDetail from './oge-calculation-detail'
+import {checkOgeCalculationAnswer,restoreOgeCalculationDrafts} from './oge-calculation-answer.mjs'
 import styles from './oge-task-bank.module.css'
 
 const FILTER_KEY='genius:oge-bank:v2',PROGRESS_KEY='genius:oge-progress:v1',ANSWERS_KEY='genius:oge-choice-answers:v1'
 const CLOZE_ANSWERS_KEY='genius:oge-cloze-answers:v1'
 const MATCHING_ANSWERS_KEY='genius:oge-matching-answers:v1'
+const CALCULATION_ANSWERS_KEY='genius:oge-calculation-answers:v1'
 const sectionNames=ogeSections
 const taskTypes=Array.from({length:22},(_,index)=>index+1)
 const statusNames={unsolved:'Нерешённые',solved:'Решённые',answered:'С ответом',viewed:'Просмотренные'}
@@ -35,9 +38,10 @@ export default function OgeTaskBank({onBack,onHome}){
   const [answers,setAnswers]=useState({})
   const [matchingAnswers,setMatchingAnswers]=useState({})
   const [clozeAnswers,setClozeAnswers]=useState({})
+  const [calculationAnswers,setCalculationAnswers]=useState({})
   const [ready,setReady]=useState(false)
   const scrollTop=useRef(0)
-  const answered=useMemo(()=>new Set([...Object.keys(answers),...Object.keys(matchingAnswers),...Object.keys(clozeAnswers)]),[answers,matchingAnswers,clozeAnswers])
+  const answered=useMemo(()=>new Set([...Object.keys(answers),...Object.keys(matchingAnswers),...Object.keys(clozeAnswers),...Object.entries(calculationAnswers).filter(([,draft])=>draft.answer.trim()||draft.solution.trim()).map(([id])=>id)]),[answers,matchingAnswers,clozeAnswers,calculationAnswers])
   const filtered=useMemo(()=>filterOgeTasks(ogeTasks,{sections,types,statuses,query:search},viewed,solved,answered),[sections,types,statuses,search,viewed,solved,answered])
   const current=currentId?ogeTasks.find(t=>t.id===currentId):null
   const detailTasks=detailIds.length?detailIds.map(id=>ogeTasks.find(task=>task.id===id)).filter(Boolean):filtered
@@ -61,6 +65,7 @@ export default function OgeTaskBank({onBack,onHome}){
       setAnswers(restoreOgeChoiceAnswers(savedAnswers,ogeTasks))
       setClozeAnswers(restoreOgeClozeAnswers(JSON.parse(localStorage.getItem(CLOZE_ANSWERS_KEY)||'null'),ogeTasks))
       setMatchingAnswers(restoreOgeMatchingAnswers(JSON.parse(localStorage.getItem(MATCHING_ANSWERS_KEY)||'null'),ogeTasks))
+      setCalculationAnswers(restoreOgeCalculationDrafts(JSON.parse(localStorage.getItem(CALCULATION_ANSWERS_KEY)||'null'),ogeTasks))
     }catch{}
     setReady(true)
   },[])
@@ -70,6 +75,7 @@ export default function OgeTaskBank({onBack,onHome}){
   useEffect(()=>{if(!ready)return;try{localStorage.setItem(ANSWERS_KEY,JSON.stringify(answers))}catch{}},[ready,answers])
   useEffect(()=>{if(!ready)return;try{localStorage.setItem(MATCHING_ANSWERS_KEY,JSON.stringify(matchingAnswers))}catch{}},[ready,matchingAnswers])
   useEffect(()=>{if(!ready)return;try{localStorage.setItem(CLOZE_ANSWERS_KEY,JSON.stringify(clozeAnswers))}catch{}},[ready,clozeAnswers])
+  useEffect(()=>{if(!ready)return;try{localStorage.setItem(CALCULATION_ANSWERS_KEY,JSON.stringify(calculationAnswers))}catch{}},[ready,calculationAnswers])
   useEffect(()=>{
     if(!ready||currentId)return
     const id=requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -94,6 +100,7 @@ export default function OgeTaskBank({onBack,onHome}){
 
   if(current){
     const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id)}
+    if(current.kind==='calculation')return <OgeCalculationDetail key={current.id} {...props} saved={calculationAnswers[current.id]} onSave={draft=>{setCalculationAnswers(previous=>({...previous,[current.id]:draft}));if(draft.checked&&checkOgeCalculationAnswer(current,draft.answer))markSolved(current.id)}}/>
     if(current.kind==='cloze'||current.kind==='change')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
     if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>setMatchingAnswers(previous=>({...previous,[current.id]:answer}))}/>
     return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>{setAnswers(previous=>({...previous,[current.id]:selection}));if(checkOgeChoiceAnswer(current,selection)===true)markSolved(current.id)}}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)}/>
@@ -115,7 +122,7 @@ export default function OgeTaskBank({onBack,onHome}){
       {(active.length||query)&&<div className={styles.activeFilters}><span>Выбрано:</span>{active.map(item=><button type="button" key={item.label} onClick={item.remove} aria-label={`Убрать фильтр ${item.label}`}>{item.label} ×</button>)}{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}}>«{query}» ×</button>}<button type="button" className={styles.clear} onClick={reset}>Сбросить всё</button></div>}
     </div>
     <div className={styles.summary} aria-live="polite"><strong>{filtered.length}</strong> {filtered.length===1?'задание':filtered.length%10>=2&&filtered.length%10<=4&&(filtered.length%100<10||filtered.length%100>=20)?'задания':'заданий'}{active.length||query?' по выбранным фильтрам':''}</div>
-    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><TaskTile type={t.type} section={sectionsForTask(t).join(' · ')} number={t.sourceNo} status={solved.has(t.id)?'Решена':answered.has(t.id)?'Ответ сохранён':viewed.has(t.id)?'Просмотрена':'Новая'} xp={t.xp} preview={t.text} action={solved.has(t.id)?'Открыть решение →':'Решить задачу →'}/></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
+    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><TaskTile type={t.type} section={sectionsForTask(t).join(' · ')} number={t.sourceNo} status={solved.has(t.id)?'Решена':answered.has(t.id)?'Ответ сохранён':viewed.has(t.id)?'Просмотрена':'Новая'} xp={t.xp} difficulty={t.difficulty} preview={t.text} action={solved.has(t.id)?'Открыть решение →':'Решить задачу →'}/></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
   </div>
 }
 

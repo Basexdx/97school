@@ -16,13 +16,13 @@ const keys=JSON.parse(fs.readFileSync(new URL('../scripts/oge-type8-12-keys.json
 const byNo=n=>imported.find(t=>t.sourceNo===n)
 
 test('all four new PDFs are imported completely by type and section without duplicating existing packs',()=>{
- assert.equal(ogeCounts.total,639)
+ assert.equal(ogeCounts.total,882)
  assert.equal(ogeCounts[8],56);assert.equal(ogeCounts[12],70)
  assert.equal(filterOgeTasks(ogeTasks,{types:[12],sections:['Механика']}).length,47)
  assert.equal(filterOgeTasks(ogeTasks,{types:[12],sections:['Тепловые явления']}).length,23)
  assert.equal(filterOgeTasks(ogeTasks,{types:[8],sections:['Тепловые явления']}).length,56)
  assert.equal(ogeCounts[5],61);assert.equal(ogeCounts[7],50)
- assert.equal(new Set(ogeTasks.map(t=>`${t.type}:${t.sourceNo}`)).size,639)
+ assert.equal(new Set(ogeTasks.map(t=>`${t.type}:${t.sourceNo}`)).size,882)
  assert.equal(new Set(imported.map(t=>t.sourceNo)).size,Object.keys(keys).length)
  let figures=0
  for(const task of imported){

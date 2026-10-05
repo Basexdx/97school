@@ -8,8 +8,11 @@ import {ogeType7Tasks} from './oge-task-data-7.mjs'
 
 import {ogeType8Tasks} from './oge-task-data-8.mjs'
 import {ogeType12Tasks} from './oge-task-data-12.mjs'
+import {ogeType20Tasks} from './oge-task-data-20.mjs'
+import {ogeType21Tasks} from './oge-task-data-21.mjs'
+import {ogeType22Tasks} from './oge-task-data-22.mjs'
 
-export const OGE_BANK_VERSION='2.6.0-oge-1-3-4-5-6-7-8-12-14-16'
+export const OGE_BANK_VERSION='2.7.0-oge-calculations-20-21-22'
 
 const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
   id:`oge-${type}-${sourceNo}`,
@@ -31,6 +34,9 @@ export const ogeTasks=[
   ...ogeType7Tasks,
   ...ogeType8Tasks,
   ...ogeType12Tasks,
+  ...ogeType20Tasks,
+  ...ogeType21Tasks,
+  ...ogeType22Tasks,
   task(6,12419,'Автобус везёт пассажиров по прямой дороге со скоростью 10 м/с. Пассажир равномерно идёт по салону автобуса со скоростью 1 м/с относительно автобуса, двигаясь от задней двери к кабине водителя. Чему равен модуль скорости пассажира относительно дороги? Ответ запишите в метрах в секунду.',11,'м/с'),
   task(6,23873,'Скорость человека, первоначально находящегося в покое, в течение 2 секунд достигла значения 10 м/с. Какой путь пробежал он за это время? Ответ запишите в метрах.',10,'м'),
   task(6,24046,'Радиус окружности, по которой движется тело, увеличили в 4 раза, линейную скорость тела увеличили в √2 раза. Во сколько раз уменьшилось центростремительное ускорение тела?',2,'раз'),
