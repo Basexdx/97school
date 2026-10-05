@@ -8,14 +8,12 @@ new Function('require','module','exports',bundle.outputFiles[0].text)(require,mo
 const render=mod.exports.render,base={className:'8Б',codeLabel:'ключ №17',requestedAt:'23:31'}
 test('student connection presents the correct action for every status',()=>{
  const pending=render({request:{...base,status:'PENDING'}})
- assert.match(pending,/Ждём подтверждения/);assert.match(pending,/Класс 8Б \(17\)/);assert.match(pending,/23:31/);assert.match(pending,/Статус обновляется автоматически/);assert.doesNotMatch(pending,/Подтвердить подключение<\/button>/)
+ assert.match(pending,/Ждём подтверждения/);assert.match(pending,/Класс 8Б \(17\)/);assert.match(pending,/23:31/);assert.match(pending,/Открыть вход учителя для демо/);assert.doesNotMatch(pending,/Подтвердить подключение<\/button>/)
  const approved=render({request:{...base,status:'APPROVED'}});assert.match(approved,/Подключение подтверждено/);assert.match(approved,/Открыть Genius/);assert.doesNotMatch(approved,/автоматически проверять/)
  const rejected=render({request:{...base,status:'REJECTED'}});assert.match(rejected,/Запрос отклонён/);assert.match(rejected,/Ввести другой код/)
 })
 test('teacher connection has approval actions only while a request is pending',()=>{
  const pending=render({teacher:true,request:{...base,status:'PENDING'}});assert.match(pending,/Подтвердить подключение/);assert.match(pending,/Отклонить запрос/);assert.doesNotMatch(pending,/Открыть вход учителя для демо/)
- for(const status of ['APPROVED','REJECTED']){const html=render({teacher:true,request:{...base,status}});assert.doesNotMatch(html,/Открыть экран ученика/);assert.doesNotMatch(html,/Отклонить запрос/)}
+ for(const status of ['APPROVED','REJECTED']){const html=render({teacher:true,request:{...base,status}});assert.match(html,/Открыть экран ученика/);assert.doesNotMatch(html,/Отклонить запрос/)}
  assert.match(render({teacher:true,request:null}),/Новых запросов нет/)
 })
-
-test('expired requests offer retry and do not show a class label without server details',()=>{const html=render({request:{status:'EXPIRED'}});assert.match(html,/Время ожидания истекло/);assert.match(html,/Ввести другой код/);assert.doesNotMatch(html,/Класс undefined/);assert.doesNotMatch(html,/Запрос: —/)})

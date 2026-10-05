@@ -99,13 +99,3 @@ html[data-season='autumn'] .genius-room-front-leaves i{display:block}
 }
 @media(max-height:640px) and (max-width:700px){.genius-room-shell--form .genius-room-copy p{display:none}}
 @media(prefers-reduced-motion:reduce){.genius-room-front-leaves i{display:none!important}}
-
-/* Artwork and spine titles scale together; seasonal effects remain separate. */
-.genius-room-scene,html[data-season] .genius-room-scene{background:#031224}
-.genius-room-art{position:absolute;inset:0;width:100%;height:100%}
-.genius-room-art image{display:none}.genius-room-art .genius-room-art-autumn{display:block}
-html[data-season='winter'] .genius-room-art image,html[data-season='spring'] .genius-room-art image,html[data-season='summer'] .genius-room-art image{display:none}
-html[data-season='winter'] .genius-room-art .genius-room-art-winter,html[data-season='spring'] .genius-room-art .genius-room-art-spring,html[data-season='summer'] .genius-room-art .genius-room-art-summer{display:block}
-.student-profile-button{overflow:visible;flex-shrink:0}.student-profile-button svg{flex-shrink:0}.profile-title p{overflow-wrap:anywhere}
-
-.genius-room-art-mobile{display:none}@media(max-width:700px){.genius-room-art-desktop{display:none}.genius-room-art-mobile{display:block}}

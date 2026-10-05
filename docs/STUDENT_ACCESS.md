@@ -1,5 +1,7 @@
 # Student access and avatars
 
+**Current status:** The server-backed entry flow is temporarily disconnected at the user's request. `app/page.js`, the landing login forms, and connection screens use the earlier demo entry again, including its original teacher credentials and student code. The landing page and both entry forms are restored to their pre-onboarding version. Approved avatar artwork, server profile storage, native transport, and the unused book-spine artwork component remain available for later re-enabling. The sections below describe the prepared server-backed flow, which is currently inactive in the entry UI.
+
 The landing screen retains the seasonal artwork and slogan. Student entry opens a separate code screen. All access uses the existing Worker API: `student/access/request`, `student/access/status`, teacher connection approvals, and persistent HttpOnly sessions. No demo code or frontend approval grants access.
 
 After approval, an unfinished profile chooses an avatar group locally, then one of six portraits. The two supplied original PNG sheets are preserved in `public/avatars/`. `shared/student-avatars.mjs` defines twelve stable IDs and crop coordinates; the inline SVG component renders the same source artwork at every size. Group choice is only an unfinished browser-tab draft; gender is not stored on the server.

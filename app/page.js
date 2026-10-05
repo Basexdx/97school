@@ -5,9 +5,6 @@ import ConnectionScreen from './connection-screen'
 import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
 import LandingRoom from './landing-room'
-import useStudentAccess from './use-student-access'
-import StudentOnboarding,{StudentAvatar,StudentCodeScreen,OnboardingDone,AccessScene} from './student-onboarding'
-import TeacherAccessPanel from './teacher-access-panel'
 import {ReferenceOverlay} from './genius-v17-enhancer'
 import {ReferenceMaterialsPage} from './reference-materials'
 import {bankPendingLocal,syncBankAttempts} from './task-store'
@@ -71,6 +68,7 @@ const navItems = [
   ['formulas', 'Σ', 'Основные формулы'],
 ]
 
+const DEMO_CODE = 'GNS-8K4P-X7M2'
 
 function AtomMark() {
   return <span className="atom-mark" aria-hidden="true"><i className="atom-nucleus"/><i className="atom-orbit atom-o1"/><i className="atom-orbit atom-o2"/><i className="atom-orbit atom-o3"/></span>
@@ -84,7 +82,12 @@ function Brand({ dark = false, onClick }) {
   )
 }
 
-function Sidebar({ screen, setScreen, isOnline, isPhone,student,onLogout }) {
+function PendingAccess({setScreen,request,openStudent,openTeacher}){
+ if(!request)return null
+ return <ConnectionScreen request={request} onHome={()=>setScreen('landing')} onOpen={()=>setScreen('home')} onRetry={openStudent} onDemo={openTeacher}/>
+}
+
+function Sidebar({ screen, setScreen, isOnline, isPhone }) {
   const [menuOpen,setMenuOpen]=useState(false)
   const navigate=key=>{setScreen(key);setMenuOpen(false)}
   return (
@@ -92,19 +95,19 @@ function Sidebar({ screen, setScreen, isOnline, isPhone,student,onLogout }) {
       <button type="button" className="mobile-nav-toggle" aria-controls="student-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
       {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
     <aside className={`sidebar-light ${menuOpen?'mobile-nav-open':''}`}>
-      <div className="student-brand-row"><Brand dark onClick={() => navigate('home')} /><button className="student-profile-button" onClick={()=>navigate('profile')} aria-label={`Профиль · ${isOnline?'в сети':'нет сети'}${isPhone?' · телефон':''}`} title={`Профиль · ${isOnline?'в сети':'нет сети'}`}><StudentAvatar id={student.avatarId} size={40}/><i className={isOnline?'is-online':'is-offline'} aria-hidden="true">{isPhone?'▯':''}</i></button></div>
+      <div className="student-brand-row"><Brand dark onClick={() => navigate('home')} /><button className="student-profile-button" onClick={()=>navigate('profile')} aria-label={`Профиль · ${isOnline?'в сети':'нет сети'}${isPhone?' · телефон':''}`} title={`Профиль · ${isOnline?'в сети':'нет сети'}`}><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.5-3.5 2.9-5.5 7-5.5s6.5 2 7 5.5"/></svg><i className={isOnline?'is-online':'is-offline'} aria-hidden="true">{isPhone?'▯':''}</i></button></div>
       <nav id="student-sidebar-nav" aria-label="Разделы ученика">
         {navItems.map(([key, icon, label]) => (
           <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => navigate(key)}><span>{icon}</span>{label}</button>
         ))}
       </nav>
-      <button className="logout" onClick={onLogout}>↪ Выход</button>
+      <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
     </aside>
     </>
   )
 }
 
-function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp,student,onLogout,onAvatarEdit }) {
+function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp }) {
   const [selectedTopic, setSelectedTopic] = useState(() => {
     try {return Math.max(0,Number(sessionStorage.getItem('genius:topic:v1'))||0)} catch {return 0}
   })
@@ -199,12 +202,12 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp,st
 
   return (
     <div className="student-app">
-      <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} student={student} onLogout={onLogout} />
+      <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
       <main className="student-content" data-section={screen}>
         {sectionInfo[screen]&&screen!=='practice'&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
-        {screen === 'home' && <HomeDashboard student={student} setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
+        {screen === 'home' && <HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
         {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
         {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank onBack={backFromSection} initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
         {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
@@ -218,16 +221,16 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp,st
         {screen === 'labs' && <LabsPlaceholder />}
         {screen === 'achievements' && <Achievements />}
         {screen === 'offline' && <OfflineMaterials grade={grade} topics={currentTopics} state={offlineState} refresh={refreshOfflineState} syncNow={() => trySync(true)} isOnline={isOnline} />}
-        {screen === 'profile' && <><Profile student={student} onAvatarEdit={onAvatarEdit} grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>}
+        {screen === 'profile' && <><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>}
       </main>
     </div>
   )
 }
 
-function HomeDashboard({ setScreen, grade, xp, topics, openTopic,student }) {
+function HomeDashboard({ setScreen, grade, xp, topics, openTopic }) {
   return (
     <>
-      <div className="page-heading-row"><div><h1>Привет, {student.nickname}!</h1><p>Продолжай двигаться к новым вершинам!</p></div><button className="student-profile-button" onClick={()=>setScreen('profile')} aria-label="Открыть профиль"><StudentAvatar id={student.avatarId} size={48}/></button><div className="streak-pill"><span>🔥</span><div><small>Серия · +5 XP сегодня</small><strong>7 дней</strong></div></div></div>
+      <div className="page-heading-row"><div><h1>Привет, Алексей! <span>👋</span></h1><p>Продолжай двигаться к новым вершинам!</p></div><div className="streak-pill"><span>🔥</span><div><small>Серия · +5 XP сегодня</small><strong>7 дней</strong></div></div></div>
       <section className="level-card">
         <div className="level-top"><div><strong>Уровень 12</strong><span>320 / 600 XP</span></div><button className="tiny-link">Как получить XP?</button></div>
         <div className="level-progress"><i style={{width:'54%'}}/></div>
@@ -620,11 +623,11 @@ function OfflineMaterials({ grade, topics, state, refresh, syncNow, isOnline }) 
   </>
 }
 
-function Profile({ grade, setGrade, xp,student,onAvatarEdit }) {
+function Profile({ grade, setGrade, xp }) {
   return <>
     <div className="profile-title">
-      <StudentAvatar id={student.avatarId} size={100}/>
-      <div><h1>{student.nickname}</h1><p>ID: {student.id}</p><button className="blue-btn small" onClick={onAvatarEdit}>Изменить аватар</button></div>
+      <div className="big-avatar">🧑🏻</div>
+      <div><h1>GeniusStudent</h1><p>ID: GS-8F4A91 · персональные данные не требуются</p></div>
     </div>
     <div className="metric-grid">
       <div className="metric-card"><strong>4 820</strong><span>XP · 7 класс</span></div>
@@ -648,15 +651,26 @@ function TeacherSectionHeader({title,description,onBack,onHome,children}){
   return <header className="teacher-head unified-section-header"><div className="unified-section-title"><h1>{title}</h1><p>{description}</p></div><div className="unified-section-end">{children}<nav aria-label="Навигация по разделам"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></div></header>
 }
 
-function TeacherDashboard({ setScreen,onLogout }) {
+function TeacherDashboard({ setScreen, request, setRequest }) {
   const [tab, setTab] = useState(() => {
-    try {return sessionStorage.getItem('genius:teacher-tab:v1')||'classes'} catch {return 'classes'}
+    try {return sessionStorage.getItem('genius:teacher-tab:v1')|| (request?.status === 'PENDING' ? 'requests' : 'classes')} catch {return request?.status === 'PENDING' ? 'requests' : 'classes'}
   })
   useEffect(()=>{try {sessionStorage.setItem('genius:teacher-tab:v1',tab)} catch {}},[tab])
   const [previousTab,setPreviousTab]=useState('classes')
   const [menuOpen,setMenuOpen]=useState(false)
   const chooseTab=value=>{if(value!==tab){setPreviousTab(tab);setTab(value)}setMenuOpen(false)}
-  const [pendingCount,setPendingCount]=useState(0)
+  const pendingCount = request?.status === 'PENDING' ? 1 : 0
+
+  function approveRequest() {
+    if (!request) return
+    setRequest({...request, status:'APPROVED', approvedAt:new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})})
+  }
+
+  function rejectRequest() {
+    if (!request) return
+    setRequest({...request, status:'REJECTED'})
+  }
+
   return <div className="student-app">
     <button type="button" className="mobile-nav-toggle" aria-controls="teacher-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
     {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
@@ -670,7 +684,7 @@ function TeacherDashboard({ setScreen,onLogout }) {
         <button className={`side-nav ${tab === 'results' ? 'active' : ''}`} onClick={() => chooseTab('results')}><span>▣</span>Результаты</button>
         <button className={`side-nav ${tab === 'bank' ? 'active' : ''}`} onClick={() => chooseTab('bank')}><span>◇</span>Банк задач</button>
       </nav>
-      <button className="logout" onClick={onLogout}>↪ Выход</button>
+      <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
     </aside>
     <main className="student-content teacher-content" data-section={tab}>
       {tab === 'classes' && <>
@@ -682,7 +696,21 @@ function TeacherDashboard({ setScreen,onLogout }) {
 
       {tab === 'academic' && <TeacherAcademic onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
 
-      {(tab==='requests'||tab==='keys')&&<><TeacherSectionHeader title={tab==='requests'?'Запросы на подключение':'Ключи доступа'} description={tab==='requests'?'Каждый запрос подтверждается учителем.':'Персональные одноразовые коды для входа.'} onBack={()=>chooseTab(previousTab)} onHome={()=>chooseTab('classes')}/><TeacherAccessPanel tab={tab} onCount={setPendingCount}/></>}
+      {tab === 'requests' && <>
+        <TeacherSectionHeader title="Запросы на подключение" description="Каждый запрос подтверждается учителем." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><span className="pending-count-pill">{pendingCount} ожидает</span></TeacherSectionHeader>
+        <ConnectionScreen teacher request={request} onHome={()=>chooseTab('classes')} onApprove={approveRequest} onReject={rejectRequest} onOpen={()=>setScreen('pending')}/>
+
+      </>}
+
+      {tab === 'keys' && <>
+        <TeacherSectionHeader title="Ключи доступа" description="Каждый ученик получает персональный одноразовый ключ." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><button className="blue-btn small">+ Создать ключ</button></TeacherSectionHeader>
+        <div className="security-table">
+          <div className="security-table-head"><span>Класс</span><span>Ключ</span><span>Назначение</span><span>Статус</span></div>
+          <div><b>8Б</b><code>GNS-8K4P-X7M2</code><span>ключ №17</span><em className={request ? 'status-used' : 'status-active'}>{request ? 'Запрос создан' : 'Активен'}</em></div>
+          <div><b>9А</b><code>GNS-2Q9M-R4T8</code><span>ключ №04</span><em className="status-active">Активен</em></div>
+        </div>
+        <div className="security-callout"><strong>Production-правило</strong><p>В базе будет храниться только криптографический хэш ключа. После успешной активации исходный код повторно использовать нельзя.</p></div>
+      </>}
 
       {tab === 'results' && <>
         <TeacherSectionHeader title="Результаты" description="Учебная активность внутри Genius." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />
@@ -695,18 +723,74 @@ function TeacherDashboard({ setScreen,onLogout }) {
   </div>
 }
 
-export default function Page(){
- const access=useStudentAccess()
- const {screen,student,request,error,entryRole,setEntryRole,navigate,goBack,startStudent,submitCode,teacherLogin,saveAvatar,logout,retry}=access
- const [grade,setGrade]=useState(8),[xp,setXp]=useState(0)
- useEffect(()=>{if(student?.grade)setGrade(student.grade)},[student?.id,student?.grade])
- if(screen==='loading')return <AccessScene Brand={Brand} title={error?'Не удалось подключиться':'Открываем Genius…'} description={error||'Проверяем сохранённый вход'}>{error&&<button className="blue-btn" onClick={retry}>Попробовать снова</button>}</AccessScene>
- if(screen==='landing')return <LandingRoom Brand={Brand} role={entryRole} setRole={setEntryRole} onStudentStart={startStudent} onTeacherSubmit={teacherLogin}/>
- if(screen==='student-code')return <StudentCodeScreen Brand={Brand} notice={error} onBack={()=>{setEntryRole(null);navigate('landing',{reset:true})}} onSubmit={submitCode}/>
- if(screen==='pending')return <ConnectionScreen request={request} error={error} onHome={()=>{setEntryRole(null);navigate('landing',{reset:true})}} onRetry={()=>navigate('student-code',{reset:true})}/>
- if(screen==='teacher')return <>{error&&<p role="alert" className="sync-toast">{error}</p>}<TeacherDashboard setScreen={navigate} onLogout={logout}/></>
- if(!student)return <AccessScene Brand={Brand} title="Войдите в Genius"><button className="blue-btn" onClick={()=>navigate('landing',{reset:true})}>На главную</button></AccessScene>
- if(screen==='avatar-setup'||screen==='avatar-edit')return <StudentOnboarding key={screen+student.id} Brand={Brand} student={student} editing={screen==='avatar-edit'} onSave={saveAvatar} onCancel={()=>navigate('profile',{reset:true})}/>
- if(screen==='avatar-done')return <OnboardingDone Brand={Brand} student={student} onFinish={()=>navigate('profile',{reset:true})}/>
- return <>{error&&<p role="alert" className="sync-toast">{error}</p>}<StudentShell screen={screen} setScreen={navigate} goBack={goBack} grade={grade} setGrade={setGrade} xp={xp} setXp={setXp} student={student} onLogout={logout} onAvatarEdit={()=>navigate('avatar-edit',{reset:true})}/></>
+export default function Page() {
+  const [screen, setCurrentScreen] = useState('landing')
+  const screenRef=useRef('landing')
+  const historyRef=useRef([])
+  const [grade, setGrade] = useState(8)
+  const [xp, setXp] = useState(0)
+  const [request, setRequest] = useState(null)
+  const [entryRole,setEntryRole]=useState(null)
+  const [restored,setRestored]=useState(false)
+  function submitStudentCode(rawCode){
+    const normalized=rawCode.trim().toUpperCase()
+    if(normalized!==DEMO_CODE)return 'Код не найден или уже недействителен.'
+    setGrade(8)
+    setRequest({id:'REQ-482731',code:DEMO_CODE,codeLabel:'ключ №17',grade:8,className:'8Б',requestedAt:new Date().toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}),status:'PENDING'})
+    setScreen('pending')
+    return ''
+  }
+  function openLandingRole(role){setScreen('landing');setEntryRole(role)}
+  function setScreen(next){
+    const target=typeof next==='function'?next(screenRef.current):next
+    if(target===screenRef.current)return
+    if(target==='landing')setEntryRole(null)
+    const previous=historyRef.current.at(-1)
+    if(previous?.screen===target){
+      historyRef.current.pop()
+      screenRef.current=target
+      setCurrentScreen(target)
+      requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0,previous.scrollY)))
+      return
+    }
+    historyRef.current.push({screen:screenRef.current,scrollY:typeof window==='undefined'?0:window.scrollY})
+    screenRef.current=target
+    setCurrentScreen(target)
+    if(typeof window!=='undefined'&&target!=='lesson8')window.scrollTo(0,0)
+  }
+  function goBack(){
+    const previous=historyRef.current.pop()
+    if(!previous){setScreen('home');return}
+    screenRef.current=previous.screen
+    setCurrentScreen(previous.screen)
+    requestAnimationFrame(()=>requestAnimationFrame(()=>window.scrollTo(0,previous.scrollY)))
+  }
+  useEffect(() => {
+    const allowed=['landing','pending','teacher','home','topics','tests','oge','practice','fipi','formulas','materials','lesson8','topic','quiz','result','performance','rating','labs','achievements','offline','profile']
+    try {
+      const saved=JSON.parse(sessionStorage.getItem('genius:view:v1')||'null')
+      if(saved){
+        if(saved.request&&typeof saved.request==='object')setRequest(saved.request)
+        if([7,8,9].includes(saved.grade))setGrade(saved.grade)
+        if(Number.isFinite(saved.xp))setXp(saved.xp)
+        if(saved.entryRole==='student'||saved.entryRole==='teacher')setEntryRole(saved.entryRole)
+        if(Array.isArray(saved.history))historyRef.current=saved.history.filter(item=>allowed.includes(item?.screen)&&Number.isFinite(item?.scrollY)).slice(-25)
+      }
+      const requested=new URLSearchParams(window.location.search).get('screen')
+      const target=['offline','performance','practice','topics','labs','oge'].includes(requested)?requested:allowed.includes(saved?.screen)?saved.screen:'landing'
+      const validTarget=target==='pending'&&!saved?.request?'landing':target
+      screenRef.current=validTarget
+      setCurrentScreen(validTarget)
+    } catch { /* Session storage may be unavailable. */ }
+    setRestored(true)
+  }, [])
+  useEffect(() => {
+    if(!restored)return
+    try {sessionStorage.setItem('genius:view:v1',JSON.stringify({screen,entryRole,request,grade,xp,history:historyRef.current}))} catch { /* Continue if storage is blocked. */ }
+  },[restored,screen,entryRole,request,grade,xp])
+
+  if (screen === 'landing') return <LandingRoom Brand={Brand} role={entryRole} setRole={setEntryRole} onStudentSubmit={submitStudentCode} onTeacherSubmit={()=>setScreen('teacher')} demoCode={DEMO_CODE}/>
+  if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} openStudent={()=>openLandingRole('student')} openTeacher={()=>openLandingRole('teacher')} />
+  if (screen === 'teacher') return <TeacherDashboard setScreen={setScreen} request={request} setRequest={setRequest} />
+  return <StudentShell screen={screen} setScreen={setScreen} goBack={goBack} grade={grade} setGrade={setGrade} xp={xp} setXp={setXp} />
 }
