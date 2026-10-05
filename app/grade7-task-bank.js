@@ -1,5 +1,6 @@
 'use client'
 
+import TaskFigureViewer from './task-figure-viewer'
 import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
@@ -18,7 +19,7 @@ const sectionLabels={intro7:'Введение и измерения',motion7:'Д
 const POSITION_KEY='genius:task-bank-position:grade7:v1'
 const xpForAttempt=(max,count)=>count===0?max:count===1?Math.floor(max*.7):count===2?Math.floor(max*.4):Math.floor(max*.2)
 const answerState=a=>a?.status==='CONFIRMED'?a.result?.correct:a?.localResult?.correct
-const numericText=v=>String(v).replace('.',',')
+const numericText=v=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2,useGrouping:false}).format(v)
 
 export default function Grade7TaskBank({onXp=()=>{},searchIds=null,clearSearch=()=>{}}){
   const [bank,setBank]=useState(null),[index,setIndex]=useState(null),[student,setStudent]=useState(null),[attempts,setAttempts]=useState([])
@@ -83,7 +84,7 @@ function Grade7TaskCard({task,submit,attempts,back,previousId,nextId,navigate,po
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К задачам</button><span>{position} / {total}</span><div><button disabled={!previousId} onClick={()=>previousId&&navigate(previousId)}>←</button><button disabled={!nextId} onClick={()=>nextId&&navigate(nextId)}>→</button></div></nav>
     <header className={styles.taskHead}><div><div className={styles.kicker}>7 КЛАСС · СБОРНИК ПЕРЫШКИНА</div><h1>Задача {task.BOOK_TASK_NUMBER}</h1><div className={styles.taskPills}><span>{difficultyLabels[task.DIFFICULTY]}</span><span>{typeLabels[task.TASK_TYPE]||task.TASK_TYPE}</span><span>{task.XP} XP максимум</span></div></div><div className={styles.xpCard}><small>{solved?'Статус':'За правильный ответ сейчас'}</small><strong>{solved?'✓':`${nextXp} XP`}</strong><span>{solved?'решено':`попытка №${attemptNo}`}</span></div></header>
-    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.taskText}>{task.TASK}</p>{task.DIAGRAM&&<Diagram spec={task.DIAGRAM}/>}<form onSubmit={check}><AnswerFields task={task} value={answer} onChange={setAnswer}/><button className={styles.primary} disabled={busy||!answerReady(task.ANSWER,answer)}>{busy?'Проверяю…':'Проверить ответ'}</button></form>{error&&<div className={styles.error}>{error}</div>}{result&&<div className={`${styles.feedback} ${result.correct?styles.right:styles.wrong}`}><strong>{result.correct?'Верно!':'Пока неверно'}</strong><p>{result.correct?(student?`Попытка сохранена. Сервер начислит XP по номеру попытки.`:'Ответ верный. В гостевом режиме результат хранится локально.'):'Можно пробовать ещё. После третьей попытки за правильное решение сохраняется минимальный XP.'}</p></div>}</section>
+    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.taskText}>{task.TASK}</p>{task.DIAGRAM&&<TaskFigureViewer label={`Рисунок к задаче ${task.BOOK_TASK_NUMBER}`}><Diagram spec={task.DIAGRAM}/></TaskFigureViewer>}<form onSubmit={check}><AnswerFields task={task} value={answer} onChange={setAnswer}/><button className={styles.primary} disabled={busy||!answerReady(task.ANSWER,answer)}>{busy?'Проверяю…':'Проверить ответ'}</button></form>{error&&<div className={styles.error}>{error}</div>}{result&&<div className={`${styles.feedback} ${result.correct?styles.right:styles.wrong}`}><strong>{result.correct?'Верно!':'Пока неверно'}</strong><p>{result.correct?(student?`Попытка сохранена. Сервер начислит XP по номеру попытки.`:'Ответ верный. В гостевом режиме результат хранится локально.'):'Можно пробовать ещё. После третьей попытки за правильное решение сохраняется минимальный XP.'}</p></div>}</section>
     <footer className={styles.bottomNav}><button disabled={!previousId} onClick={()=>previousId&&navigate(previousId)}>← Предыдущая</button><span>Задача {task.BOOK_TASK_NUMBER}</span><button disabled={!nextId} onClick={()=>nextId&&navigate(nextId)}>Следующая →</button></footer>
   </article>
 }

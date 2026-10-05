@@ -1,5 +1,6 @@
 'use client'
 
+import TaskFigureViewer from './task-figure-viewer'
 import {useState} from 'react'
 import {checkOgeClozeAnswer,ogeClozeAnswerReady,ogeAnswerLetters,parseOgeClozeInput} from './oge-cloze-answer.mjs'
 import styles from './oge-task-bank.module.css'
@@ -34,7 +35,7 @@ export default function OgeClozeDetail({task,position,total,back,previous,next,n
     <section className={styles.question}>
       <div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div>
       <div className={styles.clozePassage}>{task.text.split('\n\n').map((paragraph,index)=><p key={index}><Passage text={paragraph}/></p>)}</div>
-      {task.figures.map((src,index)=><figure className={styles.sourceFigure} key={src}><img src={src} alt={`Рисунок к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure>)}
+      {task.figures.map((src,index)=><TaskFigureViewer label={`Рисунок к заданию № ${task.sourceNo}`} key={src}><figure className={styles.sourceFigure}><img src={src} alt={`Рисунок к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure></TaskFigureViewer>)}
       <h3 className={styles.choiceHeading}>{changes?'Как изменяется величина':'Слова и словосочетания'}</h3>
       <ol className={styles.clozeOptions}>{task.options.map((option,index)=><li key={index}><b aria-hidden="true">{index+1}</b><span>{option}</span></li>)}</ol>
       <form onSubmit={event=>{event.preventDefault();if(complete&&!isSaved)onSave([...values])}}>

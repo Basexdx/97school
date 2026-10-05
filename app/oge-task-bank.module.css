@@ -81,3 +81,11 @@
 .calculationTable th,.calculationTable td{padding:13px 16px;border:1px solid rgba(84,174,255,.25)}
 .calculationTable th{color:#8bdfff;background:#0a3159}.calculationTable td{color:#f4f8ff;background:#071d36}
 @media(max-width:640px){.calculationTable th,.calculationTable td{padding:10px 12px}}
+
+/* Keep long scientific words and scanned figures inside narrow task cards. */
+.detail,.question,.taskHead,.taskHead>div,.question form{min-width:0;box-sizing:border-box}
+.question p,.choiceOptions button,.choiceOptions button>span{overflow-wrap:anywhere}
+.choiceOptions button{min-width:0}
+.sourceFigure{min-width:0;max-width:100%;box-sizing:border-box}
+.sourceFigure img{max-width:100%;object-fit:contain}
+.answer em{max-width:38%;overflow-wrap:anywhere;flex-shrink:0}

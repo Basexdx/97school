@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="501" height="225" viewBox="0 0 167 75" fill="#e1effd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="501" height="267" viewBox="0 0 167 89" fill="#e1effd">
 <defs>
 <clipPath id="clip_1">
-<path transform="matrix(1,0,0,-1,-390,472.91999)" d="M390 397.91999H557V472.91999H390Z" clip-rule="evenodd" />
+<path transform="matrix(1,0,0,-1,-390,472.91999)" d="M390 383.91999H557V472.91999H390Z" clip-rule="evenodd" />
 </clipPath>
 <clipPath id="clip_2">
 <path transform="matrix(.24,0,0,.24,-390,-369)" d="M1900 293.75H2318.75V790.625H1900Z" clip-rule="evenodd" />
