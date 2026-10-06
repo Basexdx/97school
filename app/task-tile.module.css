@@ -2,14 +2,17 @@
 .head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px}
 .left,.right{display:flex;flex-direction:column;gap:7px;min-width:0}
 .right{align-items:flex-end;text-align:right;max-width:142px}
-.type{color:#f2bf64;font-size:12px;font-weight:850;letter-spacing:.055em;line-height:1.35;overflow-wrap:anywhere}
+.type{color:#f2bf64;font-size:12px;font-weight:600;letter-spacing:.055em;line-height:1.35;overflow-wrap:anywhere}
 .section{color:#98b6d1;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
 .number{color:#edf7ff;font-size:14px;line-height:1.35;white-space:nowrap}
 .status{padding:4px 8px;border:1px solid #4b759344;border-radius:8px;background:#16334c80;color:#b8cee1;font-size:10px;line-height:1.4;overflow-wrap:anywhere}
-.card .preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;min-height:4.5em;margin:0;color:#e8f2fc;font-size:15px;font-weight:600;line-height:1.5;text-align:center}
+.card .preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere;min-height:4.5em;margin:0;color:#e8f2fc;font-size:15px;font-weight:500;line-height:1.5;text-align:center}
 .bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:12px;border-top:1px solid #6098c421}
-.xp{flex-shrink:0;border-radius:8px;padding:5px 9px;background:#f2bf6414;color:#f2bf64;font-size:12px;font-weight:800;white-space:nowrap}
-.action{color:#bcd9ee;font-size:12px;font-weight:700;text-align:right;line-height:1.45}
+.xp{flex-shrink:0;border-radius:8px;padding:5px 9px;background:#f2bf6414;color:#f2bf64;font-size:12px;font-weight:600;white-space:nowrap}
+.action{color:#bcd9ee;font-size:12px;font-weight:600;text-align:right;line-height:1.45}
 @media(max-width:420px){.card{gap:14px}.head{gap:9px}.right{max-width:125px}.card .preview{font-size:14px}.type,.section{font-size:11px}}
 
 .reward{display:flex;align-items:center;gap:9px;flex-shrink:0}.difficulty{display:block;width:24px;height:20px;flex-shrink:0}
+
+.type,.xp{color:var(--ui-accent)}
+.section{color:var(--ui-muted)}

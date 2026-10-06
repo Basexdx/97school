@@ -1,0 +1,157 @@
+/* Shared Cosmic Genius tokens. Keep artwork and semantic status colours intact. */
+:root {
+  --ui-font: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Noto Sans", Arial, sans-serif;
+  --ui-bg: #031221;
+  --ui-text: #eef7ff;
+  --ui-muted: #a6bfd3;
+  --ui-accent: #ffc34e;
+  --ui-cyan: #54cfff;
+  --ui-line: rgba(79, 166, 238, .28);
+  --ui-panel: linear-gradient(145deg, rgba(7, 29, 49, .97), rgba(4, 18, 33, .97));
+  --ui-toolbar: rgba(3, 17, 32, .94);
+  --ui-control: #061c33;
+  --ui-control-hover: #0b2c48;
+  --ui-control-line: rgba(54, 151, 220, .62);
+  --ui-active: rgba(185, 111, 25, .17);
+  --ui-primary: linear-gradient(105deg, #0878c9, #0764ce);
+  --cosmo-bg: var(--ui-bg);
+  --cosmo-panel: #071d31;
+  --cosmo-panel2: var(--ui-control);
+  --cosmo-line: var(--ui-line);
+  --cosmo-text: var(--ui-text);
+  --cosmo-muted: var(--ui-muted);
+  --cosmo-orange: var(--ui-accent);
+}
+
+html, body { font-family: var(--ui-font); }
+body { font-weight: 400; }
+button, input, select, textarea { font-family: var(--ui-font); }
+button { font-weight: 500; }
+/* Formula glyphs, code and the Genius wordmark retain their own typography. */
+html.cosmo-genius-restored :is(h1, h2, h3, h4) { font-weight: 600; }
+html.cosmo-genius-restored :is(strong, b):not(.katex *) { font-weight: 600; }
+html.cosmo-genius-restored :is(.student-content, .genius-reference-overlay, .reference-materials-overlay) {
+  color: var(--ui-text);
+  background-color: var(--ui-bg) !important;
+}
+html.cosmo-genius-restored :is(.student-content, .genius-reference-overlay, .reference-materials-overlay) :is(p, li) {
+  overflow-wrap: break-word;
+}
+
+/* All section headers and the search/navigation controls use the same surface. */
+html.cosmo-genius-restored :is(.unified-section-header, .book-bank-header, .rm-hero, .fl-toolbar) {
+  background: var(--ui-toolbar) !important;
+  border-color: var(--ui-line) !important;
+}
+html.cosmo-genius-restored :is(.unified-section-title p, .book-heading p, .rm-hero-copy p, .fl-hero p, .subtle) {
+  color: var(--ui-muted) !important;
+}
+html.cosmo-genius-restored :is(.unified-section-header nav button, .book-header-controls button,
+  .book-header-controls select, .book-search, .rm-search, .fl-search,
+  .rm-header-actions button, .fl-header-actions button) {
+  height: 48px !important;
+  min-height: 48px;
+  box-sizing: border-box;
+  border-color: var(--ui-control-line) !important;
+  border-radius: 11px;
+  background: var(--ui-control) !important;
+  color: var(--ui-text);
+  font-weight: 500;
+}
+html.cosmo-genius-restored :is(.book-search, .rm-search, .fl-search) input {
+  height: 100%;
+  min-width: 0;
+  background: transparent !important;
+}
+html.cosmo-genius-restored :is(.unified-section-end, .book-header-controls, .rm-header-actions, .fl-header-actions) {
+  align-items: center;
+}
+
+/* Shared cards, including the home screen, lessons and both task banks. */
+html.cosmo-genius-restored :is(.level-card, .metric-card, .continue-card, .streak-pill,
+  .recommend-grid button, .topic-list, .topic-list-row, .profile-settings,
+  .teacher-classes > div, .quick-grid button, .connection-request,
+  .security-callout, .sync-queue-card, .offline-summary-grid > div,
+  .rm-grid > .rm-card, .fl-card, .genius-constant-grid article, .genius-formula-grid article,
+  .bank-tile, .bank-question, .bank-hints, .bank-solution,
+  .task-bank-hub[data-native-layout] .book-task-tile,
+  .topic-header-card, .lesson-dark-card) {
+  background: var(--ui-panel) !important;
+  border-color: var(--ui-line) !important;
+  color: var(--ui-text);
+}
+html.cosmo-genius-restored :is(.metric-card span, .continue-main span, .topic-copy small,
+  .profile-settings p, .bank-tile small) { color: var(--ui-muted) !important; }
+html.cosmo-genius-restored :is(.book-areas button, .book-filter-toggle, .book-reset,
+  .book-filter-grid input, .book-filter-grid select, .rm-categories button, .fl-categories button) {
+  background: var(--ui-control);
+  border-color: var(--ui-control-line);
+  color: var(--ui-text);
+  font-weight: 500;
+}
+html.cosmo-genius-restored :is(.book-areas button[aria-pressed=true], .rm-categories button.active,
+  .fl-categories button.active) {
+  background: var(--ui-active);
+  border-color: var(--ui-accent);
+  color: var(--ui-accent);
+}
+html.cosmo-genius-restored :is(.book-filter-grid, .book-filter-dock) { background: var(--ui-toolbar); }
+html.cosmo-genius-restored :is(.rm-table-wrap th, .bank-data-table th) {
+  background: var(--ui-control);
+  color: var(--ui-text);
+}
+html.cosmo-genius-restored :is(.rm-table-wrap td, .bank-data-table td) {
+  background: rgba(4, 18, 33, .65);
+  color: var(--ui-text);
+}
+
+/* The same primary blue and focus accent everywhere; statuses remain meaningful. */
+html.cosmo-genius-restored :is(.blue-btn, .bank-primary, .genius-room-primary) {
+  background: var(--ui-primary) !important;
+  color: #fff;
+  font-weight: 500 !important;
+}
+html.cosmo-genius-restored :is(.unified-section-header nav button, .book-header-controls button,
+  .rm-header-actions button, .fl-header-actions button):hover {
+  background: var(--ui-control-hover) !important;
+  border-color: var(--ui-accent) !important;
+}
+html.cosmo-genius-restored :is(button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 3px;
+}
+html.cosmo-genius-restored .student-profile-button i.is-online { background: var(--ui-accent); }
+
+@media (max-width: 900px) {
+  html.cosmo-genius-restored .formula-reference-overlay .formula-mobile-top {
+    padding-left: 120px !important;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  html.cosmo-genius-restored .formula-reference-overlay .formula-mobile-top button {
+    flex: none;
+    height: 44px;
+    background: var(--ui-control);
+    border-color: var(--ui-control-line);
+    font-weight: 500;
+  }
+  html.cosmo-genius-restored :is(.unified-section-header nav button, .book-header-controls button,
+    .book-header-controls select, .book-search, .rm-search, .fl-search,
+    .rm-header-actions button, .fl-header-actions button) {
+    height: 44px !important;
+    min-height: 44px;
+  }
+  html.cosmo-genius-restored .unified-section-end { min-width: 0; }
+}
+html.cosmo-genius-restored .security-table {
+  background: var(--ui-panel);
+  border-color: var(--ui-line);
+  color: var(--ui-text);
+}
+html.cosmo-genius-restored .security-table-head {
+  background: var(--ui-control);
+  color: var(--ui-muted);
+  border-color: var(--ui-line);
+}
+html.cosmo-genius-restored .profile-title > div { min-width: 0; }
+html.cosmo-genius-restored .profile-title h1 { overflow-wrap: anywhere; }

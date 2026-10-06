@@ -3,11 +3,11 @@
 .book-bank-header{position:sticky;top:var(--book-sticky-top);z-index:42;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px;border:1px solid rgba(48,161,238,.38);border-radius:18px;background:rgba(3,17,32,.94);box-shadow:0 9px 30px rgba(0,8,20,.34);backdrop-filter:blur(15px);margin-bottom:18px}
 .book-heading{display:flex;align-items:center;gap:20px;flex-shrink:0}
 .book-heading>span{display:grid;place-items:center;flex:none;width:70px;height:70px;border:1px solid #ffc34e;border-radius:15px;color:#ffd079;font-size:47px;background:rgba(3,16,29,.83);box-shadow:0 0 23px rgba(255,186,59,.2),inset 0 0 15px rgba(248,173,42,.08)}
-.task-bank-hub.task-bank-hub .book-heading h1{margin:0 0 7px;font-size:clamp(31px,2.45vw,46px);font-weight:700;line-height:1.08;color:#ecf4ff;letter-spacing:-.025em;text-shadow:0 0 20px rgba(61,146,255,.2)}
+.task-bank-hub.task-bank-hub .book-heading h1{margin:0 0 7px;font-size:clamp(31px,2.45vw,46px);font-weight:600;line-height:1.08;color:#ecf4ff;letter-spacing:-.025em;text-shadow:0 0 20px rgba(61,146,255,.2)}
 .book-heading p{margin:0;font-size:15px;line-height:1.4;color:#b8cfe9}
 .book-header-controls{display:flex;align-items:center;gap:10px;min-width:0;flex:1;justify-content:flex-end}
 .book-header-controls button,.book-header-controls select,.book-search{height:58px!important;border:1px solid rgba(48,161,238,.65);border-radius:14px;background:#061c33;color:#e3f2ff}
-.book-header-controls button{padding:0 15px;font-size:15px;font-weight:550;white-space:nowrap}
+.book-header-controls button{padding:0 15px;font-size:15px;font-weight:500;white-space:nowrap}
 .book-header-controls select{width:98px;padding:0 9px;font-size:14px}
 .book-search{display:flex;align-items:center;gap:9px;padding:0 12px;flex:1;max-width:475px;min-width:130px;color:#9bcbeb}
 .book-search>span{font-size:25px}
@@ -18,7 +18,7 @@
 .book-areas{display:flex;gap:12px;overflow:auto;padding:0 0 11px;scrollbar-width:thin;scrollbar-color:#2497d5 transparent}
 .book-areas button{flex:none;min-height:52px;border:1px solid rgba(48,161,238,.65);background:#061c33;color:#d6e9f7;padding:0 22px;white-space:nowrap;border-radius:13px;font-size:15px}
 .book-areas button[aria-pressed=true]{color:#ffda86;background:rgba(185,111,25,.17);border-color:#ffc34e;box-shadow:0 0 14px rgba(255,179,52,.13)}
-.book-filter-toggle{display:flex;align-items:center;gap:12px;width:max-content;min-height:46px;margin-top:10px;padding:0 17px;border:1px solid rgba(48,161,238,.65);border-radius:11px;background:#061c33;color:#e6f3ff;font-size:15px;font-weight:700}
+.book-filter-toggle{display:flex;align-items:center;gap:12px;width:max-content;min-height:46px;margin-top:10px;padding:0 17px;border:1px solid rgba(48,161,238,.65);border-radius:11px;background:#061c33;color:#e6f3ff;font-size:15px;font-weight:600}
 .book-filter-toggle>span:first-child{font-size:24px;line-height:1;color:#9bcbeb}
 .book-filter-toggle>span:last-child{margin-left:6px;color:#a9cde8}
 .book-filter-toggle b{padding:2px 7px;border-radius:20px;background:#ffc34e;color:#061326;font-size:12px}
@@ -26,7 +26,7 @@
 .book-filter-grid[hidden]{display:none!important}
 .book-filter-grid label{display:grid;gap:7px;font-size:14px;color:#b8cfe9;min-width:0}
 .book-filter-grid input,.book-filter-grid select,.book-reset{height:46px;width:100%;min-width:0;box-sizing:border-box;border:1px solid rgba(48,161,238,.65);border-radius:11px;background:#061c33;color:#e3f2ff;padding:0 12px;font-size:14px}
-.book-reset{align-self:end;cursor:pointer;font-weight:600}
+.book-reset{align-self:end;cursor:pointer;font-weight:500}
 .book-filter-grid input::placeholder{color:#8aadc5}
 .book-header-controls button:hover,.book-header-controls button:focus-visible,.book-areas button:hover,.book-areas button:focus-visible,.book-filter-toggle:hover,.book-filter-toggle:focus-visible,.book-reset:hover,.book-reset:focus-visible{border-color:#ffc34e;color:#fff}
 .book-search:focus-within,.book-filter-grid input:focus,.book-filter-grid select:focus,.book-header-controls select:focus{outline:2px solid #ffc34e55;outline-offset:2px;border-color:#ffc34e}

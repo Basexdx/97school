@@ -18,7 +18,7 @@ html.cosmo-genius-restored .teacher-content .unified-section-header{
   backdrop-filter:blur(15px);
 }
 .unified-section-title{min-width:0}
-html.cosmo-genius-restored .unified-section-title h1{margin:0 0 3px;color:#f1f7ff;font-size:clamp(23px,2.1vw,30px);font-weight:700;line-height:1.15;letter-spacing:-.025em}
+html.cosmo-genius-restored .unified-section-title h1{margin:0 0 3px;color:#f1f7ff;font-size:clamp(23px,2.1vw,30px);font-weight:600;line-height:1.15;letter-spacing:-.025em}
 html.cosmo-genius-restored .unified-section-title p{margin:0;color:#9db5cb!important;font-size:13px;line-height:1.35}
 .unified-section-header nav,.unified-section-end{display:flex;align-items:center;gap:9px;min-width:0}
 .unified-section-header nav{flex:none}
@@ -35,7 +35,7 @@ html.cosmo-genius-restored .genius-reference-overlay:not(.formula-reference-over
   background:rgba(5,32,55,.88);
   color:#e3f2ff;
   font-size:13px;
-  font-weight:550;
+  font-weight:500;
   white-space:nowrap;
   cursor:pointer;
 }

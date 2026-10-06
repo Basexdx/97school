@@ -29,7 +29,7 @@
 }
 .g8-editorial-first10 .genius-lesson-top button{
   color:#c7dcec!important;
-  font-weight:600!important;
+  font-weight:500!important;
 }
 
 /* Paragraph header = the strongest framed element on the page. */
@@ -61,7 +61,7 @@
   background:linear-gradient(180deg,rgba(16,35,49,.92),rgba(7,20,33,.96));
   color:#ffc45b!important;
   font-size:42px!important;
-  font-weight:600!important;
+  font-weight:500!important;
   letter-spacing:-.045em;
   text-shadow:0 0 13px rgba(255,173,39,.18)!important;
   box-shadow:0 0 20px rgba(255,169,31,.09),inset 0 0 18px rgba(255,176,39,.025);
@@ -71,7 +71,7 @@
   margin:0 0 10px!important;
   font-size:clamp(27px,2.55vw,39px)!important;
   line-height:1.13!important;
-  font-weight:650!important;
+  font-weight:550!important;
   letter-spacing:-.018em;
 }
 .g8-editorial-first10 .g8-hero-copy p{
@@ -134,7 +134,7 @@
   color:#f1f7fc!important;
   font-size:24px!important;
   line-height:1.25!important;
-  font-weight:620!important;
+  font-weight:500!important;
   letter-spacing:-.01em;
 }
 .g8-editorial-first10 .g8-opening-card>p,
@@ -166,7 +166,7 @@
   line-height:1.58!important;
   font-weight:400!important;
 }
-.g8-editorial-first10 .g8-definition strong{font-weight:650!important}
+.g8-editorial-first10 .g8-definition strong{font-weight:550!important}
 .g8-editorial-first10 .g8-diagram{
   min-height:300px;
   margin:0!important;
@@ -208,7 +208,7 @@
   background:linear-gradient(90deg,rgba(89,57,12,.19),rgba(5,24,40,.42))!important;
   box-shadow:none!important;
 }
-.g8-editorial-first10 .genius-lesson-formula span{font-weight:650!important}
+.g8-editorial-first10 .genius-lesson-formula span{font-weight:550!important}
 .g8-editorial-first10 .genius-lesson-formula div{
   color:#ffe4a8!important;
   font-weight:520!important;
@@ -227,14 +227,14 @@
 .g8-editorial-first10 .g8-recap>span{
   color:#ffc451!important;
   font-size:10px!important;
-  font-weight:650!important;
+  font-weight:550!important;
   letter-spacing:.1em!important;
 }
 .g8-editorial-first10 .g8-recap h2{
   margin:4px 0 10px!important;
   color:#f4f7fa!important;
   font-size:21px!important;
-  font-weight:620!important;
+  font-weight:500!important;
 }
 .g8-editorial-first10 .g8-recap ul{
   columns:1!important;

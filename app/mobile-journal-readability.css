@@ -8,9 +8,9 @@ html.cosmo-genius-restored .student-content input,
 html.cosmo-genius-restored .student-content textarea{
   font-weight:400;
 }
-html.cosmo-genius-restored .student-content h1{font-weight:650}
+html.cosmo-genius-restored .student-content h1{font-weight:550}
 html.cosmo-genius-restored .student-content h2,
-html.cosmo-genius-restored .student-content h3{font-weight:600}
+html.cosmo-genius-restored .student-content h3{font-weight:500}
 html.cosmo-genius-restored .side-nav{font-weight:500!important}
 html.cosmo-genius-restored .bank-tile.viewed:not(.solved){opacity:.86}
 html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
@@ -24,7 +24,7 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
   }
   html.cosmo-genius-restored .mobile-nav-toggle span{
     font-size:14px!important;
-    font-weight:550!important;
+    font-weight:500!important;
   }
   html.cosmo-genius-restored .sidebar-light{
     width:min(304px,86vw)!important;
@@ -50,7 +50,7 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
   html.cosmo-genius-restored [class*='gradebookHead']{gap:10px!important;margin-bottom:12px!important}
   html.cosmo-genius-restored [class*='gradebookHead'] h2{
     font-size:22px!important;
-    font-weight:650!important;
+    font-weight:550!important;
     line-height:1.2!important;
   }
   html.cosmo-genius-restored [class*='gradebookHead'] p{
@@ -76,7 +76,7 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
   }
   html.cosmo-genius-restored [class*='gradebookWrap'] th b{
     font-size:14px!important;
-    font-weight:600!important;
+    font-weight:500!important;
     line-height:1.2!important;
   }
   html.cosmo-genius-restored [class*='gradebookWrap'] th small{
@@ -103,7 +103,7 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
     text-overflow:clip!important;
     overflow-wrap:anywhere;
     font-size:14.5px!important;
-    font-weight:550!important;
+    font-weight:500!important;
     line-height:1.3!important;
   }
   html.cosmo-genius-restored [class*='gradebookWrap'] [class*='studentAvatar']{
@@ -116,11 +116,11 @@ html.cosmo-genius-restored .bank-tile.viewed:not(.solved):hover{opacity:1}
     min-height:38px!important;
     padding:7px 5px!important;
     font-size:15px!important;
-    font-weight:600!important;
+    font-weight:500!important;
   }
   html.cosmo-genius-restored [class*='classAnalytics'] h2{
     font-size:21px!important;
-    font-weight:650!important;
+    font-weight:550!important;
   }
   html.cosmo-genius-restored [class*='classAnalytics'] h3,
   html.cosmo-genius-restored [class*='classAnalytics'] p,

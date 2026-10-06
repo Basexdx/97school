@@ -5,8 +5,8 @@
 .genius-room-layout{position:relative;display:grid;grid-template-columns:minmax(0,46%) minmax(0,54%);grid-template-rows:auto auto;align-content:center;min-height:calc(100svh - 74px);padding:34px clamp(24px,4.5vw,80px) 42px;box-sizing:border-box}
 .genius-room-copy,.genius-room-entry{position:relative;z-index:3;grid-column:1;max-width:610px}
 .genius-room-copy{grid-row:1;align-self:end}
-.genius-room-kicker{display:inline-block;margin-bottom:19px;padding:9px 17px;border:1px solid rgba(20,160,246,.65);border-radius:999px;background:rgba(2,17,34,.74);color:#18b8ff;font-size:13px;font-weight:750;letter-spacing:.07em}
-.genius-room-copy h1{margin:0;color:#fff;font-size:clamp(57px,5.6vw,96px);line-height:.96;font-weight:850;letter-spacing:-.065em;text-shadow:0 4px 20px rgba(0,0,0,.42)}
+.genius-room-kicker{display:inline-block;margin-bottom:19px;padding:9px 17px;border:1px solid rgba(20,160,246,.65);border-radius:999px;background:rgba(2,17,34,.74);color:#18b8ff;font-size:13px;font-weight:600;letter-spacing:.07em}
+.genius-room-copy h1{margin:0;color:#fff;font-size:clamp(57px,5.6vw,96px);line-height:.96;font-weight:600;letter-spacing:-.065em;text-shadow:0 4px 20px rgba(0,0,0,.42)}
 .genius-room-copy h1 span{display:block}.genius-room-copy h1 span+span{margin-top:5px;color:#12a9fa;text-shadow:0 2px 27px rgba(13,141,255,.22)}
 .genius-room-copy p{max-width:560px;margin:18px 0 0;color:#d2dfeb;font-size:clamp(16px,1.3vw,21px);line-height:1.5;text-shadow:0 2px 12px rgba(0,0,0,.65)}
 .genius-room-scene{position:absolute;z-index:0;inset:-74px 0 0;background:#031224 url('/landing/genius-room-autumn.webp') center center/cover no-repeat;pointer-events:none;animation:roomAppear .3s ease-out both}
@@ -14,11 +14,11 @@ html[data-season='winter'] .genius-room-scene{background-image:url('/landing/gen
 html[data-season='spring'] .genius-room-scene{background-image:url('/landing/genius-room-spring.webp')}
 html[data-season='summer'] .genius-room-scene{background-image:url('/landing/genius-room-summer.webp')}
 .genius-room-scene:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(1,9,21,.5),rgba(1,9,21,.1) 42%,transparent 70%)}
-.genius-room-books{position:absolute;z-index:2;left:65%;top:46.7%;width:21%;height:22.2%;display:flex;flex-direction:column;justify-content:space-around;transform:skewY(-1deg);color:#e79a66;font-size:clamp(10px,1.02vw,17px);font-weight:650;letter-spacing:.02em;text-shadow:0 0 8px rgba(254,104,17,.5),0 1px 3px #0b0b15;white-space:nowrap}
+.genius-room-books{position:absolute;z-index:2;left:65%;top:46.7%;width:21%;height:22.2%;display:flex;flex-direction:column;justify-content:space-around;transform:skewY(-1deg);color:#e79a66;font-size:clamp(10px,1.02vw,17px);font-weight:550;letter-spacing:.02em;text-shadow:0 0 8px rgba(254,104,17,.5),0 1px 3px #0b0b15;white-space:nowrap}
 .genius-room-books span{display:flex;align-items:center;height:25%;padding-left:2%}
 .genius-room-entry{grid-row:2;align-self:start;min-height:285px;margin-top:20px}
 .genius-room-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:590px;animation:roomFormIn .22s ease-out both}
-.genius-room-primary,.genius-room-secondary{display:inline-flex;align-items:center;justify-content:center;gap:11px;min-height:54px;padding:10px 16px;border-radius:13px;color:#fff;font-family:inherit;font-size:15px;font-weight:750;line-height:1.2;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.genius-room-primary,.genius-room-secondary{display:inline-flex;align-items:center;justify-content:center;gap:11px;min-height:54px;padding:10px 16px;border-radius:13px;color:#fff;font-family:inherit;font-size:15px;font-weight:600;line-height:1.2;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
 .genius-room-primary{border:1px solid #279af4;background:linear-gradient(105deg,#0dacf9,#076ff6);box-shadow:0 9px 25px rgba(0,120,255,.25)}
 .genius-room-secondary{border:1px solid rgba(57,155,228,.75);background:rgba(2,18,36,.85)}
 .genius-room-primary:hover,.genius-room-secondary:hover{transform:translateY(-2px);box-shadow:0 11px 27px rgba(0,120,255,.3)}
@@ -26,7 +26,7 @@ html[data-season='summer'] .genius-room-scene{background-image:url('/landing/gen
 .genius-room-choices button span{font-size:21px;line-height:1}
 .genius-room-login{max-width:590px;padding:13px 16px 11px;border:1px solid rgba(48,146,217,.55);border-radius:17px;background:rgba(2,16,33,.88);box-shadow:0 18px 50px rgba(0,5,15,.36);backdrop-filter:blur(14px);animation:roomFormIn .22s ease-out both}
 .genius-room-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid rgba(58,135,203,.45);border-radius:11px;background:rgba(1,14,31,.85)}
-.genius-room-tabs button{min-height:44px;border:0;border-radius:8px;background:transparent;color:#bacde1;font-size:14px;font-weight:700;cursor:pointer}
+.genius-room-tabs button{min-height:44px;border:0;border-radius:8px;background:transparent;color:#bacde1;font-size:14px;font-weight:600;cursor:pointer}
 .genius-room-tabs button.active{background:linear-gradient(105deg,#0b9ee9,#086deb);color:white;box-shadow:0 4px 15px rgba(0,120,255,.22)}
 .genius-room-login form{display:grid;gap:7px;margin-top:13px}
 .genius-room-login form label{color:#d9e9f7;font-size:12px}
