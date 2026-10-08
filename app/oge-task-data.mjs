@@ -1,4 +1,5 @@
 import {ogeImportedTasks} from './oge-task-data-14-16.mjs'
+import {withVerifiedOgeKey} from '../shared/verified-task-keys.mjs'
 import {ogeMatchingTasks} from './oge-task-data-1.mjs'
 import {ogeType3Tasks} from './oge-task-data-3.mjs'
 import {ogeType4Tasks} from './oge-task-data-4.mjs'
@@ -12,7 +13,7 @@ import {ogeType20Tasks} from './oge-task-data-20.mjs'
 import {ogeType21Tasks} from './oge-task-data-21.mjs'
 import {ogeType22Tasks} from './oge-task-data-22.mjs'
 
-export const OGE_BANK_VERSION='2.7.0-oge-calculations-20-21-22'
+export const OGE_BANK_VERSION='2.8.0-verified-answer-keys'
 
 const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
   id:`oge-${type}-${sourceNo}`,
@@ -104,7 +105,7 @@ export const ogeTasks=[
   task(7,29835,'Два шара полностью погружены в воду: шар 1 на глубину 8 см, шар 2 на глубину 20 см. Объём шара 1 в два раза больше объёма шара 2. На шар 2 действует выталкивающая сила, равная 2,4 Н. Определите выталкивающую силу, действующую на шар 1. Ответ запишите в ньютонах.',4.8,'Н',{kind:'buoyancy'}),
   task(7,32438,'Какой выигрыш в силе при подъёме тела даёт система из идеальных блоков, показанная на рисунке?',2,'раз',{kind:'pulley',variant:'advantage2'}),
   ...ogeImportedTasks,
-].map(t=>({...t,xp:t.xp??([1,4,14,16].includes(t.type)?20:10)}))
+].map(withVerifiedOgeKey).map(t=>({...t,xp:t.xp??([1,4,14,16].includes(t.type)?20:10)}))
 
 export const ogeCounts=Object.fromEntries([...Array(22)].map((_,index)=>[index+1,ogeTasks.filter(t=>t.type===index+1).length]))
 ogeCounts.total=ogeTasks.length

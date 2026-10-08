@@ -89,10 +89,10 @@ function Grade7TaskCard({task,submit,attempts,back,previousId,nextId,navigate,po
   </article>
 }
 
-function emptyAnswer(spec){if(spec.mode==='numeric_list')return (spec.fields||spec.values||[]).map(()=> '');if(spec.mode==='parts')return (spec.parts||[]).map(()=> '');if(spec.mode==='set')return [];return ''}
-function answerReady(spec,value){if(spec.mode==='numeric_list'||spec.mode==='parts')return value.every(v=>String(v).trim());if(spec.mode==='set')return value.length>0;return String(value).trim().length>0}
+export function emptyAnswer(spec){if(spec.mode==='numeric_list')return (spec.fields||spec.values||[]).map(()=> '');if(spec.mode==='parts')return (spec.parts||[]).map(()=> '');if(spec.mode==='set')return [];return ''}
+export function answerReady(spec,value){if(spec.mode==='numeric_list'||spec.mode==='parts')return value.every(v=>String(v).trim());if(spec.mode==='set')return value.length>0;return String(value).trim().length>0}
 
-function AnswerFields({task,value,onChange}){
+export function AnswerFields({task,value,onChange}){
   const spec=task.ANSWER
   if(spec.mode==='numeric')return <label className={styles.answerBox}><span>{task.ANSWER_PROMPT||'Введите ответ'}</span><div><input inputMode="decimal" value={value} onChange={e=>onChange(e.target.value)} placeholder="Ответ"/><em>{spec.unit}</em></div></label>
   if(spec.mode==='numeric_list')return <div className={styles.multiFields}>{spec.fields.map((f,i)=><label key={i}><span>{f.label}</span><div><input inputMode="decimal" value={value?.[i]??''} onChange={e=>{const a=[...value];a[i]=e.target.value;onChange(a)}}/><em>{f.unit}</em></div></label>)}</div>

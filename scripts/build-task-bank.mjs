@@ -1,3 +1,4 @@
+import {withVerifiedTextbookKey} from '../shared/verified-task-keys.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import {taskPreview} from '../shared/task-preview.mjs'
 import fs from 'node:fs'
@@ -38,7 +39,7 @@ function toPublicTask(t,version){
 }
 
 function buildGrade8(){
-  const tasks=[...read('bank/tasks.json'),...read('bank/tasks-grade8-additions.json'),...grade8Additions],paragraphs=read('bank/paragraphs.json'),ids=new Set()
+  const tasks=[...read('bank/tasks.json'),...read('bank/tasks-grade8-additions.json'),...grade8Additions].map(withVerifiedTextbookKey),paragraphs=read('bank/paragraphs.json'),ids=new Set()
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==8) throw Error(`${t.ID}: wrong class`)
@@ -95,7 +96,7 @@ function buildGrade7(){
 }
 
 function buildGrade9(){
-  const tasks=[...read('bank/tasks-grade9.json'),...grade9Additions],ids=new Set(),allowedParagraphs=new Set([51,52,53,54,57,61])
+  const tasks=[...read('bank/tasks-grade9.json'),...grade9Additions].map(withVerifiedTextbookKey),ids=new Set(),allowedParagraphs=new Set([51,52,53,54,57,61])
   for(const t of tasks){
     validateCommon(t,ids)
     if(t.CLASS!==9) throw Error(`${t.ID}: wrong class`)

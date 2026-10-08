@@ -8,14 +8,43 @@ import grade9Pack from '../../public/task-bank/grade9.json'
 import {grade8RuntimeAdditions} from '../../bank/peryshkin-runtime-additions.mjs'
 import {checkAnswer,publishable} from '../../shared/task-checker.mjs'
 import {TASK_BANK_VERSION,TASK_BANK_VERSION_7,TASK_BANK_VERSION_9} from '../../shared/task-bank-meta.mjs'
+import {withVerifiedTextbookKey} from '../../shared/verified-task-keys.mjs'
 
-const allTasks=[...tasks8,...tasks8extra,...grade8RuntimeAdditions,...(grade7Pack.tasks||[]),...(grade9Pack.tasks||[])]
+const allTasks=[...tasks8,...tasks8extra,...grade8RuntimeAdditions,...(grade7Pack.tasks||[]),...(grade9Pack.tasks||[])].map(withVerifiedTextbookKey)
 const ogeById=new Map(ogeTasks.map(t=>[t.id,t]))
 const byId=new Map(allTasks.filter(publishable).map(t=>[t.ID,t]))
 const versionForGrade=grade=>Number(grade)===7?TASK_BANK_VERSION_7:Number(grade)===9?TASK_BANK_VERSION_9:TASK_BANK_VERSION
 const gradeSql="CASE WHEN task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN task_id LIKE 'oge-%' THEN (SELECT current_grade FROM students WHERE id=a.student_id) WHEN task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END"
 const json=(v,status=200)=>new Response(JSON.stringify(v),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}})
 const digest=async s=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s))),b=>b.toString(16).padStart(2,'0')).join('')
+
+// Old free-form answers may have used different table constants. Confirm only
+// demonstrably correct answers; leave other historical answers for the teacher.
+async function confirmPreviouslyPending(env,scope,params){
+ const rows=await env.DB.prepare(`SELECT a.*,a.rowid AS attempt_rowid FROM task_attempts a
+ JOIN students s ON s.id=a.student_id JOIN classes c ON c.id=s.class_id
+ WHERE a.status='PENDING_REVIEW' AND ${scope} ORDER BY a.received_at,a.rowid`).bind(...params).all()
+ for(const row of rows.results||[]){
+  const oge=ogeById.get(row.task_id),book=byId.get(row.task_id)
+  if(!(oge?.answerVerified||book?.ANSWER_VERIFIED))continue
+  let answer
+  try{answer=JSON.parse(row.answer_json)}catch{continue}
+  const checked=oge?checkOgeAttempt(oge,answer):checkAnswer(book,answer)
+  if(checked.correct!==true)continue
+  const update=env.DB.prepare(`UPDATE task_attempts SET correct=1,status='CONFIRMED'
+   WHERE student_id=? AND attempt_id=? AND status='PENDING_REVIEW'`).bind(row.student_id,row.attempt_id)
+  const award=env.DB.prepare(`INSERT OR IGNORE INTO task_awards(student_id,task_id,attempt_id,amount)
+   SELECT student_id,task_id,attempt_id,CASE
+    WHEN ordinal=1 THEN max_xp WHEN ordinal=2 THEN CAST(max_xp*0.7 AS INTEGER)
+    WHEN ordinal=3 THEN CAST(max_xp*0.4 AS INTEGER) ELSE CAST(max_xp*0.2 AS INTEGER) END
+   FROM (SELECT a.*,(SELECT COUNT(*) FROM task_attempts p WHERE p.student_id=a.student_id AND p.task_id=a.task_id
+    AND (p.received_at<a.received_at OR (p.received_at=a.received_at AND p.rowid<=a.rowid))) AS ordinal
+    FROM task_attempts a WHERE a.student_id=? AND a.attempt_id=? AND a.status='CONFIRMED' AND a.correct=1)
+   `).bind(row.student_id,row.attempt_id)
+  if(env.DB.batch)await env.DB.batch([update,award])
+  else{await update.run();await award.run()}
+ }
+}
 
 export async function teacherTaskCatalog(request){
  const url=new URL(request.url),source=url.searchParams.get('source')||'peryshkin',grade=Number(url.searchParams.get('grade')||8),page=Math.max(0,Math.min(1000,Number(url.searchParams.get('page'))||0))
@@ -29,6 +58,7 @@ export async function teacherTaskCatalog(request){
 export async function teacherTaskDetail(env,teacher,id){
  const oge=ogeById.get(id),book=byId.get(id)
  if(!oge&&!book)return json({error:'task_not_found'},404)
+ await confirmPreviouslyPending(env,'c.teacher_id=? AND a.task_id=? AND s.status=\'ACTIVE\'',[teacher.id,id])
  const task=oge?{ID:oge.id,CLASS:9,TOPIC:sectionsForTask(oge).join(' · '),TASK:oge.text,BOOK_TASK_NUMBER:oge.sourceNo,XP:oge.xp,ANSWER:oge.answer==null?{mode:'manual'}:Array.isArray(oge.answer)?{mode:'sequence',values:oge.answer}:{mode:'numeric',value:oge.answer,unit:oge.unit},oge}:book
  const rows=await env.DB.prepare(`SELECT s.id,s.nickname,c.title AS class_name,a.attempt_id,a.correct,a.status,a.received_at,w.amount AS xp
  FROM students s JOIN classes c ON c.id=s.class_id
@@ -47,6 +77,7 @@ export async function teacherTaskDetail(env,teacher,id){
 
 export async function taskProgress(env,student) {
   const grade=Number(student.grade)
+  await confirmPreviouslyPending(env,'a.student_id=?',[student.id])
   const rows=await env.DB.prepare(`SELECT a.task_id,a.attempt_id,a.event_id,a.correct,a.status,a.received_at,
     COALESCE((SELECT amount FROM task_awards w WHERE w.student_id=a.student_id AND w.task_id=a.task_id AND w.attempt_id=a.attempt_id),0) AS xp_awarded
     FROM task_attempts a

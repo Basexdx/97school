@@ -1,6 +1,7 @@
 'use client'
 
 import TaskFigureViewer from './task-figure-viewer'
+import {AnswerFields,emptyAnswer,answerReady} from './grade7-task-bank'
 import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
@@ -121,13 +122,14 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
 }
 
 function TaskCard({task:t,submit,back,goLearn,student,attempts,message,navigate,previousId,nextId,position,total}) {
-  const [answer,setAnswer]=useState(()=>t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):''),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
+  const [answer,setAnswer]=useState(()=>t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):emptyAnswer(t.ANSWER)),[result,setResult]=useState(null),[busy,setBusy]=useState(false),[error,setError]=useState('')
   const latest=attempts.at(-1),wrongCount=attempts.filter(a=>answerState(a)===false).length,solved=attempts.some(a=>answerState(a)===true)
   async function check(e){e.preventDefault();setBusy(true);setError('');try{const checked=await submit(t,answer);setResult(checked)}catch(e){setError(e.message)}finally{setBusy(false)}}
-  function tryAgain(){setAnswer(t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):'');setResult(null);setError('')}
+  function tryAgain(){setAnswer(t.TASK_TYPE==='matching'?emptyMatchingAnswer(t):emptyAnswer(t.ANSWER));setResult(null);setError('')}
   const location=Number.isInteger(t.PARAGRAPH)?`§${t.PARAGRAPH}`:'Дополнительная тема 8 класса'
   const isAdvanced=t.DIFFICULTY==='ПОВЫШЕННЫЙ'||t.DIFFICULTY==='ВЫСОКИЙ'
   const manual=t.ANSWER?.mode==='manual'
+  const multipart=t.ANSWER?.mode==='parts'||t.ANSWER?.mode==='numeric_list'
 
   return <article className="bank-page bank-detail bank-v11 bank-v12">
     <div className="bank-detail-top">
@@ -145,9 +147,9 @@ function TaskCard({task:t,submit,back,goLearn,student,attempts,message,navigate,
       <div className="bank-card-title"><span>01</span><h2>Условие</h2></div>
       {t.TASK_TYPE!=='matching'&&<div className="bank-task-text">{t.TASK}</div>}
       {t.DIAGRAM&&<TaskFigureViewer label={`Рисунок к задаче ${t.BOOK_TASK_NUMBER||t.ID}`}><TaskDiagram spec={t.DIAGRAM}/></TaskFigureViewer>}
-      <form onSubmit={check}>{t.TASK_TYPE==='matching'?<MatchingTaskFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:<label className="bank-answer"><span>{t.ANSWER_PROMPT||'Введите ответ'}</span>{manual?<textarea rows={5} autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder="Введите ответ" required/>:<input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder={t.TASK_TYPE==='single_choice'?'Номер варианта':'Введите число'} required/>}<small>{manual?'Ответ сохранится в попытке. Автоматическая проверка для задач из сборника будет добавлена позже.':t.TASK_TYPE==='single_choice'?'Введите номер выбранного варианта.':'Можно использовать точку или запятую для десятичной дроби.'}</small></label>}<div className="bank-submit-row"><button className="bank-primary" disabled={busy||(t.TASK_TYPE==='matching'?!matchingAnswerReady(answer):!String(answer).trim())}>{busy?'Сохраняю…':manual?'Сохранить ответ':'Проверить ответ'}</button>{attempts.length>0&&<span>Попыток: {attempts.length}</span>}</div></form>
+      <form onSubmit={check}>{t.TASK_TYPE==='matching'?<MatchingTaskFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:multipart?<AnswerFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:<label className="bank-answer"><span>{t.ANSWER_PROMPT||'Введите ответ'}</span>{manual?<textarea rows={5} autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder="Введите ответ" required/>:<input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder={t.TASK_TYPE==='single_choice'?'Номер варианта':'Введите число'} required/>}<small>{manual?'Краткий ответ сохранится для проверки учителем.':t.TASK_TYPE==='single_choice'?'Введите номер выбранного варианта.':'Можно использовать точку или запятую для десятичной дроби.'}</small></label>}<div className="bank-submit-row"><button className="bank-primary" disabled={busy||(t.TASK_TYPE==='matching'?!matchingAnswerReady(answer):!answerReady(t.ANSWER,answer))}>{busy?'Сохраняю…':manual?'Сохранить ответ':'Проверить ответ'}</button>{attempts.length>0&&<span>Попыток: {attempts.length}</span>}</div></form>
       {(error||message)&&<p role="alert" className="bank-inline-message">{error||message}</p>}
-      {result&&result.correct===null&&<div role="status" className="bank-feedback manual"><div className="bank-feedback-icon">◇</div><div><strong>Ответ сохранён</strong><p>Для этой задачи пока не включена автоматическая проверка и не опубликовано решение. Можно перейти к следующей задаче стрелкой.</p></div></div>}
+      {result&&result.correct===null&&<div role="status" className="bank-feedback manual"><div className="bank-feedback-icon">◇</div><div><strong>Ответ сохранён</strong><p>Качественный ответ проверяет учитель по эталону. Можно перейти к следующей задаче стрелкой.</p></div></div>}
       {result&&result.correct!==null&&<div role="status" className={`bank-feedback ${result.correct?'right':'wrong'}`}><div className="bank-feedback-icon">{result.correct?'✓':'×'}</div><div><strong>{result.correct?'Верно!':'Ответ пока неверный'}</strong><p>{result.correct?(!student?'Результат сохранён локально. В режиме ученика сервер подтвердит XP.':latest?.status==='CONFIRMED'?`Сервер подтвердил ответ. XP за эту задачу: ${latest.result?.xpAwarded||0}.`:'Попытка сохранена и ожидает серверной синхронизации.'):'Проверь вычисления и попробуй ещё раз. Решение для этой сборки пока не опубликовано.'}</p>{!result.correct&&<button type="button" onClick={tryAgain}>Попробовать ещё</button>}</div></div>}
     </section>
 

@@ -6,7 +6,7 @@ export function checkOgeChoiceAnswer(task,selection){
   if(!Array.isArray(task.answer))return null
   if(!Array.isArray(selection)||selection.length!==requiredOgeChoices(task))return false
   const parsed=parseOgeChoiceInput(selection.join(''),task)
-  return parsed!==null&&parsed.length===task.answer.length&&parsed.every(value=>task.answer.includes(value))
+  return parsed!==null&&[task.answer,...(task.answerAlternatives||[])].some(key=>parsed.length===key.length&&parsed.every(value=>key.includes(value)))
 }
 
 export function parseOgeChoiceInput(value,task){

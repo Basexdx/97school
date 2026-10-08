@@ -117,8 +117,8 @@ test('Teacher statistics include every own active pupil and the first successful
  assert.equal(detail.students.find(s=>s.id==='stats_not_started').attempts,0)
  assert.equal(detail.students.find(s=>s.id==='stats_not_started').solvedAttempt,null)
  assert.ok(!detail.students.some(s=>['stats_foreign','stats_suspended'].includes(s.id)))
- const missing=ogeTasks.find(t=>t.answer==null)
- result=await submit([{...attempts[0],attemptId:'stats_unknown_key',eventId:'stats_unknown_event',taskId:missing.id,answer:[1,2,3]}])
+ const missing={id:'genius-peryshkin9-1588'}
+ result=await submit([{...attempts[0],attemptId:'stats_unknown_key',eventId:'stats_unknown_event',taskId:missing.id,version:(await import('../shared/task-bank-meta.mjs')).TASK_BANK_VERSION_9,answer:'Измерить время падения и высоту'}])
  assert.equal(result.results[0].status,'PENDING_REVIEW')
  assert.equal(result.results[0].correct,null)
  assert.equal((await get('/api/teacher/tasks/'+missing.id)).students.find(s=>s.id==='stats_pupil').pendingReview,true)
@@ -153,4 +153,32 @@ test('High difficulty FIPI calculation attempts are persisted and award their de
  assert.equal(result.data.results[0].correct,true)
  assert.equal(result.data.results[0].xpAwarded,40)
  assert.equal(dbCall("SELECT max_xp FROM task_attempts WHERE student_id='test_student' AND attempt_id=?",[item.attemptId])[0].max_xp,40)
+})
+
+test('Verified keys confirm old correct attempts once, preserve uncertain answers and award the original attempt discount',async()=>{
+ const id='verified_keys_pupil',token='verified_keys_token'
+ const tokenHash=Buffer.from(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(token))).toString('hex')
+ dbCall("INSERT INTO students(id,class_id,current_grade) VALUES(?,'class_8B',8)",[id])
+ dbCall("INSERT INTO student_sessions(id,student_id,token_hash,expires_at) VALUES('verified_keys_session',?,?,'2099-01-01T00:00:00Z')",[id,tokenHash])
+ const insert=(attempt,task,answer,xp=10)=>dbCall(`INSERT INTO task_attempts(student_id,attempt_id,event_id,task_id,content_version,payload_hash,answer_json,correct,status,max_xp)
+ VALUES(?,?,?,?,?,'original_hash',?,NULL,'PENDING_REVIEW',?)`,[id,attempt,'event_'+attempt,task,'previous_bank_version',JSON.stringify(answer),xp])
+ insert('old_wrong','genius-peryshkin-739','20000')
+ insert('old_right','genius-peryshkin-739','21000')
+ insert('old_equivalent','oge-1-1182',['5','3','4'],20)
+ insert('old_free_text','genius-peryshkin-736','Для 1 кг на 1 градус нужно 920 Дж')
+ const progress=async()=>{
+  const r=await worker.fetch(new Request('https://genius.test/api/student/task-attempts',{headers:{cookie:'genius_student='+token}}),env)
+  assert.equal(r.status,200);return r.json()
+ }
+ for(let i=0;i<2;i++){
+  const data=await progress()
+  assert.equal(data.totalXp,27)
+  assert.equal(data.attempts.find(a=>a.attempt_id==='old_right').xp_awarded,7)
+  assert.equal(data.attempts.find(a=>a.attempt_id==='old_right').status,'CONFIRMED')
+  assert.equal(data.attempts.find(a=>a.attempt_id==='old_equivalent').correct,1)
+  assert.equal(data.attempts.find(a=>a.attempt_id==='old_wrong').status,'PENDING_REVIEW')
+  assert.equal(data.attempts.find(a=>a.attempt_id==='old_free_text').status,'PENDING_REVIEW')
+ }
+ assert.equal(dbCall('SELECT count(*) AS n FROM task_awards WHERE student_id=?',[id])[0].n,2)
+ assert.ok(dbCall('SELECT payload_hash FROM task_attempts WHERE student_id=?',[id]).every(a=>a.payload_hash==='original_hash'))
 })

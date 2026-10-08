@@ -76,7 +76,9 @@ export default function OgeTaskBank({onBack,onHome}){
       const savedAnswers=JSON.parse(localStorage.getItem(ANSWERS_KEY)||'null')
       setAnswers(restoreOgeChoiceAnswers(savedAnswers,ogeTasks))
       setClozeAnswers(restoreOgeClozeAnswers(JSON.parse(localStorage.getItem(CLOZE_ANSWERS_KEY)||'null'),ogeTasks))
-      setMatchingAnswers(restoreOgeMatchingAnswers(JSON.parse(localStorage.getItem(MATCHING_ANSWERS_KEY)||'null'),ogeTasks))
+      const restoredMatching=restoreOgeMatchingAnswers(JSON.parse(localStorage.getItem(MATCHING_ANSWERS_KEY)||'null'),ogeTasks)
+      setMatchingAnswers(restoredMatching)
+      setSolved(previous=>new Set([...previous,...ogeTasks.filter(t=>restoredMatching[t.id]&&checkOgeAttempt(t,restoredMatching[t.id]).correct===true).map(t=>t.id)]))
       setCalculationAnswers(restoreOgeCalculationDrafts(JSON.parse(localStorage.getItem(CALCULATION_ANSWERS_KEY)||'null'),ogeTasks))
     }catch{}
     setReady(true)
@@ -115,7 +117,7 @@ export default function OgeTaskBank({onBack,onHome}){
     function renderDetail(){
     if(current.kind==='calculation')return <OgeCalculationDetail key={current.id} {...props} saved={calculationAnswers[current.id]} onSave={draft=>{if(draft.checked)recordAttempt(current,draft.answer);setCalculationAnswers(previous=>({...previous,[current.id]:draft}));if(draft.checked&&checkOgeCalculationAnswer(current,draft.answer))markSolved(current.id)}}/>
     if(current.kind==='cloze'||current.kind==='change')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{recordAttempt(current,values);setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
-    if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>{recordAttempt(current,answer);setMatchingAnswers(previous=>({...previous,[current.id]:answer}))}}/>
+    if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>{recordAttempt(current,answer);setMatchingAnswers(previous=>({...previous,[current.id]:answer}));if(checkOgeAttempt(current,answer).correct===true)markSolved(current.id)}}/>
     return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>{recordAttempt(current,selection);setAnswers(previous=>({...previous,[current.id]:selection}));if(checkOgeChoiceAnswer(current,selection)===true)markSolved(current.id)}}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)} onAttempt={answer=>recordAttempt(current,answer)}/>
     }
     return <>{syncNotice&&<p role="status" className="bank-note">{syncNotice}</p>}{renderDetail()}</>
@@ -154,9 +156,10 @@ export function OgeChoiceDetail({task,position,total,back,previous,next,navigate
   function save(event){event.preventDefault();if(selection.length===count&&!isSaved)onSave([...selection])}
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
-    <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label} · {task.section}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.figures.length?'С рисунком или таблицей':'Без рисунка'}</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
+    <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label} · {task.section}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.figures.length||task.tables?.length?'С рисунком или таблицей':'Без рисунка'}</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
     <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.choicePrompt}>{task.text}</p>
       {task.figures.map((src,index)=><TaskFigureViewer label={`Рисунок к заданию № ${task.sourceNo}`} key={src}><figure className={styles.sourceFigure}><img src={src} alt={`Рисунок или таблица к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure></TaskFigureViewer>)}
+      {task.tables?.map((table,index)=><div className={styles.calculationTable} key={index}><table><thead><tr>{table[0].map((cell,i)=><th key={i}>{cell}</th>)}</tr></thead><tbody>{table.slice(1).map((row,i)=><tr key={i}>{row.map((cell,j)=><td key={j}>{cell}</td>)}</tr>)}</tbody></table></div>)}
       <div className={styles.choiceHeading}>Выберите {count===1?'один вариант':'два утверждения'}</div>
       <div className={styles.choiceOptions}>{task.options.map((option,index)=><button type="button" key={index} aria-pressed={selection.includes(index+1)} className={selection.includes(index+1)?styles.chosen:''} onClick={()=>choose(index+1)}><span>{index+1}</span>{option}</button>)}</div>
       <form onSubmit={save}><label className={styles.choiceAnswerInput}><span>Или введите {count===1?'номер варианта':'два номера вариантов'}</span><input type="text" inputMode="numeric" autoComplete="off" value={selection.join('')} onChange={event=>{const parsed=parseOgeChoiceInput(event.target.value,task);if(parsed)setSelection(parsed)}} placeholder={count===1?'Например, 3':'Например, 24'} aria-label="Номера выбранных ответов"/><small>Номера от 1 до {task.options.length}{count===2?', без повторов':''}.</small></label>

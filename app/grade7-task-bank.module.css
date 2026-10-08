@@ -15,3 +15,11 @@
 .question,.xpCard,.tile{background:var(--ui-panel);border-color:var(--ui-line)}
 .topNav>button,.topNav div button,.bottomNav button,.answerBox input{background:var(--ui-control);border-color:var(--ui-control-line);color:var(--ui-text)}
 .primary{background:var(--ui-primary);font-weight:500}
+
+/* Shared answer fields also appear in the grade 8–9 task form. */
+.multiFields,.multiFields *,.answerBox,.answerBox *{box-sizing:border-box;min-width:0}
+.multiFields fieldset{min-inline-size:0}
+.multiFields input:not([type=radio]):not([type=checkbox]){width:100%}
+.multiFields .choices label{position:relative}
+.multiFields .choices input{width:1px;height:1px;inset:0}
+.multiFields label>span,.choices legend{overflow-wrap:anywhere}
