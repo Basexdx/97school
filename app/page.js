@@ -4,6 +4,11 @@ import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectionScreen from './connection-screen'
 import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
+import TeacherAccessPanel from './teacher-access-panel'
+import TeacherSessionConnect from './teacher-session-connect'
+import {accessApi} from './access-api.mjs'
+import {useSchoolToday} from './school-today'
+import {formatSchoolDate} from '../shared/academic-calendar.mjs'
 import LandingRoom from './landing-room'
 import {ReferenceOverlay} from './genius-v17-enhancer'
 import {ReferenceMaterialsPage} from './reference-materials'
@@ -647,29 +652,22 @@ function Profile({ grade, setGrade, xp }) {
   </>
 }
 
-function TeacherSectionHeader({title,description,onBack,onHome,children}){
-  return <header className="teacher-head unified-section-header"><div className="unified-section-title"><h1>{title}</h1><p>{description}</p></div><div className="unified-section-end">{children}<nav aria-label="Навигация по разделам"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></div></header>
+function TeacherSectionHeader({title,description,onBack,onHome,children,icon}){
+  return <header className="teacher-head unified-section-header"><div className="unified-section-title"><span className="teacher-section-icon" aria-hidden="true">{icon}</span><div><h1>{title}</h1><p>{description}</p></div></div><div className="unified-section-end">{children}<nav aria-label="Навигация по разделам"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></div></header>
 }
 
 function TeacherDashboard({ setScreen, request, setRequest }) {
   const [tab, setTab] = useState(() => {
-    try {return sessionStorage.getItem('genius:teacher-tab:v1')|| (request?.status === 'PENDING' ? 'requests' : 'classes')} catch {return request?.status === 'PENDING' ? 'requests' : 'classes'}
+    try {const saved=sessionStorage.getItem('genius:teacher-tab:v1');return ['classes','academic','requests','keys','bank'].includes(saved)?saved: (request?.status === 'PENDING' ? 'requests' : 'classes')} catch {return request?.status === 'PENDING' ? 'requests' : 'classes'}
   })
   useEffect(()=>{try {sessionStorage.setItem('genius:teacher-tab:v1',tab)} catch {}},[tab])
   const [previousTab,setPreviousTab]=useState('classes')
   const [menuOpen,setMenuOpen]=useState(false)
   const chooseTab=value=>{if(value!==tab){setPreviousTab(tab);setTab(value)}setMenuOpen(false)}
-  const pendingCount = request?.status === 'PENDING' ? 1 : 0
-
-  function approveRequest() {
-    if (!request) return
-    setRequest({...request, status:'APPROVED', approvedAt:new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})})
-  }
-
-  function rejectRequest() {
-    if (!request) return
-    setRequest({...request, status:'REJECTED'})
-  }
+  const [pendingCount,setPendingCount]=useState(0)
+  const [teacherClasses,setTeacherClasses]=useState([]),[classError,setClassError]=useState(''),[selectedClass,setSelectedClass]=useState(''),[needsSession,setNeedsSession]=useState(false),[sessionRevision,setSessionRevision]=useState(0)
+  const today=useSchoolToday()
+  useEffect(()=>{const controller=new AbortController();accessApi('/api/teacher/classes',{signal:controller.signal}).then(data=>{setTeacherClasses(data.classes);setClassError('');setNeedsSession(false)}).catch(e=>{if(e.name!=='AbortError'){setClassError(e.message);setNeedsSession(e.status===401)}});accessApi('/api/teacher/connection-requests',{signal:controller.signal}).then(data=>setPendingCount(data.requests.filter(r=>r.status==='PENDING').length)).catch(()=>{});return()=>controller.abort()},[tab,sessionRevision])
 
   return <div className="student-app">
     <button type="button" className="mobile-nav-toggle" aria-controls="teacher-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
@@ -681,44 +679,33 @@ function TeacherDashboard({ setScreen, request, setRequest }) {
         <button className={`side-nav ${tab === 'academic' ? 'active' : ''}`} onClick={() => chooseTab('academic')}><span>▤</span>Дневник и ДЗ</button>
         <button className={`side-nav ${tab === 'requests' ? 'active' : ''}`} onClick={() => chooseTab('requests')}><span>◎</span>Запросы {pendingCount > 0 && <b className="nav-badge">{pendingCount}</b>}</button>
         <button className={`side-nav ${tab === 'keys' ? 'active' : ''}`} onClick={() => chooseTab('keys')}><span>⌁</span>Ключи доступа</button>
-        <button className={`side-nav ${tab === 'results' ? 'active' : ''}`} onClick={() => chooseTab('results')}><span>▣</span>Результаты</button>
         <button className={`side-nav ${tab === 'bank' ? 'active' : ''}`} onClick={() => chooseTab('bank')}><span>◇</span>Банк задач</button>
       </nav>
       <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
     </aside>
     <main className="student-content teacher-content" data-section={tab}>
+      {needsSession&&<TeacherSessionConnect onConnected={()=>{setNeedsSession(false);setSessionRevision(v=>v+1)}}/>}
       {tab === 'classes' && <>
-        <TeacherSectionHeader title="Мои классы" description="Управление учебными группами без лишних персональных данных." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><button className="blue-btn small">+ Создать класс</button></TeacherSectionHeader>
-        <div className="teacher-classes">{[['7А','24 ученика','88%'],['8Б','28 учеников','92%'],['9А','25 учеников','76%'],['9Б','30 учеников','68%']].map(c => <div key={c[0]}><span>{c[0]}</span><div><strong>{c[1]}</strong><small>Активность: {c[2]}</small></div><button onClick={() => chooseTab('academic')}>Открыть →</button></div>)}</div>
+        <TeacherSectionHeader icon="▦" title="Мои классы" description="Учебные группы и журнал по физике." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><span className="teacher-today" title={formatSchoolDate(today)}>Сегодня</span></TeacherSectionHeader>
+        {classError&&<p role="alert" className="bank-note">{classError}</p>}
+        <div className="teacher-class-grid">{teacherClasses.map(c=><article key={c.id}><span className="teacher-class-icon" aria-hidden="true">▦</span><h2>{c.title}</h2><p>{c.grade} класс · {c.student_count} учеников</p><button onClick={()=>{setSelectedClass(c.id);chooseTab('academic')}}>Открыть журнал →</button></article>)}</div>
+        {!classError&&!teacherClasses.length&&<p>Учебных классов пока нет.</p>}
         <h2 className="quick-title">Быстрые действия</h2>
         <div className="quick-grid"><button onClick={() => chooseTab('keys')}>⌁<span>Выдать ключ</span></button><button onClick={() => chooseTab('requests')}>◎<span>Запросы на подключение</span></button><button onClick={() => chooseTab('academic')}>▤<span>Открыть дневник</span></button></div>
       </>}
 
-      {tab === 'academic' && <TeacherAcademic onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
+      {tab === 'academic' && <TeacherAcademic initialClassId={selectedClass} classes={teacherClasses} onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
 
       {tab === 'requests' && <>
-        <TeacherSectionHeader title="Запросы на подключение" description="Каждый запрос подтверждается учителем." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><span className="pending-count-pill">{pendingCount} ожидает</span></TeacherSectionHeader>
-        <ConnectionScreen teacher request={request} onHome={()=>chooseTab('classes')} onApprove={approveRequest} onReject={rejectRequest} onOpen={()=>setScreen('pending')}/>
-
+        <TeacherSectionHeader icon="◎" title="Запросы на подключение" description="Каждый запрос подтверждается учителем." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><span className="pending-count-pill">{pendingCount} ожидает</span></TeacherSectionHeader>
+        <TeacherAccessPanel key={sessionRevision} tab="requests" onCount={setPendingCount} onHome={()=>chooseTab('classes')}/>
       </>}
-
       {tab === 'keys' && <>
-        <TeacherSectionHeader title="Ключи доступа" description="Каждый ученик получает персональный одноразовый ключ." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}><button className="blue-btn small">+ Создать ключ</button></TeacherSectionHeader>
-        <div className="security-table">
-          <div className="security-table-head"><span>Класс</span><span>Ключ</span><span>Назначение</span><span>Статус</span></div>
-          <div><b>8Б</b><code>GNS-8K4P-X7M2</code><span>ключ №17</span><em className={request ? 'status-used' : 'status-active'}>{request ? 'Запрос создан' : 'Активен'}</em></div>
-          <div><b>9А</b><code>GNS-2Q9M-R4T8</code><span>ключ №04</span><em className="status-active">Активен</em></div>
-        </div>
-        <div className="security-callout"><strong>Production-правило</strong><p>В базе будет храниться только криптографический хэш ключа. После успешной активации исходный код повторно использовать нельзя.</p></div>
+        <TeacherSectionHeader icon="⌁" title="Ключи доступа" description="Персональные одноразовые ключи для учеников." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')}/>
+        <TeacherAccessPanel key={sessionRevision} tab="keys" onCount={setPendingCount}/>
       </>}
 
-      {tab === 'results' && <>
-        <TeacherSectionHeader title="Результаты" description="Учебная активность внутри Genius." onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />
-        <div className="metric-grid"><div className="metric-card"><strong>83</strong><span>Учеников</span></div><div className="metric-card"><strong>79%</strong><span>Средняя точность</span></div><div className="metric-card"><strong>1 248</strong><span>Задач за неделю</span></div><div className="metric-card"><strong>68%</strong><span>Активность</span></div></div>
-        <div className="security-callout"><strong>Принцип приватности</strong><p>Учитель видит результаты тестов, XP, прогресс и активность внутри Genius. Геолокация, файлы, сообщения, контакты и активность в других приложениях не собираются.</p></div>
-      </>}
-
-      {tab === 'bank' && <TeacherTaskBank onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
+      {tab === 'bank' && <TeacherTaskBank key={sessionRevision} onBack={() => chooseTab(previousTab)} onHome={() => chooseTab('classes')} />}
     </main>
   </div>
 }

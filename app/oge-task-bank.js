@@ -4,7 +4,9 @@ import TaskFigureViewer from './task-figure-viewer'
 import TaskTile from './task-tile'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useRef,useState} from 'react'
-import {ogeCounts,ogeTasks} from './oge-task-data.mjs'
+import {bankIdentity,bankCachedIdentity,saveBankAttempt,syncBankAttempts} from './task-store'
+import {checkOgeAttempt} from '../shared/oge-attempts.mjs'
+import {ogeCounts,ogeTasks,OGE_BANK_VERSION} from './oge-task-data.mjs'
 import {filterOgeTasks,ogeSections,sectionsForTask} from './oge-task-filters.mjs'
 import OgeClozeDetail from './oge-cloze-detail'
 import {checkOgeClozeAnswer,restoreOgeClozeAnswers} from './oge-cloze-answer.mjs'
@@ -25,6 +27,15 @@ const taskTypes=Array.from({length:22},(_,index)=>index+1)
 const statusNames={unsolved:'Нерешённые',solved:'Решённые',answered:'С ответом',viewed:'Просмотренные'}
 
 export default function OgeTaskBank({onBack,onHome}){
+  const [syncNotice,setSyncNotice]=useState('')
+  const attemptQueue=useRef(Promise.resolve())
+  function recordAttempt(task,answer){
+    attemptQueue.current=attemptQueue.current.catch(()=>{}).then(async()=>{
+      const student=await bankIdentity().catch(()=>bankCachedIdentity())
+      await saveBankAttempt(student?.id,{ID:task.id,VERSION:OGE_BANK_VERSION},answer,checkOgeAttempt(task,answer))
+      if(student){try{await syncBankAttempts();setSyncNotice('')}catch{setSyncNotice('Ответ сохранён на устройстве. Статистика появится у учителя после синхронизации.')}}
+    }).catch(()=>setSyncNotice('Не удалось сохранить попытку. Проверьте соединение и повторите ответ.'))
+  }
   const [sections,setSections]=useState([])
   const [types,setTypes]=useState([])
   const [statuses,setStatuses]=useState([])
@@ -101,13 +112,17 @@ export default function OgeTaskBank({onBack,onHome}){
 
   if(current){
     const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id)}
-    if(current.kind==='calculation')return <OgeCalculationDetail key={current.id} {...props} saved={calculationAnswers[current.id]} onSave={draft=>{setCalculationAnswers(previous=>({...previous,[current.id]:draft}));if(draft.checked&&checkOgeCalculationAnswer(current,draft.answer))markSolved(current.id)}}/>
-    if(current.kind==='cloze'||current.kind==='change')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
-    if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>setMatchingAnswers(previous=>({...previous,[current.id]:answer}))}/>
-    return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>{setAnswers(previous=>({...previous,[current.id]:selection}));if(checkOgeChoiceAnswer(current,selection)===true)markSolved(current.id)}}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)}/>
+    function renderDetail(){
+    if(current.kind==='calculation')return <OgeCalculationDetail key={current.id} {...props} saved={calculationAnswers[current.id]} onSave={draft=>{if(draft.checked)recordAttempt(current,draft.answer);setCalculationAnswers(previous=>({...previous,[current.id]:draft}));if(draft.checked&&checkOgeCalculationAnswer(current,draft.answer))markSolved(current.id)}}/>
+    if(current.kind==='cloze'||current.kind==='change')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{recordAttempt(current,values);setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
+    if(current.kind==='matching')return <OgeMatchingDetail key={current.id} {...props} saved={matchingAnswers[current.id]||[]} onSave={answer=>{recordAttempt(current,answer);setMatchingAnswers(previous=>({...previous,[current.id]:answer}))}}/>
+    return current.kind==='choice'?<OgeChoiceDetail key={current.id} {...props} saved={answers[current.id]||[]} onSave={selection=>{recordAttempt(current,selection);setAnswers(previous=>({...previous,[current.id]:selection}));if(checkOgeChoiceAnswer(current,selection)===true)markSolved(current.id)}}/>:<OgeTaskDetail key={current.id} {...props} onSolved={()=>markSolved(current.id)} onAttempt={answer=>recordAttempt(current,answer)}/>
+    }
+    return <>{syncNotice&&<p role="status" className="bank-note">{syncNotice}</p>}{renderDetail()}</>
   }
 
   return <div className={styles.page}>
+    {syncNotice&&<p role="status" className="bank-note">{syncNotice}</p>}
     <header className={styles.bankHeader}>
       <div className={styles.bankTitle}><span className={styles.bankIcon} aria-hidden="true">Φ</span><div><h1>Банк заданий ФИПИ</h1><p>Задания по физике для подготовки к ОГЭ.</p></div></div>
       <label className={styles.bankSearch}><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по номеру, теме или ключевому слову..." aria-label="Поиск задач ФИПИ"/>{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}} aria-label="Очистить поиск">×</button>}</label>
@@ -152,10 +167,10 @@ export function OgeChoiceDetail({task,position,total,back,previous,next,navigate
   </article>
 }
 
-export function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved}){
+export function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved,onAttempt}){
   const [answer,setAnswer]=useState(''),[state,setState]=useState(null)
   useEffect(()=>{setAnswer('');setState(null)},[task.id])
-  function check(e){e.preventDefault();const right=isCorrectOgeNumber(answer,task.answer);setState(right?'right':'wrong');if(right)onSolved()}
+  function check(e){e.preventDefault();onAttempt?.(answer);const right=isCorrectOgeNumber(answer,task.answer);setState(right?'right':'wrong');if(right)onSolved()}
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
     <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.diagram||task.figures?.length?'График / рисунок':'Числовой ответ'}</span><span>Без подсказок</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>

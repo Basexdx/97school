@@ -159,7 +159,7 @@ function TaskCard({task:t,submit,back,goLearn,student,attempts,message,navigate,
   </article>
 }
 
-function TaskDiagram({spec}){
+export function TaskDiagram({spec}){
   if(spec.type==='data-table')return <figure className="bank-chart-figure"><div className="bank-data-table-wrap"><table className="bank-data-table"><thead><tr>{spec.headers.map((h,i)=><th key={i}>{h}</th>)}</tr></thead><tbody>{spec.rows.map((row,i)=><tr key={i}>{row.map((v,j)=><td key={j}>{v}</td>)}</tr>)}</tbody></table></div><figcaption>{spec.label}</figcaption></figure>
 
   if(['line-chart','multi-line-chart'].includes(spec.type)){

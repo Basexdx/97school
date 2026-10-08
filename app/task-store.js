@@ -18,6 +18,7 @@ async function meta(key,value) {
   const result=await request(value===undefined?tx.objectStore('meta').get(key):tx.objectStore('meta').put({key,value}))
   await wait;return value===undefined?result?.value:value
 }
+export async function bankCachedIdentity(){return (await meta('bank-student'))||null}
 export async function bankIdentity() {
   if(!navigator.onLine) return (await meta('bank-student'))||null
   const r=await fetch('/api/student/me',{credentials:'include',cache:'no-store'})

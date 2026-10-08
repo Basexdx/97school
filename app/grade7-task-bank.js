@@ -102,7 +102,7 @@ function AnswerFields({task,value,onChange}){
   return <fieldset className={styles.choices}><legend>{task.ANSWER_PROMPT||'Выберите ответ'}</legend>{options.map(o=><label key={o.id}><input type="radio" name={`answer-${task.ID}`} checked={value===o.id} onChange={()=>onChange(o.id)}/><span><b>{o.id}</b>{o.text}</span></label>)}</fieldset>
 }
 
-function Diagram({spec}){
+export function Diagram({spec}){
   if(spec.type==='peryshkin-schematic')return <PeryshkinSchematic spec={spec}/>
   if(['line-chart','multi-line-chart','blank-grid'].includes(spec.type))return <Chart spec={spec}/>
   if(spec.type==='ruler-block')return <div className={styles.visual}><svg viewBox="0 0 700 250" role="img" aria-label={spec.ariaLabel}><rect className={styles.object} x="205" y="55" width="330" height="95" rx="16"/><text x="370" y="112" textAnchor="middle">деревянный брусок</text><line className={styles.axis} x1="80" x2="620" y1="185" y2="185"/>{Array.from({length:91},(_,i)=>i).map(i=>{const v=spec.min+i/10,x=80+i*6;return <g key={i}><line className={styles.tickLine} x1={x} x2={x} y1="185" y2={i%10===0?160:173}/>{i%10===0&&<text className={styles.tickText} x={x} y="220" textAnchor="middle">{Math.round(v)}</text>}</g>})}</svg></div>

@@ -1,33 +1,42 @@
 'use client'
 
-import {useEffect,useState} from 'react'
+import {useEffect,useRef,useState} from 'react'
+import {TaskDiagram} from './task-bank'
+import {Diagram as Grade7Diagram} from './grade7-task-bank'
+import {matchingParts} from '../shared/matching-utils.mjs'
+import {OgeDiagram} from './oge-task-bank'
+import {teacherAnswerLabel} from '../shared/oge-attempts.mjs'
+import {ogeSections} from './oge-task-filters.mjs'
+import TaskFigureViewer from './task-figure-viewer'
 
-function answerLabel(answer){
-  if(!answer||answer.mode==='manual')return 'Ответ не задан: требуется проверка учителем.'
-  if(Array.isArray(answer.values))return answer.values.join(', ')
-  if(answer.value!=null)return String(answer.value)
-  return 'Ключ ответа доступен только для автоматической проверки.'
+function TaskContent({task}){
+ const oge=task.oge,matching=task.TASK_TYPE==='matching'?matchingParts(task):null
+ return <><p className="teacher-task-question">{task.TASK}</p>{task.DIAGRAM&&<TaskFigureViewer label="Рисунок задачи">{Number(task.CLASS)===7?<Grade7Diagram spec={task.DIAGRAM}/>:<TaskDiagram spec={task.DIAGRAM}/>}</TaskFigureViewer>}{oge?.diagram&&<OgeDiagram spec={oge.diagram}/>}{oge?.figures?.map((src,i)=><TaskFigureViewer key={src} label={`Рисунок ${i+1}`}><img src={src} alt={`Рисунок к задаче, часть ${i+1}`}/></TaskFigureViewer>)}{oge?.tables?.map((table,i)=><div className="teacher-table-scroll" key={i}><table><tbody>{table.map((row,j)=><tr key={j}>{row.map((v,k)=><td key={k}>{v}</td>)}</tr>)}</tbody></table></div>)}{matching&&<div className="teacher-matching">{[matching.left,matching.right].map((items,i)=><div key={i}>{items.map(t=><p key={t.id}><b>{t.id})</b> {t.text}</p>)}</div>)}</div>}{oge?.left&&<div className="teacher-matching"><div>{oge.left.map(t=><p key={t.id}><b>{t.id})</b> {t.text}</p>)}</div><div>{oge.right.map(t=><p key={t.id}><b>{t.id})</b> {t.text}</p>)}</div></div>}{oge?.options&&<ol>{oge.options.map((v,i)=><li key={i}>{typeof v==='string'?v:v.text}</li>)}</ol>}</>
 }
 
 export default function TeacherTaskBank({onBack,onHome}){
-  const [grade,setGrade]=useState(8),[query,setQuery]=useState(''),[page,setPage]=useState(0)
-  const [catalog,setCatalog]=useState(null),[detail,setDetail]=useState(null),[selected,setSelected]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false)
-  useEffect(()=>{let active=true;const timer=setTimeout(()=>{
-    fetch(`/api/teacher/tasks?grade=${grade}&page=${page}&q=${encodeURIComponent(query)}`,{credentials:'same-origin'})
-      .then(r=>r.ok?r.json():Promise.reject(Error(`Не удалось загрузить задачи (${r.status})`)))
-      .then(data=>{if(active){setCatalog(data);setError('')}})
-      .catch(e=>{if(active)setError(e.message)})
-  },200);return()=>{active=false;clearTimeout(timer)}},[grade,query,page])
-  async function open(id){setSelected(id);setDetail(null);setBusy(true);setError('');try{
-    const response=await fetch(`/api/teacher/tasks/${encodeURIComponent(id)}`,{credentials:'same-origin'})
-    if(!response.ok)throw Error(`Не удалось открыть задачу (${response.status})`)
-    setDetail(await response.json())
-  }catch(e){setError(e.message)}finally{setBusy(false)}}
-  return <section className="teacher-task-bank">
-    <header className="teacher-head unified-section-header"><div className="unified-section-title"><h1>Банк задач</h1><p>Ответы и результаты учеников по каждой задаче.</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></header>
-    <div className="teacher-task-controls"><label>Класс<select value={grade} onChange={e=>{setGrade(Number(e.target.value));setPage(0);setDetail(null)}}>{[7,8,9].map(x=><option key={x} value={x}>{x} класс</option>)}</select></label><label>Поиск<input type="search" value={query} onChange={e=>{setQuery(e.target.value);setPage(0);setDetail(null)}} placeholder="Номер, тема или текст"/></label></div>
-    {error&&<p role="alert" className="bank-note">{error}</p>}
-    <div className="teacher-task-layout"><div className="teacher-task-list" aria-label="Задачи">{catalog?.tasks.map(t=><button key={t.id} className={selected===t.id?'active':''} onClick={()=>open(t.id)}><small>№ {t.number||'—'} · {t.grade} класс · {t.xp} XP</small><strong>{t.topic}</strong><span>{t.preview}</span></button>)}{catalog&&!catalog.tasks.length&&<p>По запросу задач нет.</p>}<nav className="teacher-task-pages"><button disabled={!page} onClick={()=>setPage(page-1)}>← Назад</button><span>{catalog?`${page+1} / ${Math.max(1,Math.ceil(catalog.total/40))}`:'…'}</span><button disabled={!catalog||page+1>=Math.ceil(catalog.total/40)} onClick={()=>setPage(page+1)}>Далее →</button></nav></div>
-    <article className="teacher-task-detail" aria-live="polite">{busy?<p>Загружаю задачу…</p>:detail?<><small>№ {detail.task.BOOK_TASK_NUMBER||'—'} · {detail.task.CLASS} класс · {detail.task.XP} XP</small><h2>{detail.task.TOPIC}</h2><p className="teacher-task-question">{detail.task.TASK}</p><div className="teacher-task-answer"><b>Ответ</b><p>{answerLabel(detail.task.ANSWER)}{detail.task.ANSWER?.unit&&detail.task.ANSWER.mode!=='manual'?` ${detail.task.ANSWER.unit}`:''}</p></div><h3>Решили задачу · {detail.students.length}</h3>{detail.students.length?<ul>{detail.students.map(s=><li key={s.id}><span>{s.nickname||'Ученик'} · {s.className}</span><strong>+{s.xp} XP</strong></li>)}</ul>:<p>Пока никто не решил эту задачу с подтверждённым результатом.</p>}</>:<p>Выберите задачу, чтобы увидеть ответ и результат учеников.</p>}</article></div>
-  </section>
+ const [source,setSource]=useState('fipi'),[grade,setGrade]=useState(8),[query,setQuery]=useState(''),[page,setPage]=useState(0),[type,setType]=useState(''),[section,setSection]=useState(''),[classFilter,setClassFilter]=useState('')
+ const [catalog,setCatalog]=useState(null),[detail,setDetail]=useState(null),[selected,setSelected]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(false),[busy,setBusy]=useState(false)
+ const detailRef=useRef(null),requestRef=useRef(null)
+ useEffect(()=>{const controller=new AbortController();setLoading(true);setCatalog(null);const timer=setTimeout(async()=>{try{
+  const r=await fetch(`/api/teacher/tasks?source=${source}&grade=${grade}&type=${type}&section=${encodeURIComponent(section)}&page=${page}&q=${encodeURIComponent(query)}`,{credentials:'same-origin',signal:controller.signal})
+  if(!r.ok)throw Error(r.status===401?'Войдите с ключом учителя, чтобы открыть банк и статистику.':`Не удалось загрузить задачи (${r.status})`)
+  setCatalog(await r.json());setError('')
+ }catch(e){if(e.name!=='AbortError')setError(e.message)}finally{if(!controller.signal.aborted)setLoading(false)}},200);return()=>{controller.abort();clearTimeout(timer)}},[source,grade,query,page,type,section])
+ useEffect(()=>()=>requestRef.current?.abort(),[])
+ function reset(resetPage=true){requestRef.current?.abort();if(resetPage)setPage(0);setSelected('');setDetail(null);setBusy(false);setClassFilter('')}
+ async function open(id){requestRef.current?.abort();const controller=new AbortController();requestRef.current=controller;setSelected(id);setDetail(null);setBusy(true);setError('');try{
+  const response=await fetch(`/api/teacher/tasks/${encodeURIComponent(id)}`,{credentials:'same-origin',signal:controller.signal})
+  if(!response.ok)throw Error(`Не удалось открыть задачу (${response.status})`)
+  setDetail(await response.json());setClassFilter('');requestAnimationFrame(()=>detailRef.current?.scrollIntoView({block:'start',behavior:'smooth'}))
+ }catch(e){if(e.name!=='AbortError')setError(e.message)}finally{if(!controller.signal.aborted)setBusy(false)}}
+ const pupils=detail?.students.filter(s=>!classFilter||s.className===classFilter)||[],classes=[...new Set(detail?.students.map(s=>s.className)||[])],index=catalog?.tasks.findIndex(t=>t.id===selected)??-1
+ return <section className="teacher-task-bank">
+  <header className="teacher-head unified-section-header"><div className="unified-section-title"><span className="teacher-section-icon" aria-hidden="true">◇</span><div><h1>Банк задач</h1><p>Ответы и статистика каждого ученика.</p></div></div><nav aria-label="Навигация по разделам"><button type="button" onClick={()=>{if(selected)reset(false);else onBack()}}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></nav></header>
+  {!selected&&<><div className="teacher-bank-switch" aria-label="Выбор банка">{[['fipi','Задачи ФИПИ','Подготовка к ОГЭ'],['peryshkin','Задачник Перышкина','Физика · 7–9 классы']].map(([id,title,subtitle])=><button key={id} aria-pressed={source===id} onClick={()=>{setSource(id);setType('');setSection('');setQuery('');reset()}}><span aria-hidden="true">{id==='fipi'?'Φ':'▤'}</span><div><strong>{title}</strong><small>{subtitle}</small></div></button>)}</div>
+  <div className="teacher-task-controls">{source==='peryshkin'?<label>Класс<select value={grade} onChange={e=>{setGrade(Number(e.target.value));reset()}}>{[7,8,9].map(x=><option key={x} value={x}>{x} класс</option>)}</select></label>:<><label>Тип задания<select value={type} onChange={e=>{setType(e.target.value);reset()}}><option value="">Все типы</option>{Array.from({length:22},(_,i)=><option key={i+1} value={i+1}>Тип {i+1}</option>)}</select></label><label>Раздел<select value={section} onChange={e=>{setSection(e.target.value);reset()}}><option value="">Все разделы</option>{ogeSections.map(s=><option key={s}>{s}</option>)}</select></label></>}<label>Поиск<input type="search" value={query} onChange={e=>{setQuery(e.target.value);reset()}} placeholder="Номер, тема или текст"/></label></div></>}
+  {error&&<p role="alert" className="bank-note">{error}</p>}
+  <div className={`teacher-task-layout ${selected?'teacher-task-layout-selected':''}`}><div hidden={!!selected} className="teacher-task-list" aria-label="Задачи">{loading&&<p role="status">Загружаю задачи…</p>}{catalog?.tasks.map(t=><button key={t.id} className={selected===t.id?'active':''} onClick={()=>open(t.id)}><small>{t.type?`ТИП ${t.type} · `:''}№ {t.number||'—'} · {t.grade} класс · {t.xp} XP</small><strong>{t.topic}</strong><span>{t.preview}</span></button>)}{catalog&&!catalog.tasks.length&&<p>По запросу задач нет.</p>}<nav className="teacher-task-pages"><button disabled={!page||loading} onClick={()=>{setPage(page-1);setSelected('');setDetail(null)}}>← Назад</button><span>{catalog?`${page+1} / ${Math.max(1,Math.ceil(catalog.total/40))}`:'…'}</span><button disabled={loading||!catalog||page+1>=Math.ceil(catalog.total/40)} onClick={()=>{setPage(page+1);setSelected('');setDetail(null)}}>Далее →</button></nav></div>
+  <article ref={detailRef} className="teacher-task-detail" aria-live="polite">{busy?<p>Загружаю задачу…</p>:detail?<><div className="teacher-detail-nav"><button onClick={()=>reset(false)}>← К задачам</button><div><button aria-label="Предыдущая задача" disabled={index<=0} onClick={()=>open(catalog.tasks[index-1].id)}>‹</button><button aria-label="Следующая задача" disabled={index<0||index>=catalog.tasks.length-1} onClick={()=>open(catalog.tasks[index+1].id)}>›</button></div></div><small>{detail.task.oge?`ТИП ${detail.task.oge.type} · `:''}№ {detail.task.BOOK_TASK_NUMBER||'—'} · {detail.task.XP} XP</small><h2>{detail.task.TOPIC}</h2><TaskContent task={detail.task}/><label className="teacher-task-answer"><span>Правильный ответ</span><input aria-label="Правильный ответ" readOnly value={teacherAnswerLabel(detail.task.ANSWER)} placeholder="Ключ ответа ещё не задан"/>{detail.task.ANSWER?.unit&&<small>{detail.task.ANSWER.unit}</small>}{!teacherAnswerLabel(detail.task.ANSWER)&&<small>В исходных данных нет подтверждённого ключа. Ответы учеников сохраняются для проверки учителем.</small>}</label><div className="teacher-stat-head"><h3>Ученики · решено {pupils.filter(s=>s.solvedAttempt!==null).length} из {pupils.length}</h3><label>Класс<select value={classFilter} onChange={e=>setClassFilter(e.target.value)}><option value="">Все мои классы</option>{classes.map(c=><option key={c}>{c}</option>)}</select></label></div><div className="teacher-table-scroll"><table className="teacher-pupil-stats"><thead><tr><th>Ученик</th><th>Класс</th><th>Статус</th><th>Попыток</th><th>Решил с попытки</th><th>XP</th></tr></thead><tbody>{pupils.map(s=><tr key={s.id}><th scope="row">{s.nickname||'Ученик'}</th><td>{s.className}</td><td className={s.solvedAttempt!==null?'teacher-solved':''}>{s.solvedAttempt!==null?'✓ Решено':s.pendingReview?'На проверке':s.attempts?'Пока не решено':'Не приступал'}</td><td>{s.attempts}</td><td>{s.solvedAttempt??'—'}</td><td>{s.xp}</td></tr>)}</tbody></table></div>{!pupils.length&&<p>В выбранных классах пока нет активных учеников.</p>}<small>Учитываются попытки, полученные сервером. Ответы, сохранённые раньше только в браузере, в статистику не входят.</small></>:<p>Выберите задачу, чтобы увидеть условие, правильный ответ и статистику учеников.</p>}</article></div>
+ </section>
 }

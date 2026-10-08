@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS task_attempts (
  answer_json TEXT NOT NULL,
  correct INTEGER CHECK(correct IN (0,1)),
  status TEXT NOT NULL CHECK(status IN ('CONFIRMED','PENDING_REVIEW')),
- max_xp INTEGER NOT NULL CHECK(max_xp IN (10,20,30)),
+ max_xp INTEGER NOT NULL CHECK(max_xp IN (10,20,30,40)),
  received_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY(student_id,attempt_id),
  UNIQUE(student_id,event_id)
@@ -48,14 +48,14 @@ BEGIN
  VALUES(
    'task:'||NEW.student_id||':'||NEW.task_id,
    NEW.student_id,
-   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END,
+   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'oge-%' THEN (SELECT current_grade FROM students WHERE id=NEW.student_id) WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END,
    NEW.amount,'TASK_SOLVED',NEW.task_id
  );
  INSERT INTO class_progress(id,student_id,grade,total_xp)
  VALUES(
-   'task-progress:'||NEW.student_id||':'||(CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END),
+   'task-progress:'||NEW.student_id||':'||(CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'oge-%' THEN (SELECT current_grade FROM students WHERE id=NEW.student_id) WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END),
    NEW.student_id,
-   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END,
+   CASE WHEN NEW.task_id LIKE 'genius-peryshkin7-%' THEN 7 WHEN NEW.task_id LIKE 'oge-%' THEN (SELECT current_grade FROM students WHERE id=NEW.student_id) WHEN NEW.task_id LIKE 'genius-peryshkin9-%' THEN 9 ELSE 8 END,
    NEW.amount
  )
  ON CONFLICT(student_id,grade) DO UPDATE SET total_xp=total_xp+NEW.amount,updated_at=CURRENT_TIMESTAMP;

@@ -1,7 +1,8 @@
 'use client'
 
 import {useEffect,useMemo,useRef,useState} from 'react'
-import {formatSchoolDate,generateLessonDates,tomorrowIso,SCHOOL_BREAKS} from '../shared/academic-calendar.mjs'
+import {formatSchoolDate,generateLessonDates,tomorrowIso,SCHOOL_BREAKS,schoolToday} from '../shared/academic-calendar.mjs'
+import {useSchoolToday} from './school-today'
 import styles from './performance-v2.module.css'
 
 const classOptions=[['class_7A','7А',7],['class_8B','8Б',8],['class_9A','9А',9],['class_9B','9Б',9]]
@@ -17,7 +18,7 @@ const holidayStyle=item=>item.id==='winter'||item.id==='february'?'Winter':item.
 const holidayIcon=item=>({Winter:'❄',Spring:'✿',Summer:'☀',Autumn:'🍂'})[holidayStyle(item)]
 const averageTone=value=>Number.isFinite(Number(value))?(Number(value)>=4.6?'averageHigh':Number(value)>=3.6?'averageMid':'averageLow'):'averageNone'
 
-function todayIso(){return new Date().toISOString().slice(0,10)}
+function todayIso(){return schoolToday()}
 function currentSchoolWeek(){
   const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date())
   const value=Object.fromEntries(parts.map(part=>[part.type,part.value]))
@@ -147,10 +148,14 @@ function demoAcademic(classId){
   return {class:{id:option[0],title:option[1],grade:option[2]},students,lessons,grades,attendance,homework:[],overrides:[]}
 }
 
-export function TeacherAcademic({onBack,onHome}){
-  const [classId,setClassId]=useState('class_7A'),[data,setData]=useState(()=>demoAcademic('class_7A')),[selectedLesson,setSelectedLesson]=useState(''),[studentId,setStudentId]=useState(''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[message,setMessage]=useState(''),[studentSearch,setStudentSearch]=useState('')
+export function TeacherAcademic({onBack,onHome,initialClassId,classes}){
+  const [classId,setClassId]=useState(initialClassId||classes?.[0]?.id||'class_7A'),[data,setData]=useState(()=>demoAcademic('class_7A')),[selectedLesson,setSelectedLesson]=useState(''),[studentId,setStudentId]=useState(''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[message,setMessage]=useState(''),[studentSearch,setStudentSearch]=useState('')
+  const today=useSchoolToday()
+  const availableClasses=classes?.length?classes.map(c=>[c.id,c.title,c.grade]):classOptions
+  useEffect(()=>{if(classes?.length&&!classes.some(c=>c.id===classId)){setClassId(classes.some(c=>c.id===initialClassId)?initialClassId:classes[0].id);setSelectedLesson('')}},[classes,classId,initialClassId])
+  const initialScrollRef=useRef(true),lastTodayRef=useRef(today)
   const tableScrollRef=useRef(null)
-  useEffect(()=>{setData(demoAcademic(classId));api(`/api/teacher/academic?classId=${classId}`).then(x=>setData({...x,attendance:x.attendance||[]})).catch(()=>{})},[classId])
+  useEffect(()=>{let active=true;initialScrollRef.current=true;setData(demoAcademic(classId));api(`/api/teacher/academic?classId=${encodeURIComponent(classId)}`).then(x=>{if(active){initialScrollRef.current=true;setData({...x,attendance:x.attendance||[]})}}).catch(()=>{});return()=>{active=false}},[classId])
   useEffect(()=>{
     if(!data.lessons.length||(selectedLesson&&data.lessons.some(l=>l.id===selectedLesson)))return
     const week=currentSchoolWeek()
@@ -159,14 +164,15 @@ export function TeacherAcademic({onBack,onHome}){
     setSelectedLesson((current||ordered.find(l=>l.lesson_date>=week.start)||ordered.at(-1)).id)
   },[data,selectedLesson])
   useEffect(()=>{
-    if(!selectedLesson)return
+    if(!selectedLesson||!data.lessons.some(l=>l.id===selectedLesson))return
     const frame=requestAnimationFrame(()=>{
       const wrap=tableScrollRef.current,lesson=data.lessons.find(l=>l.id===selectedLesson)
-      const header=lesson&&wrap?.querySelector(`[data-lesson-date="${lesson.lesson_date}"]`)
-      if(wrap&&header)wrap.scrollLeft=Math.max(0,header.offsetLeft-270)
+      const todayHeader=(initialScrollRef.current||lastTodayRef.current!==today)&&wrap?.querySelector(`[data-lesson-date="${today}"]`)
+      const header=todayHeader||(lesson&&wrap?.querySelector(`[data-lesson-date="${lesson.lesson_date}"]`))
+      if(wrap&&header){const nameWidth=wrap.querySelector('tbody tr td:first-child')?.getBoundingClientRect().width||180;wrap.scrollLeft=Math.max(0,wrap.scrollLeft+header.getBoundingClientRect().left-wrap.getBoundingClientRect().left-nameWidth-12);initialScrollRef.current=false;lastTodayRef.current=today}
     })
     return()=>cancelAnimationFrame(frame)
-  },[selectedLesson,data.lessons])
+  },[selectedLesson,data.lessons,today])
   const lessons=[...data.lessons].sort((a,b)=>a.lesson_date.localeCompare(b.lesson_date))
   const timeline=[]
   lessons.forEach((lesson,index)=>{
@@ -213,7 +219,7 @@ export function TeacherAcademic({onBack,onHome}){
 
   return <div className={styles.teacherPage}>
     <header className={styles.academicHeader}>
-      <div className={styles.academicTitle}><h1>Дневник и ДЗ</h1><p>Журнал, результаты класса и домашние задания</p></div>
+      <div className={styles.academicTitle}><h1><span className="teacher-section-icon" aria-hidden="true">▤</span> Дневник и ДЗ</h1><p>Журнал, результаты класса и домашние задания</p></div>
       <label className={styles.academicSearch}><span aria-hidden="true">⌕</span><input type="search" value={studentSearch} onChange={e=>setStudentSearch(e.target.value)} placeholder="Найти ученика" aria-label="Найти ученика в журнале"/></label>
       <div className={styles.academicNav}><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome}>⌂ Домой</button></div>
     </header>
@@ -221,14 +227,14 @@ export function TeacherAcademic({onBack,onHome}){
 
     <div className={styles.teacherGrid}>
       <section className={styles.gradebookCard}>
-        <div className={styles.gradebookHead}><div><h2>Журнал класса</h2></div><div className={styles.lessonEditor}><select aria-label="Дата урока" value={selectedLesson} onChange={e=>setSelectedLesson(e.target.value)}>{data.lessons.map(l=><option key={l.id} value={l.id}>{formatSchoolDate(l.lesson_date,{short:true})}</option>)}</select><select aria-label="Тип работы" value={selected?.assessment_type||'LESSON'} onChange={e=>setAssessmentType(e.target.value)}><option value="LESSON">Работа на уроке</option><option value="INDEPENDENT">Самостоятельная</option><option value="TEST">Контрольная</option><option value="HOMEWORK">Домашняя</option></select><select className={styles.classSelect} aria-label="Класс" value={classId} onChange={e=>{setClassId(e.target.value);setSelectedLesson('')}}>{classOptions.map(c=><option value={c[0]} key={c[0]}>{c[1]}</option>)}</select></div></div>
-        <div className={styles.gradebookWrap} ref={tableScrollRef}><table><colgroup><col className={styles.nameColumn}/>{timeline.map(entry=><col key={entry.kind==='break'?entry.date:entry.lesson.id} className={styles.lessonColumn}/>)}<col className={styles.averageColumn}/></colgroup><thead><tr className={styles.breakBands}><th rowSpan={2} className={styles.nameHeader}>Фамилия и имя</th>{timeline.map((entry,index)=>entry.kind==='break'?(index===0||timeline[index-1]?.break?.id!==entry.break.id?<th key={entry.break.id} colSpan={timeline.filter(x=>x.break?.id===entry.break.id).length} className={`${styles.breakBand} ${styles[`holiday${holidayStyle(entry.break)}`]}`}>{holidayIcon(entry.break)} {entry.break.title}</th>:null):<th key={entry.lesson.id} aria-hidden="true"/>)}<th rowSpan={2}>Средняя</th></tr><tr>{timeline.map(entry=>entry.kind==='break'?<th key={entry.date} className={`${styles.holidayHead} ${styles[`holiday${holidayStyle(entry.break)}`]}`}><b>{formatSchoolDate(entry.date,{short:true})}</b><small>{formatSchoolDate(entry.date,{weekday:true}).split(',')[0]}</small></th>:(()=>{const l=entry.lesson,meta=workType(l.assessment_type);return <th key={l.id} data-lesson-date={l.lesson_date} className={styles[`head${l.assessment_type||'LESSON'}`]}><b>{formatSchoolDate(l.lesson_date,{short:true})}</b><small>{meta.short}</small></th>})())}</tr></thead><tbody>{visibleStudents.map(s=>{const own=data.grades.filter(g=>g.student_id===s.id).map(g=>Number(g.value)).filter(Boolean),avg=own.length?(own.reduce((a,b)=>a+b,0)/own.length).toFixed(1):'—';return <tr key={s.id}><td><span className={styles.studentAvatar}>{(s.nickname||'?').slice(0,1)}</span><b>{s.nickname||'Ученик'}</b></td>{timeline.map(entry=>{if(entry.kind==='break')return <td key={entry.date} className={`${styles.holidayCell} ${styles[`holiday${holidayStyle(entry.break)}`]}`} title={entry.break.title}>{holidayIcon(entry.break)}</td>;const l=entry.lesson,absent=(data.attendance||[]).some(a=>a.student_id===s.id&&a.lesson_id===l.id&&a.status==='ABSENT'),value=data.grades.find(g=>g.student_id===s.id&&g.lesson_id===l.id&&g.kind==='LESSON')?.value,cell=absent?'N':value||'';return <td key={l.id}><select className={`${styles.markSelect} ${absent?styles.markAbsent:''} ${value?styles[`mark${l.assessment_type||'LESSON'}`]:''}`} aria-label={`Оценка ${s.nickname} ${l.lesson_date}`} value={cell} onChange={e=>setMark(s.id,l.id,e.target.value)}><option value="">—</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="N">н</option></select></td>})}<td><strong className={`${styles.averageScore} ${styles[averageTone(avg)]}`}>{avg}</strong></td></tr>})}</tbody></table></div>
+        <div className={styles.gradebookHead}><div><h2>Журнал класса</h2></div><div className={styles.lessonEditor}><select aria-label="Дата урока" value={selectedLesson} onChange={e=>setSelectedLesson(e.target.value)}>{data.lessons.map(l=><option key={l.id} data-date={l.lesson_date} value={l.id}>{l.lesson_date===today?'Сегодня':formatSchoolDate(l.lesson_date,{short:true})}</option>)}</select><select aria-label="Тип работы" value={selected?.assessment_type||'LESSON'} onChange={e=>setAssessmentType(e.target.value)}><option value="LESSON">Работа на уроке</option><option value="INDEPENDENT">Самостоятельная</option><option value="TEST">Контрольная</option><option value="HOMEWORK">Домашняя</option></select><select className={styles.classSelect} aria-label="Класс" value={classId} onChange={e=>{setClassId(e.target.value);setSelectedLesson('')}}>{availableClasses.map(c=><option value={c[0]} key={c[0]}>{c[1]}</option>)}</select></div></div>
+        <div className={styles.gradebookWrap} ref={tableScrollRef}><table><colgroup><col className={styles.nameColumn}/>{timeline.map(entry=><col key={entry.kind==='break'?entry.date:entry.lesson.id} className={styles.lessonColumn}/>)}<col className={styles.averageColumn}/></colgroup><thead><tr className={styles.breakBands}><th rowSpan={2} className={styles.nameHeader}>Фамилия и имя</th>{timeline.map((entry,index)=>entry.kind==='break'?(index===0||timeline[index-1]?.break?.id!==entry.break.id?<th key={entry.break.id} colSpan={timeline.filter(x=>x.break?.id===entry.break.id).length} className={`${styles.breakBand} ${styles[`holiday${holidayStyle(entry.break)}`]}`}>{holidayIcon(entry.break)} {entry.break.title}</th>:null):<th key={entry.lesson.id} aria-hidden="true"/>)}<th rowSpan={2}>Средняя</th></tr><tr>{timeline.map(entry=>entry.kind==='break'?<th key={entry.date} data-lesson-date={entry.date} data-today={entry.date===today||undefined} aria-current={entry.date===today?'date':undefined} title={formatSchoolDate(entry.date)} className={`${styles.holidayHead} ${styles[`holiday${holidayStyle(entry.break)}`]}`}><b>{entry.date===today?'Сегодня':formatSchoolDate(entry.date,{short:true})}</b><small>{formatSchoolDate(entry.date,{weekday:true}).split(',')[0]}</small></th>:(()=>{const l=entry.lesson,meta=workType(l.assessment_type);return <th key={l.id} data-lesson-date={l.lesson_date} data-today={l.lesson_date===today||undefined} aria-current={l.lesson_date===today?'date':undefined} title={formatSchoolDate(l.lesson_date)} className={styles[`head${l.assessment_type||'LESSON'}`]}><b>{l.lesson_date===today?'Сегодня':formatSchoolDate(l.lesson_date,{short:true})}</b><small>{meta.short}</small></th>})())}</tr></thead><tbody>{visibleStudents.map(s=>{const own=data.grades.filter(g=>g.student_id===s.id).map(g=>Number(g.value)).filter(Boolean),avg=own.length?(own.reduce((a,b)=>a+b,0)/own.length).toFixed(1):'—';return <tr key={s.id}><td><span className={styles.studentAvatar}>{(s.nickname||'?').slice(0,1)}</span><b>{s.nickname||'Ученик'}</b></td>{timeline.map(entry=>{if(entry.kind==='break')return <td key={entry.date} data-today={entry.date===today||undefined} className={`${styles.holidayCell} ${styles[`holiday${holidayStyle(entry.break)}`]}`} title={entry.break.title}>{holidayIcon(entry.break)}</td>;const l=entry.lesson,absent=(data.attendance||[]).some(a=>a.student_id===s.id&&a.lesson_id===l.id&&a.status==='ABSENT'),value=data.grades.find(g=>g.student_id===s.id&&g.lesson_id===l.id&&g.kind==='LESSON')?.value,cell=absent?'N':value||'';return <td key={l.id} data-today={l.lesson_date===today||undefined}><select className={`${styles.markSelect} ${absent?styles.markAbsent:''} ${value?styles[`mark${l.assessment_type||'LESSON'}`]:''}`} aria-label={`Оценка ${s.nickname} ${l.lesson_date}`} value={cell} onChange={e=>setMark(s.id,l.id,e.target.value)}><option value="">—</option><option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="N">н</option></select></td>})}<td><strong className={`${styles.averageScore} ${styles[averageTone(avg)]}`}>{avg}</strong></td></tr>})}</tbody></table></div>
       </section>
 
       <aside className={styles.classAnalytics}><h2>Аналитика класса</h2><div><h3>🏆 Лучшие результаты</h3>{metrics.top.map((s,i)=><p key={s.id}><span>{i+1}</span><b>{s.nickname}</b><em>{s.avg?s.avg.toFixed(1):'—'}</em></p>)}</div><div><h3>△ Нужна поддержка</h3>{metrics.support.length?metrics.support.map(s=><p key={s.id}><span>!</span><b>{s.nickname}</b><em>{s.avg.toFixed(1)}</em></p>):<small>Сейчас нет учеников в зоне внимания.</small>}</div><div className={styles.workLegend}><h3>Типы работ</h3><span className={styles.kindLesson}>✦ Урок</span><span className={styles.kindIndependent}>◇ Самостоятельная</span><span className={styles.kindTest}>★ Контрольная</span></div></aside>
     </div>
 
-    <section className={styles.homeworkEditor}><div><h2>Назначить домашнее задание</h2><p>Обычное или индивидуальное.</p></div><label>Урок<select value={selectedLesson} onChange={e=>setSelectedLesson(e.target.value)}>{data.lessons.map(l=><option key={l.id} value={l.id}>{formatSchoolDate(l.lesson_date,{weekday:true})}</option>)}</select></label><label>Кому<select value={studentId} onChange={e=>setStudentId(e.target.value)}><option value="">Всему классу</option>{data.students.map(s=><option key={s.id} value={s.id}>{s.nickname||s.id}</option>)}</select></label><label>Кратко<input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Например: задачи §12"/></label><label>Описание<textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Номера упражнений и пояснение"/></label><button onClick={saveHomework}>Сохранить ДЗ</button></section>
+    <section className={styles.homeworkEditor}><div><h2>Назначить домашнее задание</h2><p>Обычное или индивидуальное.</p></div><label>Урок<select value={selectedLesson} onChange={e=>setSelectedLesson(e.target.value)}>{data.lessons.map(l=><option key={l.id} data-date={l.lesson_date} value={l.id}>{l.lesson_date===today?'Сегодня':formatSchoolDate(l.lesson_date,{weekday:true})}</option>)}</select></label><label>Кому<select value={studentId} onChange={e=>setStudentId(e.target.value)}><option value="">Всему классу</option>{data.students.map(s=><option key={s.id} value={s.id}>{s.nickname||s.id}</option>)}</select></label><label>Кратко<input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Например: задачи §12"/></label><label>Описание<textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Номера упражнений и пояснение"/></label><button onClick={saveHomework}>Сохранить ДЗ</button></section>
     {message&&<p className={styles.notice} role="status">{message}</p>}
   </div>
 }

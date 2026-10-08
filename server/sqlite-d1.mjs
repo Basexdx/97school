@@ -1,6 +1,7 @@
 import {mkdirSync,readFileSync} from 'node:fs'
 import {dirname,resolve} from 'node:path'
 import {DatabaseSync} from 'node:sqlite'
+import {upgradeTaskAttemptXp} from './task-attempt-migration.mjs'
 
 function normalize(value){
   if(value===undefined)return null
@@ -43,6 +44,7 @@ export function createD1Database(databasePath,{schemaDir=resolve(process.cwd(),'
   sqlite.exec('PRAGMA synchronous=NORMAL;')
   sqlite.exec('PRAGMA busy_timeout=5000;')
 
+  upgradeTaskAttemptXp(sqlite)
   for(const file of ['schema.sql','task-bank.sql']){
     sqlite.exec(readFileSync(resolve(schemaDir,file),'utf8'))
   }

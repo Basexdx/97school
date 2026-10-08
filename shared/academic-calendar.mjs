@@ -43,3 +43,9 @@ export function tomorrowIso(now = new Date()) {
   tomorrow.setDate(tomorrow.getDate() + 1)
   return `${tomorrow.getFullYear()}-${String(tomorrow.getMonth()+1).padStart(2,'0')}-${String(tomorrow.getDate()).padStart(2,'0')}`
 }
+
+export function schoolToday(now=new Date()){
+ const parts=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Moscow',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now)
+ const values=Object.fromEntries(parts.map(p=>[p.type,p.value]))
+ return `${values.year}-${values.month}-${values.day}`
+}

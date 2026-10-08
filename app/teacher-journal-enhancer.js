@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { ACADEMIC_YEAR, SCHOOL_BREAKS } from '../shared/academic-calendar.mjs'
+import { ACADEMIC_YEAR, SCHOOL_BREAKS, schoolToday } from '../shared/academic-calendar.mjs'
 
 const MONTH_ALIASES={янв:0,фев:1,мар:2,апр:3,май:4,мая:4,июн:5,июл:6,авг:7,сен:8,сент:8,окт:9,ноя:10,нояб:10,дек:11}
 const WEEKDAYS=['Пн','Вт','Ср','Чт','Пт','Сб','Вс']
@@ -23,7 +23,7 @@ function breakForIso(value){return SCHOOL_BREAKS.find(item=>value>=item.start&&v
 function breakBetween(leftDate,rightDate){const left=iso(leftDate),right=iso(rightDate);return SCHOOL_BREAKS.find(item=>item.start>left&&item.end<right)}
 function monthTitle(year,month){const raw=new Intl.DateTimeFormat('ru-RU',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(Date.UTC(year,month,1)));return raw.charAt(0).toUpperCase()+raw.slice(1)}
 function shortRange(item){const f=new Intl.DateTimeFormat('ru-RU',{day:'numeric',month:'short',timeZone:'UTC'});return `${f.format(dateFromIso(item.start))}–${f.format(dateFromIso(item.end))}`}
-function optionDates(select){return [...select.options].map(option=>({option,date:parseLessonLabel(option.textContent)})).filter(x=>x.date)}
+function optionDates(select){return [...select.options].map(option=>({option,date:option.dataset.date?dateFromIso(option.dataset.date):parseLessonLabel(option.textContent)})).filter(x=>x.date)}
 function dispatchSelect(select,option){if(!option)return;select.value=option.value;select.dispatchEvent(new Event('input',{bubbles:true}));select.dispatchEvent(new Event('change',{bubbles:true}))}
 
 function ensureAverage(page){
@@ -56,18 +56,25 @@ function createCalendar(page,editor,select){
   let button=editor.querySelector('.cg-calendar-button');if(!button){button=document.createElement('button');button.type='button';button.className='cg-calendar-button';button.setAttribute('aria-label','Открыть календарь');button.innerHTML='<span aria-hidden="true">▦</span>';editor.prepend(button)}
   if(button.dataset.cgReady)return;button.dataset.cgReady='1'
   button.addEventListener('click',()=>{
-    const existing=card.querySelector('.cg-calendar-popover');if(existing){existing.remove();button.setAttribute('aria-expanded','false');return}
-    const parsed=parseLessonLabel(select.selectedOptions[0]?.textContent||'')||new Date(Date.UTC(START_YEAR,8,1));let viewYear=parsed.getUTCFullYear(),viewMonth=parsed.getUTCMonth()
+    const existing=card.querySelector('.cg-calendar-popover');if(existing){existing.cgCleanup?.();existing.remove();button.setAttribute('aria-expanded','false');return}
+    const parsed=(select.selectedOptions[0]?.dataset.date?dateFromIso(select.selectedOptions[0].dataset.date):parseLessonLabel(select.selectedOptions[0]?.textContent||''))||new Date(Date.UTC(START_YEAR,8,1));let viewYear=parsed.getUTCFullYear(),viewMonth=parsed.getUTCMonth()
     const popover=document.createElement('div');popover.className='cg-calendar-popover';button.setAttribute('aria-expanded','true');card.appendChild(popover)
+    let refreshTimer
+    const refresh=()=>{if(popover.isConnected)render();else popover.cgCleanup()}
+    popover.cgCleanup=()=>{clearTimeout(refreshTimer);document.removeEventListener('visibilitychange',refresh)}
+    document.addEventListener('visibilitychange',refresh)
     function render(){
-      const options=optionDates(select),lessonMap=new Map(options.map(item=>[iso(item.date),item.option])),selectedDate=parseLessonLabel(select.selectedOptions[0]?.textContent||'')
+      clearTimeout(refreshTimer)
+      refreshTimer=setTimeout(refresh,30000)
+      const options=optionDates(select),lessonMap=new Map(options.map(item=>[iso(item.date),item.option])),selectedDate=(select.selectedOptions[0]?.dataset.date?dateFromIso(select.selectedOptions[0].dataset.date):parseLessonLabel(select.selectedOptions[0]?.textContent||''))
       const days=new Date(Date.UTC(viewYear,viewMonth+1,0)).getUTCDate(),offset=(new Date(Date.UTC(viewYear,viewMonth,1)).getUTCDay()+6)%7
       const leading=Array.from({length:offset},(_,i)=>({date:new Date(Date.UTC(viewYear,viewMonth,1-offset+i)),outside:true})),current=Array.from({length:days},(_,i)=>({date:new Date(Date.UTC(viewYear,viewMonth,i+1)),outside:false})),tailCount=(7-((leading.length+current.length)%7))%7,trailing=Array.from({length:tailCount},(_,i)=>({date:new Date(Date.UTC(viewYear,viewMonth+1,i+1)),outside:true})),cells=[...leading,...current,...trailing]
       const monthBreaks=SCHOOL_BREAKS.filter(item=>{const start=dateFromIso(item.start),end=dateFromIso(item.end);return(start.getUTCFullYear()===viewYear&&start.getUTCMonth()===viewMonth)||(end.getUTCFullYear()===viewYear&&end.getUTCMonth()===viewMonth)})
       popover.dataset.breakTone=monthBreaks[0]?breakTone(monthBreaks[0]):""
-      popover.innerHTML=`<div class="cg-calendar-head"><button type="button" data-dir="-1" aria-label="Предыдущий месяц">‹</button><strong>${monthTitle(viewYear,viewMonth)}</strong><button type="button" data-dir="1" aria-label="Следующий месяц">›</button></div>${monthBreaks.length?`<div class="cg-calendar-break">${breakIcon(monthBreaks[0])} ${monthBreaks.map(x=>`${x.title} · ${shortRange(x)}`).join(' · ')}</div>`:''}<div class="cg-calendar-week">${WEEKDAYS.map(x=>`<span>${x}</span>`).join('')}</div><div class="cg-calendar-grid">${cells.map(({date,outside})=>{const value=iso(date),lesson=lessonMap.has(value),breakItem=breakForIso(value),holiday=!!breakItem,selected=selectedDate&&iso(selectedDate)===value,classes=['cg-calendar-day',outside?'outside':'',lesson?'lesson':'',holiday?'holiday':'',breakItem?`cg-break-${breakTone(breakItem)}`:'',selected?'selected':''].filter(Boolean).join(' ');return `<button type="button" class="${classes}" data-date="${value}" ${outside?'tabindex="-1"':''}><span>${date.getUTCDate()}</span>${lesson?'<i></i>':''}${holiday?`<em>${breakIcon(breakItem)}</em>`:''}</button>`}).join('')}</div><div class="cg-calendar-legend"><span><i class="lesson-dot"></i>есть уроки</span><span><i class="empty-dot"></i>нет уроков</span><span><i class="holiday-dot"></i>каникулы</span></div>`
+      popover.innerHTML=`<div class="cg-calendar-head"><button type="button" data-dir="-1" aria-label="Предыдущий месяц">‹</button><strong>${monthTitle(viewYear,viewMonth)}</strong><button type="button" data-dir="1" aria-label="Следующий месяц">›</button></div>${monthBreaks.length?`<div class="cg-calendar-break">${breakIcon(monthBreaks[0])} ${monthBreaks.map(x=>`${x.title} · ${shortRange(x)}`).join(' · ')}</div>`:''}<div class="cg-calendar-week">${WEEKDAYS.map(x=>`<span>${x}</span>`).join('')}</div><div class="cg-calendar-grid">${cells.map(({date,outside})=>{const value=iso(date),lesson=lessonMap.has(value),breakItem=breakForIso(value),holiday=!!breakItem,selected=selectedDate&&iso(selectedDate)===value,classes=['cg-calendar-day',outside?'outside':'',lesson?'lesson':'',holiday?'holiday':'',breakItem?`cg-break-${breakTone(breakItem)}`:'',selected?'selected':'',value===schoolToday()?'today':''].filter(Boolean).join(' ');return `<button type="button" class="${classes}" data-date="${value}" ${value===schoolToday()?'aria-current="date"':''} ${outside?'tabindex="-1"':''}><span>${value===schoolToday()?'Сегодня':date.getUTCDate()}</span>${lesson?'<i></i>':''}${holiday?`<em>${breakIcon(breakItem)}</em>`:''}</button>`}).join('')}</div><div class="cg-calendar-legend"><span><i class="lesson-dot"></i>есть уроки</span><span><i class="empty-dot"></i>нет уроков</span><span><i class="holiday-dot"></i>каникулы</span></div><button type="button" class="cg-calendar-close" aria-label="Закрыть календарь">Закрыть календарь</button>`
+      popover.querySelector('.cg-calendar-close').addEventListener('click',()=>{popover.cgCleanup();popover.remove();button.setAttribute('aria-expanded','false');button.focus()})
       popover.querySelectorAll('[data-dir]').forEach(nav=>nav.addEventListener('click',()=>{viewMonth+=Number(nav.dataset.dir);if(viewMonth<0){viewMonth=11;viewYear--}if(viewMonth>11){viewMonth=0;viewYear++}render()}))
-      popover.querySelectorAll('[data-date]').forEach(day=>day.addEventListener('click',()=>{const option=lessonMap.get(day.dataset.date);if(option){dispatchSelect(select,option);popover.remove();button.setAttribute('aria-expanded','false')}}))
+      popover.querySelectorAll('[data-date]').forEach(day=>day.addEventListener('click',()=>{const option=lessonMap.get(day.dataset.date);if(option){dispatchSelect(select,option);popover.cgCleanup();popover.remove();button.setAttribute('aria-expanded','false')}}))
     }
     render()
   })
