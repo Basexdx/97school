@@ -84,6 +84,7 @@ jobs:
           rm -rf android
           npx cap add android
           npx cap sync android
+          node scripts/prepare-android-standalone.mjs
       - name: Build installable debug APK
         working-directory: android
         run: |
