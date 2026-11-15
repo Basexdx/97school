@@ -33,7 +33,7 @@ function startStaticServer(){
       const ext=path.extname(file).toLowerCase()
       res.writeHead(200,{
         'content-type':MIME[ext]||'application/octet-stream',
-        'cache-control':ext==='.html'?'no-cache':'public, max-age=31536000, immutable',
+        'cache-control':['.html','.json'].includes(ext)?'no-store':'public, max-age=31536000, immutable',
         'x-content-type-options':'nosniff',
       })
       fs.createReadStream(file).pipe(res)
@@ -44,7 +44,7 @@ function startStaticServer(){
   })
   return new Promise((resolve,reject)=>{
     server.once('error',reject)
-    server.listen(0,'127.0.0.1',()=>resolve(server.address().port))
+    server.listen(28697,'127.0.0.1',()=>resolve(server.address().port))
   })
 }
 

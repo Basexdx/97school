@@ -1,5 +1,6 @@
 'use client'
 import {openOfflineDb} from './offline-db'
+import {IS_STANDALONE,localIdentity} from './standalone-mode.mjs'
 const request=r=>new Promise((resolve,reject)=>{r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})
 const done=tx=>new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})
 function attemptId() {
@@ -18,8 +19,9 @@ async function meta(key,value) {
   const result=await request(value===undefined?tx.objectStore('meta').get(key):tx.objectStore('meta').put({key,value}))
   await wait;return value===undefined?result?.value:value
 }
-export async function bankCachedIdentity(){return (await meta('bank-student'))||null}
+export async function bankCachedIdentity(){return IS_STANDALONE?localIdentity():(await meta('bank-student'))||null}
 export async function bankIdentity() {
+  if(IS_STANDALONE)return localIdentity()
   if(!navigator.onLine) return (await meta('bank-student'))||null
   const r=await fetch('/api/student/me',{credentials:'include',cache:'no-store'})
   if(r.status===401) {await meta('bank-student',null);return null}
@@ -32,7 +34,7 @@ export async function bankPendingLocal() {
   return (await bankAttempts(student.id)).filter(a=>a.status==='PENDING_SYNC')
 }
 export async function bankIndex() {
-  if(navigator.onLine) {
+  if(IS_STANDALONE||navigator.onLine) {
     try {const r=await fetch('/task-bank/index.json',{cache:'no-store'});if(r.ok){const data=await r.json();await meta('bank-index',data);return data}} catch {}
   }
   const saved=await meta('bank-index');if(saved)return saved
@@ -44,7 +46,7 @@ async function savedTasks() {
   return rows.filter(x=>x.kind==='task-bank').flatMap(x=>x.tasks||[])
 }
 export async function loadBankTask(id,version) {
-  if(navigator.onLine) {
+  if(IS_STANDALONE||navigator.onLine) {
     try {const r=await fetch(`/task-bank/${encodeURIComponent(id)}.json`,{cache:'no-store'});if(r.ok){const t=await r.json();if(t.VERSION!==version)throw Error('Версия банка обновилась. Обновите страницу.');return t}} catch(e) {if(e.message.includes('Версия'))throw e}
   }
   const task=(await savedTasks()).find(t=>t.ID===id&&t.VERSION===version)
@@ -52,7 +54,7 @@ export async function loadBankTask(id,version) {
   return task
 }
 export async function downloadBankPackage(index,kind,value) {
-  if(!navigator.onLine)throw Error('Для скачивания нужен интернет.')
+  if(!IS_STANDALONE&&!navigator.onLine)throw Error('Для скачивания нужен интернет.')
   const selection=index.tasks.filter(t=>kind==='section'?t.section===value:t.paragraph===Number(value))
   if(!selection.length)throw Error('В этом пакете пока нет задач.')
   const tasks=[]
@@ -79,6 +81,17 @@ export async function bankAttempts(owner) {
 }
 export async function saveBankAttempt(owner,task,answer,localResult) {
   const id=attemptId()
+  if(IS_STANDALONE){
+    const db=await attemptDb(),tx=db.transaction('attempts','readwrite'),wait=done(tx),store=tx.objectStore('attempts')
+    const previous=(await request(store.getAll())).filter(a=>a.owner===owner&&a.taskId===task.ID)
+    const correct=localResult.correct,solved=previous.some(a=>a.result?.correct===true)
+    const factor=previous.length===0?1:previous.length===1?.7:previous.length===2?.4:.2
+    const xpAwarded=correct===true&&!solved?Math.floor((task.XP||20)*factor):0
+    const status=correct===null?'PENDING_REVIEW':'CONFIRMED'
+    const value={attemptId:id,eventId:id,owner,taskId:task.ID,version:task.VERSION,answer,createdAt:new Date().toISOString(),status,localResult,result:{correct,xpAwarded,status}}
+    store.put(value);await wait
+    window.dispatchEvent(new Event('genius-local-progress'));return value
+  }
   return putAttempt({attemptId:id,eventId:id,owner:owner||'guest',taskId:task.ID,version:task.VERSION,answer,createdAt:new Date().toISOString(),status:owner?'PENDING_SYNC':'LOCAL_PRACTICE',localResult})
 }
 let syncing=null
@@ -87,6 +100,7 @@ export function syncBankAttempts() {
   syncing=syncInner().finally(()=>{syncing=null});return syncing
 }
 async function syncInner() {
+  if(IS_STANDALONE){const student=localIdentity(),rows=await bankAttempts(student.id);return {student,totalXp:rows.reduce((sum,a)=>sum+(a.result?.xpAwarded||0),0)}}
   if(!navigator.onLine)return {offline:true}
   const student=await bankIdentity();if(!student)return {authRequired:true}
   const rows=(await bankAttempts(student.id)).filter(x=>x.status==='PENDING_SYNC')

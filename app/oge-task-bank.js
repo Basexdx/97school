@@ -32,7 +32,7 @@ export default function OgeTaskBank({onBack,onHome}){
   function recordAttempt(task,answer){
     attemptQueue.current=attemptQueue.current.catch(()=>{}).then(async()=>{
       const student=await bankIdentity().catch(()=>bankCachedIdentity())
-      await saveBankAttempt(student?.id,{ID:task.id,VERSION:OGE_BANK_VERSION},answer,checkOgeAttempt(task,answer))
+      await saveBankAttempt(student?.id,{ID:task.id,VERSION:OGE_BANK_VERSION,XP:task.xp},answer,checkOgeAttempt(task,answer))
       if(student){try{await syncBankAttempts();setSyncNotice('')}catch{setSyncNotice('Ответ сохранён на устройстве. Статистика появится у учителя после синхронизации.')}}
     }).catch(()=>setSyncNotice('Не удалось сохранить попытку. Проверьте соединение и повторите ответ.'))
   }

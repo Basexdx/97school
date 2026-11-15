@@ -28,7 +28,8 @@ jobs:
     runs-on: windows-latest
     env:
       GENIUS_STATIC_BUILD: '1'
-      NEXT_PUBLIC_GENIUS_API_ORIGIN: ${{ secrets.GENIUS_API_ORIGIN }}
+      NEXT_PUBLIC_GENIUS_STANDALONE: '1'
+      NEXT_PUBLIC_GENIUS_API_ORIGIN: ''
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -37,6 +38,8 @@ jobs:
           cache: npm
       - name: Install web dependencies
         run: npm ci
+      - name: Test standalone profiles and backups
+        run: node --test tests/standalone.test.mjs tests/standalone-store.test.mjs
       - name: Build static Genius web app
         run: npm run build
       - name: Install desktop packager
@@ -49,14 +52,15 @@ jobs:
           path: |
             release/windows/*.exe
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 90
 
   android:
     name: Android APK
     runs-on: ubuntu-latest
     env:
       GENIUS_STATIC_BUILD: '1'
-      NEXT_PUBLIC_GENIUS_API_ORIGIN: ${{ secrets.GENIUS_API_ORIGIN }}
+      NEXT_PUBLIC_GENIUS_STANDALONE: '1'
+      NEXT_PUBLIC_GENIUS_API_ORIGIN: ''
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -69,6 +73,8 @@ jobs:
           java-version: '21'
       - name: Install web dependencies
         run: npm ci
+      - name: Test standalone profiles and backups
+        run: node --test tests/standalone.test.mjs tests/standalone-store.test.mjs
       - name: Build static Genius web app
         run: npm run build
       - name: Install Capacitor
@@ -88,4 +94,4 @@ jobs:
           name: Genius-Android
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 90

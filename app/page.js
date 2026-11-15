@@ -2,6 +2,8 @@
 
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectionScreen from './connection-screen'
+import {IS_STANDALONE,readLocalProfile,saveLocalProfile} from './standalone-mode.mjs'
+import {StandaloneWelcome,StandaloneDashboard,StandaloneProfile} from './standalone-ui'
 import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
 import TeacherAccessPanel from './teacher-access-panel'
@@ -141,6 +143,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
   }
 
   async function trySync(showMessage = false) {
+    if(IS_STANDALONE){const result=await syncBankAttempts();setXp(result.totalXp);return}
     if (!navigator.onLine) return
     const result = await syncPendingEvents()
     try { const bankResult=await syncBankAttempts(); if(Number.isFinite(bankResult.totalXp))setXp(bankResult.totalXp) } catch {}
@@ -161,8 +164,10 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
     const offline = () => setIsOnline(false)
     window.addEventListener('online', online)
     window.addEventListener('offline', offline)
-    if (navigator.onLine) trySync(false)
-    return () => { window.removeEventListener('online', online); window.removeEventListener('offline', offline) }
+    if (IS_STANDALONE||navigator.onLine) trySync(false)
+    const localProgress=()=>trySync(false)
+    window.addEventListener('genius-local-progress',localProgress)
+    return () => { window.removeEventListener('genius-local-progress',localProgress);window.removeEventListener('online', online); window.removeEventListener('offline', offline) }
   }, [])
 
   useEffect(()=>{if(screen==='practice')setPracticeVisited(true)},[screen])
@@ -212,7 +217,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
         {sectionInfo[screen]&&screen!=='practice'&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
-        {screen === 'home' && <HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />}
+        {screen === 'home' && (IS_STANDALONE?<StandaloneDashboard grade={grade} xp={xp} setScreen={setScreen}/>:<HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />)}
         {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
         {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank onBack={backFromSection} initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
         {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
@@ -226,7 +231,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
         {screen === 'labs' && <LabsPlaceholder />}
         {screen === 'achievements' && <Achievements />}
         {screen === 'offline' && <OfflineMaterials grade={grade} topics={currentTopics} state={offlineState} refresh={refreshOfflineState} syncNow={() => trySync(true)} isOnline={isOnline} />}
-        {screen === 'profile' && <><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>}
+        {screen === 'profile' && (IS_STANDALONE?<StandaloneProfile grade={grade} setGrade={setGrade} xp={xp}/>:<><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>)}
       </main>
     </div>
   )
@@ -755,7 +760,7 @@ export default function Page() {
   useEffect(() => {
     const allowed=['landing','pending','teacher','home','topics','tests','oge','practice','fipi','formulas','materials','lesson8','topic','quiz','result','performance','rating','labs','achievements','offline','profile']
     try {
-      const saved=JSON.parse(sessionStorage.getItem('genius:view:v1')||'null')
+      const saved=JSON.parse((IS_STANDALONE?localStorage:sessionStorage).getItem('genius:view:v1')||'null')
       if(saved){
         if(saved.request&&typeof saved.request==='object')setRequest(saved.request)
         if([7,8,9].includes(saved.grade))setGrade(saved.grade)
@@ -765,7 +770,8 @@ export default function Page() {
       }
       const requested=new URLSearchParams(window.location.search).get('screen')
       const target=['offline','performance','practice','topics','labs','oge'].includes(requested)?requested:allowed.includes(saved?.screen)?saved.screen:'landing'
-      const validTarget=target==='pending'&&!saved?.request?'landing':target
+      const validTarget=IS_STANDALONE?(readLocalProfile()?(['landing','pending','teacher'].includes(target)?'home':target):'landing'):target==='pending'&&!saved?.request?'landing':target
+      if(IS_STANDALONE&&readLocalProfile())setGrade(readLocalProfile().grade)
       screenRef.current=validTarget
       setCurrentScreen(validTarget)
     } catch { /* Session storage may be unavailable. */ }
@@ -773,9 +779,10 @@ export default function Page() {
   }, [])
   useEffect(() => {
     if(!restored)return
-    try {sessionStorage.setItem('genius:view:v1',JSON.stringify({screen,entryRole,request,grade,xp,history:historyRef.current}))} catch { /* Continue if storage is blocked. */ }
+    try {(IS_STANDALONE?localStorage:sessionStorage).setItem('genius:view:v1',JSON.stringify({screen,entryRole,request,grade,xp,history:historyRef.current}))} catch { /* Continue if storage is blocked. */ }
   },[restored,screen,entryRole,request,grade,xp])
 
+  if(IS_STANDALONE&&screen==='landing')return <StandaloneWelcome Brand={Brand} onStart={profile=>{saveLocalProfile(profile);setGrade(profile.grade);setScreen('home')}}/>
   if (screen === 'landing') return <LandingRoom Brand={Brand} role={entryRole} setRole={setEntryRole} onStudentSubmit={submitStudentCode} onTeacherSubmit={()=>setScreen('teacher')} demoCode={DEMO_CODE}/>
   if (screen === 'pending') return <PendingAccess setScreen={setScreen} request={request} openStudent={()=>openLandingRole('student')} openTeacher={()=>openLandingRole('teacher')} />
   if (screen === 'teacher') return <TeacherDashboard setScreen={setScreen} request={request} setRequest={setRequest} />
