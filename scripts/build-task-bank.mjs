@@ -1,3 +1,5 @@
+import {hasQuickAnswer} from '../shared/quick-answer.mjs'
+const quickOnly=process.env.NEXT_PUBLIC_GENIUS_STANDALONE==='1'
 import {withVerifiedTextbookKey} from '../shared/verified-task-keys.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import {taskPreview} from '../shared/task-preview.mjs'
@@ -49,7 +51,7 @@ function buildGrade8(){
     if(!['thermal','electric','extra8'].includes(t.SECTION)) throw Error(`${t.ID}: unknown section`)
     if(!['РЕШУ ОГЭ — физика','А. В. Перышкин — Сборник задач по физике 7–9 классы'].includes(t.SOURCE.organization)||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
   }
-  const live=tasks.filter(publishable),publicDir=path.join(root,'public/task-bank')
+  const live=tasks.filter(t=>publishable(t)&&(!quickOnly||hasQuickAnswer(t))),publicDir=path.join(root,'public/task-bank')
   fs.mkdirSync(publicDir,{recursive:true})
   for(const f of fs.readdirSync(publicDir)) if(f.endsWith('.json')&&!f.startsWith('grade7')&&!f.startsWith('index-grade7')&&!f.startsWith('grade9')&&!f.startsWith('index-grade9')) fs.unlinkSync(path.join(publicDir,f))
   for(const t of live)write(`public/task-bank/${t.ID}.json`,toPublicTask(t,TASK_BANK_VERSION))
@@ -86,7 +88,7 @@ function buildGrade7(){
     if(t.SOURCE.organization!=='А. В. Перышкин — Сборник задач по физике 7–9 классы'||t.SOURCE.supplied_by_user!==true||!t.SOURCE.file||!t.SOURCE.task_id) throw Error(`${t.ID}: invalid supplied source metadata`)
     if(t.TASK_TYPE==='qualitative') throw Error(`${t.ID}: qualitative task must not be published in grade 7 pack`)
   }
-  const live=tasks.filter(publishable),publicDir=path.join(root,'public/task-bank')
+  const live=tasks.filter(t=>publishable(t)&&(!quickOnly||hasQuickAnswer(t))),publicDir=path.join(root,'public/task-bank')
   fs.mkdirSync(publicDir,{recursive:true})
   const publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_7))
   const coverage=paragraphs.map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
@@ -109,7 +111,7 @@ function buildGrade9(){
   if(first.some(t=>!['numeric','numeric_list'].includes(t.ANSWER.mode)||t.GRAPH_REQUIRED)) throw Error('Grade 9 range 1404–1513 must contain only direct numeric tasks without graph construction')
   const second=tasks.filter(t=>t.BOOK_TASK_NUMBER>=1588&&t.BOOK_TASK_NUMBER<=1611)
   if(second.length!==24||new Set(second.map(t=>t.BOOK_TASK_NUMBER)).size!==24) throw Error('Grade 9 range 1588–1611 must be complete')
-  const live=tasks.filter(publishable),publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_9))
+  const live=tasks.filter(t=>publishable(t)&&(!quickOnly||hasQuickAnswer(t))),publicTasks=live.map(t=>toPublicTask(t,TASK_BANK_VERSION_9))
   const paragraphs=[...new Map(live.map(t=>[t.PARAGRAPH,{paragraph:t.PARAGRAPH,title:t.TOPIC,section:t.SECTION}])).values()].sort((a,b)=>a.paragraph-b.paragraph).map(p=>({...p,count:live.filter(t=>t.PARAGRAPH===p.paragraph).length,reviewRequired:0,searchStatus:'SOURCE_PDF_RELEASE'}))
   write('public/task-bank/grade9.json',{version:TASK_BANK_VERSION_9,grade:9,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,tasks:publicTasks})
   write('public/task-bank/index-grade9.json',{version:TASK_BANK_VERSION_9,grade:9,complete:true,origin:TASK_BANK_ORIGIN_9,title:TASK_BANK_TITLE_9,sourceRanges:['1404–1513: числовой отбор без построения графиков','1588–1611: полный блок','1717–1720: период и частота колебаний'],paragraphs,tasks:publicTasks.map(t=>({id:t.ID,bookNumber:t.BOOK_TASK_NUMBER,paragraph:t.PARAGRAPH,section:t.SECTION,topic:t.TOPIC,preview:taskPreview(t.TASK),difficulty:t.DIFFICULTY,type:t.TASK_TYPE,answerFormat:textbookAnswerFormat(t),xp:t.XP}))})

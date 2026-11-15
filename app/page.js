@@ -3,6 +3,9 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectionScreen from './connection-screen'
 import {IS_STANDALONE,readLocalProfile,saveLocalProfile} from './standalone-mode.mjs'
+import {localSessionOpen,lockLocalProfile} from './local-auth.mjs'
+import {StudentAvatar} from './student-onboarding'
+import TextbookCatalog from './textbook-catalog'
 import {StandaloneWelcome,StandaloneDashboard,StandaloneProfile} from './standalone-ui'
 import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
@@ -95,14 +98,15 @@ function PendingAccess({setScreen,request,openStudent,openTeacher}){
 }
 
 function Sidebar({ screen, setScreen, isOnline, isPhone }) {
-  const [menuOpen,setMenuOpen]=useState(false)
+  const [menuOpen,setMenuOpen]=useState(false),[localAvatar,setLocalAvatar]=useState(null)
+  useEffect(()=>{if(!IS_STANDALONE)return;const update=()=>setLocalAvatar(readLocalProfile()?.avatarId||null);update();window.addEventListener('genius-local-profile',update);return()=>window.removeEventListener('genius-local-profile',update)},[])
   const navigate=key=>{setScreen(key);setMenuOpen(false)}
   return (
     <>
       <button type="button" className="mobile-nav-toggle" aria-controls="student-sidebar-nav" aria-expanded={menuOpen} aria-label={menuOpen?'Закрыть меню':'Открыть меню'} onClick={()=>setMenuOpen(!menuOpen)}>{menuOpen?'×':'☰'}<span>Меню</span></button>
       {menuOpen&&<button type="button" className="mobile-nav-backdrop" aria-label="Закрыть меню" onClick={()=>setMenuOpen(false)}/>}
     <aside className={`sidebar-light ${menuOpen?'mobile-nav-open':''}`}>
-      <div className="student-brand-row"><Brand dark onClick={() => navigate('home')} /><button className="student-profile-button" onClick={()=>navigate('profile')} aria-label={`Профиль · ${isOnline?'в сети':'нет сети'}${isPhone?' · телефон':''}`} title={`Профиль · ${isOnline?'в сети':'нет сети'}`}><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.5-3.5 2.9-5.5 7-5.5s6.5 2 7 5.5"/></svg><i className={isOnline?'is-online':'is-offline'} aria-hidden="true">{isPhone?'▯':''}</i></button></div>
+      <div className="student-brand-row"><Brand dark onClick={() => navigate('home')} /><button className="student-profile-button" onClick={()=>navigate('profile')} aria-label={`Профиль · ${isOnline?'в сети':'нет сети'}${isPhone?' · телефон':''}`} title={`Профиль · ${isOnline?'в сети':'нет сети'}`}>{IS_STANDALONE&&localAvatar?<StudentAvatar id={localAvatar} size={34}/>:<svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.5-3.5 2.9-5.5 7-5.5s6.5 2 7 5.5"/></svg>}<i className={isOnline?'is-online':'is-offline'} aria-hidden="true">{isPhone?'▯':''}</i></button></div>
       <nav id="student-sidebar-nav" aria-label="Разделы ученика">
         {navItems.map(([key, icon, label]) => (
           <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => navigate(key)}><span>{icon}</span>{label}</button>
@@ -186,10 +190,11 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
     goBack()
   }
 
+  function markLessonViewed(id){try{const seen=new Set(JSON.parse(localStorage.getItem('genius:lesson-views:v1')||'[]'));seen.add(id);localStorage.setItem('genius:lesson-views:v1',JSON.stringify([...seen]));window.dispatchEvent(new Event('genius-local-progress'))}catch{}}
   function startQuiz() { setQuizIndex(0); setAnswers([]); setScreen('quiz') }
   function answer(i) { const next = [...answers, i]; setAnswers(next); if (quizIndex < quiz.length - 1) setQuizIndex(quizIndex + 1); else setScreen('result') }
-  function openTopic(i) { setSelectedTopic(i); setScreen('topic') }
-  function openLesson(id) { setSelectedLessonId(id); setScreen('lesson8') }
+  function openTopic(i) { if(IS_STANDALONE)markLessonViewed(`${grade}:topic:${i}`);setSelectedTopic(i); setScreen('topic') }
+  function openLesson(id) { if(IS_STANDALONE)markLessonViewed(id);setSelectedLessonId(id); setScreen('lesson8') }
 
   async function downloadCurrentTopic() {
     await downloadTopicPackage({ grade, topic: currentTopics[selectedTopic], topicIndex: selectedTopic })
@@ -214,11 +219,11 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
     <div className="student-app">
       <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
       <main className="student-content" data-section={screen}>
-        {sectionInfo[screen]&&screen!=='practice'&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
+        {sectionInfo[screen]&&screen!=='practice'&&!(IS_STANDALONE&&['topics','tests','oge'].includes(screen))&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && (IS_STANDALONE?<StandaloneDashboard grade={grade} xp={xp} setScreen={setScreen}/>:<HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />)}
-        {(screen === 'topics' || screen === 'tests' || screen === 'oge') && <CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />}
+        {(screen === 'topics' || screen === 'tests' || screen === 'oge') && (IS_STANDALONE?<TextbookCatalog grade={grade} setGrade={setGrade} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} onBack={backFromSection} onHome={()=>setScreen('home')}/>:<CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />)}
         {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank onBack={backFromSection} initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
         {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
         {(openedSections.includes('formulas')||screen==='formulas')&&<div hidden={screen!=='formulas'}><ReferenceOverlay mode="formulas" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
@@ -735,6 +740,7 @@ export default function Page() {
   function openLandingRole(role){setScreen('landing');setEntryRole(role)}
   function setScreen(next){
     const target=typeof next==='function'?next(screenRef.current):next
+    if(IS_STANDALONE&&target==='landing')lockLocalProfile()
     if(target===screenRef.current)return
     if(target==='landing')setEntryRole(null)
     const previous=historyRef.current.at(-1)
@@ -770,7 +776,7 @@ export default function Page() {
       }
       const requested=new URLSearchParams(window.location.search).get('screen')
       const target=['offline','performance','practice','topics','labs','oge'].includes(requested)?requested:allowed.includes(saved?.screen)?saved.screen:'landing'
-      const validTarget=IS_STANDALONE?(readLocalProfile()?(['landing','pending','teacher'].includes(target)?'home':target):'landing'):target==='pending'&&!saved?.request?'landing':target
+      const validTarget=IS_STANDALONE?(readLocalProfile()&&localSessionOpen()?(['landing','pending','teacher'].includes(target)?'home':target):'landing'):target==='pending'&&!saved?.request?'landing':target
       if(IS_STANDALONE&&readLocalProfile())setGrade(readLocalProfile().grade)
       screenRef.current=validTarget
       setCurrentScreen(validTarget)

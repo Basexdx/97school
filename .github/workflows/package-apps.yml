@@ -39,18 +39,21 @@ jobs:
       - name: Install web dependencies
         run: npm ci
       - name: Test standalone profiles and backups
-        run: node --test tests/standalone.test.mjs tests/standalone-store.test.mjs
+        run: node --test tests/standalone.test.mjs tests/standalone-store.test.mjs tests/release-1-8.test.mjs
       - name: Build static Genius web app
         run: npm run build
       - name: Install desktop packager
-        run: npm install --no-save electron@latest electron-builder@latest
+        run: npm install --no-save electron@latest electron-builder@latest @electron/asar@3.4.1
       - name: Build Windows installer and portable app
         run: npx electron-builder --config desktop/electron-builder.yml --win --publish never
+      - name: Package files-only Windows update
+        run: node scripts/package-windows-update.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: Genius-Windows
           path: |
             release/windows/*.exe
+            release/windows/*Update*.zip
           if-no-files-found: error
           retention-days: 90
 
@@ -74,7 +77,7 @@ jobs:
       - name: Install web dependencies
         run: npm ci
       - name: Test standalone profiles and backups
-        run: node --test tests/standalone.test.mjs tests/standalone-store.test.mjs
+        run: node --test tests/standalone.test.mjs tests/standalone-store.test.mjs tests/release-1-8.test.mjs
       - name: Build static Genius web app
         run: npm run build
       - name: Install Capacitor

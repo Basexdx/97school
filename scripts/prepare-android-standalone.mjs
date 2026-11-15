@@ -14,6 +14,6 @@ for(const directory of fs.readdirSync(res)){
  }else for(const name of ['ic_launcher.png','ic_launcher_round.png'])fs.writeFileSync(path.join(target,name),icon)
 }
 fs.writeFileSync(path.join(res,'values/genius.xml'),'<?xml version="1.0" encoding="utf-8"?><resources><color name="genius_background">#071525</color></resources>\n')
-const gradle='android/app/build.gradle';let text=fs.readFileSync(gradle,'utf8');text=text.replace(/versionCode\s+\d+/,'versionCode 10700').replace(/versionName\s+"[^"]+"/,'versionName "1.7.0"');fs.writeFileSync(gradle,text)
+const gradle='android/app/build.gradle';let text=fs.readFileSync(gradle,'utf8');text=text.replace(/versionCode\s+\d+/,'versionCode 10800').replace(/versionName\s+"[^"]+"/,'versionName "1.8.0"');fs.writeFileSync(gradle,text)
 const styles=path.join(res,'values/styles.xml');if(fs.existsSync(styles)){let text=fs.readFileSync(styles,'utf8');text=text.replaceAll('@drawable/splash','@drawable/genius_launcher');fs.writeFileSync(styles,text)}
-console.log('Android Genius branding applied: 1.7.0 (10700)')
+console.log('Android Genius branding applied: 1.8.0 (10800)')

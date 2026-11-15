@@ -7,7 +7,7 @@ import {checkOgeAttempt,teacherAnswerLabel} from '../shared/oge-attempts.mjs'
 import {checkAnswer} from '../shared/task-checker.mjs'
 const read=p=>JSON.parse(fs.readFileSync(new URL(p,import.meta.url)))
 const ogeKeys=read('../bank/verified-oge-keys.json'),bookKeys=read('../bank/verified-textbook-keys.json')
-const books=[...read('../bank/tasks.json'),...read('../bank/tasks-grade8-additions.json'),...read('../public/task-bank/grade9.json').tasks].map(withVerifiedTextbookKey)
+const books=[...read('../bank/tasks.json'),...read('../bank/tasks-grade8-additions.json'),...read('../bank/tasks-grade9.json')].map(withVerifiedTextbookKey)
 const book=n=>books.find(t=>Number(t.ID.split('-').at(-1))===n)
 const oge=id=>ogeTasks.find(t=>t.id===id)
 

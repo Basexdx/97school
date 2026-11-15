@@ -6,9 +6,9 @@ import {PROFILE_KEY,readLocalProfile,saveLocalProfile,localIdentity} from '../ap
 test('standalone profile persists independently of sessions and normalizes grade and nickname',()=>{
  const values=new Map();globalThis.localStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)}
  assert.equal(readLocalProfile(),null)
- assert.deepEqual(saveLocalProfile({nickname:'  Саша  ',grade:9}),{nickname:'Саша',grade:9})
+ assert.deepEqual(saveLocalProfile({nickname:'  Саша  ',grade:9}),{nickname:'Саша',grade:9,avatarId:null})
  assert.equal(localIdentity().id,'local-student');assert.equal(localIdentity().nickname,'Саша')
- assert.deepEqual(saveLocalProfile({nickname:'',grade:42}),{nickname:'Ученик',grade:8})
+ assert.deepEqual(saveLocalProfile({nickname:'',grade:42}),{nickname:'Ученик',grade:8,avatarId:null})
 })
 test('backup validation rejects incomplete, foreign and duplicate attempts before writing',()=>{
  const row={attemptId:'one',owner:'local-student',taskId:'oge-1-1182',createdAt:new Date().toISOString(),status:'CONFIRMED',result:{correct:true,xpAwarded:20}}

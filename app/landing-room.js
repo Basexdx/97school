@@ -5,18 +5,18 @@ import {useEffect,useState} from 'react'
 const bookSections=['МЕХАНИКА','ТЕПЛОВЫЕ ЯВЛЕНИЯ','ЭЛЕКТРИЧЕСТВО','ОПТИКА']
 function EntryIcon({teacher=false}){return teacher?<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="7" r="3"/><path d="M4.5 20v-2.5a7.5 7.5 0 0 1 15 0V20z"/></svg>:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m2 9 10-5 10 5-10 5zM6 11v5c3 2.7 9 2.7 12 0v-5M22 9v7"/></svg>}
 
-export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeacherSubmit,demoCode}){
+export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeacherSubmit,demoCode,entryContent,entryMode}){
   const [code,setCode]=useState('')
   const [error,setError]=useState('')
   const [busy,setBusy]=useState(false)
   const [showPassword,setShowPassword]=useState(false)
 
   useEffect(()=>{
-    if(!role)return
+    if(!role||entryContent)return
     const previous=document.body.style.overflow
     document.body.style.overflow='hidden'
     return ()=>{document.body.style.overflow=previous}
-  },[role])
+  },[role,entryContent])
 
   async function submitStudent(event){
     event.preventDefault()
@@ -41,13 +41,13 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
 
   function selectRole(next){setError('');setBusy(false);setRole(next)}
 
-  return <main className="landing-page genius-room-landing">
+  return <main className={`landing-page genius-room-landing${entryContent?` standalone-room ${entryMode||''}`:''}`}>
     <section className={`genius-room-shell${role?' genius-room-shell--form':''}`}>
       <header className="genius-room-header"><Brand dark onClick={()=>selectRole(null)}/></header>
       <div className="genius-room-layout">
         <div className="genius-room-copy">
           <span className="genius-room-kicker">ФИЗИКА · 7–9 КЛАСС</span>
-          <h1><span>Понимай<br/>физику.</span><span>Решай<br/>уверенно.</span></h1>
+          <h1><span>{entryContent?'Понимай физику.':<>Понимай<br/>физику.</>}</span><span>{entryContent?'Решай уверенно.':<>Решай<br/>уверенно.</>}</span></h1>
           <p>Учебник, задачи и справочные материалы по физике — в одной системе.</p>
         </div>
         <div className="genius-room-scene" aria-hidden="true">
@@ -63,7 +63,7 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
           {Array.from({length:5},(_,i)=><i style={{left:`${48+i*11}%`,animationDuration:`${12+i*1.5}s`,animationDelay:`-${i*3.2}s`}} key={i}/>)}
         </div>
         <div className="genius-room-entry" aria-live="polite">
-          {!role?<div className="genius-room-choices">
+          {entryContent||( !role?<div className="genius-room-choices">
             <button type="button" className="genius-room-primary" onClick={()=>selectRole('student')}><EntryIcon/>Войти как ученик</button>
             <button type="button" className="genius-room-secondary" onClick={()=>selectRole('teacher')}><EntryIcon teacher/>Войти как учитель</button>
           </div>:<div className="genius-room-login" key={role}>
@@ -85,7 +85,7 @@ export default function LandingRoom({Brand,role,setRole,onStudentSubmit,onTeache
               {error&&<p className="genius-room-error" role="alert">{error}</p>}
               <button className="genius-room-primary" type="submit" disabled={busy}>{busy?'Входим…':'Войти →'}</button>
             </form>}
-          </div>}
+          </div>)}
         </div>
       </div>
     </section>
