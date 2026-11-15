@@ -62,7 +62,9 @@ test('every type-3 key accepts its answer and rejects each distractor before and
   assert.deepEqual(restored,stored)
   const solved=new Set(Object.entries(restored).filter(([id,answer])=>checkOgeChoiceAnswer(tasks.find(task=>task.id===id),answer)).map(([id])=>id))
   assert.equal(filterOgeTasks(ogeTasks,{types:[3],statuses:['solved']},new Set(),solved).length,60)
-  const unkeyed=ogeTasks.find(task=>task.type===14)
+  const keyed=ogeTasks.find(task=>task.type===14)
+  assert.equal(checkOgeChoiceAnswer(keyed,keyed.answer),true)
+  const unkeyed={...keyed,answer:null}
   assert.equal(checkOgeChoiceAnswer(unkeyed,[1,2]),null)
 })
 
