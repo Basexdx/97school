@@ -33,7 +33,7 @@ function startStaticServer(){
       const ext=path.extname(file).toLowerCase()
       res.writeHead(200,{
         'content-type':MIME[ext]||'application/octet-stream',
-        'cache-control':['.html','.json'].includes(ext)?'no-store':'public, max-age=31536000, immutable',
+        'cache-control':url.pathname.startsWith('/_next/static/')?'public, max-age=31536000, immutable':'no-store',
         'x-content-type-options':'nosniff',
       })
       fs.createReadStream(file).pipe(res)
