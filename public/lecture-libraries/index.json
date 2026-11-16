@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "libraries": [
+    {
+      "id": "genius-physics-7",
+      "title": "Курс лекций · 7 класс",
+      "grade": 7,
+      "file": "grade-7.json"
+    },
+    {
+      "id": "genius-physics-8",
+      "title": "Курс лекций · 8 класс",
+      "grade": 8,
+      "file": "grade-8.json"
+    },
+    {
+      "id": "genius-physics-9",
+      "title": "Курс лекций · 9 класс",
+      "grade": 9,
+      "file": "grade-9.json"
+    }
+  ]
+}

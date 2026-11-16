@@ -1,6 +1,6 @@
-const SHELL_CACHE = 'genius-shell-v13'
-const RUNTIME_CACHE = 'genius-runtime-v13'
-const SHELL = ['/', '/tasks']
+const SHELL_CACHE = 'genius-shell-v14'
+const RUNTIME_CACHE = 'genius-runtime-v14'
+const SHELL = ['/', '/tasks', '/lecture-libraries/index.json', '/lecture-libraries/grade-7.json', '/lecture-libraries/grade-8.json', '/lecture-libraries/grade-9.json']
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(SHELL_CACHE).then(cache => cache.addAll(SHELL)))
