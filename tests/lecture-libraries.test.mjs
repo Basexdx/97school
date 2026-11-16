@@ -11,19 +11,23 @@ test('all Word formula blocks are covered once by readable, renderable lectures'
   const manifest = read('public/lecture-libraries/index.json')
   const deliveredEquations = []
   const ids = new Set()
+  const originalCounts = {7:8, 8:10, 9:16}
   assert.deepEqual(manifest.libraries.map(item => item.grade), [7, 8, 9])
   for (const entry of manifest.libraries) {
     const library = validateLectureLibrary(read(`public/lecture-libraries/${entry.file}`))
     assert.equal(library.id, entry.id)
     assert.equal(library.grade, entry.grade)
     assert.ok(library.lessons.length >= 8)
+    assert.deepEqual(library.lessons.filter(item => /^lecture-[789]-\d{2}$/.test(item.id)).map(item => item.id).sort(),
+      Array.from({length:originalCounts[entry.grade]}, (_, i) => `lecture-${entry.grade}-${String(i+1).padStart(2,'0')}`))
     for (const lecture of library.lessons) {
       assert.ok(!ids.has(lecture.id), `Duplicate lecture ${lecture.id}`)
       ids.add(lecture.id)
       const words = [lecture.intro, lecture.takeaway, ...lecture.blocks.flatMap(block => [block.text, block.symbols, block.conditions])].join(' ').split(/\s+/)
       assert.ok(words.length >= 100, `Lecture too terse: ${lecture.title}`)
       for (const block of lecture.blocks) {
-        assert.ok(block.source && block.symbols && block.conditions)
+        assert.ok(block.source && block.text)
+        if (block.equations.length) assert.ok(block.symbols && block.conditions)
         for (const equation of block.equations) {
           assert.doesNotThrow(() => katex.renderToString(equation, {throwOnError:true, strict:'ignore', trust:false}), equation)
           deliveredEquations.push(equation)
