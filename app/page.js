@@ -1,13 +1,13 @@
 'use client'
 
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
 import ConnectionScreen from './connection-screen'
 import {IS_STANDALONE,readLocalProfile,saveLocalProfile} from './standalone-mode.mjs'
 import {localSessionOpen,lockLocalProfile} from './local-auth.mjs'
 import {StudentAvatar} from './student-onboarding'
-import TextbookCatalog from './textbook-catalog'
+import {studentModules,studentModule} from './student-modules.mjs'
 import {StandaloneWelcome,StandaloneDashboard,StandaloneProfile} from './standalone-ui'
-import UnifiedTaskBank from './unified-task-bank'
 import TeacherTaskBank from './teacher-task-bank'
 import TeacherAccessPanel from './teacher-access-panel'
 import TeacherSessionConnect from './teacher-session-connect'
@@ -15,8 +15,10 @@ import {accessApi} from './access-api.mjs'
 import {useSchoolToday} from './school-today'
 import {formatSchoolDate} from '../shared/academic-calendar.mjs'
 import LandingRoom from './landing-room'
-import {ReferenceOverlay} from './genius-v17-enhancer'
-import {ReferenceMaterialsPage} from './reference-materials'
+const UnifiedTaskBank=dynamic(()=>import('./unified-task-bank'))
+const ReferenceOverlay=dynamic(()=>import('./genius-v17-enhancer').then(module=>module.ReferenceOverlay))
+const ReferenceMaterialsPage=dynamic(()=>import('./reference-materials').then(module=>module.ReferenceMaterialsPage))
+const TextbookCatalog=dynamic(()=>import('./textbook-catalog'))
 import {bankPendingLocal,syncBankAttempts} from './task-store'
 import {TASK_BANK_VERSION} from '../shared/task-bank-meta.mjs'
 import { clearOfflinePackages, downloadGradeLessonsPackage, downloadGradePackage, downloadLessonPackage, downloadTopicPackage, formatBytes, getOfflineState, queueSyncEvent, removeOfflinePackage, syncPendingEvents } from './offline-db'
@@ -70,13 +72,11 @@ const quiz = [
   },
 ]
 
-const navItems = [
-  ['practice', '◇', 'Задачник'],
-  ['topics', '▦', 'Учебник'],
-  ['fipi', 'Φ', 'Банк заданий ФИПИ'],
-  ['materials', '▤', 'Справочные материалы'],
-  ['formulas', 'Σ', 'Основные формулы'],
-]
+const navItems=studentModules.map(({id,icon,label})=>[id,icon,label])
+
+function UnavailableModule({module,onBack,onHome}){
+ return <section className="library-unavailable"><header className="unified-section-header"><div className="unified-section-title"><h1><span aria-hidden="true">{module.icon} </span>{module.label}</h1><p>Библиотека пока не загружена</p></div><nav aria-label="Навигация по разделам"><button onClick={onBack}>← Назад</button><button onClick={onHome}>⌂ Домой</button></nav></header><div className="library-unavailable-card" role="status"><span aria-hidden="true">{module.icon}</span><h2>Библиотека не загружена</h2><p>Материалы раздела «{module.label}» появятся в следующем обновлении.</p><button onClick={onHome}>На главную →</button></div></section>
+}
 
 const DEMO_CODE = 'GNS-8K4P-X7M2'
 
@@ -219,11 +219,11 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
     <div className="student-app">
       <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
       <main className="student-content" data-section={screen}>
-        {sectionInfo[screen]&&!['practice','topics'].includes(screen)&&!(IS_STANDALONE&&['tests','oge'].includes(screen))&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
+        {sectionInfo[screen]&&!['practice','topics','labs'].includes(screen)&&!(IS_STANDALONE&&['tests','oge'].includes(screen))&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && (IS_STANDALONE?<StandaloneDashboard grade={grade} xp={xp} setScreen={setScreen}/>:<HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />)}
-        {screen === 'topics' && <TextbookCatalog grade={grade} setGrade={setGrade} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} onBack={backFromSection} onHome={()=>setScreen('home')}/>}
+        {screen === 'topics' && (!IS_STANDALONE?<TextbookCatalog grade={grade} setGrade={setGrade} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} onBack={backFromSection} onHome={()=>setScreen('home')}/>:<UnavailableModule module={studentModule('topics')} onBack={backFromSection} onHome={()=>setScreen('home')}/>)}
         {(screen === 'tests' || screen === 'oge') && (IS_STANDALONE?<TextbookCatalog grade={grade} setGrade={setGrade} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} onBack={backFromSection} onHome={()=>setScreen('home')}/>:<CourseScreen grade={grade} setGrade={setGrade} mode={screen === 'oge' ? 'oge' : courseMode} setMode={setCourseMode} topics={currentTopics} openTopic={openTopic} openLesson={openLesson} />)}
         {(practiceVisited||screen==='practice')&&<div hidden={screen!=='practice'}><UnifiedTaskBank onBack={backFromSection} initialGrade={grade} onXp={setXp} refreshOffline={refreshOfflineState} setScreen={setScreen}/></div>}
         {(openedSections.includes('fipi')||screen==='fipi')&&<div hidden={screen!=='fipi'}><ReferenceOverlay mode="fipi" close={backFromSection} onMenu={()=>setScreen('home')} returnToTask={false}/></div>}
@@ -234,7 +234,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
         {screen === 'quiz' && <QuizScreen quizIndex={quizIndex} answer={answer} />}
         {screen === 'result' && <ResultScreen percent={percent} score={score} earned={earned} setScreen={setScreen} startQuiz={startQuiz} claim={claimXp} />}
         {(screen === 'performance' || screen === 'rating') && <StudentPerformance grade={grade} xp={xp} />}
-        {screen === 'labs' && <LabsPlaceholder />}
+        {screen === 'labs' && (IS_STANDALONE?<UnavailableModule module={studentModule('labs')} onBack={backFromSection} onHome={()=>setScreen('home')}/>:<LabsPlaceholder />)}
         {screen === 'achievements' && <Achievements />}
         {screen === 'offline' && <OfflineMaterials grade={grade} topics={currentTopics} state={offlineState} refresh={refreshOfflineState} syncNow={() => trySync(true)} isOnline={isOnline} />}
         {screen === 'profile' && (IS_STANDALONE?<StandaloneProfile grade={grade} setGrade={setGrade} xp={xp}/>:<><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>)}

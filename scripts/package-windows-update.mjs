@@ -3,13 +3,13 @@ import os from 'node:os'
 import path from 'node:path'
 import zlib from 'node:zlib'
 import {createPackage} from '@electron/asar'
-const version=process.env.GENIUS_UPDATE_VERSION||'1.8.2',stage=fs.mkdtempSync(path.join(os.tmpdir(),'genius-update-')),release=path.resolve('release/windows')
+const version=process.env.GENIUS_UPDATE_VERSION||'1.8.3',stage=fs.mkdtempSync(path.join(os.tmpdir(),'genius-update-')),release=path.resolve('release/windows')
 fs.mkdirSync(release,{recursive:true});fs.cpSync('out',path.join(stage,'out'),{recursive:true});fs.cpSync('desktop',path.join(stage,'desktop'),{recursive:true})
 const base=JSON.parse(fs.readFileSync('package.json','utf8'))
 // Electron's package name defines its existing user-data directory. Never rename it.
 fs.writeFileSync(path.join(stage,'package.json'),JSON.stringify({name:base.name,version,private:true,main:'desktop/main.cjs'},null,2))
 const archive=path.join(stage,'app.asar');await createPackage(stage,archive)
-const readme=`Обновление Genius ${version} для Windows (версия 1.8.0 и новее)\r\n\r\n1. Полностью закройте Genius.\r\n2. Найдите папку, где находится Genius.exe. Можно нажать правой кнопкой по ярлыку и выбрать «Расположение файла».\r\n3. Скопируйте папку resources из этого архива в папку Genius.exe. Подтвердите замену файла resources/app.asar.\r\n4. Запустите Genius. Для входа в существующий профиль нажмите «Войти» — пароль вводить не нужно.\r\n\r\nУдалять приложение или папку данных не нужно. Никнейм, ответы, просмотры, XP и статистика остаются на устройстве.\r\n\r\nПакет меняет только файлы приложения и не содержит файлов профиля. Подключённые учеником дополнительные библиотеки остаются в локальном хранилище. Ранее сохранённый хэш пароля не удаляется, если позже вы решите вернуть вход по паролю.\r\n`
+const readme=`Обновление Genius ${version} для Windows (версия 1.8.0 и новее)\r\n\r\n1. Полностью закройте Genius.\r\n2. Найдите папку, где находится Genius.exe. Можно нажать правой кнопкой по ярлыку и выбрать «Расположение файла».\r\n3. Скопируйте папку resources из этого архива в папку Genius.exe. Подтвердите замену файла resources/app.asar.\r\n4. Запустите Genius. При первом входе после обновления укажите имя, фамилию и класс, выберите аватар, задайте логин и новый пароль. Затем входите по этому логину и паролю.\r\n\r\nПрофиль, ответы, просмотры, XP и статистика остаются на устройстве. Прежний пароль вводить не нужно: после задания нового пароля сохранённый прогресс остаётся привязанным к этому устройству. Учебник и лабораторные работы пока отображаются как незагруженные библиотеки.\r\n\r\nПакет меняет только файлы приложения и не содержит пользовательских данных. Не удаляйте установленное приложение или его папку данных.\r\n`
 const crcTable=Array.from({length:256},(_,n)=>{for(let k=0;k<8;k++)n=n&1?0xedb88320^(n>>>1):n>>>1;return n>>>0})
 const crc32=buffer=>{let c=0xffffffff;for(const b of buffer)c=crcTable[(c^b)&255]^(c>>>8);return (c^0xffffffff)>>>0}
 const now=new Date(),dosDate=((now.getFullYear()-1980)<<9)|((now.getMonth()+1)<<5)|now.getDate()

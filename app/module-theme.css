@@ -1,0 +1,94 @@
+/* Five shared colors: space 3/18/33, panel 7/29/49, blue 38/165/242,
+   gold 245/195/99 and text 238/247/255. */
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-400-normal.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-600-normal.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-400-normal.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-600-normal.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
+:root{
+  --ui-font:Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --genius-space:rgb(3 18 33);
+  --genius-panel:rgb(7 29 49);
+  --genius-blue:rgb(38 165 242);
+  --genius-gold:rgb(245 195 99);
+  --genius-text:rgb(238 247 255);
+  --ui-bg:var(--genius-space);
+  --ui-text:var(--genius-text);
+  --ui-accent:var(--genius-gold);
+}
+html,body,html.cosmo-genius-restored .student-app,.standalone-room,
+html.cosmo-genius-restored .genius-reference-overlay,
+html.cosmo-genius-restored .reference-materials-overlay{font-family:var(--ui-font)!important;font-weight:400}
+html.cosmo-genius-restored :is(button,input,select,textarea){font-family:var(--ui-font)!important}
+html.cosmo-genius-restored :is(.student-content,.genius-reference-overlay,.reference-materials-overlay) :is(h1,h2,h3){font-weight:500}
+html.cosmo-genius-restored .task-bank-hub{background:transparent!important;background-image:none!important}
+
+/* The desktop title row occupies the same position and height in each library. */
+@media(min-width:901px){
+  html.cosmo-genius-restored .genius-reference-scroll{padding:28px 26px 90px}
+  html.cosmo-genius-restored .genius-fipi-wrap [class*="_page__"]{padding:0 0 60px;max-width:none}
+  html.cosmo-genius-restored .reference-materials-page{max-width:none;padding:28px 26px 44px}
+  html.cosmo-genius-restored :is(.book-bank-header,.unified-section-header,.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar,.genius-fipi-wrap [class*="_bankHeader__"]){box-sizing:border-box;min-height:134px;margin-bottom:18px;padding:18px 20px;border-radius:18px}
+  html.cosmo-genius-restored :is(.book-heading>span,.rm-book-icon,.fl-hero-icon,.genius-fipi-wrap [class*="_bankIcon__"]){width:70px;height:70px;flex-basis:70px;font-size:46px}
+  html.cosmo-genius-restored :is(.book-heading h1,.rm-title-block h1,.fl-hero h1,.genius-fipi-wrap [class*="_bankTitle__"] h1){font-size:clamp(30px,2.45vw,43px);line-height:1.1;font-weight:500;letter-spacing:-.035em;margin:0 0 7px}
+  html.cosmo-genius-restored :is(.book-heading p,.rm-title-block p,.fl-hero p,.genius-fipi-wrap [class*="_bankTitle__"] p){font-size:14px;line-height:1.4}
+  html.cosmo-genius-restored .rm-title-block h1{white-space:nowrap}
+  html.cosmo-genius-restored .formula-reference-overlay .fl-hero-count{display:none}
+  html.cosmo-genius-restored :is(.book-bank-header,.genius-fipi-wrap [class*="_bankHeader__"],.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar){grid-template-columns:minmax(0,1fr) minmax(230px,34%) auto;gap:14px}
+  html.cosmo-genius-restored .book-bank-header{display:flex}
+  html.cosmo-genius-restored .book-heading{min-width:0}
+  html.cosmo-genius-restored .book-header-controls{flex-wrap:nowrap}
+  html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankHeader__"]{display:grid}
+  html.cosmo-genius-restored :is(.book-search,.genius-fipi-wrap [class*="_bankSearch__"],.rm-search,.fl-search){height:48px!important;min-height:48px}
+  html.cosmo-genius-restored :is(.book-header-controls button,.book-header-controls select,.genius-fipi-wrap [class*="_bankNav__"] button){height:48px!important;min-height:48px}
+}
+@media(min-width:901px) and (max-width:1450px){
+  html.cosmo-genius-restored .book-bank-header{flex-wrap:wrap}
+  html.cosmo-genius-restored .book-header-controls{flex-basis:100%}
+  html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankHeader__"],
+  html.cosmo-genius-restored .reference-materials-page .rm-hero,
+  html.cosmo-genius-restored .formula-reference-overlay .fl-toolbar{grid-template-columns:minmax(0,1fr) auto}
+  html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankSearch__"],
+  html.cosmo-genius-restored .reference-materials-page .rm-search,
+  html.cosmo-genius-restored .formula-reference-overlay .fl-search{grid-column:1/-1;grid-row:2}
+  html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankNav__"],
+  html.cosmo-genius-restored .reference-materials-page .rm-header-actions,
+  html.cosmo-genius-restored .formula-reference-overlay .fl-header-actions{grid-column:2;grid-row:1}
+}
+/* Both task banks use one tile geometry and the same typography. */
+html.cosmo-genius-restored .task-bank-hub[data-native-layout] .book-task-tile,
+html.cosmo-genius-restored .genius-fipi-wrap [class*="_tile__"]{box-sizing:border-box;min-height:286px;padding:20px;border:1px solid rgba(60,152,245,.28);border-radius:17px;background:linear-gradient(155deg,rgba(8,31,54,.96),rgba(4,18,34,.98));color:var(--genius-text)}
+html.cosmo-genius-restored .genius-fipi-wrap [class*="_tile__"]:hover{border-color:var(--genius-blue)}
+html.cosmo-genius-restored .genius-fipi-wrap [class*="_tile__"] [class*="_preview__"],
+html.cosmo-genius-restored .task-bank-hub .book-task-tile [class*="_preview__"]{font-weight:400;line-height:1.52}
+@media(max-width:700px){
+  html.cosmo-genius-restored :is(.task-bank-hub[data-native-layout] .book-task-tile,.genius-fipi-wrap [class*="_tile__"]){min-height:245px;padding:16px}
+  html.cosmo-genius-restored .rm-title-block h1{font-size:clamp(25px,7vw,34px)}
+}
+/* Math symbols keep their conventional italic shape, text explanations do not. */
+.fl-math,.fl-variable-symbol,.rm-card-constants .rm-table-wrap td:last-child,
+.rm-card-unit-relations .rm-table-wrap td:last-child,.rm-card-particle-mass .rm-table-wrap td:last-child,
+.genius-formula-grid article>div{font-style:italic}
+.katex .mord.mathnormal{font-style:italic}
+
+.library-unavailable{min-height:calc(100vh - 60px)}
+.library-unavailable-card{max-width:550px;margin:clamp(40px,12vh,120px) auto;padding:35px;border:1px solid rgba(38,165,242,.38);border-radius:22px;background:rgba(7,29,49,.9);color:var(--genius-text);text-align:center}
+.library-unavailable-card>span{font-size:48px;color:var(--genius-gold)}
+.library-unavailable-card h2{font-size:25px}.library-unavailable-card p{color:#a6bfd3;line-height:1.6}
+.library-unavailable-card button{margin-top:12px;border:1px solid var(--genius-blue);border-radius:11px;padding:12px 20px;background:#061c33;color:var(--genius-text);cursor:pointer}
+
+.standalone-room .genius-room-copy h1{font-family:var(--ui-font);font-weight:500;letter-spacing:-.045em;line-height:1.02}
+.standalone-room .genius-room-kicker{font-weight:500;letter-spacing:.055em}
+.standalone-room .genius-room-copy h1 span+span{margin-top:8px}
+.local-entry-credentials{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.local-entry-fields{grid-template-columns:1fr 1fr 110px}
+.standalone-room.local-entry-setup .genius-room-layout{align-content:start;padding-top:16px}
+.standalone-room.local-entry-setup .genius-room-entry{margin-top:8px}
+.standalone-room.local-entry-setup .genius-room-login{padding:12px 16px}
+.standalone-room.local-entry-setup .genius-room-login form{gap:6px;margin-top:8px}
+.standalone-room.local-entry-setup .local-avatar-picker{margin:2px 0}
+.standalone-room.local-entry-setup .local-avatar-picker>div{grid-template-columns:repeat(8,minmax(0,1fr));gap:5px}
+.standalone-room.local-entry-setup .local-avatar-picker button{padding:1px;max-width:50px}
+@media(max-width:700px){.local-entry-fields{grid-template-columns:1fr 1fr}.local-entry-fields label:last-child{grid-column:1/-1}.local-entry-credentials{grid-template-columns:1fr 1fr}.standalone-room.local-entry-setup .local-avatar-picker>div{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media(max-width:420px){.local-entry-credentials{grid-template-columns:1fr}}

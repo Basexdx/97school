@@ -2,11 +2,12 @@
 
 import {useEffect,useState} from 'react'
 import {createPortal} from 'react-dom'
+import dynamic from 'next/dynamic'
 import {grade8Lessons} from './grade8-lessons'
 import Grade8Diagram from './grade8-diagrams'
 import {grade8Definitions} from './grade8-definitions'
-import PhysicsFormulas from './physics-formulas'
-import OgeTaskBank from './oge-task-bank'
+const PhysicsFormulas=dynamic(()=>import('./physics-formulas'))
+const OgeTaskBank=dynamic(()=>import('./oge-task-bank'))
 
 const VIEWED_KEY='genius:viewed-tasks:v17'
 const SOLVED_KEY='genius:solved-tasks:v17'
