@@ -7,6 +7,7 @@ import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import TaskTile from './task-tile'
+import EarnedXp from './earned-xp'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
@@ -102,9 +103,9 @@ export default function TaskBank({onXp=()=>{},refreshOffline=async()=>{},setScre
   function backToBank(){const id=task?.ID||restoreTaskId;rememberPosition(id);setTask(null)}
   async function download(kind,value){setBusy(true);setMessage('');try{const result=await downloadBankPackage(index,kind,value);await refreshOffline();setMessage(`Готово: скачано ${result.count} задач · ${formatBytes(result.sizeBytes)}.`)}catch(e){setMessage(e.message)}finally{setBusy(false)}}
   async function submit(t,answer){
-    const checked=checkAnswer(t,answer);await saveBankAttempt(student?.id,t,answer,checked);setAttempts(await bankAttempts(student?.id))
+    const checked=checkAnswer(t,answer);const attempt=await saveBankAttempt(student?.id,t,answer,checked);setAttempts(await bankAttempts(student?.id))
     if(student&&navigator.onLine){try{const result=await syncBankAttempts();if(Number.isFinite(result.totalXp))onXp(result.totalXp);setAttempts(await bankAttempts(student.id))}catch(e){setMessage(e.message)}}
-    return checked
+    return {...checked,xpAwarded:attempt.result?.xpAwarded}
   }
 
   if(task){
@@ -151,7 +152,7 @@ function TaskCard({task:t,submit,back,goLearn,student,attempts,message,navigate,
       <form onSubmit={check}>{t.TASK_TYPE==='matching'?<MatchingTaskFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:multipart?<AnswerFields task={t} value={answer} onChange={value=>{setAnswer(value);setResult(null)}}/>:<label className="bank-answer"><span>{t.ANSWER_PROMPT||'Введите ответ'}</span>{manual?<textarea rows={5} autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder="Введите ответ" required/>:<input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setResult(null)}} placeholder={t.TASK_TYPE==='single_choice'?'Номер варианта':'Введите число'} required/>}<small>{manual?'Краткий ответ сохранится для проверки учителем.':t.TASK_TYPE==='single_choice'?'Введите номер выбранного варианта.':'Можно использовать точку или запятую для десятичной дроби.'}</small></label>}<div className="bank-submit-row"><button className="bank-primary" disabled={busy||(t.TASK_TYPE==='matching'?!matchingAnswerReady(answer):!answerReady(t.ANSWER,answer))}>{busy?'Сохраняю…':manual?'Сохранить ответ':'Проверить ответ'}</button>{attempts.length>0&&<span>Попыток: {attempts.length}</span>}</div></form>
       {(error||message)&&<p role="alert" className="bank-inline-message">{error||message}</p>}
       {result&&result.correct===null&&<div role="status" className="bank-feedback manual"><div className="bank-feedback-icon">◇</div><div><strong>Ответ сохранён</strong><p>Качественный ответ проверяет учитель по эталону. Можно перейти к следующей задаче стрелкой.</p></div></div>}
-      {result&&result.correct!==null&&<div role="status" className={`bank-feedback ${result.correct?'right':'wrong'}`}><div className="bank-feedback-icon">{result.correct?'✓':'×'}</div><div><strong>{result.correct?'Верно!':'Ответ пока неверный'}</strong><p>{result.correct?(IS_STANDALONE?'Ответ и XP сохранены на этом устройстве.':!student?'Результат сохранён локально. В режиме ученика сервер подтвердит XP.':latest?.status==='CONFIRMED'?`Сервер подтвердил ответ. XP за эту задачу: ${latest.result?.xpAwarded||0}.`:'Попытка сохранена и ожидает серверной синхронизации.'):'Проверь вычисления и попробуй ещё раз. Решение для этой сборки пока не опубликовано.'}</p>{!result.correct&&<button type="button" onClick={tryAgain}>Попробовать ещё</button>}</div></div>}
+      {result&&result.correct!==null&&<div role="status" className={`bank-feedback ${result.correct?'right':'wrong'}`}><div className="bank-feedback-icon">{result.correct?'✓':'×'}</div><div><strong>{result.correct?'Верно!':'Ответ пока неверный'}</strong>{result.correct&&<EarnedXp amount={result.xpAwarded??latest?.result?.xpAwarded}/>}<p>{result.correct?(IS_STANDALONE?'Ответ сохранён на этом устройстве.':!student?'Результат сохранён локально. В режиме ученика сервер подтвердит XP.':latest?.status==='CONFIRMED'?'Сервер подтвердил ответ.':'Попытка сохранена и ожидает серверной синхронизации.'):'Проверь вычисления и попробуй ещё раз. Решение для этой сборки пока не опубликовано.'}</p>{!result.correct&&<button type="button" onClick={tryAgain}>Попробовать ещё</button>}</div></div>}
     </section>
 
     <div className="bank-bottom-nav">

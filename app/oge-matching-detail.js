@@ -1,11 +1,12 @@
 'use client'
 
 import {useState} from 'react'
+import EarnedXp from './earned-xp'
 import {ogeMatchingAnswerReady,parseOgeMatchingValue,checkOgeMatchingAnswer} from './oge-matching-answer.mjs'
 import {sectionsForTask} from './oge-task-filters.mjs'
 import styles from './oge-task-bank.module.css'
 
-export default function OgeMatchingDetail({task,position,total,back,previous,next,navigate,saved=[],onSave}){
+export default function OgeMatchingDetail({task,position,total,back,previous,next,navigate,saved=[],onSave,earnedXp}){
   const [answer,setAnswer]=useState(()=>saved.length?saved:task.left.map(()=>''))
   const [result,setResult]=useState(()=>saved.length?checkOgeMatchingAnswer(task,saved):null)
   const ready=ogeMatchingAnswerReady(answer,task)
@@ -30,7 +31,7 @@ export default function OgeMatchingDetail({task,position,total,back,previous,nex
         <small className={styles.matchingHelp} id="oge-matching-help">В каждом поле — номер варианта от 1 до {task.right.length}. Порядок ответов: А, Б, В.</small>
         <button className={styles.primary} disabled={!ready||isSaved}>{isSaved?'Ответ сохранён':task.answer?'Проверить ответ':'Сохранить ответ'}</button>
       </form>
-      <p className={styles.answerNotice} aria-live="polite">{result===true?'Верно! Ответ сохранён.':result===false?'Пока неверно. Проверь соответствия и попробуй ещё.':isSaved?'Ответ сохранён. Он останется после обновления страницы.':'Заполните все три поля и проверьте ответ.'}</p>
+      <p className={styles.answerNotice} aria-live="polite">{result===true?<>Верно! Ответ сохранён. <EarnedXp amount={earnedXp}/></>:result===false?'Пока неверно. Проверь соответствия и попробуй ещё.':isSaved?'Ответ сохранён. Он останется после обновления страницы.':'Заполните все три поля и проверьте ответ.'}</p>
     </section>
     <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>

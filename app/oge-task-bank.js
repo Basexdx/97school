@@ -2,9 +2,11 @@
 
 import TaskFigureViewer from './task-figure-viewer'
 import TaskTile from './task-tile'
+import EarnedXp from './earned-xp'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useRef,useState} from 'react'
-import {bankIdentity,bankCachedIdentity,saveBankAttempt,syncBankAttempts} from './task-store'
+import {bankIdentity,bankCachedIdentity,bankAttempts,saveBankAttempt,syncBankAttempts} from './task-store'
+import {IS_STANDALONE} from './standalone-mode.mjs'
 import {checkOgeAttempt} from '../shared/oge-attempts.mjs'
 import {ogeCounts,ogeTasks,OGE_BANK_VERSION} from './oge-task-data.mjs'
 import {filterOgeTasks,ogeSections,sectionsForTask} from './oge-task-filters.mjs'
@@ -28,11 +30,13 @@ const statusNames={unsolved:'Нерешённые',solved:'Решённые',ans
 
 export default function OgeTaskBank({onBack,onHome}){
   const [syncNotice,setSyncNotice]=useState('')
+  const [awards,setAwards]=useState({})
   const attemptQueue=useRef(Promise.resolve())
   function recordAttempt(task,answer){
     attemptQueue.current=attemptQueue.current.catch(()=>{}).then(async()=>{
       const student=await bankIdentity().catch(()=>bankCachedIdentity())
-      await saveBankAttempt(student?.id,{ID:task.id,VERSION:OGE_BANK_VERSION,XP:task.xp},answer,checkOgeAttempt(task,answer))
+      const attempt=await saveBankAttempt(student?.id,{ID:task.id,VERSION:OGE_BANK_VERSION,XP:task.xp},answer,checkOgeAttempt(task,answer))
+      if(Number.isFinite(attempt.result?.xpAwarded))setAwards(previous=>({...previous,[task.id]:(previous[task.id]||0)+attempt.result.xpAwarded}))
       if(student){try{await syncBankAttempts();setSyncNotice('')}catch{setSyncNotice('Ответ сохранён на устройстве. Статистика появится у учителя после синхронизации.')}}
     }).catch(()=>setSyncNotice('Не удалось сохранить попытку. Проверьте соединение и повторите ответ.'))
   }
@@ -83,6 +87,7 @@ export default function OgeTaskBank({onBack,onHome}){
     }catch{}
     setReady(true)
   },[])
+  useEffect(()=>{if(!IS_STANDALONE)return;let live=true;bankIdentity().then(student=>bankAttempts(student.id)).then(rows=>{if(!live)return;const earned={};for(const row of rows)if(Number.isFinite(row.result?.xpAwarded))earned[row.taskId]=(earned[row.taskId]||0)+row.result.xpAwarded;setAwards(earned)}).catch(()=>{});return()=>{live=false}},[])
   useEffect(()=>{const timeout=setTimeout(()=>setSearch(query),200);return()=>clearTimeout(timeout)},[query])
   useEffect(()=>{if(!ready)return;try{sessionStorage.setItem(FILTER_KEY,JSON.stringify({sections,types,statuses,query,lastId,currentId,detailIds,scrollTop:scrollTop.current}))}catch{}},[ready,sections,types,statuses,query,lastId,currentId,detailIds])
   useEffect(()=>{if(!ready)return;try{localStorage.setItem(PROGRESS_KEY,JSON.stringify({viewed:[...viewed],solved:[...solved]}))}catch{}},[ready,viewed,solved])
@@ -113,7 +118,7 @@ export default function OgeTaskBank({onBack,onHome}){
   const active=[...sections.map(value=>({label:value,remove:()=>toggle(setSections,value)})),...types.map(value=>({label:`Тип ${value}`,remove:()=>toggle(setTypes,value)})),...statuses.map(value=>({label:statusNames[value],remove:()=>toggle(setStatuses,value)}))]
 
   if(current){
-    const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id)}
+    const props={task:current,position:pos+1,total:detailTasks.length,back,previous:pos>0?detailTasks[pos-1]:null,next:pos>=0&&pos<detailTasks.length-1?detailTasks[pos+1]:null,navigate:t=>open(t.id),earnedXp:awards[current.id]}
     function renderDetail(){
     if(current.kind==='calculation')return <OgeCalculationDetail key={current.id} {...props} saved={calculationAnswers[current.id]} onSave={draft=>{if(draft.checked)recordAttempt(current,draft.answer);setCalculationAnswers(previous=>({...previous,[current.id]:draft}));if(draft.checked&&checkOgeCalculationAnswer(current,draft.answer))markSolved(current.id)}}/>
     if(current.kind==='cloze'||current.kind==='change')return <OgeClozeDetail key={current.id} {...props} saved={clozeAnswers[current.id]||[]} onSave={values=>{recordAttempt(current,values);setClozeAnswers(previous=>({...previous,[current.id]:values}));if(checkOgeClozeAnswer(current,values))markSolved(current.id)}}/>
@@ -140,11 +145,11 @@ export default function OgeTaskBank({onBack,onHome}){
       {(active.length||query)&&<div className={styles.activeFilters}><span>Выбрано:</span>{active.map(item=><button type="button" key={item.label} onClick={item.remove} aria-label={`Убрать фильтр ${item.label}`}>{item.label} ×</button>)}{query&&<button type="button" onClick={()=>{setQuery('');setSearch('')}}>«{query}» ×</button>}<button type="button" className={styles.clear} onClick={reset}>Сбросить всё</button></div>}
     </div>
     <div className={styles.summary} aria-live="polite"><strong>{filtered.length}</strong> {filtered.length===1?'задание':filtered.length%10>=2&&filtered.length%10<=4&&(filtered.length%100<10||filtered.length%100>=20)?'задания':'заданий'}{active.length||query?' по выбранным фильтрам':''}</div>
-    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><TaskTile type={t.type} section={sectionsForTask(t).join(' · ')} number={t.sourceNo} status={solved.has(t.id)?'Решена':answered.has(t.id)?'Ответ сохранён':viewed.has(t.id)?'Просмотрена':'Новая'} xp={t.xp} difficulty={t.difficulty} preview={t.text} action={solved.has(t.id)?'Открыть решение →':'Решить задачу →'}/></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
+    {filtered.length?<section className={styles.grid}>{filtered.map(t=><button id={`oge-tile-${t.id}`} key={t.id} className={`${styles.tile} ${lastId===t.id?styles.last:''} ${viewed.has(t.id)&&!solved.has(t.id)?styles.viewed:''}`} onClick={()=>open(t.id)}><TaskTile type={t.type} section={sectionsForTask(t).join(' · ')} number={t.sourceNo} status={solved.has(t.id)?'Решена':answered.has(t.id)?'Ответ сохранён':viewed.has(t.id)?'Просмотрена':'Новая'} xp={t.xp} difficulty={t.difficulty||'БАЗОВЫЙ'} preview={t.text} action={solved.has(t.id)?'Открыть решение →':'Решить задачу →'}/></button>)}</section>:<div className={styles.empty}><b>Φ</b><p>По выбранным фильтрам задач не найдено.</p><button type="button" onClick={reset}>Сбросить фильтры</button></div>}
   </div>
 }
 
-export function OgeChoiceDetail({task,position,total,back,previous,next,navigate,saved,onSave}){
+export function OgeChoiceDetail({task,position,total,back,previous,next,navigate,saved,onSave,earnedXp}){
   const [selection,setSelection]=useState(saved)
   const savedKey=saved.join(',')
   useEffect(()=>setSelection(saved),[task.id,savedKey])
@@ -164,20 +169,20 @@ export function OgeChoiceDetail({task,position,total,back,previous,next,navigate
       <div className={styles.choiceOptions}>{task.options.map((option,index)=><button type="button" key={index} aria-pressed={selection.includes(index+1)} className={selection.includes(index+1)?styles.chosen:''} onClick={()=>choose(index+1)}><span>{index+1}</span>{option}</button>)}</div>
       <form onSubmit={save}><label className={styles.choiceAnswerInput}><span>Или введите {count===1?'номер варианта':'два номера вариантов'}</span><input type="text" inputMode="numeric" autoComplete="off" value={selection.join('')} onChange={event=>{const parsed=parseOgeChoiceInput(event.target.value,task);if(parsed)setSelection(parsed)}} placeholder={count===1?'Например, 3':'Например, 24'} aria-label="Номера выбранных ответов"/><small>Номера от 1 до {task.options.length}{count===2?', без повторов':''}.</small></label>
       <button type="submit" className={styles.primary} disabled={selection.length!==count||isSaved}>{hasKey?(isSaved?'Ответ проверен':'Проверить ответ'):(isSaved?'Ответ сохранён':'Сохранить ответ')}</button></form>
-      {hasKey?(checked!==null?<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong><p>{checked?task.explanation:'Прочитайте условие ещё раз, выберите другой вариант и проверьте ответ.'}</p></div>:<p className={styles.answerNotice}>Выберите вариант и проверьте ответ. Результат сохранится после обновления страницы.</p>):<p className={styles.answerNotice} aria-live="polite">{isSaved?'Ответ записан. Ключа в предоставленном PDF нет, поэтому автоматическая проверка пока недоступна.':`Выберите ${count===1?'один вариант':'два варианта'} и сохраните ответ. Проверка появится после добавления ключей.`}</p>}
+      {hasKey?(checked!==null?<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong>{checked&&<EarnedXp amount={earnedXp}/>}<p>{checked?task.explanation:'Прочитайте условие ещё раз, выберите другой вариант и проверьте ответ.'}</p></div>:<p className={styles.answerNotice}>Выберите вариант и проверьте ответ. Результат сохранится после обновления страницы.</p>):<p className={styles.answerNotice} aria-live="polite">{isSaved?'Ответ записан. Ключа в предоставленном PDF нет, поэтому автоматическая проверка пока недоступна.':`Выберите ${count===1?'один вариант':'два варианта'} и сохраните ответ. Проверка появится после добавления ключей.`}</p>}
     </section>
     <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>
 }
 
-export function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved,onAttempt}){
+export function OgeTaskDetail({task,position,total,back,previous,next,navigate,onSolved,onAttempt,earnedXp}){
   const [answer,setAnswer]=useState(''),[state,setState]=useState(null)
   useEffect(()=>{setAnswer('');setState(null)},[task.id])
   function check(e){e.preventDefault();onAttempt?.(answer);const right=isCorrectOgeNumber(answer,task.answer);setState(right?'right':'wrong');if(right)onSolved()}
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
     <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{task.diagram||task.figures?.length?'График / рисунок':'Числовой ответ'}</span><span>Без подсказок</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
-    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p>{task.text}</p>{task.diagram&&<OgeDiagram spec={task.diagram}/>}{(task.figures||[]).map((src,index)=><TaskFigureViewer label={`Рисунок к заданию № ${task.sourceNo}`} key={src}><figure className={styles.sourceFigure}><img src={src} alt={`Рисунок к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure></TaskFigureViewer>)}<form onSubmit={check}><label className={styles.answer}><span>Ответ</span><div><input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setState(null)}} placeholder="Введите число"/><em>{task.unit}</em></div></label><button className={styles.primary} disabled={parseOgeNumber(answer)===null}>Проверить ответ</button></form>{state&&<div className={`${styles.feedback} ${state==='right'?styles.right:styles.wrong}`}><strong>{state==='right'?'Верно!':'Пока неверно'}</strong><p>{state==='right'?(task.explanation||'Ответ совпадает. Можно переходить к следующему заданию.'):'Проверь вычисления и ещё раз внимательно считай данные с рисунка.'}</p></div>}</section>
+    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p>{task.text}</p>{task.diagram&&<OgeDiagram spec={task.diagram}/>}{(task.figures||[]).map((src,index)=><TaskFigureViewer label={`Рисунок к заданию № ${task.sourceNo}`} key={src}><figure className={styles.sourceFigure}><img src={src} alt={`Рисунок к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure></TaskFigureViewer>)}<form onSubmit={check}><label className={styles.answer}><span>Ответ</span><div><input inputMode="decimal" autoComplete="off" value={answer} onChange={e=>{setAnswer(e.target.value);setState(null)}} placeholder="Введите число"/><em>{task.unit}</em></div></label><button className={styles.primary} disabled={parseOgeNumber(answer)===null}>Проверить ответ</button></form>{state&&<div className={`${styles.feedback} ${state==='right'?styles.right:styles.wrong}`}><strong>{state==='right'?'Верно!':'Пока неверно'}</strong>{state==='right'&&<EarnedXp amount={earnedXp}/>}<p>{state==='right'?(task.explanation||'Ответ совпадает. Можно переходить к следующему заданию.'):'Проверь вычисления и ещё раз внимательно считай данные с рисунка.'}</p></div>}</section>
     <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>
 }

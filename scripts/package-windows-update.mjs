@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import zlib from 'node:zlib'
 import {createPackage} from '@electron/asar'
-const version=process.env.GENIUS_UPDATE_VERSION||'1.8.3',stage=fs.mkdtempSync(path.join(os.tmpdir(),'genius-update-')),release=path.resolve('release/windows')
+const version=process.env.GENIUS_UPDATE_VERSION||'1.8.4',stage=fs.mkdtempSync(path.join(os.tmpdir(),'genius-update-')),release=path.resolve('release/windows')
 fs.mkdirSync(release,{recursive:true});fs.cpSync('out',path.join(stage,'out'),{recursive:true});fs.cpSync('desktop',path.join(stage,'desktop'),{recursive:true})
 const base=JSON.parse(fs.readFileSync('package.json','utf8'))
 // Electron's package name defines its existing user-data directory. Never rename it.

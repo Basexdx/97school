@@ -1,6 +1,7 @@
 'use client'
 
 import TaskFigureViewer from './task-figure-viewer'
+import EarnedXp from './earned-xp'
 import {useState} from 'react'
 import {checkOgeClozeAnswer,ogeClozeAnswerReady,ogeAnswerLetters,parseOgeClozeInput} from './oge-cloze-answer.mjs'
 import styles from './oge-task-bank.module.css'
@@ -9,7 +10,7 @@ function Passage({text}){
   return text.split(/(\([АБВГ]\) ___)/g).map((part,index)=>/^\([АБВГ]\) ___$/.test(part)?<strong className={styles.clozeBlank} key={index}>{part}</strong>:part)
 }
 
-export default function OgeClozeDetail({task,position,total,back,previous,next,navigate,saved,onSave}){
+export default function OgeClozeDetail({task,position,total,back,previous,next,navigate,saved,onSave,earnedXp}){
   const letters=ogeAnswerLetters(task)
   const count=letters.length
   const changes=task.kind==='change'
@@ -46,7 +47,7 @@ export default function OgeClozeDetail({task,position,total,back,previous,next,n
         {values.some(Boolean)&&<ul className={styles.clozeSelection} aria-label={changes?'Выбранные изменения':'Выбранные слова'}>{letters.map((letter,index)=><li key={letter}><b>{letter}</b><span>{values[index]?task.options[values[index]-1]:'Не выбрано'}</span></li>)}</ul>}
         <button type="submit" className={styles.primary} disabled={!complete||isSaved}>{isSaved?'Ответ проверен':'Проверить ответ'}</button>
       </form>
-      {checked!==null?<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong><p>{checked?task.explanation:`Проверьте ${changes?'изменение каждой величины':'номера слов'} и порядок ответа: ${letters.join(', ')}. Затем попробуйте ещё раз.`}</p></div>:<p className={styles.answerNotice}>{changes?'Укажите изменение обеих величин':'Заполните все четыре пропуска'} и проверьте ответ. Результат сохранится после обновления страницы.</p>}
+      {checked!==null?<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong>{checked&&<EarnedXp amount={earnedXp}/>}<p>{checked?task.explanation:`Проверьте ${changes?'изменение каждой величины':'номера слов'} и порядок ответа: ${letters.join(', ')}. Затем попробуйте ещё раз.`}</p></div>:<p className={styles.answerNotice}>{changes?'Укажите изменение обеих величин':'Заполните все четыре пропуска'} и проверьте ответ. Результат сохранится после обновления страницы.</p>}
     </section>
     <footer className={styles.bottomNav}><button type="button" disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button type="button" disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>

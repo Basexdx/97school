@@ -6,6 +6,7 @@ import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import TaskTile from './task-tile'
+import EarnedXp from './earned-xp'
 import {graphSeriesPath} from '../shared/graph-path.mjs'
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
@@ -61,10 +62,10 @@ export default function Grade7TaskBank({onXp=()=>{},searchIds=null,clearSearch=(
 
   async function submit(task,answer){
     const checked=checkAnswer(task,answer)
-    await saveBankAttempt(student?.id,task,answer,checked)
+    const attempt=await saveBankAttempt(student?.id,task,answer,checked)
     await reloadAttempts(student?.id)
     if(student&&navigator.onLine){try{const sync=await syncBankAttempts();if(Number.isFinite(sync.totalXp))onXp(sync.totalXp);await reloadAttempts(student.id)}catch(e){setMessage(e.message)}}
-    return checked
+    return {...checked,xpAwarded:attempt.result?.xpAwarded}
   }
 
   if(current)return <Grade7TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={backToBank} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={openTask} position={navPos+1} total={nav.length} student={student}/>
@@ -85,7 +86,7 @@ function Grade7TaskCard({task,submit,attempts,back,previousId,nextId,navigate,po
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К задачам</button><span>{position} / {total}</span><div><button disabled={!previousId} onClick={()=>previousId&&navigate(previousId)}>←</button><button disabled={!nextId} onClick={()=>nextId&&navigate(nextId)}>→</button></div></nav>
     <header className={styles.taskHead}><div><div className={styles.kicker}>7 КЛАСС · СБОРНИК ПЕРЫШКИНА</div><h1>Задача {task.BOOK_TASK_NUMBER}</h1><div className={styles.taskPills}><span>{difficultyLabels[task.DIFFICULTY]}</span><span>{typeLabels[task.TASK_TYPE]||task.TASK_TYPE}</span><span>{task.XP} XP максимум</span></div></div><div className={styles.xpCard}><small>{solved?'Статус':'За правильный ответ сейчас'}</small><strong>{solved?'✓':`${nextXp} XP`}</strong><span>{solved?'решено':`попытка №${attemptNo}`}</span></div></header>
-    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.taskText}>{task.TASK}</p>{task.DIAGRAM&&<TaskFigureViewer label={`Рисунок к задаче ${task.BOOK_TASK_NUMBER}`}><Diagram spec={task.DIAGRAM}/></TaskFigureViewer>}<form onSubmit={check}><AnswerFields task={task} value={answer} onChange={setAnswer}/><button className={styles.primary} disabled={busy||!answerReady(task.ANSWER,answer)}>{busy?'Проверяю…':'Проверить ответ'}</button></form>{error&&<div className={styles.error}>{error}</div>}{result&&<div className={`${styles.feedback} ${result.correct?styles.right:styles.wrong}`}><strong>{result.correct?'Верно!':'Пока неверно'}</strong><p>{result.correct?(IS_STANDALONE?'Ответ и XP сохранены на этом устройстве.':student?`Попытка сохранена. Сервер начислит XP по номеру попытки.`:'Ответ верный. В гостевом режиме результат хранится локально.'):'Можно пробовать ещё. После третьей попытки за правильное решение сохраняется минимальный XP.'}</p></div>}</section>
+    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.taskText}>{task.TASK}</p>{task.DIAGRAM&&<TaskFigureViewer label={`Рисунок к задаче ${task.BOOK_TASK_NUMBER}`}><Diagram spec={task.DIAGRAM}/></TaskFigureViewer>}<form onSubmit={check}><AnswerFields task={task} value={answer} onChange={setAnswer}/><button className={styles.primary} disabled={busy||!answerReady(task.ANSWER,answer)}>{busy?'Проверяю…':'Проверить ответ'}</button></form>{error&&<div className={styles.error}>{error}</div>}{result&&<div className={`${styles.feedback} ${result.correct?styles.right:styles.wrong}`}><strong>{result.correct?'Верно!':'Пока неверно'}</strong>{result.correct&&<EarnedXp amount={result.xpAwarded}/>}<p>{result.correct?(IS_STANDALONE?'Ответ сохранён на этом устройстве.':student?`Попытка сохранена. Сервер начислит XP по номеру попытки.`:'Ответ верный. В гостевом режиме результат хранится локально.'):'Можно пробовать ещё. После третьей попытки за правильное решение сохраняется минимальный XP.'}</p></div>}</section>
     <footer className={styles.bottomNav}><button disabled={!previousId} onClick={()=>previousId&&navigate(previousId)}>← Предыдущая</button><span>Задача {task.BOOK_TASK_NUMBER}</span><button disabled={!nextId} onClick={()=>nextId&&navigate(nextId)}>Следующая →</button></footer>
   </article>
 }

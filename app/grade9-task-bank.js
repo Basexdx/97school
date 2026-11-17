@@ -1,9 +1,11 @@
 'use client'
 
+import {IS_STANDALONE} from './standalone-mode.mjs'
 import BookBankFilters from './book-bank-filters'
 import {matchesBookFilters} from '../shared/book-filters.mjs'
 import {textbookAnswerFormat} from '../shared/textbook-card.mjs'
 import TaskTile from './task-tile'
+import EarnedXp from './earned-xp'
 
 import {useEffect,useMemo,useState} from 'react'
 import {checkAnswer} from '../shared/task-checker.mjs'
@@ -45,7 +47,7 @@ export default function Grade9TaskBank({onXp=()=>{},searchIds=null,clearSearch=(
   function rememberPosition(id){setRestoreTaskId(id);try{sessionStorage.setItem(POSITION_KEY,JSON.stringify({taskId:id,section,paragraph,topic,difficulty,type,progress,query}))}catch{}}
   function openTask(id){markViewed(id);rememberPosition(id);setTaskId(id)}
   function backToBank(){rememberPosition(current?.ID||restoreTaskId);setTaskId(null)}
-  async function submit(task,answer){const checked=checkAnswer(task,answer);await saveBankAttempt(student?.id,task,answer,checked);await reloadAttempts(student?.id);if(student&&navigator.onLine){try{const sync=await syncBankAttempts();if(Number.isFinite(sync.totalXp))onXp(sync.totalXp);await reloadAttempts(student.id)}catch(e){setMessage(e.message)}}return checked}
+  async function submit(task,answer){const checked=checkAnswer(task,answer);const attempt=await saveBankAttempt(student?.id,task,answer,checked);await reloadAttempts(student?.id);if(student&&navigator.onLine){try{const sync=await syncBankAttempts();if(Number.isFinite(sync.totalXp))onXp(sync.totalXp);await reloadAttempts(student.id)}catch(e){setMessage(e.message)}}return {...checked,xpAwarded:attempt.result?.xpAwarded}}
 
   if(current)return <Grade9TaskCard key={current.ID} task={current} submit={submit} attempts={gradeAttempts.filter(a=>a.taskId===current.ID)} back={backToBank} previousId={navPos>0?nav[navPos-1].id:null} nextId={navPos>=0&&navPos<nav.length-1?nav[navPos+1].id:null} navigate={openTask} position={navPos+1} total={nav.length} student={student}/>
   return <div className={`${styles.page} compact-book-page`}>
@@ -64,7 +66,7 @@ function Grade9TaskCard({task,submit,attempts,back,previousId,nextId,navigate,po
   return <article className={styles.detail}>
     <nav className={styles.topNav}><button onClick={back}>← К задачам</button><span>{position} / {total}</span><div><button disabled={!previousId} onClick={()=>previousId&&navigate(previousId)}>←</button><button disabled={!nextId} onClick={()=>nextId&&navigate(nextId)}>→</button></div></nav>
     <header className={styles.taskHead}><div><div className={styles.kicker}>9 КЛАСС · СБОРНИК ПЕРЫШКИНА</div><h1>Задача {task.BOOK_TASK_NUMBER}</h1><div className={styles.taskPills}><span>§{task.PARAGRAPH}</span><span>{difficultyLabels[task.DIFFICULTY]}</span><span>{typeLabels[task.TASK_TYPE]||task.TASK_TYPE}</span></div></div><div className={styles.xpCard}><small>{solved?'Статус':'За правильный ответ сейчас'}</small><strong>{solved?'✓':`${nextXp} XP`}</strong><span>{solved?'решено':`попытка №${attemptNo}`}</span></div></header>
-    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.taskText}>{task.TASK}</p>{task.GRAPH_REQUIRED&&<div className={styles.notice}>В этой задаче график строится отдельно по условию сборника; числовые величины можно проверить в полях ниже.</div>}<form onSubmit={check}><AnswerFields task={task} value={answer} onChange={setAnswer}/><button className={styles.primary} disabled={busy||!answerReady(task.ANSWER,answer)}>{busy?'Сохраняю…':task.ANSWER.mode==='manual'?'Сохранить ответ':'Проверить ответ'}</button></form>{error&&<div className={styles.error}>{error}</div>}{result&&<div className={`${styles.feedback} ${result.reviewRequired?'':result.correct?styles.right:styles.wrong}`}><strong>{result.reviewRequired?'Ответ сохранён':result.correct?'Верно!':'Пока неверно'}</strong><p>{result.reviewRequired?'Задание требует проверки учителем.':result.correct?(student?'Попытка сохранена. Сервер начислит XP по номеру попытки.':'Ответ верный. В гостевом режиме результат хранится локально.'):'Можно пробовать ещё.'}</p></div>}</section>
+    <section className={styles.question}><div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.taskText}>{task.TASK}</p>{task.GRAPH_REQUIRED&&<div className={styles.notice}>В этой задаче график строится отдельно по условию сборника; числовые величины можно проверить в полях ниже.</div>}<form onSubmit={check}><AnswerFields task={task} value={answer} onChange={setAnswer}/><button className={styles.primary} disabled={busy||!answerReady(task.ANSWER,answer)}>{busy?'Сохраняю…':task.ANSWER.mode==='manual'?'Сохранить ответ':'Проверить ответ'}</button></form>{error&&<div className={styles.error}>{error}</div>}{result&&<div className={`${styles.feedback} ${result.reviewRequired?'':result.correct?styles.right:styles.wrong}`}><strong>{result.reviewRequired?'Ответ сохранён':result.correct?'Верно!':'Пока неверно'}</strong>{result.correct&&<EarnedXp amount={result.xpAwarded}/>}<p>{result.reviewRequired?'Задание требует проверки учителем.':result.correct?(IS_STANDALONE?'Ответ сохранён на этом устройстве.':student?'Попытка сохранена. Сервер начислит XP по номеру попытки.':'Ответ верный. В гостевом режиме результат хранится локально.'):'Можно пробовать ещё.'}</p></div>}</section>
     <footer className={styles.bottomNav}><button disabled={!previousId} onClick={()=>previousId&&navigate(previousId)}>← Предыдущая</button><span>Задача {task.BOOK_TASK_NUMBER}</span><button disabled={!nextId} onClick={()=>nextId&&navigate(nextId)}>Следующая →</button></footer>
   </article>
 }

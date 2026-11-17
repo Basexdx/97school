@@ -1,10 +1,11 @@
 'use client'
 
 import TaskFigureViewer from './task-figure-viewer'
+import EarnedXp from './earned-xp'
 import {checkOgeCalculationAnswer,parseOgeCalculationNumber} from './oge-calculation-answer.mjs'
 import styles from './oge-task-bank.module.css'
 
-export default function OgeCalculationDetail({task,position,total,back,previous,next,navigate,saved,onSave}){
+export default function OgeCalculationDetail({task,position,total,back,previous,next,navigate,saved,onSave,earnedXp}){
  const draft=saved||{answer:'',checked:false}
  const valid=parseOgeCalculationNumber(draft.answer)!==null
  const right=draft.checked&&checkOgeCalculationAnswer(task,draft.answer)
@@ -23,7 +24,7 @@ export default function OgeCalculationDetail({task,position,total,back,previous,
     <p id="oge-calculation-hint" className={styles.answerNotice}>Введите результат{task.unit?` в ${task.unit}`:''} без единицы измерения. {precision!==null&&`Результат можно округлить ${precision===0?'до целого числа':`до ${precision} ${precision===1?'знака':'знаков'} после запятой`}. `}Можно использовать запятую, дробь или запись 1,15·10^8. Ответ сохраняется в этом браузере.</p>
     <button type="submit" className={styles.primary} disabled={!valid}>Проверить ответ</button>
    </form>
-   {draft.checked&&<div role="status" className={`${styles.feedback} ${right?styles.right:styles.wrong}`}><strong>{right?'Числовой ответ верный!':'Пока неверно'}</strong><p>{right?'Можно переходить к следующему заданию.':'Проверьте вычисления и единицы измерения, затем попробуйте ещё раз.'}</p></div>}
+   {draft.checked&&<div role="status" className={`${styles.feedback} ${right?styles.right:styles.wrong}`}><strong>{right?'Числовой ответ верный!':'Пока неверно'}</strong>{right&&<EarnedXp amount={earnedXp}/>}<p>{right?'Можно переходить к следующему заданию.':'Проверьте вычисления и единицы измерения, затем попробуйте ещё раз.'}</p></div>}
   </section>
   <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
  </article>

@@ -1,7 +1,7 @@
 @font-face{font-family:Genius Sans;src:url('/fonts/genius-sans-regular.woff') format('woff');font-style:normal;font-weight:400;font-display:swap}
 :root{--ui-font:'Genius Sans','Noto Sans','Segoe UI',Arial,sans-serif}
 html,body,.student-app{font-family:var(--ui-font)!important;font-weight:400;font-synthesis:none}
-html.cosmo-genius-restored .student-app :is(button,input,select,textarea,label,p,small,span,th,td){font-family:var(--ui-font);font-synthesis:none}
+html.cosmo-genius-restored .student-app :is(button,input,select,textarea,label,p,small,span,th,td):not(.katex *){font-family:var(--ui-font);font-synthesis:none}
 html.cosmo-genius-restored .student-app :is(button,label,th,strong,b,h1,h2,h3,h4):not(.katex *){font-weight:500!important}
 html.cosmo-genius-restored .student-app :is(p,small,td){font-weight:400!important;line-height:1.65}
 html.cosmo-genius-restored .student-content :is(h1,h2,h3,h4,p,label,button,th,td,strong,b,small){text-shadow:none!important;-webkit-text-stroke:0!important;letter-spacing:normal}

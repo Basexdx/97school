@@ -1,9 +1,11 @@
 /* Five shared colors: space 3/18/33, panel 7/29/49, blue 38/165/242,
    gold 245/195/99 and text 238/247/255. */
 @font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-400-normal.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-400-italic.woff2') format('woff2');font-style:italic;font-weight:400;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
 @font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
 @font-face{font-family:Montserrat;src:url('/fonts/montserrat-cyrillic-600-normal.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap;unicode-range:U+0400-052F,U+1C80-1C8F,U+20B4,U+2116,U+2DE0-2DFF,U+A640-A69F}
 @font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-400-normal.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
+@font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-400-italic.woff2') format('woff2');font-style:italic;font-weight:400;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
 @font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-500-normal.woff2') format('woff2');font-style:normal;font-weight:500;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
 @font-face{font-family:Montserrat;src:url('/fonts/montserrat-latin-600-normal.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap;unicode-range:U+0000-03FF,U+2000-206F,U+2070-209F,U+20A0-20CF,U+2100-214F,U+2190-21FF}
 :root{
@@ -27,7 +29,8 @@ html.cosmo-genius-restored .task-bank-hub{background:transparent!important;backg
 /* The desktop title row occupies the same position and height in each library. */
 @media(min-width:901px){
   html.cosmo-genius-restored .genius-reference-scroll{padding:28px 26px 90px}
-  html.cosmo-genius-restored .genius-fipi-wrap [class*="_page__"]{padding:0 0 60px;max-width:none}
+  html.cosmo-genius-restored .genius-fipi-wrap{max-width:none;width:100%}
+  html.cosmo-genius-restored .genius-fipi-wrap>div{box-sizing:border-box;max-width:none;width:100%;padding:0 0 60px!important}
   html.cosmo-genius-restored .reference-materials-page{max-width:none;padding:28px 26px 44px}
   html.cosmo-genius-restored :is(.book-bank-header,.unified-section-header,.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar,.genius-fipi-wrap [class*="_bankHeader__"]){box-sizing:border-box;min-height:134px;margin-bottom:18px;padding:18px 20px;border-radius:18px}
   html.cosmo-genius-restored :is(.book-heading>span,.rm-book-icon,.fl-hero-icon,.genius-fipi-wrap [class*="_bankIcon__"]){width:70px;height:70px;flex-basis:70px;font-size:46px}
@@ -35,15 +38,16 @@ html.cosmo-genius-restored .task-bank-hub{background:transparent!important;backg
   html.cosmo-genius-restored :is(.book-heading p,.rm-title-block p,.fl-hero p,.genius-fipi-wrap [class*="_bankTitle__"] p){font-size:14px;line-height:1.4}
   html.cosmo-genius-restored .rm-title-block h1{white-space:nowrap}
   html.cosmo-genius-restored .formula-reference-overlay .fl-hero-count{display:none}
-  html.cosmo-genius-restored :is(.book-bank-header,.genius-fipi-wrap [class*="_bankHeader__"],.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar){grid-template-columns:minmax(0,1fr) minmax(230px,34%) auto;gap:14px}
-  html.cosmo-genius-restored .book-bank-header{display:flex}
+  html.cosmo-genius-restored :is(.genius-fipi-wrap [class*="_bankHeader__"],.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar){grid-template-columns:minmax(max-content,1fr) minmax(210px,34%) auto;gap:14px}
+  html.cosmo-genius-restored .book-bank-header{display:flex;gap:14px}
   html.cosmo-genius-restored .book-heading{min-width:0}
   html.cosmo-genius-restored .book-header-controls{flex-wrap:nowrap}
   html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankHeader__"]{display:grid}
+  html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankTitle__"]{min-width:max-content}
   html.cosmo-genius-restored :is(.book-search,.genius-fipi-wrap [class*="_bankSearch__"],.rm-search,.fl-search){height:48px!important;min-height:48px}
   html.cosmo-genius-restored :is(.book-header-controls button,.book-header-controls select,.genius-fipi-wrap [class*="_bankNav__"] button){height:48px!important;min-height:48px}
 }
-@media(min-width:901px) and (max-width:1450px){
+@media(min-width:901px) and (max-width:1690px){
   html.cosmo-genius-restored .book-bank-header{flex-wrap:wrap}
   html.cosmo-genius-restored .book-header-controls{flex-basis:100%}
   html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankHeader__"],
@@ -67,10 +71,11 @@ html.cosmo-genius-restored .task-bank-hub .book-task-tile [class*="_preview__"]{
   html.cosmo-genius-restored .rm-title-block h1{font-size:clamp(25px,7vw,34px)}
 }
 /* Math symbols keep their conventional italic shape, text explanations do not. */
-.fl-math,.fl-variable-symbol,.rm-card-constants .rm-table-wrap td:last-child,
-.rm-card-unit-relations .rm-table-wrap td:last-child,.rm-card-particle-mass .rm-table-wrap td:last-child,
-.genius-formula-grid article>div{font-style:italic}
-.katex .mord.mathnormal{font-style:italic}
+.fl-variable-symbol,.reference-symbol,.genius-formula-grid article>div{font-style:italic}
+.fl-math .katex .mathnormal,.fl-variable-symbol .katex .mathnormal{font-family:KaTeX_Math!important;font-style:italic!important}
+.fl-card-detail :is(p,li),.rm-table-wrap td{font-style:normal}
+.earned-task-xp{display:inline-flex;align-items:center;gap:5px;margin:7px 0 3px;padding:7px 11px;border:1px solid rgba(245,195,99,.42);border-radius:9px;background:rgba(245,195,99,.12);color:var(--genius-text);font-size:14px;font-style:normal}
+.earned-task-xp strong{color:var(--genius-gold);font-weight:600}
 
 .library-unavailable{min-height:calc(100vh - 60px)}
 .library-unavailable-card{max-width:550px;margin:clamp(40px,12vh,120px) auto;padding:35px;border:1px solid rgba(38,165,242,.38);border-radius:22px;background:rgba(7,29,49,.9);color:var(--genius-text);text-align:center}

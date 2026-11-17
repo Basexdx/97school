@@ -164,11 +164,18 @@ function mobileTableFor(section){
   }
 }
 
+function ReferenceCell({value,sectionId,heading=false}){
+  const text=String(value||'—')
+  const namedSymbol=(sectionId==='constants'||sectionId==='astronomy')&&text.match(/^(π|g|G|R|k|Nₐ|c|e|h|R⊕|R☉|T)(?=\s*=)/)
+  const columnSymbol=heading&&text.match(/^([ρcML])(?=,\s)/)
+  const symbol=namedSymbol||columnSymbol
+  return symbol?<><span className="reference-symbol">{symbol[0]}</span>{text.slice(symbol[0].length)}</>:text
+}
 function ReferenceTable({sectionId,columns,rows,className=''}){
   return <div className={`rm-table-wrap ${className}`}>
     <table>
-      <thead><tr>{columns.map((column,index)=><th key={`${sectionId}-h-${className}-${index}`}>{column}</th>)}</tr></thead>
-      <tbody>{rows.map((row,rowIndex)=><tr key={`${sectionId}-r-${className}-${rowIndex}`}>{row.map((cell,cellIndex)=><td key={`${sectionId}-${className}-${rowIndex}-${cellIndex}`}>{cell||'—'}</td>)}</tr>)}</tbody>
+      <thead><tr>{columns.map((column,index)=><th key={`${sectionId}-h-${className}-${index}`}><ReferenceCell value={column} sectionId={sectionId} heading/></th>)}</tr></thead>
+      <tbody>{rows.map((row,rowIndex)=><tr key={`${sectionId}-r-${className}-${rowIndex}`}>{row.map((cell,cellIndex)=><td key={`${sectionId}-${className}-${rowIndex}-${cellIndex}`}><ReferenceCell value={cell} sectionId={sectionId}/></td>)}</tr>)}</tbody>
     </table>
   </div>
 }
