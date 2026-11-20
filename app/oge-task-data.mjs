@@ -24,6 +24,8 @@ const task=(type,sourceNo,text,answer,unit='',diagram=null)=>({
   answer,
   unit,
   diagram,
+  answerSource:'independent-physics-review',
+  answerVerified:true,
 })
 
 export const ogeTasks=[
