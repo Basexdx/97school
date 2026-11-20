@@ -97,3 +97,164 @@ html.cosmo-genius-restored .task-bank-hub .book-task-tile [class*="_preview__"]{
 .standalone-room.local-entry-setup .local-avatar-picker button{padding:1px;max-width:50px}
 @media(max-width:700px){.local-entry-fields{grid-template-columns:1fr 1fr}.local-entry-fields label:last-child{grid-column:1/-1}.local-entry-credentials{grid-template-columns:1fr 1fr}.standalone-room.local-entry-setup .local-avatar-picker>div{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(max-width:420px){.local-entry-credentials{grid-template-columns:1fr}}
+
+/* Release 1.8.5: one header, one focus language and one scrollbar palette. */
+html,body,*{
+  scrollbar-color:var(--genius-blue) var(--genius-space);
+  scrollbar-width:thin;
+}
+::-webkit-scrollbar{width:12px;height:12px;background:var(--genius-space)}
+::-webkit-scrollbar-track{background:var(--genius-space)}
+::-webkit-scrollbar-thumb{min-height:42px;border:3px solid var(--genius-space);border-radius:999px;background:var(--genius-blue)}
+::-webkit-scrollbar-corner{background:var(--genius-space)}
+
+html.cosmo-genius-restored :is(button,input,select,textarea):focus-visible{outline:0!important;box-shadow:none!important}
+html.cosmo-genius-restored :is(button,select,input,textarea):focus-visible{border-color:var(--genius-gold)!important}
+html.cosmo-genius-restored :is(.book-search,.genius-fipi-wrap [class*="_bankSearch__"],.rm-search,.fl-search):focus-within{
+  border-color:var(--genius-gold)!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+.module-flask-icon{display:block;width:24px;height:24px;color:var(--genius-blue)}
+.side-nav .module-flask-icon{flex:0 0 24px}
+.side-nav.active .module-flask-icon{color:var(--genius-gold)}
+.standalone-actions .module-card-flask{width:30px;height:30px;color:var(--genius-gold)}
+.module-section-title{display:flex;align-items:center;gap:18px}
+.module-section-title>.module-flask-icon{width:58px;height:58px;padding:13px;border:1px solid var(--genius-gold);border-radius:14px;color:var(--genius-gold);background:rgba(3,18,33,.9)}
+.library-unavailable-card>.module-flask-icon{width:58px;height:58px;margin:0 auto;color:var(--genius-gold)}
+
+@media(min-width:901px){
+  html.cosmo-genius-restored :is(.book-bank-header,.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar,.genius-fipi-wrap [class*="_bankHeader__"]){
+    position:sticky;
+    top:0;
+    z-index:42;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:minmax(76px,auto) 48px;
+    grid-template-areas:"title nav" "controls controls";
+    align-items:center;
+    gap:14px 18px!important;
+    width:100%;
+    min-height:180px;
+    padding:18px 20px!important;
+    border:1px solid rgba(38,165,242,.3)!important;
+    border-radius:18px!important;
+    background:rgba(3,18,33,.94)!important;
+    box-shadow:0 9px 30px rgba(3,18,33,.34)!important;
+  }
+  html.cosmo-genius-restored :is(.book-heading,.reference-materials-page .rm-title-block,.formula-reference-overlay .fl-hero,.genius-fipi-wrap [class*="_bankTitle__"]){grid-area:title;min-width:0!important}
+  html.cosmo-genius-restored :is(.book-header-controls,.reference-materials-page .rm-search,.formula-reference-overlay .fl-search,.genius-fipi-wrap [class*="_bankSearch__"]){grid-area:controls!important;width:100%;max-width:none!important;margin:0!important}
+  html.cosmo-genius-restored :is(.book-header-nav,.reference-materials-page .rm-header-actions,.formula-reference-overlay .fl-header-actions,.genius-fipi-wrap [class*="_bankNav__"]){grid-area:nav!important;display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+  html.cosmo-genius-restored .book-header-controls{display:grid;grid-template-columns:110px minmax(0,1fr);justify-content:stretch}
+  html.cosmo-genius-restored .book-header-controls>.book-search{width:100%;max-width:none}
+  html.cosmo-genius-restored :is(.book-header-nav,.reference-materials-page .rm-header-actions,.formula-reference-overlay .fl-header-actions,.genius-fipi-wrap [class*="_bankNav__"]) button{
+    box-sizing:border-box;
+    height:48px!important;
+    padding:0 15px;
+    border:1px solid rgba(38,165,242,.62)!important;
+    border-radius:11px;
+    background:rgba(7,29,49,.88)!important;
+    color:var(--genius-text)!important;
+    font-size:13px;
+    font-weight:500;
+    white-space:nowrap;
+  }
+  html.cosmo-genius-restored :is(.book-heading h1,.reference-materials-page .rm-title-block h1,.formula-reference-overlay .fl-hero h1,.genius-fipi-wrap [class*="_bankTitle__"] h1){
+    margin:0 0 7px!important;
+    color:var(--genius-text)!important;
+    font-size:clamp(30px,2.45vw,43px)!important;
+    font-weight:500!important;
+    line-height:1.1!important;
+    letter-spacing:-.035em!important;
+    white-space:normal!important;
+  }
+  html.cosmo-genius-restored :is(.book-heading p,.reference-materials-page .rm-title-block p,.formula-reference-overlay .fl-hero p,.genius-fipi-wrap [class*="_bankTitle__"] p){margin:0;color:rgba(238,247,255,.68)!important;font-size:14px;line-height:1.4}
+  html.cosmo-genius-restored :is(.book-heading>span,.reference-materials-page .rm-book-icon,.formula-reference-overlay .fl-hero-icon,.genius-fipi-wrap [class*="_bankIcon__"]){width:70px;height:70px;flex-basis:70px;border-color:var(--genius-gold)!important;background:rgba(3,18,33,.86)!important;color:var(--genius-gold)!important}
+  html.cosmo-genius-restored .unified-section-header{box-sizing:border-box;min-height:180px;padding:20px;border-color:rgba(38,165,242,.3)!important;border-radius:18px;background:rgba(3,18,33,.94)!important}
+}
+
+/* The profile identity itself is the section header. */
+.standalone-profile-dashboard{max-width:none;margin:0;padding:0 0 48px;color:var(--genius-text)}
+.local-profile-heading{
+  position:sticky;
+  top:0;
+  z-index:42;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"identity nav" "progress progress";
+  gap:14px 18px;
+  min-height:180px;
+  box-sizing:border-box;
+  margin:0 0 22px;
+  padding:18px 20px;
+  border:1px solid rgba(38,165,242,.3);
+  border-radius:18px;
+  background:rgba(3,18,33,.94);
+  color:var(--genius-text);
+  box-shadow:0 9px 30px rgba(3,18,33,.34);
+  backdrop-filter:blur(15px);
+}
+.profile-heading-identity{grid-area:identity;display:flex;align-items:center;gap:18px;min-width:0}
+.profile-heading-identity h1{margin:3px 0 2px;font-size:clamp(28px,2.45vw,43px);font-weight:500;line-height:1.1;overflow-wrap:anywhere}
+.profile-heading-identity p{margin:0;color:rgba(238,247,255,.68)}
+.local-profile-heading nav{grid-area:nav;display:flex;align-items:center;justify-content:flex-end;gap:9px}
+.local-profile-heading .local-secondary{height:48px;margin:0;padding:0 14px;border:1px solid rgba(38,165,242,.62);border-radius:11px;background:rgba(7,29,49,.88);color:var(--genius-text);font-size:13px;white-space:nowrap}
+.profile-heading-progress{grid-area:progress;display:grid;grid-template-columns:auto minmax(120px,1fr) auto;align-items:center;gap:12px;color:rgba(238,247,255,.68);font-size:12px}
+.profile-heading-progress>div{height:8px;overflow:hidden;border-radius:999px;background:rgba(38,165,242,.18)}
+.profile-heading-progress i{display:block;height:100%;border-radius:inherit;background:var(--genius-gold)}
+.profile-heading-progress b{color:var(--genius-gold);font-weight:500}
+
+.progress-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0 0 22px}
+.progress-metrics .progress-metric-card{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:128px;padding:20px;border:1px solid rgba(38,165,242,.3);border-radius:18px;background:rgba(7,29,49,.9);color:var(--genius-text)}
+.progress-metric-card>div{display:grid;gap:6px;min-width:0}
+.progress-metric-card span{color:rgba(238,247,255,.68);font-size:13px}
+.progress-metric-card strong{color:var(--genius-gold);font-size:32px;font-weight:500}
+.progress-metric-card small{color:rgba(238,247,255,.56);font-size:11px;line-height:1.35}
+.progress-ring{--ring-angle:0deg;position:relative;display:grid;place-items:center;flex:0 0 70px;width:70px;height:70px;border-radius:50%;background:conic-gradient(var(--genius-gold) var(--ring-angle),rgba(38,165,242,.18) 0)}
+.progress-ring::before{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--genius-panel)}
+.progress-ring>span{position:relative;color:var(--genius-text);font-size:18px;font-weight:500;font-variant-numeric:tabular-nums}
+.progress-ring small{color:inherit;font-size:10px}
+.progress-section-grid{grid-auto-rows:1fr}
+.progress-section-grid article{display:flex;flex-direction:column;min-height:224px;border-color:rgba(38,165,242,.3);background:rgba(7,29,49,.9)}
+.progress-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.progress-section-head h3{min-height:0;margin:0 0 5px;color:var(--genius-text)}
+.progress-section-head small{color:rgba(238,247,255,.56)}
+.progress-section-head .progress-ring{flex-basis:58px;width:58px;height:58px}
+.progress-section-head .progress-ring::before{inset:7px}
+.progress-section-head .progress-ring>span{font-size:15px}
+.progress-stacked{position:relative;height:9px;margin:20px 0 13px;overflow:hidden;border-radius:999px;background:rgba(38,165,242,.14)}
+.progress-stacked>i{position:absolute;inset:0 auto 0 0;border-radius:inherit}
+.progress-stacked>.viewed{background:rgba(38,165,242,.52)}
+.progress-stacked>.solved{background:var(--genius-gold)}
+.progress-section-grid p{margin-top:auto}
+.progress-section-grid p span{grid-template-columns:auto 1fr;align-items:center}
+.progress-section-grid p b{grid-column:1/-1}
+.progress-legend{width:8px;height:8px;border-radius:50%;background:rgba(38,165,242,.14)}
+.progress-legend.viewed{background:rgba(38,165,242,.52)}
+.progress-legend.solved{background:var(--genius-gold)}
+.progress-topics{border-color:rgba(38,165,242,.3);background:rgba(7,29,49,.9)}
+.progress-topics-toolbar :is(input,select){border-color:rgba(38,165,242,.62);background:var(--genius-space);color:var(--genius-text)}
+
+@media(max-width:900px){
+  html.cosmo-genius-restored :is(.book-bank-header,.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar,.genius-fipi-wrap [class*="_bankHeader__"]){min-height:0!important;background:rgba(3,18,33,.94)!important;border-color:rgba(38,165,242,.3)!important}
+  html.cosmo-genius-restored .book-bank-header{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title title" "controls controls" "nav nav"}
+  html.cosmo-genius-restored .book-heading{grid-area:title}
+  html.cosmo-genius-restored .book-header-controls{grid-area:controls;display:grid;grid-template-columns:92px minmax(0,1fr)}
+  html.cosmo-genius-restored .book-header-nav{grid-area:nav;display:flex;gap:8px}
+  html.cosmo-genius-restored .book-header-nav button{flex:1;height:44px;border:1px solid rgba(38,165,242,.62);border-radius:11px;background:var(--genius-panel);color:var(--genius-text)}
+  .local-profile-heading{position:sticky;top:58px;grid-template-columns:1fr;grid-template-areas:"identity" "progress" "nav";min-height:0;padding:14px}
+  .local-profile-heading nav{justify-content:stretch}
+  .local-profile-heading nav button{flex:1}
+  .profile-heading-identity>svg{width:62px;height:62px}
+  .profile-heading-progress{grid-template-columns:1fr auto}
+  .profile-heading-progress>span{grid-column:1/-1}
+  .progress-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:600px){
+  .local-profile-heading nav{display:grid;grid-template-columns:1fr 1fr}
+  .local-profile-heading nav button:first-child{grid-column:1/-1}
+  .profile-heading-identity h1{font-size:24px}
+  .progress-metrics{grid-template-columns:1fr}
+  .progress-metrics .progress-metric-card{min-height:106px}
+}

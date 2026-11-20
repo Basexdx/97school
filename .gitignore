@@ -13,3 +13,12 @@ bank/grade7-source-analysis.json
 bank/paragraphs-grade7.json
 public/task-bank/grade7.json
 public/task-bank/index-grade7.json
+
+# Local release artifacts and reproducible static exports
+out/
+release/
+public/task-bank/search-all.json
+public/task-bank/grade9.json
+public/task-bank/index-grade9.json
+public/task-bank/genius-peryshkin-*.json
+public/task-bank/genius-peryshkin8-*.json

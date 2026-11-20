@@ -74,8 +74,16 @@ const quiz = [
 
 const navItems=studentModules.map(({id,icon,label})=>[id,icon,label])
 
+function FlaskIcon({className=''}){
+ return <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v5l-5.4 9.1A2.5 2.5 0 0 0 6.8 21h10.4a2.5 2.5 0 0 0 2.2-3.9L14 8V3"/><path d="M7.3 15h9.4M9.2 12.8h5.6"/></svg>
+}
+
+function ModuleGlyph({id,icon}){
+ return id==='labs'?<FlaskIcon className="module-flask-icon"/>:<span aria-hidden="true">{icon}</span>
+}
+
 function UnavailableModule({module,onBack,onHome}){
- return <section className="library-unavailable"><header className="unified-section-header"><div className="unified-section-title"><h1><span aria-hidden="true">{module.icon} </span>{module.label}</h1><p>Библиотека пока не загружена</p></div><nav aria-label="Навигация по разделам"><button onClick={onBack}>← Назад</button><button onClick={onHome}>⌂ Домой</button></nav></header><div className="library-unavailable-card" role="status"><span aria-hidden="true">{module.icon}</span><h2>Библиотека не загружена</h2><p>Материалы раздела «{module.label}» появятся в следующем обновлении.</p><button onClick={onHome}>На главную →</button></div></section>
+ return <section className="library-unavailable"><header className="unified-section-header"><div className="unified-section-title module-section-title"><ModuleGlyph id={module.id} icon={module.icon}/><div><h1>{module.label}</h1><p>Библиотека пока не загружена</p></div></div><nav aria-label="Навигация по разделам"><button onClick={onBack}>← Назад</button><button onClick={onHome}>⌂ Домой</button></nav></header><div className="library-unavailable-card" role="status"><ModuleGlyph id={module.id} icon={module.icon}/><h2>Библиотека не загружена</h2><p>Материалы раздела «{module.label}» появятся в следующем обновлении.</p><button onClick={onHome}>На главную →</button></div></section>
 }
 
 const DEMO_CODE = 'GNS-8K4P-X7M2'
@@ -109,7 +117,7 @@ function Sidebar({ screen, setScreen, isOnline, isPhone }) {
       <div className="student-brand-row"><Brand dark onClick={() => navigate('home')} /><button className="student-profile-button" onClick={()=>navigate('profile')} aria-label={`Профиль · ${isOnline?'в сети':'нет сети'}${isPhone?' · телефон':''}`} title={`Профиль · ${isOnline?'в сети':'нет сети'}`}>{IS_STANDALONE&&localAvatar?<StudentAvatar id={localAvatar} size={34}/>:<svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.5-3.5 2.9-5.5 7-5.5s6.5 2 7 5.5"/></svg>}<i className={isOnline?'is-online':'is-offline'} aria-hidden="true">{isPhone?'▯':''}</i></button></div>
       <nav id="student-sidebar-nav" aria-label="Разделы ученика">
         {navItems.map(([key, icon, label]) => (
-          <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => navigate(key)}><span>{icon}</span>{label}</button>
+          <button key={key} className={screen === key ? 'side-nav active' : 'side-nav'} onClick={() => navigate(key)}><ModuleGlyph id={key} icon={icon}/>{label}</button>
         ))}
       </nav>
       <button className="logout" onClick={() => setScreen('landing')}>↪ Выход</button>
@@ -219,7 +227,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
     <div className="student-app">
       <Sidebar screen={screen} setScreen={setScreen} isOnline={isOnline} isPhone={isPhone} />
       <main className="student-content" data-section={screen}>
-        {sectionInfo[screen]&&!['practice','topics','labs'].includes(screen)&&!(IS_STANDALONE&&['tests','oge'].includes(screen))&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
+        {sectionInfo[screen]&&!['practice','topics','labs'].includes(screen)&&!(IS_STANDALONE&&['tests','oge','profile'].includes(screen))&&<header className="unified-section-header"><div className="unified-section-title"><h1>{screen==='lesson8'?getGrade8Lesson(selectedLessonId)?.shortTitle||'Урок физики':screen==='topic'?currentTopics[selectedTopic]?.title||'Тема урока':sectionInfo[screen][0]}</h1><p>{sectionInfo[screen][1]}</p></div><nav aria-label="Навигация по разделам"><button type="button" onClick={backFromSection}>← Назад</button><button type="button" onClick={()=>setScreen('home')}>⌂ Домой</button></nav></header>}
         {offlineState.pending.length>0&&<div className="student-sync-pending">{offlineState.pending.length} действий ждут синхронизации {isOnline&&<button onClick={()=>trySync(true)}>Синхронизировать</button>}</div>}
         {syncMessage && <div className="sync-toast">{syncMessage}</div>}
         {screen === 'home' && (IS_STANDALONE?<StandaloneDashboard grade={grade} xp={xp} setScreen={setScreen}/>:<HomeDashboard setScreen={setScreen} grade={grade} xp={xp} topics={currentTopics} openTopic={openTopic} />)}
@@ -237,7 +245,7 @@ function StudentShell({ screen, setScreen, goBack, grade, setGrade, xp, setXp })
         {screen === 'labs' && (IS_STANDALONE?<UnavailableModule module={studentModule('labs')} onBack={backFromSection} onHome={()=>setScreen('home')}/>:<LabsPlaceholder />)}
         {screen === 'achievements' && <Achievements />}
         {screen === 'offline' && <OfflineMaterials grade={grade} topics={currentTopics} state={offlineState} refresh={refreshOfflineState} syncNow={() => trySync(true)} isOnline={isOnline} />}
-        {screen === 'profile' && (IS_STANDALONE?<StandaloneProfile grade={grade} setGrade={setGrade} xp={xp}/>:<><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>)}
+        {screen === 'profile' && (IS_STANDALONE?<StandaloneProfile grade={grade} setGrade={setGrade} xp={xp} onBack={backFromSection} onHome={()=>setScreen('home')}/>:<><Profile grade={grade} setGrade={setGrade} xp={xp} /><StudentPerformance grade={grade} xp={xp} /></>)}
       </main>
     </div>
   )
