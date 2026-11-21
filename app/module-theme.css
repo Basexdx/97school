@@ -258,3 +258,69 @@ html.cosmo-genius-restored :is(.book-search,.genius-fipi-wrap [class*="_bankSear
   .progress-metrics{grid-template-columns:1fr}
   .progress-metrics .progress-metric-card{min-height:106px}
 }
+
+/* Release 1.8.6: static module identity, sticky search only. */
+html.cosmo-genius-restored :is(.book-bank-header,.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar,.genius-fipi-wrap [class*="_bankHeader__"]){
+  position:relative!important;top:auto!important;z-index:2!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto!important;grid-template-areas:"title nav"!important;
+  align-items:center!important;min-height:126px!important;margin:0 0 12px!important;padding:18px 20px!important;overflow:visible!important
+}
+html.cosmo-genius-restored :is(.book-heading,.reference-materials-page .rm-title-block,.formula-reference-overlay .fl-hero,.genius-fipi-wrap [class*="_bankTitle__"]){grid-area:title!important;display:flex!important;align-items:center!important;gap:18px!important;min-width:0!important}
+html.cosmo-genius-restored :is(.book-header-nav,.reference-materials-page .rm-header-actions,.formula-reference-overlay .fl-header-actions,.genius-fipi-wrap [class*="_bankNav__"]){grid-area:nav!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:9px!important;min-width:0!important}
+html.cosmo-genius-restored :is(.book-heading>span,.reference-materials-page .rm-book-icon,.formula-reference-overlay .fl-hero-icon,.genius-fipi-wrap [class*="_bankIcon__"]){
+  display:grid!important;place-items:center!important;flex:0 0 72px!important;width:72px!important;height:72px!important;margin:0!important;box-sizing:border-box!important;
+  border:1px solid var(--genius-gold)!important;border-radius:15px!important;background:var(--genius-space)!important;color:var(--genius-gold)!important;font-size:46px!important;line-height:1!important
+}
+html.cosmo-genius-restored .formula-reference-overlay .fl-hero-title{display:contents!important}
+html.cosmo-genius-restored .formula-reference-overlay .fl-hero{padding:0!important;border:0!important;background:none!important;box-shadow:none!important}
+
+html.cosmo-genius-restored .module-search-dock{
+  position:sticky!important;top:0!important;z-index:45!important;box-sizing:border-box!important;width:100%!important;max-width:none!important;min-height:58px!important;
+  margin:0 0 16px!important;border:1px solid rgba(38,165,242,.62)!important;border-radius:13px!important;background:rgba(3,18,33,.96)!important;
+  box-shadow:0 9px 28px rgba(0,8,20,.32)!important;backdrop-filter:blur(16px)!important
+}
+html.cosmo-genius-restored .book-header-controls.module-search-dock{display:grid!important;grid-template-columns:110px minmax(0,1fr) 48px!important;gap:9px!important;padding:8px!important}
+html.cosmo-genius-restored .book-header-controls.module-search-dock :is(.task-bank-grade select,.book-search,.search-filter-trigger){height:42px!important;min-height:42px!important}
+html.cosmo-genius-restored .book-header-controls.module-search-dock .book-search{max-width:none!important}
+html.cosmo-genius-restored .search-filter-trigger,html.cosmo-genius-restored .genius-fipi-wrap [class*="_searchFilter__"]{
+  position:relative!important;display:grid!important;place-items:center!important;width:44px!important;min-width:44px!important;padding:0!important;
+  border:1px solid rgba(38,165,242,.62)!important;border-radius:10px!important;background:var(--genius-panel)!important;color:var(--genius-text)!important;font-size:23px!important;line-height:1!important
+}
+html.cosmo-genius-restored :is(.search-filter-trigger,.genius-fipi-wrap [class*="_searchFilter__"]) b{position:absolute;right:-5px;top:-6px;display:grid;place-items:center;min-width:17px;height:17px;padding:0 3px;border-radius:99px;background:var(--genius-gold);color:var(--genius-space);font-size:10px;font-weight:600}
+html.cosmo-genius-restored :is(.reference-materials-page .rm-search,.formula-reference-overlay .fl-search,.genius-fipi-wrap [class*="_bankSearch__"]).module-search-dock{display:flex!important;align-items:center!important;padding:0 10px!important}
+html.cosmo-genius-restored .genius-fipi-wrap [class*="_bankSearch__"].module-search-dock [class*="_searchFilter__"]{margin-left:8px!important}
+html.cosmo-genius-restored :is(.book-filter-dock,.genius-fipi-wrap [class*="_filterDock__"]){position:relative!important;top:auto!important;z-index:3!important;margin-top:0!important;background:transparent!important;backdrop-filter:none!important}
+html.cosmo-genius-restored .book-filter-dock{padding-bottom:12px!important}
+.book-active-filters{grid-column:1/-1;display:flex;align-items:center;gap:7px;min-width:0;overflow-x:auto;padding:0 0 2px;color:rgba(238,247,255,.68);font-size:12px}
+.book-active-filters>span{flex:none}.book-active-filters button{flex:none;min-height:30px;padding:0 10px;border:1px solid rgba(38,165,242,.42);border-radius:99px;background:rgba(7,29,49,.9);color:var(--genius-text);font:inherit}
+
+html.cosmo-genius-restored .task-bank-hub:has(>article.bank-detail)>:is(.book-bank-header,.book-header-controls),
+html.cosmo-genius-restored .task-bank-hub:has(>article[class*="_detail__"])>:is(.book-bank-header,.book-header-controls),
+html.cosmo-genius-restored .task-bank-hub:has(>article[class*="_detail_"])>:is(.book-bank-header,.book-header-controls){display:none!important}
+
+html.cosmo-genius-restored button:not(:disabled){transition:border-color .16s ease,color .16s ease,filter .16s ease,background-color .16s ease,box-shadow .16s ease;cursor:pointer}
+html.cosmo-genius-restored button:not(:disabled):hover{border-color:var(--genius-gold)!important;filter:brightness(1.16);box-shadow:0 0 0 1px rgba(245,195,99,.18),0 7px 20px rgba(0,8,20,.2)}
+html.cosmo-genius-restored button:not(:disabled):active{filter:brightness(1.28)}
+
+.fl-inline-math{display:inline-block;margin:0 .18em;color:var(--genius-gold);font-style:normal;vertical-align:baseline;white-space:nowrap}
+.fl-inline-math .katex{font-size:1.02em;line-height:1}
+.fl-math .katex,.fl-variable-symbol .katex,.fl-inline-math .katex{font-family:KaTeX_Main,serif;font-style:normal}
+.fl-math .katex .mathnormal,.fl-variable-symbol .katex .mathnormal,.fl-inline-math .katex .mathnormal{font-family:KaTeX_Math!important;font-style:italic!important}
+.fl-math .katex-html,.fl-variable-symbol .katex-html,.fl-inline-math .katex-html{line-height:1.25}
+
+@media(max-width:900px){
+  html.cosmo-genius-restored :is(.book-bank-header,.reference-materials-page .rm-hero,.formula-reference-overlay .fl-toolbar,.genius-fipi-wrap [class*="_bankHeader__"]){grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"title" "nav"!important;min-height:0!important;padding:14px!important}
+  html.cosmo-genius-restored :is(.book-header-nav,.reference-materials-page .rm-header-actions,.formula-reference-overlay .fl-header-actions,.genius-fipi-wrap [class*="_bankNav__"]){justify-content:stretch!important}
+  html.cosmo-genius-restored :is(.book-header-nav,.reference-materials-page .rm-header-actions,.formula-reference-overlay .fl-header-actions,.genius-fipi-wrap [class*="_bankNav__"]) button{flex:1!important}
+  html.cosmo-genius-restored :is(.book-heading>span,.reference-materials-page .rm-book-icon,.formula-reference-overlay .fl-hero-icon,.genius-fipi-wrap [class*="_bankIcon__"]){flex-basis:54px!important;width:54px!important;height:54px!important;font-size:35px!important}
+  html.cosmo-genius-restored .module-search-dock{top:58px!important;margin-bottom:12px!important}
+  html.cosmo-genius-restored .book-header-controls.module-search-dock{grid-template-columns:86px minmax(0,1fr) 42px!important;gap:6px!important;padding:6px!important}
+  html.cosmo-genius-restored .reference-materials-page .rm-header-actions{display:none!important}
+  html.cosmo-genius-restored .formula-reference-overlay .fl-header-actions{display:none!important}
+}
+@media(max-width:540px){
+  html.cosmo-genius-restored .book-header-controls.module-search-dock{grid-template-columns:76px minmax(0,1fr) 40px!important}
+  html.cosmo-genius-restored .book-header-controls.module-search-dock .book-search{padding:0 7px!important}
+  html.cosmo-genius-restored .book-header-controls.module-search-dock .book-search>span{font-size:19px!important}
+  html.cosmo-genius-restored .book-header-controls.module-search-dock input{font-size:12px!important}
+}
