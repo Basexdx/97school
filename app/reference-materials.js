@@ -273,13 +273,13 @@ export function ReferenceMaterialsPage({onClose,onMenu,active=true}){
           <span className="rm-book-icon" aria-hidden="true">▤</span>
           <div><h1>Справочные материалы</h1><p>Вся необходимая справочная информация по физике в одном месте</p></div>
         </div>
-        <div className="rm-header-actions"><button type="button" onClick={onClose}>← Назад</button><button className="rm-close" type="button" onClick={goHome} aria-label="На главную страницу">⌂ Домой</button></div>
-      </header>
-        <label className="rm-search module-search-dock">
+        <label className="rm-search">
           <span aria-hidden="true">⌕</span>
           <input ref={searchRef} value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по справочным материалам…" autoComplete="off"/>
           {query&&<button type="button" onClick={()=>setQuery('')} aria-label="Очистить поиск">×</button>}
         </label>
+        <div className="rm-header-actions"><button type="button" onClick={onClose}>← Назад</button><button className="rm-close" type="button" onClick={goHome} aria-label="На главную страницу">⌂ Домой</button></div>
+      </header>
 
       <nav className="rm-categories" aria-label="Категории справочных материалов">
         {CATEGORIES.map(([key,label])=><button key={key} type="button" className={category===key?'active':''} onClick={()=>setCategory(key)}>{label}</button>)}

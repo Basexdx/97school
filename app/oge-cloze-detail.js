@@ -34,6 +34,7 @@ export default function OgeClozeDetail({task,position,total,back,previous,next,n
     <nav className={styles.topNav}><button type="button" onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button type="button" aria-label="Предыдущее задание" disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button type="button" aria-label="Следующее задание" disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
     <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label} · {task.section}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>{changes?'Изменение физических величин':'Пропуски в тексте'}</span></div></div><div className={styles.sourceBadge}>Задание {task.type}<small>формат ОГЭ</small></div></header>
     <section className={styles.question}>
+      <div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div>
       <div className={styles.clozePassage}>{task.text.split('\n\n').map((paragraph,index)=><p key={index}><Passage text={paragraph}/></p>)}</div>
       {task.figures.map((src,index)=><TaskFigureViewer label={`Рисунок к заданию № ${task.sourceNo}`} key={src}><figure className={styles.sourceFigure}><img src={src} alt={`Рисунок к заданию № ${task.sourceNo}, часть ${index+1}`} loading="lazy"/></figure></TaskFigureViewer>)}
       <h3 className={styles.choiceHeading}>{changes?'Как изменяется величина':'Слова и словосочетания'}</h3>
@@ -46,7 +47,7 @@ export default function OgeClozeDetail({task,position,total,back,previous,next,n
         {values.some(Boolean)&&<ul className={styles.clozeSelection} aria-label={changes?'Выбранные изменения':'Выбранные слова'}>{letters.map((letter,index)=><li key={letter}><b>{letter}</b><span>{values[index]?task.options[values[index]-1]:'Не выбрано'}</span></li>)}</ul>}
         <button type="submit" className={styles.primary} disabled={!complete||isSaved}>{isSaved?'Ответ проверен':'Проверить ответ'}</button>
       </form>
-      {checked!==null&&<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong>{checked&&<EarnedXp amount={earnedXp}/>}<p>{checked?task.explanation:`Проверьте ${changes?'изменение каждой величины':'номера слов'} и порядок ответа: ${letters.join(', ')}. Затем попробуйте ещё раз.`}</p></div>}
+      {checked!==null?<div role="status" className={`${styles.feedback} ${checked?styles.right:styles.wrong}`}><strong>{checked?'Верно!':'Пока неверно'}</strong>{checked&&<EarnedXp amount={earnedXp}/>}<p>{checked?task.explanation:`Проверьте ${changes?'изменение каждой величины':'номера слов'} и порядок ответа: ${letters.join(', ')}. Затем попробуйте ещё раз.`}</p></div>:<p className={styles.answerNotice}>{changes?'Укажите изменение обеих величин':'Заполните все четыре пропуска'} и проверьте ответ. Результат сохранится после обновления страницы.</p>}
     </section>
     <footer className={styles.bottomNav}><button type="button" disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button type="button" disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>

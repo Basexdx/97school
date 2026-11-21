@@ -21,7 +21,7 @@ export default function OgeMatchingDetail({task,position,total,back,previous,nex
     <nav className={styles.topNav}><button onClick={back}>← К заданиям ОГЭ</button><span>{position} / {total}</span><div><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>←</button><button disabled={!next} onClick={()=>next&&navigate(next)}>→</button></div></nav>
     <header className={styles.taskHead}><div><span className={styles.kicker}>{task.label} · {sectionsForTask(task).join(' · ')}</span><h1>№ {task.sourceNo}</h1><div className={styles.pills}><span>ОГЭ по физике</span><span>Соответствие</span></div></div><div className={styles.sourceBadge}>Задание 1<small>формат ОГЭ</small></div></header>
     <section className={styles.question}>
-      <p className={styles.choicePrompt}>{task.text}</p>
+      <div className={styles.questionLabel}><span>01</span><h2>Условие</h2></div><p className={styles.choicePrompt}>{task.text}</p>
       <div className={styles.matchingColumns}>
         <section><h3>{task.leftTitle}</h3>{task.left.map(item=><div className={styles.matchingItem} key={item.id}><b>{item.id}</b><span>{item.text}</span></div>)}</section>
         <section><h3>{task.rightTitle}</h3>{task.right.map(item=><div className={styles.matchingItem} key={item.id}><b>{item.id}</b><span>{item.text}</span></div>)}</section>
@@ -31,7 +31,7 @@ export default function OgeMatchingDetail({task,position,total,back,previous,nex
         <small className={styles.matchingHelp} id="oge-matching-help">В каждом поле — номер варианта от 1 до {task.right.length}. Порядок ответов: А, Б, В.</small>
         <button className={styles.primary} disabled={!ready||isSaved}>{isSaved?'Ответ сохранён':task.answer?'Проверить ответ':'Сохранить ответ'}</button>
       </form>
-      {(result!==null||isSaved)&&<p className={styles.answerNotice} aria-live="polite">{result===true?<>Верно! Ответ сохранён. <EarnedXp amount={earnedXp}/></>:result===false?'Пока неверно. Проверь соответствия и попробуй ещё.':'Ответ сохранён.'}</p>}
+      <p className={styles.answerNotice} aria-live="polite">{result===true?<>Верно! Ответ сохранён. <EarnedXp amount={earnedXp}/></>:result===false?'Пока неверно. Проверь соответствия и попробуй ещё.':isSaved?'Ответ сохранён. Он останется после обновления страницы.':'Заполните все три поля и проверьте ответ.'}</p>
     </section>
     <footer className={styles.bottomNav}><button disabled={!previous} onClick={()=>previous&&navigate(previous)}>← Предыдущая</button><span>{task.label} · № {task.sourceNo}</span><button disabled={!next} onClick={()=>next&&navigate(next)}>Следующая →</button></footer>
   </article>

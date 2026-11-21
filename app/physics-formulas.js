@@ -5,19 +5,6 @@ import {physicsFormulaCount,physicsFormulaSections,variableUnit} from './formula
 import {renderFormula} from './formula-math'
 
 const renderedFormulas=new Map(physicsFormulaSections.flatMap(section=>section.formulas.map(item=>[item.id,renderFormula(item.math)])))
-const descriptionMath={
-  'Кинематика-2':'y = y₀ + v₀ᵧt',
-  'Динамика-5':'k = nk₁',
-  'Гидростатика-11':'ρ₁gh₁ = ρ₂gh₂',
-}
-
-function FormulaDescription({item}){
-  const math=descriptionMath[item.id]
-  if(!math)return item.description
-  const index=item.description.indexOf(math)
-  if(index<0)return item.description
-  return <>{item.description.slice(0,index)}<span className="fl-inline-math" dangerouslySetInnerHTML={{__html:renderFormula(math)}}/>{item.description.slice(index+math.length)}</>
-}
 
 const normalize=value=>String(value).toLocaleLowerCase('ru-RU').replaceAll('ё','е').replace(/\\(?:frac|sqrt)/g,'').replace(/[{}]/g,'').replace(/\s+/g,' ').trim()
 
@@ -36,8 +23,8 @@ export default function PhysicsFormulas({onBack,onHome}){
   const count=sections.reduce((sum,section)=>sum+section.formulas.length,0)
 
   return <section className="fl-page">
-    <div className="fl-toolbar"><header className="fl-hero"><div className="fl-hero-title"><div className="fl-hero-icon" aria-hidden="true">Σ</div><div className="fl-hero-copy"><h1>Формулы по физике</h1><p>Основные формулы школьной физики с обозначениями, единицами измерения и понятными объяснениями.</p></div></div><span className="fl-hero-count">▤&nbsp; {physicsFormulaCount} формул</span></header><div className="fl-header-actions"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome} aria-label="На главную страницу">⌂ Домой</button></div></div>
-    <label className="fl-search module-search-dock"><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по названию, величине или слову…" autoComplete="off" aria-label="Поиск формулы"/>{query&&<button type="button" onClick={()=>setQuery('')} aria-label="Очистить поиск">×</button>}</label>
+    <div className="fl-toolbar"><header className="fl-hero"><div className="fl-hero-title"><div className="fl-hero-icon" aria-hidden="true">Σ</div><div className="fl-hero-copy"><h1>Формулы по физике</h1><p>Основные формулы школьной физики с обозначениями, единицами измерения и понятными объяснениями.</p></div></div><span className="fl-hero-count">▤&nbsp; {physicsFormulaCount} формул</span></header>
+    <label className="fl-search"><span aria-hidden="true">⌕</span><input type="search" value={query} onChange={event=>setQuery(event.target.value)} placeholder="Поиск по названию, величине или слову…" autoComplete="off" aria-label="Поиск формулы"/>{query&&<button type="button" onClick={()=>setQuery('')} aria-label="Очистить поиск">×</button>}</label><div className="fl-header-actions"><button type="button" onClick={onBack}>← Назад</button><button type="button" onClick={onHome} aria-label="На главную страницу">⌂ Домой</button></div></div>
     <nav className="fl-categories" aria-label="Разделы формул">{['Все разделы',...physicsFormulaSections.map(section=>section.title)].map(title=><button type="button" key={title} className={activeSection===title?'active':''} aria-current={activeSection===title?'true':undefined} onClick={()=>setActiveSection(title)}>{title}</button>)}</nav>
     <p className="fl-result" aria-live="polite">{query||activeSection!=='Все разделы'?`Найдено: ${count}`:`Общий перечень · ${physicsFormulaSections.length} разделов`}</p>
     {sections.map(section=><section key={section.title} className="fl-section" aria-label={section.title}>
@@ -59,7 +46,7 @@ export default function PhysicsFormulas({onBack,onHome}){
               const [symbols,meaning]=variable.split(' — ')
               return <li key={variable}><span className="fl-variable-symbol" dangerouslySetInnerHTML={{__html:renderFormula(symbols)}}/><span className="fl-variable-dash">—</span><span>{meaning}, <span className="fl-variable-unit">{variableUnit(variable)}</span></span></li>
             })}</ul>
-            <p><FormulaDescription item={item}/></p>
+            <p>{item.description}</p>
           </div>
         </article>
       })}</div>
